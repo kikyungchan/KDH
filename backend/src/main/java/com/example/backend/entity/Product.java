@@ -5,6 +5,8 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
@@ -23,5 +25,9 @@ public class Product {
 
     @Column(insertable = false, updatable = false)
     private LocalDateTime insertedAt;
+
+
+    @OneToMany(mappedBy = "product", orphanRemoval = true)
+    private List<ProductImage> images = new ArrayList<>();
 
 }
