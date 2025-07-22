@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router";
 import axios from "axios";
 import { Spinner } from "react-bootstrap";
 import { useSearchParams } from "react-router-dom";
+import "./ProductDetail.css";
 
 export function ProductDetail() {
   const [product, setProduct] = useState(null);
@@ -24,11 +24,25 @@ export function ProductDetail() {
   }
   return (
     <div className="product-detail">
-      썸네일이미지넣고.
+      <div className="product-images">
+        {product.imagePath?.map((path, index) => (
+          <img
+            key={index}
+            src={`http://localhost:8080/static/${path.split("/").pop()}`}
+            alt={`product-${index}`}
+            style={{
+              maxWidth: "300px",
+              marginBottom: "10px",
+              display: "block",
+            }}
+          />
+        ))}
+      </div>
+
       <h2>제품명 : {product.productName}</h2>
       <p>가격 : {product.price.toLocaleString()}원</p>
       <p>상세설명 : {product.info}</p>
-      todo:재고는 admin 계정한테만 보이게.
+      {/* todo: 관리자일 경우만 노출 */}
       <p>재고 : {product.quantity}개</p>
     </div>
   );

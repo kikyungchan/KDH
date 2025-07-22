@@ -1,0 +1,31 @@
+.product-detail {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 2rem;
+    font-family: Arial, sans-serif;
+}
+
+.product-images {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-bottom: 2rem;
+}
+
+.product-images img {
+    max-width: 300px;
+    width: 100%;
+    object-fit: cover;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+}
+
+.product-detail h2 {
+    font-size: 1.8rem;
+    margin-bottom: 1rem;
+}
+
+.product-detail p {
+    font-size: 1.1rem;
+    margin: 0.5rem 0;
+}
