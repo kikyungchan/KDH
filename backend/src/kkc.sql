@@ -10,7 +10,8 @@ CREATE TABLE product
     inserted_at  datetime           NOT NULL DEFAULT NOW(),
     CONSTRAINT pk_product PRIMARY KEY (id)
 );
-
+ALTER TABLE product
+    MODIFY price INT NOT NULL;
 
 #상품 이미지를저장할 테이블
 CREATE TABLE product_image

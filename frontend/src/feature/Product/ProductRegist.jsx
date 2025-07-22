@@ -21,12 +21,10 @@ export function ProductRegist() {
         images: images,
       })
       .then((res) => {
-        console.log("잘됌");
-        console.log(res.data);
+        alert("🎇상품등록이 완료되었습니다.");
       })
       .catch((err) => {
-        console.log("잘안됌");
-        console.log(err);
+        alert("상품등록중 오류가 발생하였습니다❌.");
       })
       .finally(() => {});
   }
