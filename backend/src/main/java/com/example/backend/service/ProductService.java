@@ -16,6 +16,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -71,11 +72,27 @@ public class ProductService {
             dto.setProductName(product.getProductName());
             dto.setPrice(product.getPrice());
             if (!product.getImages().isEmpty()) {
-                dto.setImagePath(product.getImages().get(0).getStoredPath());
+                dto.setImagePath(List.of(product.getImages().get(0).getStoredPath()));
             }
             result.add(dto);
         }
         return result;
 
+    }
+
+    public ProductDto view(Long id) {
+        Product product = productRepository.findById(id).get();
+        ProductDto dto = new ProductDto();
+        dto.setId(product.getId());
+        dto.setProductName(product.getProductName());
+        dto.setPrice(product.getPrice());
+        dto.setCategory(product.getCategory());
+        dto.setInfo(product.getInfo());
+        dto.setQuantity(product.getQuantity());
+
+        List<String> imagePaths = product.getImages().stream().map(ProductImage::getStoredPath).toList();
+
+        dto.setImagePath(imagePaths);
+        return dto;
     }
 }

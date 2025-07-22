@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import "./ProductList.css";
+import { Link } from "react-router-dom";
 
 export function ProductList() {
   const [products, setProducts] = useState([]);
@@ -21,10 +22,14 @@ export function ProductList() {
       <h2>상품 목록</h2>
       <div className="product-grid">
         {products.map((product) => (
-          <div className="product-card" key={product.id}>
+          <Link
+            to={`/product/view?id=${product.id}`}
+            className="product-card"
+            key={product.id}
+          >
             {product.imagePath && (
               <img
-                src={`http://localhost:8080/static/${product.imagePath?.split("/").pop()}`}
+                src={`http://localhost:8080/static/${product.imagePath?.[0].split("/").pop()}`}
                 alt={product.productName}
                 className="product-image"
               />
@@ -33,7 +38,7 @@ export function ProductList() {
             <div className="product-price">
               {product.price.toLocaleString()}원
             </div>
-          </div>
+          </Link>
         ))}
       </div>
     </div>
