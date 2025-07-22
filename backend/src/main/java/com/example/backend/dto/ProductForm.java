@@ -9,7 +9,7 @@ import java.util.List;
 public class ProductForm {
 
     private String productName;
-    private String price;
+    private Integer price;
     private String category;
     private String info;
     private Integer quantity;

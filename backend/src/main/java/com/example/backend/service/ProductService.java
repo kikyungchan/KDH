@@ -59,4 +59,10 @@ public class ProductService {
         // 이미지 DB에 저장
         productImageRepository.saveAll(imageList);
     }
+
+    public List<Product> list() {
+        List<Product> all = productRepository.findAll();
+        return all;
+
+    }
 }
