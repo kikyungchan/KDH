@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
+import "./ProductList.css";
 
 export function ProductList() {
   const [products, setProducts] = useState([]);
@@ -12,20 +13,29 @@ export function ProductList() {
       })
       .catch((err) => {
         console.log(err.message);
-      })
-      .finally(() => {});
+      });
   }, []);
 
   return (
-    <div>
-      <h2>상품목록</h2>
-      <ul>
+    <div className="product-list-container">
+      <h2>상품 목록</h2>
+      <div className="product-grid">
         {products.map((product) => (
-          <li key={product.id}>
-            <strong>{product.productName}</strong>- {product.price}원
-          </li>
+          <div className="product-card" key={product.id}>
+            {product.imagePath && (
+              <img
+                src={`http://localhost:8080/static/${product.imagePath?.split("/").pop()}`}
+                alt={product.productName}
+                className="product-image"
+              />
+            )}
+            <div className="product-name">{product.productName}</div>
+            <div className="product-price">
+              {product.price.toLocaleString()}원
+            </div>
+          </div>
         ))}
-      </ul>
+      </div>
     </div>
   );
 }

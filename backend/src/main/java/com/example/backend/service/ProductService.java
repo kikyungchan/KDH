@@ -1,5 +1,6 @@
 package com.example.backend.service;
 
+import com.example.backend.dto.ProductDto;
 import com.example.backend.entity.Product;
 import com.example.backend.dto.ProductForm;
 import com.example.backend.entity.ProductImage;
@@ -60,9 +61,21 @@ public class ProductService {
         productImageRepository.saveAll(imageList);
     }
 
-    public List<Product> list() {
-        List<Product> all = productRepository.findAll();
-        return all;
+    public List<ProductDto> list() {
+        List<Product> products = productRepository.findAll();
+        List<ProductDto> result = new ArrayList<>();
+
+        for (Product product : products) {
+            ProductDto dto = new ProductDto();
+            dto.setId(product.getId());
+            dto.setProductName(product.getProductName());
+            dto.setPrice(product.getPrice());
+            if (!product.getImages().isEmpty()) {
+                dto.setImagePath(product.getImages().get(0).getStoredPath());
+            }
+            result.add(dto);
+        }
+        return result;
 
     }
 }
