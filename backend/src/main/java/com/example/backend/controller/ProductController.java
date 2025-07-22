@@ -17,9 +17,14 @@ public class ProductController {
     private final ProductService productService;
     private final ProductRepository productRepository;
 
+    @DeleteMapping("/delete")
+    public void delete(@RequestParam Long id) {
+        productService.delete(id);
+    }
+
     @GetMapping("/view")
     public ProductDto view(@RequestParam(defaultValue = "") Long id) {
-        
+
         return productService.view(id);
     }
 

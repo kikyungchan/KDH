@@ -95,4 +95,9 @@ public class ProductService {
         dto.setImagePath(imagePaths);
         return dto;
     }
+
+    public void delete(Long id) {
+        Product product = productRepository.findById(id).get();
+        productRepository.delete(product);
+    }
 }
