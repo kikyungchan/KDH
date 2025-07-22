@@ -1,7 +1,9 @@
 import { useState } from "react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 export function ProductRegist() {
+  const navigate = useNavigate();
   const [productName, setProductName] = useState("");
   const [price, setPrice] = useState("");
   const [quantity, setQuantity] = useState("");
@@ -22,6 +24,12 @@ export function ProductRegist() {
       })
       .then((res) => {
         alert("🎇상품등록이 완료되었습니다.");
+        setProductName("");
+        setPrice("");
+        setQuantity("");
+        setCategory("");
+        setInfo("");
+        setImages([]);
       })
       .catch((err) => {
         alert("상품등록중 오류가 발생하였습니다❌.");
@@ -34,23 +42,43 @@ export function ProductRegist() {
       <div>
         <div>
           상품명
-          <input type="text" onChange={(e) => setProductName(e.target.value)} />
+          <input
+            type="text"
+            value={productName}
+            onChange={(e) => setProductName(e.target.value)}
+          />
         </div>
         <div>
           가격
-          <input type="text" onChange={(e) => setPrice(e.target.value)} />
+          <input
+            type="text"
+            value={price}
+            onChange={(e) => setPrice(e.target.value)}
+          />
         </div>
         <div>
           수량
-          <input type="text" onChange={(e) => setQuantity(e.target.value)} />
+          <input
+            type="text"
+            value={quantity}
+            onChange={(e) => setQuantity(e.target.value)}
+          />
         </div>
         <div>
           카테고리
-          <input type="text" onChange={(e) => setCategory(e.target.value)} />
+          <input
+            type="text"
+            value={category}
+            onChange={(e) => setCategory(e.target.value)}
+          />
         </div>
         <div>
           상품설명
-          <textarea rows={5} onChange={(e) => setInfo(e.target.value)} />
+          <textarea
+            rows={5}
+            value={info}
+            onChange={(e) => setInfo(e.target.value)}
+          />
         </div>
         <div>
           상품 이미지
