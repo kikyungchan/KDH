@@ -3,7 +3,8 @@ import { Client } from "@stomp/stompjs";
 import SockJS from "sockjs-client";
 // import { Stomp } from "stompjs";
 
-const WS_URL = "http://localhost:5173/ws-chat";
+const WS_URL = "http://localhost:8080/ws-chat";
+const WS_PATH = "/ws-chat";
 const SEND_DEST = "/app/chat/private";
 const SUBSCRIBE_DEST = "/user/queue/messages";
 
@@ -15,7 +16,7 @@ export function Chat({ username }) {
 
   useEffect(() => {
     const client = new Client({
-      webSocketFactory: () => new SockJS(WS_URL), // SockJS 연결
+      webSocketFactory: () => new SockJS(WS_PATH), // SockJS 연결
       debug: (str) => console.log(str),
       reconnectDelay: 5000, // 끊기면 5초후 재연결
     });
@@ -24,8 +25,11 @@ export function Chat({ username }) {
       console.log("연결됨!");
       client.subscribe(SUBSCRIBE_DEST, (message) => {
         console.log("받음");
+        console.log("message", message);
         // 서버의 json 메시지를 파싱해서 msgs 배열에 추가
         setMsgs((prev) => [...prev, JSON.parse(message.body)]);
+        // const msg = JSON.parse(message);
+        // setMsgs((prev) => [...prev, msg]);
       });
     };
 
