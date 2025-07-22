@@ -26,6 +26,7 @@ export function Chat({ username }) {
     };
     client.activate();
     clientRef.current = client;
+    console.log("연결됨!");
     return () => {
       client.deactivate();
     };
