@@ -130,15 +130,18 @@ export function MemberAdd() {
       .then((res) => {
         if (res.data.exists) {
           setLoginIdChecked(false);
-          setLoginIdCheckMessage("이미 사용 중인 아이디입니다.");
+          setLoginIdCheckMessage("이미 사용 중|인 아이디입니다.");
+          console.log("백엔드 응답", res.data);
         } else {
           setLoginIdChecked(true);
           setLoginIdCheckMessage("사용 가능한 아이디입니다.");
+          console.log("백엔드 응답", res.data);
         }
       })
       .catch((err) => {
         setLoginIdChecked(false);
         setLoginIdCheckMessage("확인 중 오류가 발생했습니다");
+        console.log("error", err.response?.data || err.message);
       })
       .finally(() => {
         console.log("always");

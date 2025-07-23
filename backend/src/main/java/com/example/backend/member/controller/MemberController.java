@@ -99,8 +99,8 @@ public class MemberController {
     @GetMapping("/check-id")
     public ResponseEntity<?> checkLoginId(@RequestParam String loginId) {
 
-        boolean exist = memberService.existByLoginId(loginId);
+        boolean exists = memberService.existByLoginId(loginId);
 
-        return ResponseEntity.ok(Map.of("exist", exist));
+        return ResponseEntity.ok(Map.of("exists", exists));
     }
 }
