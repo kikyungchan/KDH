@@ -15,8 +15,8 @@ public class ChatController {
 
 
     public ChatController(SimpMessagingTemplate template) {
-        System.out.println(template);
         this.template = template;
+        System.out.println(template);
     }
 
 
