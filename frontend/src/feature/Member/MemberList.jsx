@@ -25,9 +25,10 @@ export function MemberList() {
     <Row>
       <Col>
         <h2>회원목록</h2>
-        <Table>
+        <Table hover responsive>
           <thead>
             <tr>
+              <th>회원번호</th>
               <th>아이디</th>
               <th>이름</th>
               <th>전화번호</th>
@@ -39,7 +40,9 @@ export function MemberList() {
               <tr
                 key={member.id}
                 onClick={() => navigate(`/member?id=${member.id}`)}
+                style={{ cursor: "pointer" }}
               >
+                <td>{member.id}</td>
                 <td>{member.loginId}</td>
                 <td>{member.name}</td>
                 <td>{member.phone}</td>

@@ -112,11 +112,9 @@ export function MemberAdd() {
         console.log("잘됨");
       })
       .catch((err) => {
-        console.log("안됨");
+        console.log("에러응답", err.response?.data);
       })
-      .finally(() => {
-        console.log("항상");
-      });
+      .finally(() => {});
   }
 
   // 아이디 중복 확인 버튼
@@ -144,9 +142,7 @@ export function MemberAdd() {
         setLoginIdCheckMessage("확인 중 오류가 발생했습니다");
         console.log("error", err.response?.data || err.message);
       })
-      .finally(() => {
-        console.log("always");
-      });
+      .finally(() => {});
   }
 
   return (
@@ -174,6 +170,11 @@ export function MemberAdd() {
                 유효한 아이디 형식이 아닙니다.
               </FormText>
             )}
+            <div>
+              <Button onClick={handleSignUpClick} disabled={disabled}>
+                가입
+              </Button>
+            </div>
             <Button
               onClick={() => handleCheckLoginId()}
               size="sm"
@@ -318,11 +319,6 @@ export function MemberAdd() {
               }}
             />
           </FormGroup>
-        </div>
-        <div>
-          <Button onClick={handleSignUpClick} disabled={disabled}>
-            가입
-          </Button>
         </div>
       </Col>
     </Row>
