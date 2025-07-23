@@ -3,6 +3,7 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
 export function ProductRegist() {
+  const [previewImages, setPreviewImages] = useState([]); // 미리보기 URL
   const navigate = useNavigate();
   const [productName, setProductName] = useState("");
   const [price, setPrice] = useState("");
@@ -36,6 +37,27 @@ export function ProductRegist() {
         alert("상품등록중 오류가 발생하였습니다❌.");
       })
       .finally(() => {});
+  }
+
+  function handleRemoveImage(index) {
+    setImages((prev) => {
+      const updated = [...prev];
+      updated.splice(index, 1);
+      return updated;
+    });
+    setPreviewImages((prev) => {
+      const updated = [...prev];
+      updated.splice(index, 1);
+      return updated;
+    });
+  }
+
+  function handleImageChange(e) {
+    const files = Array.from(e.target.files);
+    setImages(files); // 이미지 파일 저장
+
+    const previews = files.map((file) => URL.createObjectURL(file));
+    setPreviewImages(previews); // 미리보기 URL 저장
   }
 
   return (
@@ -87,10 +109,61 @@ export function ProductRegist() {
             type="file"
             multiple
             accept="image/*"
-            onChange={(e) => setImages(e.target.files)}
+            onChange={handleImageChange}
           />
+          {/* 파일 이름 리스트 출력 */}
+          {images.length > 0 && (
+            <ul style={{ marginTop: "10px", fontSize: "14px" }}>
+              {images.map((file, idx) => (
+                <li key={idx}>{file.name}</li>
+              ))}
+            </ul>
+          )}
+          {previewImages.length > 0 && (
+            <div
+              style={{
+                display: "flex",
+                flexWrap: "wrap",
+                gap: "10px",
+                marginTop: "10px",
+              }}
+            >
+              {previewImages.map((url, idx) => (
+                <div key={idx} style={{ position: "relative" }}>
+                  <img
+                    src={url}
+                    alt={`미리보기 ${idx + 1}`}
+                    style={{
+                      width: "150px",
+                      height: "100px",
+                      objectFit: "cover",
+                      border: "1px solid #ccc",
+                      borderRadius: "4px",
+                    }}
+                  />
+                  <button
+                    type="button"
+                    onClick={() => handleRemoveImage(idx)}
+                    style={{
+                      position: "absolute",
+                      top: 5,
+                      right: 5,
+                      padding: "2px 6px",
+                      fontSize: "12px",
+                      color: "white",
+                      backgroundColor: "#dc3545", // 부트스트랩 danger 색
+                      border: "none",
+                      borderRadius: "4px", //
+                      cursor: "pointer",
+                    }}
+                  >
+                    취소
+                  </button>
+                </div>
+              ))}
+            </div>
+          )}
         </div>
-        <button type="submit">등록</button>
       </div>
     </form>
   );
