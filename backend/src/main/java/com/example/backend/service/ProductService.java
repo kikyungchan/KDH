@@ -1,6 +1,7 @@
 package com.example.backend.service;
 
 import com.example.backend.dto.ProductDto;
+import com.example.backend.dto.ProductEditDto;
 import com.example.backend.entity.Product;
 import com.example.backend.dto.ProductForm;
 import com.example.backend.entity.ProductImage;
@@ -20,7 +21,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -122,13 +122,24 @@ public class ProductService {
         productRepository.delete(product);
     }
 
-    public void edit(Long id, ProductForm productForm) {
+    public void edit(Long id, ProductEditDto dto) {
         Product product = productRepository.findById(id).get();
-        product.setProductName(productForm.getProductName());
-        product.setPrice(productForm.getPrice());
-        product.setCategory(productForm.getCategory());
-        product.setInfo(productForm.getInfo());
-        product.setQuantity(productForm.getQuantity());
+        product.setProductName(dto.getProductName());
+        product.setPrice(dto.getPrice());
+        product.setCategory(dto.getCategory());
+        product.setInfo(dto.getInfo());
+        product.setQuantity(dto.getQuantity());
+        if (dto.getDeletedImages() != null) {
+            for (String path : dto.getDeletedImages()) {
+                productImageRepository.deleteByStoredPath(path); // or deleteByPath(path)
+                File file = new File("C:/Temp/prj4/productFile", extractFileName(path));
+                file.delete();
+            }
+        }
         productRepository.save(product);
+    }
+
+    private String extractFileName(String path) {
+        return path.substring(path.lastIndexOf("/") + 1);
     }
 }

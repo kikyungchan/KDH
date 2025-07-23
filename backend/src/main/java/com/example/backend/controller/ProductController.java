@@ -1,6 +1,7 @@
 package com.example.backend.controller;
 
 import com.example.backend.dto.ProductDto;
+import com.example.backend.dto.ProductEditDto;
 import com.example.backend.dto.ProductForm;
 import com.example.backend.repository.ProductRepository;
 import com.example.backend.service.ProductService;
@@ -19,8 +20,8 @@ public class ProductController {
     private final ProductRepository productRepository;
 
     @PutMapping("/edit")
-    public void editProduct(@RequestParam Long id, @RequestBody ProductForm productForm) {
-        productService.edit(id, productForm);
+    public void editProduct(@RequestParam Long id, @RequestBody ProductEditDto dto) {
+        productService.edit(id, dto);
     }
 
     @DeleteMapping("/delete")

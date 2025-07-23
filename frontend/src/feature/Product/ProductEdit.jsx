@@ -5,6 +5,10 @@ import Swipe from "bootstrap/js/src/util/swipe.js";
 import { Button } from "react-bootstrap";
 
 export function ProductEdit() {
+  const [deletedIndexes, setDeletedIndexes] = useState([]); // 블러처리된 이미지 인덱스
+
+  const [deletedImagePaths, setDeletedImagePaths] = useState([]);
+
   const [imagePaths, setImagePaths] = useState([]); // 전체 이미지 경로 리스트
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
@@ -41,22 +45,28 @@ export function ProductEdit() {
   }
 
   function handleSave() {
+    const dataToSend = {
+      ...form,
+      deletedImages: deletedImagePaths, // 삭제할 이미지 경로 목록 추가
+    };
+
     axios
-      .put(`/api/product/edit?id=${id}`, form)
-      .then((res) => {
+      .put(`/api/product/edit?id=${id}`, dataToSend)
+      .then(() => {
         alert("수정 완료");
         navigate(`/product/view?id=${id}`);
       })
       .catch((err) => {
-        console.log("안될떄");
-      })
-      .finally(() => {});
+        console.error("수정 실패", err);
+      });
   }
 
   function handleImageDelete(index) {
-    // 삭제할 이미지 경로를 제외한 나머지만 남기기
+    const deleted = imagePaths[index]; // 삭제 대상 경로 추출
+    setDeletedImagePaths((prev) => [...prev, deleted]); // 삭제 리스트에 추가
+
     const updated = [...imagePaths];
-    updated.splice(index, 1);
+    updated.splice(index, 1); // 화면에서 제거
     setImagePaths(updated);
   }
 
