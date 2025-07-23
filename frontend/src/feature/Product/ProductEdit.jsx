@@ -124,12 +124,24 @@ export function ProductEdit() {
                     src={`http://localhost:8080/static/${fileName}`}
                     alt={`상품 이미지 ${idx + 1}`}
                     width="150"
+                    height="100"
                     style={{ border: "1px solid #ccc", borderRadius: "4px" }}
                   />
                   <Button
                     variant="danger"
                     size="sm"
-                    style={{ position: "absolute", top: 0, right: 0 }}
+                    style={{
+                      position: "absolute",
+                      top: 5,
+                      right: 5,
+                      padding: "2px 6px",
+                      fontSize: "12px",
+                      color: "white",
+                      backgroundColor: "#dc3545", // 부트스트랩 danger 색
+                      border: "none",
+                      borderRadius: "4px", //
+                      cursor: "pointer",
+                    }}
                     onClick={() => handleImageDelete(idx)}
                   >
                     삭제
@@ -172,6 +184,7 @@ export function ProductEdit() {
                 src={url}
                 alt={`추가 이미지 ${idx + 1}`}
                 width="150"
+                height="100"
                 style={{ border: "1px solid #aaa", borderRadius: "4px" }}
               />
               {/*  미리보기 취소버튼*/}
