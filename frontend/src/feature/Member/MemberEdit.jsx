@@ -87,7 +87,7 @@ export function MemberEdit() {
       member?.email,
       member?.address,
     ];
-    
+
     const allFieldsFilled = requiredFields.every(
       (field) => field.trim() !== "",
     );
@@ -105,6 +105,7 @@ export function MemberEdit() {
       !isEmailOk ||
       !allFieldsFilled
     ) {
+      console.log("입력값 유효성 실패로 요청 중단");
       return; // 유효하지 않으면 요청 중단
     }
     axios
@@ -113,10 +114,15 @@ export function MemberEdit() {
         password: password,
       })
       .then((res) => {
-        // navigate(`/member/${member.id}`);
+        navigate(`/member?id=${member.id}`);
+        console.log("success");
       })
-      .catch((err) => {})
-      .finally(() => {});
+      .catch((err) => {
+        console.log("error");
+      })
+      .finally(() => {
+        console.log("always");
+      });
   }
 
   if (!member) {
