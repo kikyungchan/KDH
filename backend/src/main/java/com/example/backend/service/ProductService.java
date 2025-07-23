@@ -29,6 +29,7 @@ public class ProductService {
 
     private final ProductRepository productRepository;
     private final ProductImageRepository productImageRepository;
+    private final S3Uploader s3Uploader;
 
     public void add(ProductForm productForm) {
         // 상품 저장
@@ -43,23 +44,34 @@ public class ProductService {
         // 이미지 저장
         List<ProductImage> imageList = new ArrayList<>();
         for (MultipartFile file : productForm.getImages()) {
-            String originalFileName = file.getOriginalFilename();
-            String uuid = UUID.randomUUID().toString();
-            String storedName = uuid + "_" + originalFileName;
-            String uploadDir = "C:/Temp/prj4/productFile";
-
-            File savedFile = new File(uploadDir, storedName);
             try {
-                file.transferTo(savedFile);
-            } catch (IOException e) {
-                throw new RuntimeException("파일 저장에 실패했습니다");
-            }
 
-            ProductImage image = new ProductImage();
-            image.setOriginalFileName(originalFileName);
-            image.setStoredPath(uploadDir + "/" + storedName);
-            image.setProduct(product);
-            imageList.add(image);
+                String s3Url = s3Uploader.upload(file, String.valueOf(product.getId()));
+                ProductImage image = new ProductImage();
+                image.setOriginalFileName(file.getOriginalFilename());
+                image.setStoredPath(s3Url);
+                image.setProduct(product);
+                imageList.add(image);
+            } catch (IOException e) {
+                throw new RuntimeException("업로드 실패 : " + e.getMessage(), e);
+            }
+//            String originalFileName = file.getOriginalFilename();
+//            String uuid = UUID.randomUUID().toString();
+//            String storedName = uuid + "_" + originalFileName;
+//            String uploadDir = "C:/Temp/prj4/productFile";
+
+//            File savedFile = new File(uploadDir, storedName);
+//            try {
+//                file.transferTo(savedFile);
+//            } catch (IOException e) {
+//                throw new RuntimeException("파일 저장에 실패했습니다");
+//            }
+//
+//            ProductImage image = new ProductImage();
+//            image.setOriginalFileName(originalFileName);
+//            image.setStoredPath(uploadDir + "/" + storedName);
+//            image.setProduct(product);
+//            imageList.add(image);
 
         }
         // 이미지 DB에 저장

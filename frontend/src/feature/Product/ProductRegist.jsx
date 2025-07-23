@@ -14,14 +14,20 @@ export function ProductRegist() {
 
   function handleSubmit(e) {
     e.preventDefault();
+
+    const formData = new FormData();
+    formData.append("productName", productName);
+    formData.append("price", price);
+    formData.append("quantity", quantity);
+    formData.append("category", category);
+    formData.append("info", info);
+    images.forEach((file) => {
+      formData.append("images", file);
+    });
+
     axios
-      .postForm("/api/product/regist", {
-        productName: productName,
-        price: price,
-        quantity: quantity,
-        category: category,
-        info: info,
-        images: images,
+      .post("/api/product/regist", formData, {
+        headers: { "Content-Type": "multipart/form-data" },
       })
       .then((res) => {
         alert("🎇상품등록이 완료되었습니다.");
@@ -31,12 +37,13 @@ export function ProductRegist() {
         setCategory("");
         setInfo("");
         setImages([]);
+        setPreviewImages([]);
         navigate("/product/list");
       })
       .catch((err) => {
+        console.error(err);
         alert("상품등록중 오류가 발생하였습니다❌.");
-      })
-      .finally(() => {});
+      });
   }
 
   function handleRemoveImage(index) {
