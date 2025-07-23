@@ -50,6 +50,10 @@ export function MemberAdd() {
   // 가입 버튼 클릭 여부
   const [isSubmitted, setIsSubmitted] = useState(false);
 
+  // 로그인 중복확인 상태
+  const [loginIdChecked, setLoginIdChecked] = useState(false);
+  const [loginIdCheckMessage, setLoginIdCheckMessage] = useState("");
+
   // 각 항목을 입력하지 않으면 가입 버튼 비활성화
   const requiredFields = [
     loginId,
@@ -64,8 +68,9 @@ export function MemberAdd() {
 
   // password 와 password2(비밀번호 확인)이 일치하지 않으면 가입버튼 비활성화
   const passwordConfirm = password === password2;
-  const disabled = !allFieldsFilled || !passwordConfirm;
+  const disabled = !allFieldsFilled || !passwordConfirm || !loginIdChecked;
 
+  // 회원가입 버튼
   function handleSignUpClick() {
     // 모든 입력값 유효성 검사 실행
     const isLoginIdOk = loginIdRegEx.test(loginId);
@@ -113,6 +118,33 @@ export function MemberAdd() {
       });
   }
 
+  // 아이디 중복 확인 버튼
+  function handleCheckLoginId() {
+    if (!loginId.trim()) {
+      setLoginIdCheckMessage("아이디를 입력하세요.");
+      return;
+    }
+
+    axios
+      .get(`/api/member/check-id?loginId=${loginId}`)
+      .then((res) => {
+        if (res.data.exists) {
+          setLoginIdChecked(false);
+          setLoginIdCheckMessage("이미 사용 중인 아이디입니다.");
+        } else {
+          setLoginIdChecked(true);
+          setLoginIdCheckMessage("사용 가능한 아이디입니다.");
+        }
+      })
+      .catch((err) => {
+        setLoginIdChecked(false);
+        setLoginIdCheckMessage("확인 중 오류가 발생했습니다");
+      })
+      .finally(() => {
+        console.log("always");
+      });
+  }
+
   return (
     <Row>
       <Col>
@@ -135,6 +167,13 @@ export function MemberAdd() {
                 유효한 아이디 형식이 아닙니다.
               </FormText>
             )}
+            <Button
+              onClick={() => handleCheckLoginId()}
+              size="sm"
+              variant="outline-danger"
+            >
+              아이디 중복 확인
+            </Button>
           </FormGroup>
         </div>
         <div>
