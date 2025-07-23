@@ -30,6 +30,7 @@ export function ProductRegist() {
         setCategory("");
         setInfo("");
         setImages([]);
+        navigate("/product/list");
       })
       .catch((err) => {
         alert("상품등록중 오류가 발생하였습니다❌.");

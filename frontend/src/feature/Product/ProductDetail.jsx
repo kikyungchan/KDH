@@ -25,9 +25,6 @@ export function ProductDetail() {
     return <Spinner />;
   }
 
-  const thumbnail = product.imagePath?.[0];
-  const detailImages = product.imagePath?.slice(1);
-
   function handleDeleteButton() {
     if (!window.confirm("정말 삭제하시겠습니까?")) return;
     axios
@@ -46,6 +43,9 @@ export function ProductDetail() {
     navigate(`/product/edit?id=${id}`);
   }
 
+  const thumbnail = product.imagePath?.[0];
+  const detailImages = product.imagePath?.slice(1);
+  
   return (
     <div className="product-detail">
       {/* 썸네일 이미지 */}
