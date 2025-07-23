@@ -38,7 +38,7 @@ export function ProductList() {
             {product.imagePath && (
               <div className="product-image-wrapper">
                 <img
-                  src={`http://localhost:8080/static/${product.imagePath?.[0].split("/").pop()}`}
+                  src={product.imagePath?.[0]}
                   alt={product.productName}
                   className="product-image"
                 />
