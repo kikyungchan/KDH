@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 @RestController
 @RequiredArgsConstructor
@@ -43,8 +44,8 @@ public class MemberController {
 
     // 회원 리스트 조회
     @GetMapping("/list")
-    public List<MemberListInfo> list() {
-        return memberService.list();
+    public Map<String, Object> memberList(@RequestParam(value = "page", defaultValue = "1") Integer pageNum) {
+        return memberService.list(pageNum);
     }
 
     // 회원 정보 조회

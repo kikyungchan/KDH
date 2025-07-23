@@ -2,14 +2,18 @@ package com.example.backend.member.service;
 
 import com.example.backend.member.dto.MemberDto;
 import com.example.backend.member.dto.MemberForm;
+import com.example.backend.member.dto.MemberListDto;
 import com.example.backend.member.dto.MemberListInfo;
 import com.example.backend.member.entity.Member;
 import com.example.backend.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Map;
 
 @Service
 @Transactional
@@ -31,8 +35,25 @@ public class MemberService {
     }
 
     // 회원 리스트 불러오기
-    public List<MemberListInfo> list() {
-        return memberRepository.findAllBy();
+    public Map<String, Object> list(Integer pageNum) {
+
+        Page<MemberListDto> memberListDtoPage
+                = memberRepository.findAllBy(PageRequest.of(pageNum - 1, 10));
+
+        Integer totalPages = memberListDtoPage.getTotalPages();
+        Integer rightPageNum = ((pageNum - 1) / 10 + 1) * 10;
+        Integer leftPageNum = rightPageNum - 9;
+        rightPageNum = Math.min(rightPageNum, totalPages);
+        leftPageNum = Math.max(leftPageNum, 1);
+
+        var pageInfo = Map.of(
+                "totalPages", totalPages,
+                "rightPageNum", rightPageNum,
+                "leftPageNum", leftPageNum,
+                "currentPageNum", pageNum
+        );
+        return Map.of("pageInfo", pageInfo,
+                "memberList", memberListDtoPage.getContent());
     }
 
     // 회원 상세 정보 불러오기
