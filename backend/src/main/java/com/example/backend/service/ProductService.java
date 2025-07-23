@@ -135,8 +135,33 @@ public class ProductService {
                 File file = new File("C:/Temp/prj4/productFile", extractFileName(path));
                 file.delete();
             }
+            productRepository.save(product);
         }
-        productRepository.save(product);
+        if (dto.getNewImages() != null) {
+            List<ProductImage> imageList = new ArrayList<>();
+            for (MultipartFile file : dto.getNewImages()) {
+                String originalFileName = file.getOriginalFilename();
+                String uuid = UUID.randomUUID().toString();
+                String storedName = uuid + "_" + originalFileName;
+                String uploadDir = "C:/Temp/prj4/productFile";
+
+                File savedFile = new File(uploadDir, storedName);
+                try {
+                    file.transferTo(savedFile);
+                } catch (IOException e) {
+                    throw new RuntimeException("파일 저장 실패");
+                }
+
+                ProductImage image = new ProductImage();
+                image.setOriginalFileName(originalFileName);
+                image.setStoredPath(uploadDir + "/" + storedName);
+                image.setProduct(product);
+                imageList.add(image);
+            }
+
+            productImageRepository.saveAll(imageList);
+        }
+
     }
 
     private String extractFileName(String path) {

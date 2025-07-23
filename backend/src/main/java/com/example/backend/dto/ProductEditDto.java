@@ -1,6 +1,7 @@
 package com.example.backend.dto;
 
 import lombok.Data;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -11,6 +12,6 @@ public class ProductEditDto {
     private String category;
     private String info;
     private Integer quantity;
-
+    private List<MultipartFile> newImages;
     private List<String> deletedImages;
 }

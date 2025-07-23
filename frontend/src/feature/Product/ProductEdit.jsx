@@ -5,8 +5,8 @@ import Swipe from "bootstrap/js/src/util/swipe.js";
 import { Button } from "react-bootstrap";
 
 export function ProductEdit() {
-  const [deletedIndexes, setDeletedIndexes] = useState([]); // 블러처리된 이미지 인덱스
-
+  const [newImages, setNewImages] = useState([]); // 새로 추가된 파일들
+  const [previewImages, setPreviewImages] = useState([]); // 미리보기용 URL
   const [deletedImagePaths, setDeletedImagePaths] = useState([]);
 
   const [imagePaths, setImagePaths] = useState([]); // 전체 이미지 경로 리스트
@@ -45,13 +45,28 @@ export function ProductEdit() {
   }
 
   function handleSave() {
-    const dataToSend = {
-      ...form,
-      deletedImages: deletedImagePaths, // 삭제할 이미지 경로 목록 추가
-    };
+    const formData = new FormData();
+    formData.append("productName", form.productName);
+    formData.append("price", form.price);
+    formData.append("category", form.category);
+    formData.append("info", form.info);
+    formData.append("quantity", form.quantity);
+    formData.append("id", id); // 수정 대상 id
+
+    // 삭제 이미지
+    deletedImagePaths.forEach((path) => {
+      formData.append("deletedImages", path);
+    });
+
+    // 추가 이미지
+    newImages.forEach((file) => {
+      formData.append("newImages", file);
+    });
 
     axios
-      .put(`/api/product/edit?id=${id}`, dataToSend)
+      .put(`/api/product/edit`, formData, {
+        headers: { "Content-Type": "multipart/form-data" },
+      })
       .then(() => {
         alert("수정 완료");
         navigate(`/product/view?id=${id}`);
@@ -59,6 +74,14 @@ export function ProductEdit() {
       .catch((err) => {
         console.error("수정 실패", err);
       });
+  }
+
+  function handleAddImages(e) {
+    const files = Array.from(e.target.files);
+    setNewImages((prev) => [...prev, ...files]);
+
+    const newPreviews = files.map((file) => URL.createObjectURL(file));
+    setPreviewImages((prev) => [...prev, ...newPreviews]);
   }
 
   function handleImageDelete(index) {
@@ -100,7 +123,36 @@ export function ProductEdit() {
             })}
           </div>
         </div>
+        <div>
+          <h4>새 이미지 추가</h4>
+          <input
+            type="file"
+            accept="image/*"
+            multiple
+            onChange={handleAddImages}
+          />
+        </div>
 
+        <div
+          style={{
+            display: "flex",
+            flexWrap: "wrap",
+            gap: "10px",
+            marginTop: "10px",
+          }}
+        >
+          {previewImages.map((url, idx) => (
+            <div key={idx} style={{ position: "relative" }}>
+              <img
+                src={url}
+                alt={`추가 이미지 ${idx + 1}`}
+                width="150"
+                style={{ border: "1px solid #aaa", borderRadius: "4px" }}
+              />
+              <div></div>
+            </div>
+          ))}
+        </div>
         <div>
           상품명
           <input
@@ -147,6 +199,7 @@ export function ProductEdit() {
         </div>
         <div>
           <button onClick={handleSave}>저장</button>
+          <button onClick={() => navigate(-1)}>취소</button>
         </div>
       </div>
     </>

@@ -6,8 +6,10 @@ import com.example.backend.dto.ProductForm;
 import com.example.backend.repository.ProductRepository;
 import com.example.backend.service.ProductService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -19,8 +21,25 @@ public class ProductController {
     private final ProductService productService;
     private final ProductRepository productRepository;
 
-    @PutMapping("/edit")
-    public void editProduct(@RequestParam Long id, @RequestBody ProductEditDto dto) {
+    @PutMapping(value = "/edit", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public void editProduct(@RequestParam Long id,
+                            @RequestParam String productName,
+                            @RequestParam Integer price,
+                            @RequestParam String category,
+                            @RequestParam String info,
+                            @RequestParam Integer quantity,
+                            @RequestParam(required = false) List<String> deletedImages,
+                            @RequestPart(required = false) List<MultipartFile> newImages
+    ) {
+        ProductEditDto dto = new ProductEditDto();
+        dto.setProductName(productName);
+        dto.setPrice(price);
+        dto.setCategory(category);
+        dto.setInfo(info);
+        dto.setQuantity(quantity);
+        dto.setDeletedImages(deletedImages);
+        dto.setNewImages(newImages);
+
         productService.edit(id, dto);
     }
 
