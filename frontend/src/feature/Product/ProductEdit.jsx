@@ -76,6 +76,22 @@ export function ProductEdit() {
       });
   }
 
+  function handleRemoveNewImage(index) {
+    // 1. 미리보기 제거
+    setPreviewImages((prev) => {
+      const updated = [...prev];
+      updated.splice(index, 1);
+      return updated;
+    });
+
+    // 2. 실제 업로드 대상 파일도 제거
+    setNewImages((prev) => {
+      const updated = [...prev];
+      updated.splice(index, 1);
+      return updated;
+    });
+  }
+
   function handleAddImages(e) {
     const files = Array.from(e.target.files);
     setNewImages((prev) => [...prev, ...files]);
@@ -131,6 +147,15 @@ export function ProductEdit() {
             multiple
             onChange={handleAddImages}
           />
+          {newImages.length > 0 && (
+            <ul style={{ marginTop: "10px" }}>
+              {newImages.map((file, idx) => (
+                <li key={idx} style={{ fontSize: "14px" }}>
+                  {file.name}
+                </li>
+              ))}
+            </ul>
+          )}
         </div>
 
         <div
@@ -149,7 +174,26 @@ export function ProductEdit() {
                 width="150"
                 style={{ border: "1px solid #aaa", borderRadius: "4px" }}
               />
-              <div></div>
+              {/*  미리보기 취소버튼*/}
+              <Button
+                variant="light"
+                size="sm"
+                onClick={() => handleRemoveNewImage(idx)}
+                style={{
+                  position: "absolute",
+                  top: 5,
+                  right: 5,
+                  padding: "2px 6px",
+                  fontSize: "12px",
+                  color: "white",
+                  backgroundColor: "#dc3545", // 부트스트랩 danger 색
+                  border: "none",
+                  borderRadius: "4px", //
+                  cursor: "pointer",
+                }}
+              >
+                취소
+              </Button>
             </div>
           ))}
         </div>
