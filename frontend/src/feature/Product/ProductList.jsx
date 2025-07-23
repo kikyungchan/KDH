@@ -36,11 +36,13 @@ export function ProductList() {
             key={product.id}
           >
             {product.imagePath && (
-              <img
-                src={`http://localhost:8080/static/${product.imagePath?.[0].split("/").pop()}`}
-                alt={product.productName}
-                className="product-image"
-              />
+              <div className="product-image-wrapper">
+                <img
+                  src={`http://localhost:8080/static/${product.imagePath?.[0].split("/").pop()}`}
+                  alt={product.productName}
+                  className="product-image"
+                />
+              </div>
             )}
             <div className="product-name">{product.productName}</div>
             <div className="product-price">

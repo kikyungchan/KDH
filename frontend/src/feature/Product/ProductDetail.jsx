@@ -51,6 +51,10 @@ export function ProductDetail() {
       {/* 썸네일 이미지 */}
       {thumbnail && (
         <img
+          style={{
+            width: "150",
+            height: "150",
+          }}
           className="product-thumbnail"
           src={`http://localhost:8080/static/${thumbnail.split("/").pop()}`}
           alt="썸네일 이미지"

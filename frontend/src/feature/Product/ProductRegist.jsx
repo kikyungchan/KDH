@@ -163,6 +163,7 @@ export function ProductRegist() {
               ))}
             </div>
           )}
+          <button>등록</button>
         </div>
       </div>
     </form>
