@@ -35,9 +35,6 @@ export function Chat({ username }) {
         // setMsgs((prev) => [...prev, msg]);
       });
     };
-    client.activate({
-      connectHeaders: { username: username },
-    });
 
     // 연결 활성화(connect 시도)
     client.activate();

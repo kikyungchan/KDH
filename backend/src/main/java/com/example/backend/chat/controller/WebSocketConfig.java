@@ -17,6 +17,7 @@ import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerCo
 import org.springframework.web.socket.server.support.DefaultHandshakeHandler;
 
 import java.security.Principal;
+import java.util.List;
 import java.util.Map;
 
 @Configuration
@@ -29,14 +30,26 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
             @Override
             public Message<?> preSend(Message<?> message, MessageChannel channel) {
                 StompHeaderAccessor accessor = StompHeaderAccessor.wrap(message);
-
+                System.out.println("STOMP Command: " + accessor.getCommand());
+                System.out.println("▶ Native Headers1: " + accessor.toNativeHeaderMap());
+                System.out.println("▶ user name: " + accessor.getUser().getName());
                 System.out.println("is start");
+                // todo : user 값은 넘어오는데 user name 이 guset 로 넘어옴
 
                 // 클라이언트가 STOMP CONNECT 프레임을 보낼 때 한 번 실행
                 if (StompCommand.CONNECT.equals(accessor.getCommand())) {
-                    System.out.println("is start2");
-                    // client.activate({ connectHeaders:{username} }) 값 추출
-                    String username = accessor.getFirstNativeHeader("username");
+                    // 1) native headers 전체
+                    Map<String, List<String>> nativeHeaders = accessor.toNativeHeaderMap();
+                    System.out.println("▶ Native Headers: " + nativeHeaders);
+                    System.out.println("▶ username" + nativeHeaders.get("username"));
+
+                    List<String> users = nativeHeaders.get("username");
+                    System.out.println("▶ users " + users);
+                    System.out.println("▶ users.get(0) " + users.get(0));
+                    System.out.println("true false : " + (users != null && !users.isEmpty()));
+                    String username = (users != null && !users.isEmpty())
+                            ? users.get(0)
+                            : "guest";
                     System.out.println("username33 : " + username);
                     //  null/빈값 체크
                     if (username == null || username.isEmpty()) {
@@ -44,11 +57,11 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
                         username = "guest";
                     }
                     final String user = username;
-                    // Principal 로 세션에 설정해 주면 @MessageMapping 안에서 받을 수 있다                    Principal user = () -> username;
                     accessor.setUser(() -> user);
-                    System.out.println("user33 : " + accessor.getUser().getName());
+                    System.out.println("▶ 설정된 Principal: " + accessor.getUser().getName());
                 }
                 System.out.println("message : " + message);
+                System.out.println("▶ Native Headers2: " + accessor.toNativeHeaderMap());
                 return message;
             }
         });
@@ -59,9 +72,7 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
         System.out.println("registerStompEndpoints" + registry);
         registry.addEndpoint("/ws-chat")
                 .setAllowedOriginPatterns("*") // cors 허용 범위
-                // HTTP 세션의 Principal 정보를 WebSocket 세션에도 복사
-//                .addInterceptors(new HttpSessionHandshakeInterceptor())
-//                .addInterceptors(new HandshakeInterceptor())
+
                 // Spring Security 인증된 사용자(Principal) 사용
                 .setHandshakeHandler(new DefaultHandshakeHandler() {
                     @Override
@@ -72,13 +83,17 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
                         System.out.println("attributes: " + attributes);
                         System.out.println("attributes.username : " + attributes.get("username"));
                         System.out.println("request : " + request);
-//                        String user2 = (String) attributes.get("username");
-                        String user = ((ServletServerHttpRequest) request)
+                        /*String user = ((ServletServerHttpRequest) request)
                                 .getServletRequest()
                                 .getParameter("username");
-//                        todo : user값이 null임
+//                        todo : SUBSCRIBE 요청 처리 시 여기서 username 이 guest22로 변경됨,
                         System.out.println("username from attrs: " + user);
-                        return () -> (user != null ? user : "guest");
+                        return () -> (user != null ? user : "guest2");*/
+                        String user = (String) attributes.get("username");
+                        if (user == null || user.isEmpty()) user = "guest22";
+                        final String principalName = user;
+                        System.out.println("▶ Handshake Principal: " + principalName);
+                        return () -> principalName;
                     }
 
 
