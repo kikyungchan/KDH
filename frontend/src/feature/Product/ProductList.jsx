@@ -51,6 +51,15 @@ export function ProductList() {
       </div>
       {/* 페이지네이션 */}
       <div className="pagination d-flex justify-content-center align-items-center">
+        {/*이전*/}
+        <button
+          onClick={() => handlePageClick(pageInfo.leftPageNumber - 1)}
+          disabled={pageInfo.leftPageNumber < 6}
+          className="page-nav-button"
+        >
+          이전
+        </button>
+        {/*페이지 번호 버튼들*/}
         {Array.from(
           { length: pageInfo.rightPageNumber - pageInfo.leftPageNumber + 1 },
           (_, i) => {
@@ -66,6 +75,14 @@ export function ProductList() {
             );
           },
         )}
+        {/*  다음*/}
+        <button
+          onClick={() => handlePageClick(pageInfo.rightPageNumber + 1)}
+          disabled={pageInfo.rightPageNumber > pageInfo.totalPages - 5}
+          className="page-nav-button"
+        >
+          다음
+        </button>
       </div>
     </div>
   );
