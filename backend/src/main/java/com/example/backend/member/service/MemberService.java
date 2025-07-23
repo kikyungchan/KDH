@@ -52,8 +52,12 @@ public class MemberService {
                 "leftPageNum", leftPageNum,
                 "currentPageNum", pageNum
         );
+
+        System.out.println("pageNum = " + pageNum);
+        System.out.println("page result = " + memberListDtoPage.getContent());
         return Map.of("pageInfo", pageInfo,
                 "memberList", memberListDtoPage.getContent());
+
     }
 
     // 회원 상세 정보 불러오기

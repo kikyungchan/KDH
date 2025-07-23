@@ -11,7 +11,7 @@ function App() {
         <Route path="/member/edit" element={<MemberEdit />} />
         <Route path="/member/list" element={<MemberList />} />
         <Route path="/signup" element={<MemberAdd />} />
-        <Route path="/member/" element={<MemberDetail />} />
+        <Route path="/member" element={<MemberDetail />} />
       </Routes>
     </BrowserRouter>
   );
