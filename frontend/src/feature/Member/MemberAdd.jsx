@@ -143,7 +143,7 @@ export function MemberAdd() {
             <FormControl
               type="password"
               value={password}
-              placeholder="비밀번호를 입력하세요"
+              placeholder="비밀번호는 영문+숫자 조합, 8~20자 사이로 입력하세요."
               onChange={(e) => {
                 setPassword(e.target.value);
               }}
@@ -162,7 +162,7 @@ export function MemberAdd() {
             <FormControl
               type="password"
               value={password2}
-              placeholder="비밀번호 확인"
+              placeholder="비밀번호를 한 번 더 입력해주세요"
               onChange={(e) => {
                 setPassword2(e.target.value);
               }}
@@ -180,7 +180,7 @@ export function MemberAdd() {
             <FormControl
               type="text"
               value={name}
-              placeholder="이름을 입력하세요"
+              placeholder="이름은 한글 또는 영문 2~20자까지 입력 가능합니다."
               autoComplete="name"
               onChange={(e) => {
                 setName(e.target.value);
@@ -213,7 +213,7 @@ export function MemberAdd() {
             <FormControl
               type="text"
               value={phone}
-              placeholder="전화번호를 입력하세요"
+              placeholder="숫자만 입력 (예: 01012345678)"
               autoComplete="tel"
               onChange={(e) => {
                 setPhone(e.target.value);
@@ -233,7 +233,7 @@ export function MemberAdd() {
             <FormControl
               type="text"
               value={email}
-              placeholder="이메일을 입력하세요"
+              placeholder="예: example@domain.com 형식의 이메일을 입력하세요."
               autoComplete="email"
               onChange={(e) => {
                 setEmail(e.target.value);
