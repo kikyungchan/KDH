@@ -26,6 +26,11 @@ CREATE TABLE product_image
 ALTER TABLE product_image
     ADD CONSTRAINT FK_PRODUCTIMAGE_ON_PRODUCT FOREIGN KEY (product_id) REFERENCES product (id);
 
+# 페이징용더미데이터복사
+INSERT INTO product (product_name, price, category, info, quantity)
+SELECT CONCAT(product_name, ' 복사1'), price, category, info, quantity
+FROM product;
+
 
 
 
