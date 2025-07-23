@@ -67,6 +67,30 @@ export function MemberAdd() {
   const disabled = !allFieldsFilled || !passwordConfirm;
 
   function handleSignUpClick() {
+    // 모든 입력값 유효성 검사 실행
+    const isLoginIdOk = loginIdRegEx.test(loginId);
+    const isPasswordOk = passwordRegEx.test(password);
+    const isEmailOk = emailRegEx.test(loginId);
+    const isNameOk = nameRegEx.test(loginId);
+    const isPhoneOk = phoneRegEx.test(loginId);
+    // 상태값 업데이트
+    setLoginIdValid(isLoginIdOk);
+    setPasswordValid(isPasswordOk);
+    setEmailValid(isEmailOk);
+    setNameValid(isNameOk);
+    setPhoneValid(isPhoneOk);
+
+    if (
+      !isLoginIdOk ||
+      !isPasswordOk ||
+      !isEmailOk ||
+      !isNameOk ||
+      !isPhoneOk ||
+      !passwordConfirm
+    ) {
+      return;
+    }
+
     axios
       .post("/api/member/signup", {
         loginId: loginId,
