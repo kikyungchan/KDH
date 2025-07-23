@@ -7,6 +7,7 @@ import {
   FormText,
   Row,
   Spinner,
+  Form,
 } from "react-bootstrap";
 import { useState } from "react";
 import axios from "axios";
@@ -130,7 +131,7 @@ export function MemberAdd() {
       .then((res) => {
         if (res.data.exists) {
           setLoginIdChecked(false);
-          setLoginIdCheckMessage("이미 사용 중|인 아이디입니다.");
+          setLoginIdCheckMessage("이미 사용 중인 아이디입니다.");
           console.log("백엔드 응답", res.data);
         } else {
           setLoginIdChecked(true);
@@ -191,44 +192,46 @@ export function MemberAdd() {
           </FormGroup>
         </div>
         <div>
-          <FormGroup>
-            <FormLabel>비밀번호</FormLabel>
-            <FormControl
-              type="password"
-              value={password}
-              placeholder="비밀번호는 영문+숫자 조합, 8~20자 사이로 입력하세요."
-              onChange={(e) => {
-                setPassword(e.target.value);
-              }}
-              isInvalid={isSubmitted && !passwordValid}
-            />
-            {isSubmitted && !passwordValid && (
-              <FormText className="text-danger">
-                유효한 비밀번호 형식이 아닙니다.
-              </FormText>
-            )}
-          </FormGroup>
+          <form>
+            <FormGroup>
+              <FormLabel>비밀번호</FormLabel>
+              <FormControl
+                type="password"
+                value={password}
+                placeholder="비밀번호는 영문+숫자 조합, 8~20자 사이로 입력하세요."
+                onChange={(e) => {
+                  setPassword(e.target.value);
+                }}
+                isInvalid={isSubmitted && !passwordValid}
+              />
+              {isSubmitted && !passwordValid && (
+                <FormText className="text-danger">
+                  유효한 비밀번호 형식이 아닙니다.
+                </FormText>
+              )}
+            </FormGroup>
+          </form>
         </div>
-        ;
         <div>
-          <FormGroup>
-            <FormLabel>비밀번호 확인</FormLabel>
-            <FormControl
-              type="password"
-              value={password2}
-              placeholder="비밀번호를 한 번 더 입력해주세요"
-              onChange={(e) => {
-                setPassword2(e.target.value);
-              }}
-            />
-            {password2 && password !== password2 && (
-              <div style={{ color: "red", fontSize: "0.875rem" }}>
-                비밀번호가 일치하지 않습니다.
-              </div>
-            )}
-          </FormGroup>
+          <form>
+            <FormGroup>
+              <FormLabel>비밀번호 확인</FormLabel>
+              <FormControl
+                type="password"
+                value={password2}
+                placeholder="비밀번호를 한 번 더 입력해주세요"
+                onChange={(e) => {
+                  setPassword2(e.target.value);
+                }}
+              />
+              {password2 && password !== password2 && (
+                <div style={{ color: "red", fontSize: "0.875rem" }}>
+                  비밀번호가 일치하지 않습니다.
+                </div>
+              )}
+            </FormGroup>
+          </form>
         </div>
-        ;
         <div>
           <FormGroup>
             <FormLabel>성명</FormLabel>
@@ -249,7 +252,6 @@ export function MemberAdd() {
             )}
           </FormGroup>
         </div>
-        ;
         <div>
           <FormGroup>
             <FormLabel>생년월일</FormLabel>
@@ -263,7 +265,6 @@ export function MemberAdd() {
             />
           </FormGroup>
         </div>
-        ;
         <div>
           <FormGroup>
             <FormLabel>전화번호</FormLabel>
@@ -284,7 +285,6 @@ export function MemberAdd() {
             )}
           </FormGroup>
         </div>
-        ;
         <div>
           <FormGroup>
             <FormLabel>이메일</FormLabel>
@@ -305,7 +305,6 @@ export function MemberAdd() {
             )}
           </FormGroup>
         </div>
-        ;
         <div>
           <FormGroup>
             <FormLabel>주소</FormLabel>
@@ -320,13 +319,11 @@ export function MemberAdd() {
             />
           </FormGroup>
         </div>
-        ;
         <div>
           <Button onClick={handleSignUpClick} disabled={disabled}>
             가입
           </Button>
         </div>
-        ;
       </Col>
     </Row>
   );
