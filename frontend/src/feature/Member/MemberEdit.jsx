@@ -22,7 +22,15 @@ export function MemberEdit() {
   const phoneRegEx = /^01[016789][0-9]{7,8}$/;
 
   // 입력항목
-  const [member, setMember] = useState(null);
+  const [member, setMember] = useState({
+    loginId: "",
+    name: "",
+    password: "",
+    birthday: "",
+    phone: "",
+    email: "",
+    address: "",
+  });
   const [memberParams] = useSearchParams();
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
@@ -58,6 +66,7 @@ export function MemberEdit() {
     );
   }
 
+  // 수정버튼
   function handleMemberInfoChangeButton() {
     setIsSubmitted(true);
 
@@ -96,6 +105,7 @@ export function MemberEdit() {
     axios
       .put(`/api/member/${member.id}`, {
         ...member,
+        password: password,
       })
       .then((res) => {
         // navigate(`/member/${member.id}`);
@@ -120,26 +130,29 @@ export function MemberEdit() {
         <div>
           <FormGroup controlId="loginId1">
             <FormLabel>아이디</FormLabel>
-            <FormControl disabled value={member.loginId} />
+            <FormControl disabled value={member.loginId || ""} />
           </FormGroup>
         </div>
-        <div>
-          <FormGroup controlId="password1">
-            <FormLabel>비밀번호</FormLabel>
-            <FormControl
-              value={member.password}
-              type="password"
-              onChange={(e) =>
-                setMember({ ...member, password: e.target.value })
-              }
-            />
-          </FormGroup>
-        </div>
+        {/*<div>*/}
+        {/*  <FormGroup controlId="password1">*/}
+        {/*    <FormLabel>비밀번호</FormLabel>*/}
+        {/*    <FormControl*/}
+        {/*      value={member.password || ""}*/}
+        {/*      type="password"*/}
+        {/*      onChange={(e) => setPassword(e.target.value)}*/}
+        {/*    />*/}
+        {/*    {isSubmitted && !passwordValid && (*/}
+        {/*      <FormText className="text-danger">*/}
+        {/*        비밀번호는 영문+숫자 조합 8~20자여야 합니다.*/}
+        {/*      </FormText>*/}
+        {/*    )}*/}
+        {/*  </FormGroup>*/}
+        {/*</div>*/}
         <div>
           <FormGroup controlId="name1">
             <FormLabel>이름</FormLabel>
             <FormControl
-              value={member.name}
+              value={member.name || ""}
               onChange={(e) => setMember({ ...member, name: e.target.value })}
             />
             {isSubmitted && !nameValid && (
@@ -153,7 +166,7 @@ export function MemberEdit() {
           <FormGroup controlId="birthday1">
             <FormLabel>생년월일</FormLabel>
             <FormControl
-              value={member.birthday}
+              value={member.birthday || ""}
               onChange={(e) =>
                 setMember({ ...member, birthday: e.target.value })
               }
@@ -164,7 +177,7 @@ export function MemberEdit() {
           <FormGroup controlId="phone1">
             <FormLabel>전화번호</FormLabel>
             <FormControl
-              value={member.phone}
+              value={member.phone || ""}
               onChange={(e) => setMember({ ...member, phone: e.target.value })}
             />
             {isSubmitted && !phoneValid && (
@@ -178,7 +191,7 @@ export function MemberEdit() {
           <FormGroup controlId="email1">
             <FormLabel>이메일</FormLabel>
             <FormControl
-              value={member.email}
+              value={member.email || ""}
               onChange={(e) => setMember({ ...member, email: e.target.value })}
             />
             {isSubmitted && !emailValid && (
@@ -192,7 +205,7 @@ export function MemberEdit() {
           <FormGroup controlId="address1">
             <FormLabel>주소</FormLabel>
             <FormControl
-              value={member.address}
+              value={member.address || ""}
               onChange={(e) =>
                 setMember({ ...member, address: e.target.value })
               }
