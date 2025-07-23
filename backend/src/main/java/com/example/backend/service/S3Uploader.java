@@ -17,7 +17,7 @@ import java.util.UUID;
 public class S3Uploader {
 
     private final S3Client s3Client;
-    @Value("${cloud.aws.s3.bucket}")
+    @Value("${aws.s3.bucket.name}")
     private String bucket;
 
     public String upload(MultipartFile file, String dirName) throws IOException {
