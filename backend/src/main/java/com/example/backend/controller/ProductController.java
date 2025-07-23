@@ -17,6 +17,11 @@ public class ProductController {
     private final ProductService productService;
     private final ProductRepository productRepository;
 
+    @PutMapping("/edit")
+    public void editProduct(@RequestParam Long id, @RequestBody ProductForm productForm) {
+        productService.edit(id, productForm);
+    }
+
     @DeleteMapping("/delete")
     public void delete(@RequestParam Long id) {
         productService.delete(id);

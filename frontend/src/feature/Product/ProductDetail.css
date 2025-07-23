@@ -27,16 +27,3 @@
     border-radius: 8px;
 }
 
-.btn-delete {
-    background-color: #e74c3c;
-    color: white;
-    border: none;
-    padding: 0.5rem 1rem;
-    border-radius: 5px;
-    cursor: pointer;
-}
-
-.btn-delete:hover {
-    background-color: #c0392b;
-}
-

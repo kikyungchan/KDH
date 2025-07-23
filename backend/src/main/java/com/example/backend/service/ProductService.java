@@ -100,4 +100,14 @@ public class ProductService {
         Product product = productRepository.findById(id).get();
         productRepository.delete(product);
     }
+
+    public void edit(Long id, ProductForm productForm) {
+        Product product = productRepository.findById(id).get();
+        product.setProductName(productForm.getProductName());
+        product.setPrice(productForm.getPrice());
+        product.setCategory(productForm.getCategory());
+        product.setInfo(productForm.getInfo());
+        product.setQuantity(productForm.getQuantity());
+        productRepository.save(product);
+    }
 }

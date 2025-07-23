@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { Spinner } from "react-bootstrap";
+import { Button, Spinner } from "react-bootstrap";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import "./ProductDetail.css";
 
@@ -42,7 +42,9 @@ export function ProductDetail() {
       .finally(() => {});
   }
 
-  function handleEditButton() {}
+  function handleEditButton() {
+    navigate(`/product/edit?id=${id}`);
+  }
 
   return (
     <div className="product-detail">
@@ -57,14 +59,16 @@ export function ProductDetail() {
 
       <h2>제품명 : {product.productName}</h2>
       <p>가격 : {product.price.toLocaleString()}원</p>
-      <p>상세설명 : {product.info}</p>
       <p>재고 : {product.quantity}개</p>
-      {/*수정 삭제버튼은 관리자계정만 보이게*/}
+      <p>상세설명 : {product.info}</p>
 
-      <button onClick={handleEditButton}>수정</button>
-      <button className="btn-delete" onClick={handleDeleteButton}>
+      {/*수정/삭제버튼, 재고메뉴는 관리자계정만 보이게*/}
+      <Button className="btn-secondary" onClick={handleEditButton}>
+        수정
+      </Button>
+      <Button className="btn-danger" onClick={handleDeleteButton}>
         삭제
-      </button>
+      </Button>
 
       {/* 상세 이미지 목록 */}
       <div className="product-images">
