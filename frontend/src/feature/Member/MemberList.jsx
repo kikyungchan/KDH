@@ -11,7 +11,7 @@ export function MemberList() {
 
   useEffect(() => {
     axios
-      .get("/api/member/list")
+      .get(`/api/member/list?${searchParams}`)
       .then((res) => {
         console.log("res.data" + res.data);
         setMemberList(res.data.memberList);
@@ -23,7 +23,7 @@ export function MemberList() {
       .finally(() => {
         console.log("항상");
       });
-  }, []);
+  }, [searchParams]);
 
   const pageNumber = [];
   for (let i = pageInfo.leftPageNumber; i <= pageInfo.rightPageNumber; i++) {
@@ -32,7 +32,7 @@ export function MemberList() {
 
   function handlePageNumberClick(pageNumber) {
     const nextSearchParams = new URLSearchParams(searchParams);
-    nextSearchParams.set("p", pageNumber);
+    nextSearchParams.set("page", pageNumber);
     setSearchParams(nextSearchParams);
   }
 
