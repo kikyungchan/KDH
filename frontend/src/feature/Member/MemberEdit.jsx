@@ -5,6 +5,7 @@ import {
   FormGroup,
   FormLabel,
   FormText,
+  Modal,
   Row,
   Spinner,
 } from "react-bootstrap";
@@ -34,6 +35,10 @@ export function MemberEdit() {
   const [memberParams] = useSearchParams();
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
+  // Modal
+
+  const [passwordModalShow, setPasswordModalShow] = useState(false);
+  const [saveModalShow, setSaveModalShow] = useState(false);
 
   // 정규식과 일치하는지
   const [passwordValid, setPasswordValid] = useState(true);
@@ -133,21 +138,6 @@ export function MemberEdit() {
             <FormControl disabled value={member.loginId || ""} />
           </FormGroup>
         </div>
-        {/*<div>*/}
-        {/*  <FormGroup controlId="password1">*/}
-        {/*    <FormLabel>비밀번호</FormLabel>*/}
-        {/*    <FormControl*/}
-        {/*      value={member.password || ""}*/}
-        {/*      type="password"*/}
-        {/*      onChange={(e) => setPassword(e.target.value)}*/}
-        {/*    />*/}
-        {/*    {isSubmitted && !passwordValid && (*/}
-        {/*      <FormText className="text-danger">*/}
-        {/*        비밀번호는 영문+숫자 조합 8~20자여야 합니다.*/}
-        {/*      </FormText>*/}
-        {/*    )}*/}
-        {/*  </FormGroup>*/}
-        {/*</div>*/}
         <div>
           <FormGroup controlId="name1">
             <FormLabel>이름</FormLabel>
@@ -212,25 +202,57 @@ export function MemberEdit() {
             />
           </FormGroup>
         </div>
-        <div>
-          <Button
-            onClick={handleMemberInfoChangeButton}
-            disabled={
-              !member?.name?.trim() ||
-              !member?.birthday?.trim() ||
-              !member?.phone?.trim() ||
-              !member?.email?.trim() ||
-              !member?.address?.trim() ||
-              !password.trim()
-            }
-          >
-            수정
-          </Button>
-          <Button onClick={() => navigate(`/member?id=${member.id}`)}>
-            취소
-          </Button>
+        <div className="d-flex justify-content-between">
+          <div>
+            <Button onClick={() => setPasswordModalShow(true)}>
+              암호 변경
+            </Button>
+          </div>
+          <div>
+            <Button
+              onClick={() => setSaveModalShow(true)}
+              // onClick={handleMemberInfoChangeButton}
+              disabled={
+                !member?.name?.trim() ||
+                !member?.birthday?.trim() ||
+                !member?.phone?.trim() ||
+                !member?.email?.trim() ||
+                !member?.address?.trim()
+                // ||
+                // !password.trim()
+              }
+            >
+              수정
+            </Button>
+            <Button onClick={() => navigate(`/member?id=${member.id}`)}>
+              취소
+            </Button>
+          </div>
         </div>
       </Col>
+      {/* 회원 정보 수정 모달*/}
+      <Modal show={saveModalShow} onHide={() => setSaveModalShow(false)}>
+        <Modal.Header closeButton>
+          <Modal.Title>회원 정보 수정 확인</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <FormGroup>
+            <FormLabel>암호 입력</FormLabel>
+            <FormControl
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+            />
+            {isSubmitted && password.trim() === "" && (
+              <FormText className="text-danger">암호를 입력해 주세요.</FormText>
+            )}
+          </FormGroup>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button onClick={handleMemberInfoChangeButton}>저장</Button>
+          <Button onClick={() => setSaveModalShow(false)}>취소</Button>
+        </Modal.Footer>
+      </Modal>
     </Row>
   );
 }
