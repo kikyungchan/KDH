@@ -50,7 +50,7 @@ export function ProductList() {
         ))}
       </div>
       {/* 페이지네이션 */}
-      <div className="pagination">
+      <div className="pagination d-flex justify-content-center align-items-center">
         {Array.from(
           { length: pageInfo.rightPageNumber - pageInfo.leftPageNumber + 1 },
           (_, i) => {

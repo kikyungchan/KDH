@@ -45,7 +45,7 @@ export function ProductDetail() {
 
   const thumbnail = product.imagePath?.[0];
   const detailImages = product.imagePath?.slice(1);
-  
+
   return (
     <div className="product-detail">
       {/* 썸네일 이미지 */}
@@ -69,7 +69,7 @@ export function ProductDetail() {
       <Button className="btn-danger" onClick={handleDeleteButton}>
         삭제
       </Button>
-
+      <hr />
       {/* 상세 이미지 목록 */}
       <div className="product-images">
         {detailImages?.map((path, index) => (
