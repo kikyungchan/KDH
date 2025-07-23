@@ -48,7 +48,7 @@ export function MemberAdd() {
   const [emailValid, setEmailValid] = useState(true);
 
   // 가입 버튼 클릭 여부
-  const [isSubmiited, setIsSubmiited] = useState(false);
+  const [isSubmitted, setIsSubmitted] = useState(false);
 
   // 각 항목을 입력하지 않으면 가입 버튼 비활성화
   const requiredFields = [
@@ -79,6 +79,7 @@ export function MemberAdd() {
     setEmailValid(isEmailOk);
     setNameValid(isNameOk);
     setPhoneValid(isPhoneOk);
+    setIsSubmitted(true);
 
     if (
       !isLoginIdOk ||
@@ -126,14 +127,12 @@ export function MemberAdd() {
               autoComplete="username"
               onChange={(e) => {
                 setLoginId(e.target.value);
-                setLoginIdValid(loginIdRegEx.test(e.target.value));
               }}
+              isInvalid={isSubmitted && !loginIdValid}
             />
-            {loginId !== "" && (
-              <FormText className={loginIdValid ? "text-muted" : "text-danger"}>
-                {loginIdValid
-                  ? "아이디는 영문으로 시작하며 4~20자, 영문+숫자 조합만 가능합니다."
-                  : "유효한 아이디 형식이 아닙니다."}
+            {isSubmitted && !loginIdValid && (
+              <FormText className="text-danger">
+                유효한 아이디 형식이 아닙니다.
               </FormText>
             )}
           </FormGroup>
@@ -147,12 +146,14 @@ export function MemberAdd() {
               placeholder="비밀번호를 입력하세요"
               onChange={(e) => {
                 setPassword(e.target.value);
-                setPasswordValid(passwordRegEx.test(e.target.value));
               }}
+              isInvalid={isSubmitted && !passwordValid}
             />
-            <FormText className="text-danger" hidden={passwordValid}>
-              유효한 비밀번호 형식이 아닙니다.
-            </FormText>
+            {isSubmitted && !passwordValid && (
+              <FormText className="text-danger">
+                유효한 비밀번호 형식이 아닙니다.
+              </FormText>
+            )}
           </FormGroup>
         </div>
         <div>
@@ -183,12 +184,14 @@ export function MemberAdd() {
               autoComplete="name"
               onChange={(e) => {
                 setName(e.target.value);
-                setNameValid(nameRegEx.test(e.target.value));
               }}
+              isInvalid={isSubmitted && !nameValid}
             />
-            <FormText className="text-danger" hidden={nameValid}>
-              유효한 이름 형식이 아닙니다.
-            </FormText>
+            {isSubmitted && !nameValid && (
+              <FormText className="text-danger">
+                유효한 이름 형식이 아닙니다.
+              </FormText>
+            )}
           </FormGroup>
         </div>
         <div>
@@ -214,12 +217,14 @@ export function MemberAdd() {
               autoComplete="tel"
               onChange={(e) => {
                 setPhone(e.target.value);
-                setPhoneValid(phoneRegEx.test(e.target.value));
               }}
+              isInvalid={isSubmitted && !phoneValid}
             />
-            <FormText className="text-danger" hidden={phoneValid}>
-              유효한 전화번호 형식이 아닙니다.
-            </FormText>
+            {isSubmitted && !phoneValid && (
+              <FormText className="text-danger">
+                유효한 전화번호 형식이 아닙니다.
+              </FormText>
+            )}
           </FormGroup>
         </div>
         <div>
@@ -232,12 +237,14 @@ export function MemberAdd() {
               autoComplete="email"
               onChange={(e) => {
                 setEmail(e.target.value);
-                setEmailValid(emailRegEx.test(e.target.value));
               }}
+              isInvalid={isSubmitted && !emailValid}
             />
-            <FormText className="text-danger" hidden={emailValid}>
-              유효한 이메일 형식이 아닙니다.
-            </FormText>
+            {isSubmitted && !emailValid && (
+              <FormText className="text-danger">
+                유효한 이메일 형식이 아닙니다.
+              </FormText>
+            )}
           </FormGroup>
         </div>
         <div>
