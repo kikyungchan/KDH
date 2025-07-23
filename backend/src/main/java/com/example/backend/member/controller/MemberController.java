@@ -44,8 +44,8 @@ public class MemberController {
 
     // 회원 리스트 조회
     @GetMapping("/list")
-    public Map<String, Object> memberList(@RequestParam(value = "page", defaultValue = "1") Integer pageNum) {
-        return memberService.list(pageNum);
+    public Map<String, Object> memberList(@RequestParam(value = "page", defaultValue = "1") Integer pageNumber) {
+        return memberService.list(pageNumber);
     }
 
     // 회원 정보 조회

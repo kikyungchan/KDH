@@ -5,11 +5,10 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-@AllArgsConstructor
 @NoArgsConstructor
 public class MemberListDto {
 
-    private Integer id;
+    private Long id;
 
     private String loginId;
 
@@ -19,4 +18,11 @@ public class MemberListDto {
 
     private String email;
 
+    public MemberListDto(Long id, String loginId, String name, String phone, String email) {
+        this.id = id;
+        this.loginId = loginId;
+        this.name = name;
+        this.phone = phone;
+        this.email = email;
+    }
 }

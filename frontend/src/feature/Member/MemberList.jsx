@@ -30,7 +30,11 @@ export function MemberList() {
     pageNumber.push(i);
   }
 
-  function handlePageNumberClick(pageNumber) {}
+  function handlePageNumberClick(pageNumber) {
+    const nextSearchParams = new URLSearchParams(searchParams);
+    nextSearchParams.set("p", pageNumber);
+    setSearchParams(nextSearchParams);
+  }
 
   return (
     <>
@@ -73,7 +77,9 @@ export function MemberList() {
               onClick={() => handlePageNumberClick(1)}
             ></Pagination.First>
             <Pagination.Prev
-              onClick={() => handlePageNumberClick(pageInfo.leftPageNum - 10)}
+              onClick={() =>
+                handlePageNumberClick(pageInfo.leftPageNumber - 10)
+              }
             ></Pagination.Prev>
             {pageNumber.map((pageNumber) => (
               <Pagination.Item
@@ -85,7 +91,9 @@ export function MemberList() {
               </Pagination.Item>
             ))}
             <Pagination.Next
-              onClick={() => handlePageNumberClick(pageInfo.rightPageNum + 1)}
+              onClick={() =>
+                handlePageNumberClick(pageInfo.rightPageNumber + 1)
+              }
             ></Pagination.Next>
             <Pagination.Last
               onClick={() => handlePageNumberClick(pageInfo.totalPages)}

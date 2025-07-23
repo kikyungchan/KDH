@@ -35,25 +35,25 @@ public class MemberService {
     }
 
     // 회원 리스트 불러오기
-    public Map<String, Object> list(Integer pageNum) {
+    public Map<String, Object> list(Integer pageNumber) {
 
         Page<MemberListDto> memberListDtoPage
-                = memberRepository.findAllBy(PageRequest.of(pageNum - 1, 10));
+                = memberRepository.findAllBy(PageRequest.of(pageNumber - 1, 10));
 
         Integer totalPages = memberListDtoPage.getTotalPages();
-        Integer rightPageNum = ((pageNum - 1) / 10 + 1) * 10;
-        Integer leftPageNum = rightPageNum - 9;
-        rightPageNum = Math.min(rightPageNum, totalPages);
-        leftPageNum = Math.max(leftPageNum, 1);
+        Integer rightPageNumber = ((pageNumber - 1) / 10 + 1) * 10;
+        Integer leftPageNumber = rightPageNumber - 9;
+        rightPageNumber = Math.min(rightPageNumber, totalPages);
+        leftPageNumber = Math.max(leftPageNumber, 1);
 
         var pageInfo = Map.of(
                 "totalPages", totalPages,
-                "rightPageNum", rightPageNum,
-                "leftPageNum", leftPageNum,
-                "currentPageNum", pageNum
+                "rightPageNumber", rightPageNumber,
+                "leftPageNumber", leftPageNumber,
+                "currentPageNumber", pageNumber
         );
 
-        System.out.println("pageNum = " + pageNum);
+        System.out.println("pageNumber = " + pageNumber);
         System.out.println("page result = " + memberListDtoPage.getContent());
         return Map.of("pageInfo", pageInfo,
                 "memberList", memberListDtoPage.getContent());
