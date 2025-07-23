@@ -163,6 +163,7 @@ export function MemberEdit() {
             <FormLabel>생년월일</FormLabel>
             <FormControl
               value={member.birthday || ""}
+              type="date"
               onChange={(e) =>
                 setMember({ ...member, birthday: e.target.value })
               }

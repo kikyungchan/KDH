@@ -47,7 +47,7 @@ export function MemberDetail() {
       })
       .then((res) => {
         console.log("good");
-        navigate("/api/member/list");
+        navigate("/member/list");
       })
       .catch((err) => {
         console.log("bad");

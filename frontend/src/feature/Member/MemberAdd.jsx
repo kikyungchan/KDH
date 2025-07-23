@@ -38,6 +38,7 @@ export function MemberAdd() {
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
   const [email, setEmail] = useState("");
+  // 주소 입력 api
   const [address, setAddress] = useState("");
   const [birthday, setBirthday] = useState(getToday()); // 초기값은 오늘 날짜
 
@@ -144,6 +145,17 @@ export function MemberAdd() {
       })
       .finally(() => {});
   }
+
+  // 주소 확인
+  const handleSearchAddress = () => {
+    new window.daum.Postcode({
+      oncomplete: function (data) {
+        setAddress(data.address); // 도로명 주소
+        // setZipCode(data.zonecode); // 우편번호 필요하면 이것도
+        console.log("작동");
+      },
+    }).open();
+  };
 
   return (
     <Row>
@@ -314,10 +326,9 @@ export function MemberAdd() {
               value={address}
               placeholder="주소를 입력하세요"
               autoComplete="address-line1"
-              onChange={(e) => {
-                setAddress(e.target.value);
-              }}
+              readOnly
             />
+            <Button onClick={handleSearchAddress}>주소 검색</Button>
           </FormGroup>
         </div>
       </Col>
