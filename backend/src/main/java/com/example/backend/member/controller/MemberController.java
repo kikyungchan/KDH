@@ -3,8 +3,10 @@ package com.example.backend.member.controller;
 import com.example.backend.member.dto.MemberForm;
 import com.example.backend.member.dto.MemberListInfo;
 import com.example.backend.member.service.MemberService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -19,9 +21,24 @@ public class MemberController {
 
     // 회원 등록
     @PostMapping("/signup")
-    public ResponseEntity<?> signup(@RequestBody MemberForm memberForm) {
+    public ResponseEntity<?> signup(@RequestBody @Valid MemberForm memberForm,
+                                    BindingResult bindingResult) {
+        // 오류 메세지 보여주기
+        // 입력값의 오류가 있을때(정규식과 일치하지않을때)
+        if (bindingResult.hasErrors()) {
+            String message = bindingResult.getAllErrors().get(0).getDefaultMessage();
+            return ResponseEntity.status(400).body(
+                    Map.of("message",
+                            Map.of("type", "error",
+                                    "text", message)));
+        }
+        // 유효성 검사를 통과했을 때 실행
         memberService.signup(memberForm);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok().body(
+                Map.of("message",
+                        Map.of("type", "success",
+                                "text", "회원 가입 되었습니다.")));
+
     }
 
     // 회원 리스트 조회
