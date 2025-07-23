@@ -4,6 +4,7 @@ import {
   FormControl,
   FormGroup,
   FormLabel,
+  Modal,
   Row,
   Spinner,
 } from "react-bootstrap";
@@ -109,6 +110,22 @@ export function MemberDetail() {
           <Button onClick={handleWithdrawButtonClick}>탈퇴</Button>
         </div>
       </Col>
+      // TODO : 회원 탈퇴 모달 (비밀번호 체크)
+      <Modal>
+        <Modal.Header closeButton>
+          <Modal.Title></Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <FormGroup>
+            <FormLabel></FormLabel>
+            <FormControl />
+          </FormGroup>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button>취소</Button>
+          <Button>탈퇴</Button>
+        </Modal.Footer>
+      </Modal>
     </Row>
   );
 }
