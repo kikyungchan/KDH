@@ -73,17 +73,10 @@ export function MemberEdit() {
 
   // 수정버튼
   function handleMemberInfoChangeButton() {
-    setIsSubmitted(true);
-
     const isPasswordOk = passwordRegEx.test(password);
     const isNameOk = nameRegEx.test(member.name);
     const isPhoneOk = phoneRegEx.test(member.phone);
     const isEmailOk = emailRegEx.test(member.email);
-
-    setPasswordValid(isPasswordOk);
-    setNameValid(isNameOk);
-    setPhoneValid(isPhoneOk);
-    setEmailValid(isEmailOk);
 
     // 각 항목을 입력하지 않으면 수정 버튼 비활성화
     const requiredFields = [
@@ -94,9 +87,16 @@ export function MemberEdit() {
       member?.email,
       member?.address,
     ];
+    
     const allFieldsFilled = requiredFields.every(
       (field) => field.trim() !== "",
     );
+
+    setPasswordValid(isPasswordOk);
+    setNameValid(isNameOk);
+    setPhoneValid(isPhoneOk);
+    setEmailValid(isEmailOk);
+    setIsSubmitted(true);
 
     if (
       !isPasswordOk ||
