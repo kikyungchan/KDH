@@ -9,4 +9,6 @@ import java.util.Optional;
 
 public interface MemberRepository extends JpaRepository<Member, Long> {
     List<MemberListInfo> findAllBy();
+
+    boolean existsByLoginId(String loginId);
 }

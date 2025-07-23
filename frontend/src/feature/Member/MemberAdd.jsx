@@ -159,9 +159,12 @@ export function MemberAdd() {
               autoComplete="username"
               onChange={(e) => {
                 setLoginId(e.target.value);
+                setLoginIdChecked(false);
+                setLoginIdCheckMessage("");
               }}
               isInvalid={isSubmitted && !loginIdValid}
             />
+            {/* 아이디 형식이 맞지않을때 (정규식은 최상단 위치) */}
             {isSubmitted && !loginIdValid && (
               <FormText className="text-danger">
                 유효한 아이디 형식이 아닙니다.
@@ -174,6 +177,14 @@ export function MemberAdd() {
             >
               아이디 중복 확인
             </Button>
+            {/* 아이디 중복 관련 메세지 */}
+            {loginIdCheckMessage && (
+              <FormText
+                className={loginIdChecked ? "text-success" : "text-danger"}
+              >
+                {loginIdCheckMessage}
+              </FormText>
+            )}
           </FormGroup>
         </div>
         <div>
@@ -195,6 +206,7 @@ export function MemberAdd() {
             )}
           </FormGroup>
         </div>
+        ;
         <div>
           <FormGroup>
             <FormLabel>비밀번호 확인</FormLabel>
@@ -213,6 +225,7 @@ export function MemberAdd() {
             )}
           </FormGroup>
         </div>
+        ;
         <div>
           <FormGroup>
             <FormLabel>성명</FormLabel>
@@ -233,6 +246,7 @@ export function MemberAdd() {
             )}
           </FormGroup>
         </div>
+        ;
         <div>
           <FormGroup>
             <FormLabel>생년월일</FormLabel>
@@ -246,6 +260,7 @@ export function MemberAdd() {
             />
           </FormGroup>
         </div>
+        ;
         <div>
           <FormGroup>
             <FormLabel>전화번호</FormLabel>
@@ -266,6 +281,7 @@ export function MemberAdd() {
             )}
           </FormGroup>
         </div>
+        ;
         <div>
           <FormGroup>
             <FormLabel>이메일</FormLabel>
@@ -286,6 +302,7 @@ export function MemberAdd() {
             )}
           </FormGroup>
         </div>
+        ;
         <div>
           <FormGroup>
             <FormLabel>주소</FormLabel>
@@ -300,11 +317,13 @@ export function MemberAdd() {
             />
           </FormGroup>
         </div>
+        ;
         <div>
           <Button onClick={handleSignUpClick} disabled={disabled}>
             가입
           </Button>
         </div>
+        ;
       </Col>
     </Row>
   );

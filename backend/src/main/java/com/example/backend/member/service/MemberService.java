@@ -80,4 +80,8 @@ public class MemberService {
         // 3 저장
         memberRepository.save(member);
     }
+
+    public boolean existByLoginId(String loginId) {
+        return memberRepository.existsByLoginId(loginId);
+    }
 }

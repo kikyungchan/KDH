@@ -95,5 +95,12 @@ public class MemberController {
                                 "text", "회원 정보가 수정되었습니다.")));
     }
 
+    // 아이디 중복 확인
+    @GetMapping("/check-id")
+    public ResponseEntity<?> checkLoginId(@RequestParam String loginId) {
 
+        boolean exist = memberService.existByLoginId(loginId);
+
+        return ResponseEntity.ok(Map.of("exist", exist));
+    }
 }
