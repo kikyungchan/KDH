@@ -5,6 +5,7 @@ import com.example.backend.dto.ProductForm;
 import com.example.backend.repository.ProductRepository;
 import com.example.backend.service.ProductService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -34,8 +35,8 @@ public class ProductController {
     }
 
     @GetMapping("/list")
-    public List<ProductDto> list() {
-        return productService.list();
+    public ResponseEntity<?> list(@RequestParam(defaultValue = "1") Integer page) {
+        return ResponseEntity.ok(productService.list(page));
     }
 
     @PostMapping("/regist")

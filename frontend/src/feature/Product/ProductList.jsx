@@ -1,21 +1,29 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import "./ProductList.css";
-import { Link } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 
 export function ProductList() {
+  const [searchParams, setSearchParams] = useSearchParams();
+  const pageParam = parseInt(searchParams.get("page")) || 1;
   const [products, setProducts] = useState([]);
+  const [pageInfo, setPageInfo] = useState({});
 
   useEffect(() => {
     axios
-      .get("/api/product/list")
+      .get(`/api/product/list?page=${pageParam}`)
       .then((res) => {
-        setProducts(res.data);
+        setProducts(res.data.productList);
+        setPageInfo(res.data.pageInfo);
       })
       .catch((err) => {
         console.log(err.message);
       });
-  }, []);
+  }, [pageParam]);
+
+  const handlePageClick = (page) => {
+    setSearchParams({ page });
+  };
 
   return (
     <div className="product-list-container">
@@ -40,6 +48,24 @@ export function ProductList() {
             </div>
           </Link>
         ))}
+      </div>
+      {/* 페이지네이션 */}
+      <div className="pagination">
+        {Array.from(
+          { length: pageInfo.rightPageNumber - pageInfo.leftPageNumber + 1 },
+          (_, i) => {
+            const page = pageInfo.leftPageNumber + i;
+            return (
+              <button
+                key={page}
+                onClick={() => handlePageClick(page)}
+                className={page === pageInfo.currentPageNumber ? "active" : ""}
+              >
+                {page}
+              </button>
+            );
+          },
+        )}
       </div>
     </div>
   );

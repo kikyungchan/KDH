@@ -7,6 +7,9 @@ import com.example.backend.entity.ProductImage;
 import com.example.backend.repository.ProductImageRepository;
 import com.example.backend.repository.ProductRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -15,6 +18,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -62,11 +66,12 @@ public class ProductService {
         productImageRepository.saveAll(imageList);
     }
 
-    public List<ProductDto> list() {
-        List<Product> products = productRepository.findAll();
-        List<ProductDto> result = new ArrayList<>();
+    public Map<String, Object> list(Integer pageNumber) {
+        Pageable pageable = PageRequest.of(pageNumber - 1, 15);
+        Page<Product> page = productRepository.findAllByOrderByIdDesc(pageable);
 
-        for (Product product : products) {
+
+        List<ProductDto> content = page.getContent().stream().map(product -> {
             ProductDto dto = new ProductDto();
             dto.setId(product.getId());
             dto.setProductName(product.getProductName());
@@ -74,10 +79,26 @@ public class ProductService {
             if (!product.getImages().isEmpty()) {
                 dto.setImagePath(List.of(product.getImages().get(0).getStoredPath()));
             }
-            result.add(dto);
-        }
-        return result;
+            return dto;
+        }).toList();
 
+        int totalPages = page.getTotalPages();
+        int rightPageNumber = ((pageNumber - 1) / 5 + 1) * 5;
+        int leftPageNumber = rightPageNumber - 4;
+        rightPageNumber = Math.min(rightPageNumber, totalPages);
+        leftPageNumber = Math.max(leftPageNumber, 1);
+
+        var pageInfo = Map.of(
+                "totalPages", totalPages,
+                "currentPageNumber", pageNumber,
+                "leftPageNumber", leftPageNumber,
+                "rightPageNumber", rightPageNumber
+        );
+
+        return Map.of(
+                "pageInfo", pageInfo,
+                "productList", content
+        );
     }
 
     public ProductDto view(Long id) {
