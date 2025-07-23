@@ -27,6 +27,8 @@ export function MemberDetail() {
       .catch((err) => {})
       .finally(() => {});
   }, [memberParams]);
+
+  // 회원 정보 없을때 (ex: null)
   if (!member) {
     return (
       <div>

@@ -182,11 +182,6 @@ export function MemberAdd() {
                 유효한 아이디 형식이 아닙니다.
               </FormText>
             )}
-            <div>
-              <Button onClick={handleSignUpClick} disabled={disabled}>
-                가입
-              </Button>
-            </div>
             <Button
               onClick={() => handleCheckLoginId()}
               size="sm"
@@ -330,6 +325,11 @@ export function MemberAdd() {
             />
             <Button onClick={handleSearchAddress}>주소 검색</Button>
           </FormGroup>
+        </div>
+        <div>
+          <Button onClick={handleSignUpClick} disabled={disabled}>
+            가입
+          </Button>
         </div>
       </Col>
     </Row>

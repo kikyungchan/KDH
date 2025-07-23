@@ -32,9 +32,9 @@ export function MemberEdit() {
     email: "",
     address: "",
   });
+  const navigate = useNavigate();
   const [memberParams] = useSearchParams();
   const [password, setPassword] = useState("");
-  const navigate = useNavigate();
   // Modal
 
   const [passwordModalShow, setPasswordModalShow] = useState(false);
@@ -134,6 +134,19 @@ export function MemberEdit() {
     );
   }
 
+  // 주소 확인
+  const handleSearchAddress = () => {
+    new window.daum.Postcode({
+      oncomplete: function (data) {
+        setMember((prevMember) => ({
+          ...prevMember,
+          address: data.address, // 도로명 주소 할당
+        }));
+        // setZipCode(data.zonecode); // 우편번호 필요하면 이것도
+      },
+    }).open();
+  };
+
   return (
     <Row>
       <Col>
@@ -201,12 +214,8 @@ export function MemberEdit() {
         <div>
           <FormGroup controlId="address1">
             <FormLabel>주소</FormLabel>
-            <FormControl
-              value={member.address || ""}
-              onChange={(e) =>
-                setMember({ ...member, address: e.target.value })
-              }
-            />
+            <FormControl value={member.address || ""} readOnly />
+            <Button onClick={handleSearchAddress}>주소 검색</Button>
           </FormGroup>
         </div>
         <div className="d-flex justify-content-between">
