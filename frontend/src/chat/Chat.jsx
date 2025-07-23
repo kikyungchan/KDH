@@ -17,12 +17,15 @@ export function Chat({ username }) {
   useEffect(() => {
     const client = new Client({
       webSocketFactory: () => new SockJS(WS_PATH), // SockJS 연결
-      debug: (str) => console.log(str),
+      debug: (str) => console.log("[STOMP]", str),
       reconnectDelay: 5000, // 끊기면 5초후 재연결
+      connectHeaders: {
+        username: username,
+      },
     });
-    client.onConnect = () => {
+    client.onConnect = (frame) => {
       // 연결 성공 시
-      console.log("연결됨!");
+      console.log("연결됨!", frame);
       client.subscribe(SUBSCRIBE_DEST, (message) => {
         console.log("받음");
         console.log("message", message);
@@ -32,6 +35,9 @@ export function Chat({ username }) {
         // setMsgs((prev) => [...prev, msg]);
       });
     };
+    client.activate({
+      connectHeaders: { username: username },
+    });
 
     // 연결 활성화(connect 시도)
     client.activate();
@@ -78,7 +84,7 @@ export function Chat({ username }) {
               margin: "5px 0",
             }}
           >
-            <strong>{m.from}:</strong> {m.content}
+            <strong>{m.from}:</strong> {m.message}
           </div>
         ))}
       </div>

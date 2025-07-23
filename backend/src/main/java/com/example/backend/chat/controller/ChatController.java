@@ -15,13 +15,15 @@ public class ChatController {
 
 
     public ChatController(SimpMessagingTemplate template) {
+        System.out.println(template);
         this.template = template;
     }
 
 
     @MessageMapping("/chat/private")
     public void sendPrivateMessage(ChatForm msg, Principal principal) {
-        System.out.println("principal " + principal);
+//        System.out.println("principal " + principal);
+        System.out.println("principal " + principal.getName());
         System.out.println("msg " + msg);
         template.convertAndSendToUser(
                 msg.getTo(),                // 받는 사용자 ID

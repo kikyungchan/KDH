@@ -6,13 +6,14 @@ export default defineConfig({
   plugins: [react()],
   server: {
     proxy: {
-      "/api": {
+      /*"/api": {
         target: "http://localhost:8080",
-      },
+      },*/
       "/ws-chat": {
         target: "http://localhost:8080",
         changeOrigin: true,
         ws: true,
+        rewrite: (path) => path.replace(/^\/ws-chat/, "/ws-chat"),
       },
     },
   },
