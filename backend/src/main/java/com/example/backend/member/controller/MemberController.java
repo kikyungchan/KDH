@@ -66,9 +66,21 @@ public class MemberController {
 
     // 회원 정보 수정
     @PutMapping("{id}")
-    public ResponseEntity<?> updateMember(@RequestBody MemberForm memberForm) {
+    public ResponseEntity<?> updateMember(@PathVariable long id,
+                                          @RequestBody @Valid MemberForm memberForm,
+                                          BindingResult bindingResult) {
+
+        // 입력값 일치하지않았을때
+        if (bindingResult.hasErrors()) {
+            String message = bindingResult.getAllErrors().get(0).getDefaultMessage();
+            return ResponseEntity.status(400).body(
+                    Map.of("message",
+                            Map.of("type", "error",
+                                    "text", message)));
+        }
+
         try {
-            memberService.update(memberForm);
+            memberService.update(id, memberForm);
         } catch (Exception e) {
             e.printStackTrace();
             String message = e.getMessage();

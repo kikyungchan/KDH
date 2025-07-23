@@ -65,10 +65,11 @@ public class MemberService {
         return true;
     }
 
-    public void update(MemberForm memberForm) {
+    public void update(long id, MemberForm memberForm) {
 
         // 1. 회원 조회
-        Member member = memberRepository.findById(memberForm.getId()).get();
+        Member member = memberRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("해당 회원이 존재하지 않습니다"));
         // 2. 수정
         member.setName(memberForm.getName());
         member.setPassword(memberForm.getPassword());
