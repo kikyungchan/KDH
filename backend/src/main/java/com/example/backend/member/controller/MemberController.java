@@ -1,5 +1,6 @@
 package com.example.backend.member.controller;
 
+import com.example.backend.member.dto.ChangePasswordForm;
 import com.example.backend.member.dto.MemberForm;
 import com.example.backend.member.dto.MemberListInfo;
 import com.example.backend.member.service.MemberService;
@@ -97,6 +98,33 @@ public class MemberController {
                                 "text", "회원 정보가 수정되었습니다.")));
     }
 
+    // 비밀번호 수정
+    @PutMapping("changePassword")
+    public ResponseEntity<?> changePassword(@RequestBody @Valid ChangePasswordForm data) {
+        try {
+            memberService.changePassword(data);
+        } catch (RuntimeException e) {
+            e.printStackTrace();
+            String message = e.getMessage();
+            return ResponseEntity.status(403).body(
+                    Map.of("message",
+                            Map.of("type", "error",
+                                    "text", message)));
+        } catch (Exception e) {
+            e.printStackTrace();
+            String message = e.getMessage();
+            // 403 : 권한 없음
+            return ResponseEntity.status(500).body(
+                    Map.of("message",
+                            Map.of("type", "error",
+                                    "text", message)));
+        }
+        return ResponseEntity.ok().body(
+                Map.of("message",
+                        Map.of("type", "success",
+                                "text", "암호가 수정 되었습니다.")));
+    }
+
     // 아이디 중복 확인
     @GetMapping("/check-id")
     public ResponseEntity<?> checkLoginId(@RequestParam String loginId) {
@@ -105,4 +133,6 @@ public class MemberController {
 
         return ResponseEntity.ok(Map.of("exists", exists));
     }
+
+
 }

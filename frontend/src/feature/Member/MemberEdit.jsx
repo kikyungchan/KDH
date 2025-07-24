@@ -170,7 +170,27 @@ export function MemberEdit() {
   }
 
   // 비밀번호 수정
-  function handleChangePasswordClick() {}
+  function handleChangePasswordClick() {
+    axios
+      .put(`/api/member/changePassword`, {
+        id: member.id,
+        oldPassword: oldPassword,
+        newPassword: newPassword1,
+      })
+      .then((res) => {
+        console.log("비밀번호 변경 성공");
+      })
+      .catch((err) => {
+        console.log("비밀번호 변경 실패");
+      })
+      .finally(() => {
+        console.log("비밀번호 항상 보이는 코드");
+        setOldPassword("");
+        setNewPassword1("");
+        setNewPassword2("");
+        setChangePasswordModalShow(false);
+      });
+  }
 
   return (
     <Row>

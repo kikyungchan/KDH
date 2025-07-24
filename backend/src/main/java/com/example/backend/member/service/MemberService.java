@@ -1,9 +1,6 @@
 package com.example.backend.member.service;
 
-import com.example.backend.member.dto.MemberDto;
-import com.example.backend.member.dto.MemberForm;
-import com.example.backend.member.dto.MemberListDto;
-import com.example.backend.member.dto.MemberListInfo;
+import com.example.backend.member.dto.*;
 import com.example.backend.member.entity.Member;
 import com.example.backend.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
@@ -15,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 @Service
 @Transactional
@@ -120,13 +118,6 @@ public class MemberService {
         member.setEmail(memberForm.getEmail());
         member.setAddress(memberForm.getAddress());
 
-        // 4. 새 비밀번호가 있으면 암호화해서 저장
-        if (newPassword != null && !newPassword.isBlank()) {
-            if (passwordEncoder.matches(newPassword, member.getPassword())) {
-                throw new RuntimeException("새 비밀번호는 현재 비밀번호와 달라야합니다.");
-            }
-            member.setPassword(passwordEncoder.encode(newPassword));
-        }
 
         // 5. 저장
         memberRepository.save(member);
@@ -134,5 +125,31 @@ public class MemberService {
 
     public boolean existByLoginId(String loginId) {
         return memberRepository.existsByLoginId(loginId);
+    }
+
+    public void changePassword(ChangePasswordForm data) {
+        Member member = memberRepository.findById(data.getId())
+                .orElseThrow(() -> new RuntimeException("존재하지 않는 회원입니다."));
+
+        String oldPassword = data.getOldPassword(); // 현재 password
+        String newPassword = data.getNewPassword(); // 새 password
+
+        // 1. 기존 비밀번호 확인
+        if (!passwordEncoder.matches(oldPassword, member.getPassword())) {
+            throw new RuntimeException("비밀번호가 일치하지 않습니다.");
+        }
+
+        // 2. 새 비밀번호 입력 확인
+        if (newPassword == null && newPassword.isBlank()) {
+            throw new RuntimeException("새 비밀번호를 입력해주세요.");
+        }
+
+        // 3. 기존과 동일한 비밀번호 사용 방지
+        if (passwordEncoder.matches(newPassword, member.getPassword())) {
+            throw new RuntimeException("새 비밀번호는 현재 비밀번호와 달라야합니다.");
+        }
+        // 4. 암호화 후 저장
+        member.setPassword(passwordEncoder.encode(newPassword));
+        memberRepository.save(member);
     }
 }
