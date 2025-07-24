@@ -31,6 +31,19 @@ INSERT INTO product (product_name, price, category, info, quantity)
 SELECT CONCAT(product_name), price, category, info, quantity
 FROM product;
 
+-- 상품등록 옵션 테이블
+CREATE TABLE product_option
+(
+    id          BIGINT AUTO_INCREMENT NOT NULL,
+    option_name VARCHAR(255)         NOT NULL,
+    price       INT                  NOT NULL,
+    product_id  INT                  NOT NULL,
+    CONSTRAINT pk_product_option PRIMARY KEY (id)
+);
+
+ALTER TABLE product_option
+    ADD CONSTRAINT FK_PRODUCT_OPTION_ON_PRODUCT FOREIGN KEY (product_id) REFERENCES product (id);
+
 
 
 

@@ -2,10 +2,13 @@ package com.example.backend.product.service;
 
 import com.example.backend.product.dto.ProductDto;
 import com.example.backend.product.dto.ProductEditDto;
+import com.example.backend.product.dto.ProductOptionDto;
 import com.example.backend.product.entity.Product;
 import com.example.backend.product.dto.ProductForm;
 import com.example.backend.product.entity.ProductImage;
+import com.example.backend.product.entity.ProductOption;
 import com.example.backend.product.repository.ProductImageRepository;
+import com.example.backend.product.repository.ProductOptionRepository;
 import com.example.backend.product.repository.ProductRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -27,6 +30,7 @@ public class ProductService {
 
     private final ProductRepository productRepository;
     private final ProductImageRepository productImageRepository;
+    private final ProductOptionRepository productOptionRepository;
     private final S3Uploader s3Uploader;
 
     // url에서 key만 따오는 메소드
@@ -44,6 +48,19 @@ public class ProductService {
         product.setInfo(productForm.getInfo());
         product.setQuantity(productForm.getQuantity());
         productRepository.save(product);
+
+        //옵션 저장
+        if (productForm.getOptions() != null && !productForm.getOptions().isEmpty()) {
+            List<ProductOption> optionList = new ArrayList<>();
+            for (ProductOptionDto dto : productForm.getOptions()) {
+                ProductOption option = new ProductOption();
+                option.setOptionName(dto.getOptionName());
+                option.setPrice(dto.getPrice());
+                option.setProduct(product);
+                optionList.add(option);
+            }
+            productOptionRepository.saveAll(optionList);
+        }
 
         // 이미지 저장
         List<ProductImage> imageList = new ArrayList<>();
@@ -166,5 +183,5 @@ public class ProductService {
             productImageRepository.saveAll(imageList);
         }
     }
-    
+
 }

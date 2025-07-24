@@ -148,7 +148,7 @@ export function ProductRegist() {
                 value={opt.optionName}
                 onChange={(e) => {
                   const newOptions = [...options];
-                  newOptions[index].size = e.target.value;
+                  newOptions[index].optionName = e.target.value;
                   setOptions(newOptions);
                 }}
               />
