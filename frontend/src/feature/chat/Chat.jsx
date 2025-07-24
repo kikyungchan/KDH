@@ -2,25 +2,31 @@ import { useEffect, useRef, useState } from "react";
 import { Client } from "@stomp/stompjs";
 import SockJS from "sockjs-client";
 // import { Stomp } from "stompjs";
-
 const WS_URL = "http://localhost:8080/ws-chat";
 const WS_PATH = "/ws-chat";
 const SEND_DEST = "/app/chat/private";
 const SUBSCRIBE_DEST = "/user/queue/messages";
 
-export function Chat({ username }) {
+export function Chat() {
   const [target, setTarget] = useState(""); //수신자 id
   const [text, setText] = useState(""); // 보낼 텍스트
   const [msgs, setMsgs] = useState([]); // 주고 받은 메시지들
+  const [username, setUsername] = useState("guest");
   const clientRef = useRef(null); // STOMP 인스턴스 담아 둘 상자
 
   useEffect(() => {
+    const name = prompt("닉네임을 입력해 주세요").trim();
+    console.log("name : ", name);
+    setUsername(name);
+    console.log("username1 : ", username);
+
+    // todo : username : null
     const client = new Client({
       webSocketFactory: () => new SockJS(WS_PATH), // SockJS 연결
       debug: (str) => console.log("[STOMP]", str),
       reconnectDelay: 5000, // 끊기면 5초후 재연결
       connectHeaders: {
-        username: username,
+        username: name,
       },
     });
     client.onConnect = (frame) => {
@@ -40,6 +46,7 @@ export function Chat({ username }) {
     client.activate();
     // 훅 박에서도 쓰기 위해 ref에 저장
     clientRef.current = client;
+    console.log("username2 : ", username);
 
     // 언마운트 될 때
     return () => {
@@ -84,6 +91,12 @@ export function Chat({ username }) {
             <strong>{m.from}:</strong> {m.message}
           </div>
         ))}
+      </div>
+      <div>
+        <span>
+          테스트 하시려면 해당 창이랑 새 창 모두 상대방 아이디에 guest22 입력 후
+          테스트 하시면 됩니다
+        </span>
       </div>
       <input
         placeholder="상대방 아이디"

@@ -28,6 +28,7 @@ function App() {
           <Route path="/signup" element={<MemberAdd />} />
           <Route path="/member" element={<MemberDetail />} />
           {/*<Route path="chat/chatting" element={<Chat username={username} />} />*/}
+          <Route path="chat/chatting" element={<Chat />} />
         </Route>
       </Routes>
     </BrowserRouter>

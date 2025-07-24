@@ -32,8 +32,7 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
                 StompHeaderAccessor accessor = StompHeaderAccessor.wrap(message);
                 System.out.println("STOMP Command: " + accessor.getCommand());
                 System.out.println("▶ Native Headers1: " + accessor.toNativeHeaderMap());
-                System.out.println("▶ user name: " + accessor.getUser().getName());
-                System.out.println("is start");
+                System.out.println("▶ user name (preSend): " + accessor.getUser().getName());
                 // todo : user 값은 넘어오는데 user name 이 guset 로 넘어옴
 
                 // 클라이언트가 STOMP CONNECT 프레임을 보낼 때 한 번 실행
@@ -60,6 +59,16 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
                     accessor.setUser(() -> user);
                     System.out.println("▶ 설정된 Principal: " + accessor.getUser().getName());
                 }
+
+                if (StompCommand.SUBSCRIBE.equals(accessor.getCommand())) {
+                    // nativeHeaders에는 username 없음
+                    // 대신 세션에 세팅된 Principal 에서 참조
+                    Principal user = accessor.getUser();
+                    System.out.println("▶ SUBSCRIBE user: " + user.getName());
+
+                    String username = (user != null ? user.getName() : "anonymous");
+                    System.out.println("▶ SUBSCRIBE 요청자: " + username);
+                }
                 System.out.println("message : " + message);
                 System.out.println("▶ Native Headers2: " + accessor.toNativeHeaderMap());
                 return message;
@@ -79,6 +88,8 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
                     protected Principal determineUser(ServerHttpRequest request,
                                                       WebSocketHandler wsHandler,
                                                       Map<String, Object> attributes) {
+
+
                         // 예시: ?username=userA 쿼리로 전달받았다 가정
                         System.out.println("attributes: " + attributes);
                         System.out.println("attributes.username : " + attributes.get("username"));
@@ -89,11 +100,30 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 //                        todo : SUBSCRIBE 요청 처리 시 여기서 username 이 guest22로 변경됨,
                         System.out.println("username from attrs: " + user);
                         return () -> (user != null ? user : "guest2");*/
-                        String user = (String) attributes.get("username");
-                        if (user == null || user.isEmpty()) user = "guest22";
-                        final String principalName = user;
-                        System.out.println("▶ Handshake Principal: " + principalName);
-                        return () -> principalName;
+
+                        if (request instanceof ServletServerHttpRequest) {
+                            Principal httpPrincipal = request.getPrincipal();
+                            System.out.println("▶ HTTP 요청 Principal: " + httpPrincipal);
+                        } else {
+                            System.out.println("▶ HTTP 요청이 ServletServerHttpRequest 가 아닙니다.");
+                        }
+
+                        // 기본적으로 생성된 Principal 값 확인
+                        Principal defaultP = super.determineUser(request, wsHandler, attributes);
+                        System.out.println("▶ Default Principal: " + defaultP);
+
+                        if (request.getPrincipal() != null) {
+                            Principal httpPrincipal = request.getPrincipal();
+                            return httpPrincipal;
+                        } else {
+                            String user = (String) attributes.get("username");
+                            if (user == null || user.isEmpty()) user = "guest22";
+                            final String principalName = user;
+                            Principal httpPrincipal = request.getPrincipal();
+                            System.out.println("▶ Handshake Principal: " + principalName);
+                            System.out.println("▶ HTTP 요청 Principal: " + httpPrincipal);
+                            return () -> principalName;
+                        }
                     }
 
 
