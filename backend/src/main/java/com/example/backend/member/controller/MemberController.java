@@ -66,7 +66,13 @@ public class MemberController {
 
     // 회원 탈퇴
     @DeleteMapping
-    public ResponseEntity<?> deleteMember(@RequestBody MemberForm memberForm) {
+    @PreAuthorize("isAuthenticated()")
+    public ResponseEntity<?> deleteMember(@RequestBody MemberForm memberForm,
+                                          Authentication authentication) {
+        // 로그인한 회원 본인만 탈퇴 가능
+        if (!authentication.getName().equals(memberForm.getId().toString())) {
+            return ResponseEntity.status(403).build();
+        }
         boolean deleted = memberService.delete(memberForm);
         if (deleted) {
             return ResponseEntity.ok().build();
@@ -77,9 +83,16 @@ public class MemberController {
 
     // 회원 정보 수정
     @PutMapping("{id}")
+    @PreAuthorize("isAuthenticated()")
     public ResponseEntity<?> updateMember(@PathVariable long id,
                                           @RequestBody @Valid MemberForm memberForm,
+                                          Authentication authentication,
                                           BindingResult bindingResult) {
+
+        // 로그인한 회원 본인만 수정 가능
+        if (!authentication.getName().equals(memberForm.getId().toString())) {
+            return ResponseEntity.status(403).build();
+        }
 
         // 입력값 일치하지않았을때
         if (bindingResult.hasErrors()) {
@@ -108,9 +121,14 @@ public class MemberController {
 
     // 비밀번호 수정
     @PutMapping("changePassword")
-    public ResponseEntity<?> changePassword(@RequestBody @Valid ChangePasswordForm data) {
+    @PreAuthorize("isAuthenticated()")
+    public ResponseEntity<?> changePassword(@RequestBody @Valid ChangePasswordForm data,
+                                            Authentication authentication) {
+        // 로그인한 본인 아이디
+        Long memberId = Long.valueOf(authentication.getName()); // JWT sub에서 추출
+
         try {
-            memberService.changePassword(data);
+            memberService.changePassword(memberId, data);
         } catch (RuntimeException e) {
             e.printStackTrace();
             String message = e.getMessage();

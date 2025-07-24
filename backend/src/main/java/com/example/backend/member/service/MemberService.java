@@ -14,7 +14,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Instant;
-import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -132,8 +131,8 @@ public class MemberService {
         return memberRepository.existsByLoginId(loginId);
     }
 
-    public void changePassword(ChangePasswordForm data) {
-        Member member = memberRepository.findById(data.getId())
+    public void changePassword(Long memberId, ChangePasswordForm data) {
+        Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new RuntimeException("존재하지 않는 회원입니다."));
 
         String oldPassword = data.getOldPassword(); // 현재 password
@@ -145,7 +144,7 @@ public class MemberService {
         }
 
         // 2. 새 비밀번호 입력 확인
-        if (newPassword == null && newPassword.isBlank()) {
+        if (newPassword == null || newPassword.isBlank()) {
             throw new RuntimeException("새 비밀번호를 입력해주세요.");
         }
 
