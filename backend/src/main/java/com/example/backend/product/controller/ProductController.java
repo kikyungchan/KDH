@@ -1,10 +1,10 @@
-package com.example.backend.controller;
+package com.example.backend.product.controller;
 
-import com.example.backend.dto.ProductDto;
-import com.example.backend.dto.ProductEditDto;
-import com.example.backend.dto.ProductForm;
-import com.example.backend.repository.ProductRepository;
-import com.example.backend.service.ProductService;
+import com.example.backend.product.dto.ProductDto;
+import com.example.backend.product.dto.ProductEditDto;
+import com.example.backend.product.dto.ProductForm;
+import com.example.backend.product.repository.ProductRepository;
+import com.example.backend.product.service.ProductService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;

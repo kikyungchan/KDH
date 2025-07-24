@@ -1,7 +1,6 @@
 package com.example.backend.member.controller;
 
 import com.example.backend.member.dto.MemberForm;
-import com.example.backend.member.dto.MemberListInfo;
 import com.example.backend.member.service.MemberService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -9,9 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 
 @RestController
 @RequiredArgsConstructor

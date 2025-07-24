@@ -57,7 +57,7 @@ export function ProductDetail() {
             height: "150",
           }}
           className="product-thumbnail"
-          src={`http://localhost:8080/static/${thumbnail.split("/").pop()}`}
+          src={thumbnail}
           alt="썸네일 이미지"
         />
       )}
@@ -80,7 +80,7 @@ export function ProductDetail() {
         {detailImages?.map((path, index) => (
           <img
             key={index}
-            src={`http://localhost:8080/static/${path.split("/").pop()}`}
+            src={path}
             alt={`상세 이미지 ${index + 1}`}
             className="product-detail-image"
           />

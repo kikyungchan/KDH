@@ -1,4 +1,4 @@
-package com.example.backend.dto;
+package com.example.backend.product.dto;
 
 import lombok.Data;
 import org.springframework.web.multipart.MultipartFile;
@@ -6,12 +6,12 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.List;
 
 @Data
-public class ProductForm {
-
+public class ProductEditDto {
     private String productName;
     private Integer price;
     private String category;
     private String info;
     private Integer quantity;
-    private List<MultipartFile> images;
+    private List<MultipartFile> newImages;
+    private List<String> deletedImages;
 }

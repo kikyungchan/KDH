@@ -117,11 +117,10 @@ export function ProductEdit() {
           <h4>등록된 이미지</h4>
           <div style={{ display: "flex", flexWrap: "wrap", gap: "10px" }}>
             {imagePaths.map((path, idx) => {
-              const fileName = path.split("/").pop();
               return (
                 <div key={idx} style={{ position: "relative" }}>
                   <img
-                    src={`http://localhost:8080/static/${fileName}`}
+                    src={path}
                     alt={`상품 이미지 ${idx + 1}`}
                     width="150"
                     height="100"

@@ -126,6 +126,7 @@ export function ProductRegist() {
               ))}
             </ul>
           )}
+          {/*파일 미리보기*/}
           {previewImages.length > 0 && (
             <div
               style={{
