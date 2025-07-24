@@ -33,6 +33,7 @@ public class AppConfiguration {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.csrf(c -> c.disable());
+        http.oauth2ResourceServer(c -> c.jwt(Customizer.withDefaults()));
 
         return http.build();
     }
@@ -55,6 +56,25 @@ public class AppConfiguration {
                 )
 //                .endpointOverride(URI.create("http://localhost:8080"))
                 .build();
+    }
+
+    @Value("classpath:secret/public.pem")
+    private RSAPublicKey publicKey;
+
+    @Value("classpath:secret/private.pem")
+    private RSAPrivateKey privateKey;
+
+    @Bean
+    public JwtDecoder jwtDecoder() {
+        return NimbusJwtDecoder.withPublicKey(publicKey).build();
+    }
+
+    @Bean
+    public JwtEncoder jwtEncoder() {
+        JWK jwk = new RSAKey.Builder(publicKey).privateKey(privateKey).build();
+        JWKSource<SecurityContext> jwks = new ImmutableJWKSet<>(new JWKSet(jwk));
+
+        return new NimbusJwtEncoder(jwks);
     }
 
 }

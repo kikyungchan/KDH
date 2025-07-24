@@ -8,6 +8,7 @@ import {
 } from "react-bootstrap";
 import { useState } from "react";
 import { useNavigate } from "react-router";
+import axios from "axios";
 
 export function MemberLogin() {
   const [loginId, setLoginId] = useState("");
@@ -16,13 +17,19 @@ export function MemberLogin() {
 
   function handleLogInButtonClick() {
     axios
-      .post("api/member/login", {
+      .post("/api/member/login", {
         loginId: loginId,
         password: password,
       })
-      .then((res) => {})
-      .catch((err) => {})
-      .finally(() => {});
+      .then((res) => {
+        console.log("success");
+      })
+      .catch((err) => {
+        console.log("bad");
+      })
+      .finally(() => {
+        console.log("always");
+      });
   }
 
   return (

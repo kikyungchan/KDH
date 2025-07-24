@@ -7,9 +7,13 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.oauth2.jwt.JwtClaimsSet;
+import org.springframework.security.oauth2.jwt.JwtEncoder;
+import org.springframework.security.oauth2.jwt.JwtEncoderParameters;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.Instant;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -20,6 +24,7 @@ import java.util.Optional;
 public class MemberService {
     private final MemberRepository memberRepository;
     private final PasswordEncoder passwordEncoder;
+    private final JwtEncoder jwtEncoder;
 
     // 회원 등록
     public void signup(MemberForm memberForm) {
@@ -151,5 +156,27 @@ public class MemberService {
         // 4. 암호화 후 저장
         member.setPassword(passwordEncoder.encode(newPassword));
         memberRepository.save(member);
+    }
+
+    // 로그인 토큰 생성
+    public String getToken(MemberLoginForm loginForm) {
+        // 해당 loginId 의 데이터 있는지
+        Optional<Member> db = memberRepository.findByLoginId(loginForm.getLoginId());
+        // 있으면 패스워드 맞는지
+        if (db.isPresent()) {
+            if (!passwordEncoder.matches(loginForm.getPassword(), db.get().getPassword())) {
+                // token 생성 후 리턴
+                JwtClaimsSet claims = JwtClaimsSet.builder()
+                        .subject(loginForm.getLoginId())
+                        .issuer("self")
+                        .issuedAt(Instant.now())
+                        .expiresAt(Instant.now().plusSeconds(60 * 60 * 24))
+                        .build();
+
+                return jwtEncoder.encode(JwtEncoderParameters.from(claims)).getTokenValue();
+            }
+        }
+
+        throw new RuntimeException("아이디 또는 비밀번호가 일치하지 않습니다");
     }
 }
