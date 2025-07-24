@@ -8,6 +8,8 @@ import com.example.backend.member.service.MemberService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
@@ -53,8 +55,13 @@ public class MemberController {
 
     // 회원 정보 조회
     @GetMapping(params = "id")
-    public ResponseEntity<?> getMember(@RequestParam Long id) {
-        return ResponseEntity.ok().body(memberService.get(id));
+    @PreAuthorize("isAuthenticated()")
+    public ResponseEntity<?> getMember(@RequestParam Long id, Authentication authentication) {
+        if (authentication.getName().equals(id.toString())) {
+            return ResponseEntity.ok().body(memberService.get(id));
+        } else {
+            return ResponseEntity.status(403).build();
+        }
     }
 
     // 회원 탈퇴
