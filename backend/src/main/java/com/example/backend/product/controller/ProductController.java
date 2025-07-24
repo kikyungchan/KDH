@@ -1,9 +1,11 @@
 package com.example.backend.product.controller;
 
+import com.example.backend.product.dto.OrderDTO;
 import com.example.backend.product.dto.ProductDto;
 import com.example.backend.product.dto.ProductEditDto;
 import com.example.backend.product.dto.ProductForm;
 import com.example.backend.product.repository.ProductRepository;
+import com.example.backend.product.service.OrderService;
 import com.example.backend.product.service.ProductService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
@@ -19,7 +21,18 @@ import java.util.List;
 public class ProductController {
 
     private final ProductService productService;
-    private final ProductRepository productRepository;
+    private final OrderService orderService;
+
+    @PostMapping("/order")
+    public ResponseEntity<?> order(@RequestBody OrderDTO dto) {
+        try {
+            orderService.order(dto);
+            return ResponseEntity.ok("주문 완료");
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body("주문 실패: " + e.getMessage());
+        }
+    }
+
 
     @PutMapping(value = "/edit", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public void editProduct(@RequestParam Long id,
