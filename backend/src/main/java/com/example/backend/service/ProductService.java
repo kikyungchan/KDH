@@ -43,18 +43,21 @@ public class ProductService {
 
         // 이미지 저장
         List<ProductImage> imageList = new ArrayList<>();
-        for (MultipartFile file : productForm.getImages()) {
-            try {
 
-                String s3Url = s3Uploader.upload(file, String.valueOf(product.getId()));
-                ProductImage image = new ProductImage();
-                image.setOriginalFileName(file.getOriginalFilename());
-                image.setStoredPath(s3Url);
-                image.setProduct(product);
-                imageList.add(image);
-            } catch (IOException e) {
-                throw new RuntimeException("업로드 실패 : " + e.getMessage(), e);
-            }
+        if (productForm.getImages() != null) {
+            for (MultipartFile file : productForm.getImages()) {
+
+                try {
+
+                    String s3Url = s3Uploader.upload(file, String.valueOf(product.getId()));
+                    ProductImage image = new ProductImage();
+                    image.setOriginalFileName(file.getOriginalFilename());
+                    image.setStoredPath(s3Url);
+                    image.setProduct(product);
+                    imageList.add(image);
+                } catch (IOException e) {
+                    throw new RuntimeException("업로드 실패 : " + e.getMessage(), e);
+                }
 //            String originalFileName = file.getOriginalFilename();
 //            String uuid = UUID.randomUUID().toString();
 //            String storedName = uuid + "_" + originalFileName;
@@ -73,9 +76,11 @@ public class ProductService {
 //            image.setProduct(product);
 //            imageList.add(image);
 
+            }
         }
-        // 이미지 DB에 저장
         productImageRepository.saveAll(imageList);
+
+        // 이미지 DB에 저장
     }
 
     public Map<String, Object> list(Integer pageNumber) {

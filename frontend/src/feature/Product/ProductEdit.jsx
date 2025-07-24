@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { useNavigate, useSearchParams } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router";
 import Swipe from "bootstrap/js/src/util/swipe.js";
 import { Button } from "react-bootstrap";
 

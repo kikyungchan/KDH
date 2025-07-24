@@ -26,6 +26,7 @@ export function MemberList() {
   }, [searchParams]);
 
   const pageNumber = [];
+  console.log("pageInfo : ", pageInfo);
   for (let i = pageInfo.leftPageNumber; i <= pageInfo.rightPageNumber; i++) {
     pageNumber.push(i);
   }

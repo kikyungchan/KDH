@@ -1,6 +1,6 @@
 import { useState } from "react";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router";
 
 export function ProductRegist() {
   const [previewImages, setPreviewImages] = useState([]); // 미리보기 URL

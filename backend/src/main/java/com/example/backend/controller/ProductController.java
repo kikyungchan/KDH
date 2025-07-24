@@ -61,7 +61,7 @@ public class ProductController {
 
     @PostMapping("/regist")
     public ResponseEntity<?> regist(@ModelAttribute ProductForm productForm) {
-//        System.out.println("productForm = " + productForm);
+        System.out.println("productForm = " + productForm);
         productService.add(productForm);
         return ResponseEntity.ok().build();
     }

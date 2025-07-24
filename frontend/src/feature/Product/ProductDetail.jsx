@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { Button, Spinner } from "react-bootstrap";
-import { useNavigate, useSearchParams } from "react-router-dom";
+// import { useNavigate, useSearchParams } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router";
 import "./ProductDetail.css";
 
 export function ProductDetail() {
