@@ -49,31 +49,37 @@ export function ProductDetail() {
 
   return (
     <div className="product-detail">
-      {/* 썸네일 이미지 */}
-      {thumbnail && (
-        <img
-          style={{
-            width: "150",
-            height: "150",
-          }}
-          className="product-thumbnail"
-          src={thumbnail}
-          alt="썸네일 이미지"
-        />
-      )}
+      <div style={{ display: "flex", gap: "20px", alignItems: "flex-start" }}>
+        {/* 썸네일 이미지 */}
+        {thumbnail && (
+          <img
+            style={{
+              width: "150",
+              height: "150",
+            }}
+            className="product-thumbnail"
+            src={thumbnail}
+            alt="썸네일 이미지"
+          />
+        )}
+        <div style={{ flex: 1 }}>
+          <h2>제품명 : {product.productName}</h2>
+          <p>가격 : {product.price.toLocaleString()}원</p>
+          <p>재고 : {product.quantity}개</p>
+          <p>상세설명 : {product.info}</p>
 
-      <h2>제품명 : {product.productName}</h2>
-      <p>가격 : {product.price.toLocaleString()}원</p>
-      <p>재고 : {product.quantity}개</p>
-      <p>상세설명 : {product.info}</p>
-
-      {/*수정/삭제버튼, 재고메뉴는 관리자계정만 보이게*/}
-      <Button className="btn-secondary" onClick={handleEditButton}>
-        수정
-      </Button>
-      <Button className="btn-danger" onClick={handleDeleteButton}>
-        삭제
-      </Button>
+          <div style={{ marginTop: "20px", display: "flex", gap: "10px" }}>
+            <Button>구매하기</Button>
+            {/*수정/삭제버튼, 재고메뉴는 관리자계정만 보이게*/}
+            <Button className="btn-secondary" onClick={handleEditButton}>
+              수정
+            </Button>
+            <Button className="btn-danger" onClick={handleDeleteButton}>
+              삭제
+            </Button>
+          </div>
+        </div>
+      </div>
       <hr />
       {/* 상세 이미지 목록 */}
       <div className="product-images">
