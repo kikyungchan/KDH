@@ -164,10 +164,13 @@ public class MemberService {
         Optional<Member> db = memberRepository.findByLoginId(loginForm.getLoginId());
         // 있으면 패스워드 맞는지
         if (db.isPresent()) {
+            Member member = db.get();
+
             if (!passwordEncoder.matches(loginForm.getPassword(), db.get().getPassword())) {
                 // token 생성 후 리턴
                 JwtClaimsSet claims = JwtClaimsSet.builder()
-                        .subject(loginForm.getId())
+                        .subject(String.valueOf(member.getId()))
+                        .claim("loginId", member.getLoginId())
                         .issuer("self")
                         .issuedAt(Instant.now())
                         .expiresAt(Instant.now().plusSeconds(60 * 60 * 24))
