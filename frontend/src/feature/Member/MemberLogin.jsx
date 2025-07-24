@@ -6,13 +6,15 @@ import {
   FormLabel,
   Row,
 } from "react-bootstrap";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { useNavigate } from "react-router";
 import axios from "axios";
+import { AuthenticationContext } from "../common/AuthenticationContextProvider.jsx";
 
 export function MemberLogin() {
   const [loginId, setLoginId] = useState("");
   const [password, setPassword] = useState("");
+  const { login } = useContext(AuthenticationContext);
   const navigate = useNavigate();
 
   function handleLogInButtonClick() {
@@ -23,7 +25,7 @@ export function MemberLogin() {
       })
       .then((res) => {
         const token = res.data.token;
-        localStorage.setItem("token", token);
+        login(token);
 
         const message = res.data.message;
         console.log(message.text);

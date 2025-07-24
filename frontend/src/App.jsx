@@ -12,28 +12,32 @@ import { MemberDetail } from "./feature/Member/MemberDetail.jsx";
 import { MemberEdit } from "./feature/Member/MemberEdit.jsx";
 import { MemberLogin } from "./feature/Member/MemberLogin.jsx";
 import { MemberLogout } from "./feature/Member/MemberLogout.jsx";
+import { createContext } from "react";
+import { AuthenticationContextProvider } from "./feature/common/AuthenticationContextProvider.jsx";
 
 function App() {
   // const username = prompt("닉네임을 입력해 주세요");
   return (
-    <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<MainLayout />}>
-          {/*<Route path="/" */}
-          <Route path="product/regist" element={<ProductRegist />} />
-          <Route path="product/list" element={<ProductList />} />
-          <Route path="product/view" element={<ProductDetail />} />
-          <Route path="product/edit" element={<ProductEdit />} />
-          <Route path="/member/edit" element={<MemberEdit />} />
-          <Route path="/member/list" element={<MemberList />} />
-          <Route path="/member" element={<MemberDetail />} />
-          <Route path="/signup" element={<MemberAdd />} />
-          <Route path="/login" element={<MemberLogin />} />
-          <Route path="/logout" element={<MemberLogout />} />
-          {/*<Route path="chat/chatting" element={<Chat username={username} />} />*/}
-        </Route>
-      </Routes>
-    </BrowserRouter>
+    <AuthenticationContextProvider>
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<MainLayout />}>
+            {/*<Route path="/" */}
+            <Route path="product/regist" element={<ProductRegist />} />
+            <Route path="product/list" element={<ProductList />} />
+            <Route path="product/view" element={<ProductDetail />} />
+            <Route path="product/edit" element={<ProductEdit />} />
+            <Route path="/member/edit" element={<MemberEdit />} />
+            <Route path="/member/list" element={<MemberList />} />
+            <Route path="/member" element={<MemberDetail />} />
+            <Route path="/signup" element={<MemberAdd />} />
+            <Route path="/login" element={<MemberLogin />} />
+            <Route path="/logout" element={<MemberLogout />} />
+            {/*<Route path="chat/chatting" element={<Chat username={username} />} />*/}
+          </Route>
+        </Routes>
+      </BrowserRouter>
+    </AuthenticationContextProvider>
   );
 }
 
