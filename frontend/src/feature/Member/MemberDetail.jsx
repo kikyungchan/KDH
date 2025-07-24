@@ -113,7 +113,6 @@ export function MemberDetail() {
           <Button onClick={() => setWithdrawModalShow(true)}>탈퇴</Button>
         </div>
       </Col>
-      {/* TODO : 회원 탈퇴 모달 (비밀번호 체크)*/}
       <Modal
         show={withdrawModalShow}
         onHide={() => setWithdrawModalShow(false)}
