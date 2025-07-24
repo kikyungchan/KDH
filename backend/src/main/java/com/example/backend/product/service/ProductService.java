@@ -15,12 +15,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 
 @Service
 @Transactional
@@ -30,6 +28,12 @@ public class ProductService {
     private final ProductRepository productRepository;
     private final ProductImageRepository productImageRepository;
     private final S3Uploader s3Uploader;
+
+    // url에서 key만 따오는 메소드
+    private String extractS3Key(String url) {
+        // 예: https://bucket.s3.region.amazonaws.com/123/abc.jpg -> 123/abc.jpg
+        return url.substring(url.indexOf(".com/") + 5);
+    }
 
     public void add(ProductForm productForm) {
         // 상품 저장
@@ -113,15 +117,19 @@ public class ProductService {
     }
 
     public void delete(Long id) {
-        Product product = productRepository.findById(id).get();
+        Product product = productRepository.findById(id).orElseThrow();
+
+        // 상품에 연결된 이미지 전체 삭제 (S3 + DB)
+        List<ProductImage> images = product.getImages();
+        for (ProductImage image : images) {
+            s3Uploader.delete(extractS3Key(image.getStoredPath())); // S3 삭제
+            productImageRepository.delete(image); // DB 삭제
+        }
+
+        // 상품 삭제
         productRepository.delete(product);
     }
 
-    // url에서 key만 따오는 메소드
-    private String extractS3Key(String url) {
-        // 예: https://bucket.s3.region.amazonaws.com/123/abc.jpg -> 123/abc.jpg
-        return url.substring(url.indexOf(".com/") + 5);
-    }
 
     public void edit(Long id, ProductEditDto dto) {
         Product product = productRepository.findById(id).get();
@@ -157,9 +165,5 @@ public class ProductService {
             }
             productImageRepository.saveAll(imageList);
         }
-    }
-
-    private String extractFileName(String path) {
-        return path.substring(path.lastIndexOf("/") + 1);
     }
 }

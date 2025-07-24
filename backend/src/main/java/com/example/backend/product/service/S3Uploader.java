@@ -21,7 +21,16 @@ public class S3Uploader {
     private String bucket;
 
     public String upload(MultipartFile file, String dirName) throws IOException {
-        String fileName = dirName + "/" + UUID.randomUUID() + "_" + file.getOriginalFilename();
+
+        String originalFilename = file.getOriginalFilename();
+        String extension = "";
+
+        if (originalFilename != null && originalFilename.contains(".")) {
+            extension = originalFilename.substring(originalFilename.lastIndexOf("."));
+        }
+
+        // UUID 기반 새 파일명 (한글 제거됨)
+        String fileName = dirName + "/" + UUID.randomUUID() + extension;
 
         PutObjectRequest request = PutObjectRequest.builder()
                 .bucket(bucket)
