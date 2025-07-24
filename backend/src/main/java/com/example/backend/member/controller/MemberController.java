@@ -86,7 +86,7 @@ public class MemberController {
         } catch (Exception e) {
             e.printStackTrace();
             String message = e.getMessage();
-            return ResponseEntity.status(403).body(
+            return ResponseEntity.status(401).body(
                     Map.of("message",
                             Map.of("type", "error",
                                     "text", message)));

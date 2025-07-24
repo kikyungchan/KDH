@@ -101,14 +101,25 @@ public class MemberService {
         // 1. 회원 조회
         Member member = memberRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("해당 회원이 존재하지 않습니다"));
-        // 2. 수정
+
+        // 2. 기존 비밀번호 일치 여부 확인
+        if (!passwordEncoder.matches(memberForm.getPassword(), member.getPassword())) {
+            throw new RuntimeException("비밀번호가 일치하지 않습니다.");
+        }
+
+        // 3. 수정
         member.setName(memberForm.getName());
-        member.setPassword(memberForm.getPassword());
         member.setBirthday(memberForm.getBirthday());
         member.setPhone(memberForm.getPhone());
         member.setEmail(memberForm.getEmail());
         member.setAddress(memberForm.getAddress());
-        // 3 저장
+
+        // 4. 새 비밀번호가 있으면 암호화해서 저장
+        if (memberForm.getNewPassword() != null && !memberForm.getNewPassword().isBlank()) {
+            member.setPassword(passwordEncoder.encode(memberForm.getNewPassword()));
+        }
+
+        // 5. 저장
         memberRepository.save(member);
     }
 
