@@ -77,6 +77,15 @@ export function MemberAdd() {
 
   // 회원가입 버튼
   function handleSignUpClick() {
+    console.log("회원가입 시 전송할 데이터", {
+      loginId,
+      password,
+      name,
+      birthday,
+      phone,
+      email,
+      address,
+    });
     // 모든 입력값 유효성 검사 실행
     const isLoginIdOk = loginIdRegEx.test(loginId);
     const isPasswordOk = passwordRegEx.test(password);

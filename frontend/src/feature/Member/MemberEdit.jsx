@@ -12,6 +12,7 @@ import {
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate, useSearchParams } from "react-router";
+import { jwtDecode } from "jwt-decode";
 
 export function MemberEdit() {
   // 입력 항목 정규식
@@ -182,6 +183,14 @@ export function MemberEdit() {
 
   // 비밀번호 수정
   function handleChangePasswordClick() {
+    // JWT Token 디코드
+    const token = localStorage.getItem("token");
+    if (token) {
+      const payload = jwtDecode(token);
+      console.log("🔐 JWT payload:", payload);
+      console.log("→ sub:", payload.sub); // ← 이게 백엔드에서 받는 memberId임
+      console.log("→ loginId:", payload.loginId); // ← 클레임 확인
+    }
     axios
       .put(`/api/member/changePassword`, {
         id: member.id,
@@ -196,6 +205,8 @@ export function MemberEdit() {
       })
       .finally(() => {
         console.log("비밀번호 항상 보이는 코드");
+        console.log("보내는 oldPassword:", oldPassword);
+        console.log("보내는 newPassword:", newPassword1);
         setOldPassword("");
         setNewPassword1("");
         setNewPassword2("");

@@ -29,7 +29,7 @@ public class MemberService {
     public void signup(MemberForm memberForm) {
         Member member = new Member();
         member.setLoginId(memberForm.getLoginId());
-        member.setPassword(passwordEncoder.encode(memberForm.getOldPassword()));
+        member.setPassword(passwordEncoder.encode(memberForm.getPassword()));
         member.setName(memberForm.getName());
         member.setBirthday(memberForm.getBirthday());
         member.setPhone(memberForm.getPhone());
@@ -138,6 +138,13 @@ public class MemberService {
         String oldPassword = data.getOldPassword(); // 현재 password
         String newPassword = data.getNewPassword(); // 새 password
 
+        System.out.println(passwordEncoder.matches("choi1563", "$2a$10$07IJyschqLEPkgS1iNyWsuzPjtpmjqOuEycUvJo1uN/arc9uCt6Da"));
+
+        System.out.println("입력한 현재 비밀번호: " + data.getOldPassword());
+        System.out.println("DB 저장 비밀번호: " + member.getPassword());
+        System.out.println("매치 결과: " + passwordEncoder.matches(data.getOldPassword(), member.getPassword()));
+
+
         // 1. 기존 비밀번호 확인
         if (!passwordEncoder.matches(oldPassword, member.getPassword())) {
             throw new RuntimeException("비밀번호가 일치하지 않습니다.");
@@ -159,26 +166,24 @@ public class MemberService {
 
     // 로그인 토큰 생성
     public String getToken(MemberLoginForm loginForm) {
-        // 해당 loginId 의 데이터 있는지
-        Optional<Member> db = memberRepository.findByLoginId(loginForm.getLoginId());
-        // 있으면 패스워드 맞는지
-        if (db.isPresent()) {
-            Member member = db.get();
+        // 아이디가 맞는지
+        Member member = memberRepository.findByLoginId(loginForm.getLoginId())
+                .orElseThrow(() -> new RuntimeException("아이디 또는 비밀번호가 일치하지 않습니다"));
 
-            if (!passwordEncoder.matches(loginForm.getPassword(), db.get().getPassword())) {
-                // token 생성 후 리턴
-                JwtClaimsSet claims = JwtClaimsSet.builder()
-                        .subject(String.valueOf(member.getId()))
-                        .claim("loginId", member.getLoginId())
-                        .issuer("self")
-                        .issuedAt(Instant.now())
-                        .expiresAt(Instant.now().plusSeconds(60 * 60 * 24))
-                        .build();
-
-                return jwtEncoder.encode(JwtEncoderParameters.from(claims)).getTokenValue();
-            }
+        // 비밀번호가 맞지 않았을때
+        if (!passwordEncoder.matches(loginForm.getPassword(), member.getPassword())) {
+            throw new RuntimeException("아이디 또는 비밀번호가 일치하지 않습니다");
         }
 
-        throw new RuntimeException("아이디 또는 비밀번호가 일치하지 않습니다");
+        // 토큰 생성
+        JwtClaimsSet claims = JwtClaimsSet.builder()
+                .subject(String.valueOf(member.getId()))       // primaryKey 인 id
+                .claim("loginId", member.getLoginId())         // 필요한 claim(loginId)
+                .issuer("self")
+                .issuedAt(Instant.now())
+                .expiresAt(Instant.now().plusSeconds(60 * 60 * 24)) // 1일 유효
+                .build();
+
+        return jwtEncoder.encode(JwtEncoderParameters.from(claims)).getTokenValue();
     }
 }

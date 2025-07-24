@@ -11,3 +11,6 @@ CREATE TABLE member
 );
 
 DROP TABLE member;
+
+SELECT id, login_id, password FROM member WHERE login_id = 'choi1563';  -- 로그인 기준
+SELECT id, login_id, password FROM member WHERE id = 128;
