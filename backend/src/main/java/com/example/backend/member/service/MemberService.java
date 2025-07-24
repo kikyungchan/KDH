@@ -167,7 +167,7 @@ public class MemberService {
             if (!passwordEncoder.matches(loginForm.getPassword(), db.get().getPassword())) {
                 // token 생성 후 리턴
                 JwtClaimsSet claims = JwtClaimsSet.builder()
-                        .subject(loginForm.getLoginId())
+                        .subject(loginForm.getId())
                         .issuer("self")
                         .issuedAt(Instant.now())
                         .expiresAt(Instant.now().plusSeconds(60 * 60 * 24))
