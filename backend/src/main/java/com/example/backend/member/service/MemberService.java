@@ -122,6 +122,14 @@ public class MemberService {
         member.setEmail(memberForm.getEmail());
         member.setAddress(memberForm.getAddress());
 
+        // 새 비밀번호가 입력된 경우에만 변경
+        if (newPassword != null && !newPassword.isBlank()) {
+            if (passwordEncoder.matches(newPassword, member.getPassword())) {
+                throw new RuntimeException("새 비밀번호는 현재 비밀번호와 달라야 합니다.");
+            }
+
+            member.setPassword(passwordEncoder.encode(newPassword));
+        }
 
         // 5. 저장
         memberRepository.save(member);
