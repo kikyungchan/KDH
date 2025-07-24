@@ -10,7 +10,7 @@ import { MemberAdd } from "./feature/Member/MemberAdd.jsx";
 import { MemberDetail } from "./feature/Member/MemberDetail.jsx";
 
 import { MemberEdit } from "./feature/Member/MemberEdit.jsx";
-import { Chat } from "./feature/chat/Chat.jsx";
+import ProductOrder from "./feature/Product/ProductOrder.jsx";
 
 function App() {
   // const username = prompt("닉네임을 입력해 주세요");
@@ -23,6 +23,7 @@ function App() {
           <Route path="product/list" element={<ProductList />} />
           <Route path="product/view" element={<ProductDetail />} />
           <Route path="product/edit" element={<ProductEdit />} />
+          <Route path="product/order" element={<ProductOrder />} />
           <Route path="/member/edit" element={<MemberEdit />} />
           <Route path="/member/list" element={<MemberList />} />
           <Route path="/signup" element={<MemberAdd />} />
