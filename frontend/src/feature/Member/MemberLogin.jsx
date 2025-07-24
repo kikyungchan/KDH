@@ -22,10 +22,15 @@ export function MemberLogin() {
         password: password,
       })
       .then((res) => {
-        console.log("success");
+        const token = res.data.token;
+        localStorage.setItem("token", token);
+
+        const message = res.data.message;
+        console.log(message.text);
+        navigate("/");
       })
       .catch((err) => {
-        console.log("bad");
+        console.log(err.response.data.message);
       })
       .finally(() => {
         console.log("always");

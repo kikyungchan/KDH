@@ -139,10 +139,9 @@ public class MemberController {
     @PostMapping("login")
     public ResponseEntity<?> login(@RequestBody MemberLoginForm loginForm) {
 
-        String token = null;
 
         try {
-            token = memberService.getToken(loginForm);
+            String token = memberService.getToken(loginForm);
             return ResponseEntity.ok().body(
                     Map.of("token", token,
                             "message",
@@ -151,7 +150,7 @@ public class MemberController {
         } catch (Exception e) {
             e.printStackTrace();
             String message = e.getMessage();
-            return ResponseEntity.status(403).body(
+            return ResponseEntity.status(401).body(
                     Map.of("message",
                             Map.of("type", "error",
                                     "text", message)));
