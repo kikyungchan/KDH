@@ -10,7 +10,8 @@ import { MemberAdd } from "./feature/Member/MemberAdd.jsx";
 import { MemberDetail } from "./feature/Member/MemberDetail.jsx";
 
 import { MemberEdit } from "./feature/Member/MemberEdit.jsx";
-import { Chat } from "./feature/chat/Chat.jsx";
+import { Chat } from "./feature/Chat/Chat.jsx";
+import { QnaAdd } from "./feature/Qna/QnaAdd.jsx";
 
 function App() {
   // const username = prompt("닉네임을 입력해 주세요");
@@ -27,6 +28,7 @@ function App() {
           <Route path="/member/list" element={<MemberList />} />
           <Route path="/signup" element={<MemberAdd />} />
           <Route path="/member" element={<MemberDetail />} />
+          <Route path="/qna/view" element={<QnaAdd />} />
           {/*<Route path="chat/chatting" element={<Chat username={username} />} />*/}
           <Route path="chat/chatting" element={<Chat />} />
         </Route>
