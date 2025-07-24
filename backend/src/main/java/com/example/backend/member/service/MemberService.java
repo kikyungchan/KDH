@@ -9,6 +9,7 @@ import com.example.backend.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,12 +21,13 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class MemberService {
     private final MemberRepository memberRepository;
+    private final PasswordEncoder passwordEncoder;
 
     // 회원 등록
     public void signup(MemberForm memberForm) {
         Member member = new Member();
         member.setLoginId(memberForm.getLoginId());
-        member.setPassword(memberForm.getPassword());
+        member.setPassword(passwordEncoder.encode(memberForm.getPassword()));
         member.setName(memberForm.getName());
         member.setBirthday(memberForm.getBirthday());
         member.setPhone(memberForm.getPhone());
@@ -85,10 +87,10 @@ public class MemberService {
         Member db = memberRepository.findById(memberForm.getId())
                 .orElseThrow(() -> new RuntimeException("존재하지 않는 회원입니다."));
 
-//        // 비밀번호 불일치 시
-//        if (!db.getPassword().equals(memberForm.getPassword())) {
-//            return false;
-//        }
+        // 비밀번호 불일치 시
+        if (!passwordEncoder.matches(memberForm.getPassword(), db.getPassword())) {
+            return false;
+        }
 
         memberRepository.delete(db);
         return true;
