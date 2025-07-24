@@ -3,6 +3,7 @@ package com.example.backend.member.controller;
 import com.example.backend.member.dto.ChangePasswordForm;
 import com.example.backend.member.dto.MemberForm;
 import com.example.backend.member.dto.MemberListInfo;
+import com.example.backend.member.dto.MemberLoginForm;
 import com.example.backend.member.service.MemberService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -132,6 +133,12 @@ public class MemberController {
         boolean exists = memberService.existByLoginId(loginId);
 
         return ResponseEntity.ok(Map.of("exists", exists));
+    }
+
+    // 로그인
+    @PostMapping("login")
+    public String login(@RequestBody MemberLoginForm loginForm) {
+
     }
 
 
