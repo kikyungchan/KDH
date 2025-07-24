@@ -14,20 +14,11 @@ function Order(props) {
 
   return (
     <div>
-      <h2>주문 상품 정보</h2>
+      <h2>결제 하기</h2>
       <img src={state.imagePath} width={200} alt="상품 이미지" />
       <p>상품명 : {state.productName}</p>
       <p>가격 : {state.price.toLocaleString()}원</p>
-      <p>
-        수량 :
-        <input
-          onChange={(e) => setQuantity(Number(e.target.value))}
-          value={quantity}
-          min={1}
-          max={99}
-          type="text"
-        />
-      </p>
+      <p>수량 : {state.quantity}개</p>
       <p>총 금액 : {totalPrice.toLocaleString()}원</p>
     </div>
   );
