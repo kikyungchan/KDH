@@ -77,9 +77,10 @@ export function ProductDetail() {
               <p>{product.info}귀여운 공룡이에요~</p>
               {/* 관리자 권한만 보이게*/}
               <p>재고 : {product.quantity}개</p>
-
+             
               <div style={{ marginTop: "2px", display: "flex", gap: "10px" }}>
                 <button
+                  onClick={() => navigate("/product/buy")}
                   style={{
                     border: "3",
                     width: "150px",

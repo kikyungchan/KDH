@@ -14,7 +14,30 @@ export function ProductRegist() {
 
   function handleSubmit(e) {
     e.preventDefault();
-
+    if (!productName.trim()) {
+      alert("상품명을 입력해주세요.");
+      return;
+    }
+    if (!price || isNaN(price)) {
+      alert("가격을 입력해주세요.");
+      return;
+    }
+    if (!quantity || isNaN(quantity)) {
+      alert("수량을 입력해주세요.");
+      return;
+    }
+    if (!category.trim()) {
+      alert("카테고리를 입력해주세요.");
+      return;
+    }
+    if (!info.trim()) {
+      alert("상세설명을 입력해주세요.");
+      return;
+    }
+    if (images.length === 0) {
+      alert("이미지를 한 장 이상 추가해주세요.");
+      return;
+    }
     const formData = new FormData();
     formData.append("productName", productName);
     formData.append("price", price);
