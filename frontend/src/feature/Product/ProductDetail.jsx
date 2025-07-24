@@ -6,6 +6,8 @@ import { useNavigate, useSearchParams } from "react-router";
 import "./ProductDetail.css";
 
 export function ProductDetail() {
+  const [selectedOption, setSelectedOption] = useState(null);
+  const [quantity, setQuantity] = useState(1);
   const [product, setProduct] = useState(null);
   const [searchParams] = useSearchParams();
   const id = searchParams.get("id");
@@ -56,9 +58,10 @@ export function ProductDetail() {
       state: {
         productId: product.id,
         productName: product.productName,
-        price: product.price,
-        quantity: product.quantity,
+        price: selectedOption ? selectedOption.price : product.price,
+        quantity: quantity,
         imagePath: thumbnail,
+        option: selectedOption?.optionName || null,
       },
     });
   }
@@ -91,9 +94,69 @@ export function ProductDetail() {
               <p>{product.price.toLocaleString()}원</p>
               <hr />
               <p>{product.info}귀여운 공룡이에요~</p>
-              {/* 관리자 권한만 보이게*/}
-              <p>재고 : {product.quantity}개</p>
 
+              {/*옵션선택 드롭다운*/}
+              <div style={{ margin: "10px 0" }}>
+                <label>선택:</label>
+                <select
+                  onChange={(e) => {
+                    const selected = product.options?.find(
+                      (opt) => opt.optionName === e.target.value,
+                    );
+                    setSelectedOption(selected);
+                  }}
+                  style={{ padding: "5px", marginLeft: "10px" }}
+                >
+                  <option value="">옵션을 선택하세요</option>
+                  {product.options?.map((opt, idx) => (
+                    <option key={idx} value={opt.optionName}>
+                      {opt.optionName} - {opt.price.toLocaleString()}원
+                    </option>
+                  ))}
+                </select>
+              </div>
+              {/* 수량 선택*/}
+              <div style={{ marginTop: "10px" }}>
+                <div
+                  style={{ display: "flex", alignItems: "center", gap: "10px" }}
+                >
+                  <span style={{ fontWeight: "bold" }}>수량</span>
+                  <button
+                    type="button"
+                    onClick={() => setQuantity((prev) => Math.max(1, prev - 1))}
+                    style={{ width: "30px" }}
+                  >
+                    -
+                  </button>
+                  <span>{quantity}</span>
+                  <button
+                    type="button"
+                    onClick={() =>
+                      setQuantity((prev) => Math.min(99, prev + 1))
+                    }
+                    style={{ width: "30px" }}
+                  >
+                    +
+                  </button>
+                </div>
+
+                <div
+                  style={{
+                    marginTop: "15px",
+                    fontSize: "22px",
+                    fontWeight: "bold",
+                  }}
+                >
+                  총 가격:{" "}
+                  {(
+                    quantity *
+                    (selectedOption ? selectedOption.price : product.price)
+                  ).toLocaleString()}
+                  원
+                </div>
+              </div>
+
+              {/*버튼*/}
               <div style={{ marginTop: "2px", display: "flex", gap: "10px" }}>
                 <button
                   onClick={handleBuyButton}

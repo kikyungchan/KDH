@@ -27,9 +27,12 @@ public class Product {
     private LocalDateTime insertedAt;
 
 
-    //    casade = 상품저장시 모든 옵션도 같이 저장
-//    orphanRemoval= 상품 삭제시 옵션도 함께 삭제
-    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
+    //    orphanRemoval= 상품 삭제시 옵션도 함께 삭제
+    @OneToMany(mappedBy = "product", orphanRemoval = true)
     private List<ProductImage> images = new ArrayList<>();
+
+    //    casade = 상품저장시 모든 옵션도 같이 저장
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<ProductOption> options = new ArrayList<>();
 
 }

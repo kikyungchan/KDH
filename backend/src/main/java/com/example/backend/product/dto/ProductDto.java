@@ -13,6 +13,7 @@ public class ProductDto {
     private String info;
     private Integer quantity;
 
+    private List<ProductOptionDto> options;
     private List<String> imagePath;
 
 

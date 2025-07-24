@@ -130,6 +130,16 @@ public class ProductService {
         List<String> imagePaths = product.getImages().stream().map(ProductImage::getStoredPath).toList();
 
         dto.setImagePath(imagePaths);
+
+        //옵션리스트
+        List<ProductOptionDto> options = product.getOptions().stream()
+                .map(opt -> {
+                    ProductOptionDto option = new ProductOptionDto();
+                    option.setOptionName(opt.getOptionName());
+                    option.setPrice(opt.getPrice());
+                    return option;
+                }).toList();
+        dto.setOptions(options);
         return dto;
     }
 
