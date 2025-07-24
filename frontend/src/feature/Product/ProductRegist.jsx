@@ -11,6 +11,7 @@ export function ProductRegist() {
   const [category, setCategory] = useState("");
   const [info, setInfo] = useState("");
   const [images, setImages] = useState([]);
+  const [options, setOptions] = useState([{ optionName: "", price: "" }]);
 
   function handleSubmit(e) {
     e.preventDefault();
@@ -44,6 +45,7 @@ export function ProductRegist() {
     formData.append("quantity", quantity);
     formData.append("category", category);
     formData.append("info", info);
+    formData.append("options", JSON.stringify(options));
     images.forEach((file) => {
       formData.append("images", file);
     });
@@ -132,6 +134,55 @@ export function ProductRegist() {
             value={info}
             onChange={(e) => setInfo(e.target.value)}
           />
+        </div>
+        <div style={{ marginTop: "20px" }}>
+          <label>옵션 목록 (메뉴이름 / 가격)</label>
+          {options.map((opt, index) => (
+            <div
+              key={index}
+              style={{ display: "flex", gap: "10px", marginBottom: "5px" }}
+            >
+              <input
+                type="text"
+                placeholder="메뉴이름"
+                value={opt.optionName}
+                onChange={(e) => {
+                  const newOptions = [...options];
+                  newOptions[index].size = e.target.value;
+                  setOptions(newOptions);
+                }}
+              />
+              <input
+                type="number"
+                placeholder="가격"
+                value={opt.price}
+                onChange={(e) => {
+                  const newOptions = [...options];
+                  newOptions[index].price = e.target.value;
+                  setOptions(newOptions);
+                }}
+              />
+              <button
+                type="button"
+                onClick={() => {
+                  const newOptions = [...options];
+                  newOptions.splice(index, 1);
+                  setOptions(newOptions);
+                }}
+                style={{ color: "red" }}
+              >
+                삭제
+              </button>
+            </div>
+          ))}
+          <button
+            type="button"
+            onClick={() =>
+              setOptions([...options, { optionName: "", price: "" }])
+            }
+          >
+            옵션 추가
+          </button>
         </div>
         <div>
           상품 이미지

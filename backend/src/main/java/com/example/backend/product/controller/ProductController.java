@@ -3,7 +3,10 @@ package com.example.backend.product.controller;
 import com.example.backend.product.dto.ProductDto;
 import com.example.backend.product.dto.ProductEditDto;
 import com.example.backend.product.dto.ProductForm;
+import com.example.backend.product.dto.ProductOptionDto;
 import com.example.backend.product.service.ProductService;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -59,10 +62,34 @@ public class ProductController {
         return ResponseEntity.ok(productService.list(page));
     }
 
-    @PostMapping("/regist")
-    public ResponseEntity<?> regist(@ModelAttribute ProductForm productForm) {
-        System.out.println("productForm = " + productForm);
-        productService.add(productForm);
+    @PostMapping(value = "/regist", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<?> regist(@RequestParam String productName,
+                                    @RequestParam Integer price,
+                                    @RequestParam Integer quantity,
+                                    @RequestParam String category,
+                                    @RequestParam String info,
+                                    @RequestParam String options,
+                                    @RequestParam("images") List<MultipartFile> images) {
+//        System.out.println("productForm = " + productForm);
+        ObjectMapper objectMapper = new ObjectMapper();
+        List<ProductOptionDto> optionList;
+        try {
+            optionList = objectMapper.readValue(options, new TypeReference<List<ProductOptionDto>>() {
+            });
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body("오류가 발생하였습니다.");
+        }
+        ProductForm form = new ProductForm();
+        form.setProductName(productName);
+        form.setPrice(price);
+        form.setQuantity(quantity);
+        form.setCategory(category);
+        form.setInfo(info);
+        form.setOptions(optionList);
+        form.setImages(images);
+
+        productService.add(form);
+
         return ResponseEntity.ok().build();
     }
 

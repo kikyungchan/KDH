@@ -14,7 +14,7 @@ function Order(props) {
 
   return (
     <div>
-      <h2>주문 확인</h2>
+      <h2>주문 상품 정보</h2>
       <img src={state.imagePath} width={200} alt="상품 이미지" />
       <p>상품명 : {state.productName}</p>
       <p>가격 : {state.price.toLocaleString()}원</p>
