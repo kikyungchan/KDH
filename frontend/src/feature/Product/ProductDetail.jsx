@@ -54,16 +54,20 @@ export function ProductDetail() {
     // alert("로그인이 필요합니다.");
     // navigate("/login");
     // }
-    navigate("/product/order", {
-      state: {
-        productId: product.id,
-        productName: product.productName,
-        price: selectedOption ? selectedOption.price : product.price,
-        quantity: quantity,
-        imagePath: thumbnail,
-        option: selectedOption?.optionName || null,
-      },
-    });
+    if (!selectedOption) {
+      alert("옵션을 선택해주세요.");
+    } else {
+      navigate("/product/order", {
+        state: {
+          productId: product.id,
+          productName: product.productName,
+          price: selectedOption ? selectedOption.price : product.price,
+          quantity: quantity,
+          imagePath: thumbnail,
+          option: selectedOption?.optionName || null,
+        },
+      });
+    }
   }
 
   return (
