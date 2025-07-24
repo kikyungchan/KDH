@@ -11,6 +11,7 @@ public class MemberForm {
 
     @NotBlank(message = "아이디는 필수입니다.")
     @Pattern(
+//            TODO : admin 을 포함한 id 는 생성불가
             regexp = "^[A-Za-z][A-Za-z0-9]{3,19}$",
             message = "아이디는 영문으로 시작하고 4~20자의 영문자 또는 숫자여야 합니다."
     )
@@ -37,7 +38,10 @@ public class MemberForm {
     private String name;
 
     @NotBlank(message = "이메일은 필수입니다.")
-    @Email(message = "유효한 이메일 형식이어야 합니다.")
+    @Pattern(
+            regexp = "^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$",
+            message = "유효한 이메일 형식이어야 합니다."
+    )
     private String email;
 
     @NotBlank(message = "전화번호는 필수입니다.")

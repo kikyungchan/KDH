@@ -9,6 +9,7 @@ function NavBar(props) {
       <Link to="/product/regist">상품등록</Link>
       <Link to="/member/list">회원목록</Link>
       <Link to="/signup">회원가입</Link>
+      <Link to="/login">로그인</Link>
     </nav>
   );
 }
