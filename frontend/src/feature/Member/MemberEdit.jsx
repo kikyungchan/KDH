@@ -77,7 +77,7 @@ export function MemberEdit() {
 
   // 수정버튼
   function handleMemberInfoChangeButton() {
-    const isPasswordOk = passwordRegEx.test(oldPassword);
+    const isPasswordOk = oldPassword.trim() !== "";
     const isNameOk = nameRegEx.test(member.name);
     const isPhoneOk = phoneRegEx.test(member.phone);
     const isEmailOk = emailRegEx.test(member.email);
@@ -110,6 +110,17 @@ export function MemberEdit() {
       !allFieldsFilled
     ) {
       console.log("입력값 유효성 실패로 요청 중단");
+      console.log("newPassword1:", newPassword1);
+      console.log("isNewPasswordOk:", isPasswordOk);
+      console.log({
+        name: member.name,
+        phone: member.phone,
+        email: member.email,
+        isNameOk,
+        isPhoneOk,
+        isEmailOk,
+      });
+
       return; // 유효하지 않으면 요청 중단
     }
     axios

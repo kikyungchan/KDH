@@ -24,7 +24,7 @@ public class MemberForm {
     private String oldPassword;
 
     @Pattern(
-            regexp = "^[A-Za-z0-9]{8,20}$",
+            regexp = "^$|^[A-Za-z0-9]{8,20}$",
             message = "비밀번호는 영문자와 숫자 조합의 8~20자여야 합니다."
     )
     private String newPassword;
