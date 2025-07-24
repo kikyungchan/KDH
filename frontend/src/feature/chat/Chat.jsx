@@ -19,8 +19,7 @@ export function Chat() {
     console.log("name : ", name);
     setUsername(name);
     console.log("username1 : ", username);
-
-    // todo : username : null
+    
     const client = new Client({
       webSocketFactory: () => new SockJS(WS_PATH), // SockJS 연결
       debug: (str) => console.log("[STOMP]", str),
