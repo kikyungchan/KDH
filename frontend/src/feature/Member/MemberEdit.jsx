@@ -260,7 +260,7 @@ export function MemberEdit() {
               onChange={(e) => setPassword(e.target.value)}
             />
             {isSubmitted && password.trim() === "" && (
-              <FormText className="text-danger">암호를 입력해 주세요.</FormText>
+              <FormText className="text-danger">암호를 입력해주세요.</FormText>
             )}
           </FormGroup>
         </Modal.Body>

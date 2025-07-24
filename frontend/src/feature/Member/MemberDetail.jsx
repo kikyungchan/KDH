@@ -4,6 +4,7 @@ import {
   FormControl,
   FormGroup,
   FormLabel,
+  FormText,
   Modal,
   Row,
   Spinner,
@@ -14,6 +15,8 @@ import axios from "axios";
 
 export function MemberDetail() {
   const [member, setMember] = useState(null);
+  const [withdrawModalShow, setWithdrawModalShow] = useState(false);
+  const [password, setPassword] = useState("");
   const [memberParams] = useSearchParams();
   const navigate = useNavigate();
 
@@ -46,7 +49,7 @@ export function MemberDetail() {
     console.log(member);
     axios
       .delete(`/api/member`, {
-        data: { id: member.id, password: member.password },
+        data: { id: member.id, password: password },
       })
       .then((res) => {
         console.log("good");
@@ -107,23 +110,40 @@ export function MemberDetail() {
           >
             수정
           </Button>
-          <Button onClick={handleWithdrawButtonClick}>탈퇴</Button>
+          <Button onClick={() => setWithdrawModalShow(true)}>탈퇴</Button>
         </div>
       </Col>
-      // TODO : 회원 탈퇴 모달 (비밀번호 체크)
-      <Modal>
+      {/* TODO : 회원 탈퇴 모달 (비밀번호 체크)*/}
+      <Modal
+        show={withdrawModalShow}
+        onHide={() => setWithdrawModalShow(false)}
+      >
         <Modal.Header closeButton>
-          <Modal.Title></Modal.Title>
+          <Modal.Title>회원 탈퇴 확인</Modal.Title>
         </Modal.Header>
         <Modal.Body>
+          <p className="mb-3" style={{ fontSize: "13px" }}>
+            정말 탈퇴하시겠습니까? 탈퇴를 위해 비밀번호를 입력해주세요.
+          </p>
           <FormGroup>
-            <FormLabel></FormLabel>
-            <FormControl />
+            <FormLabel>비밀번호</FormLabel>
+            <FormControl
+              id="withdraw-password"
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              autoFocus
+            />
+            <FormText className="text-danger">
+              비밀번호를 입력해주세요.
+            </FormText>
           </FormGroup>
         </Modal.Body>
         <Modal.Footer>
-          <Button>취소</Button>
-          <Button>탈퇴</Button>
+          <Button onClick={() => setWithdrawModalShow(false)}>취소</Button>
+          <Button onClick={handleWithdrawButtonClick} disabled={!password}>
+            탈퇴
+          </Button>
         </Modal.Footer>
       </Modal>
     </Row>
