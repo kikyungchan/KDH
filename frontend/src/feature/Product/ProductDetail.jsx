@@ -82,15 +82,23 @@ export function ProductDetail() {
       </div>
       <hr />
       {/* 상세 이미지 목록 */}
-      <div className="product-images">
-        {detailImages?.map((path, index) => (
-          <img
-            key={index}
-            src={path}
-            alt={`상세 이미지 ${index + 1}`}
-            className="product-detail-image"
-          />
-        ))}
+      <div style={{ marginTop: "20px" }}>
+        <div style={{ display: "flex", flexDirection: "column", gap: "15px" }}>
+          {detailImages?.map((path, index) => (
+            <img
+              key={index}
+              src={path}
+              alt={`상세 이미지 ${index + 1}`}
+              style={{
+                width: "100%",
+                height: "600px",
+                objectFit: "cover",
+                border: "1px solid #ccc",
+                borderRadius: "6px",
+              }}
+            />
+          ))}
+        </div>
       </div>
     </div>
   );
