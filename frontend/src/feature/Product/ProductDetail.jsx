@@ -48,15 +48,19 @@ export function ProductDetail() {
   const detailImages = product.imagePath?.slice(1);
 
   function handleBuyButton() {
-    // if (isLogged) {
-    axios.post(`/api/product/order`, {
-      productId: product.id,
-      productName: product.productName,
-      price: product.price,
-      quantity: product.quantity,
-      imagePath: thumbnail,
-    });
+    // if (!isLogged) {
+    // alert("로그인이 필요합니다.");
+    // navigate("/login");
     // }
+    navigate("/product/order", {
+      state: {
+        productId: product.id,
+        productName: product.productName,
+        price: product.price,
+        quantity: product.quantity,
+        imagePath: thumbnail,
+      },
+    });
   }
 
   return (
