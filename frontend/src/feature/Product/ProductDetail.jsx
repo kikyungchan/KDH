@@ -81,8 +81,15 @@ export function ProductDetail() {
       optionName: selectedOption.optionName,
       quantity: quantity,
     };
+
+    const token = localStorage.getItem("token");
+
     axios
-      .post("/api/product/cart", cartItem)
+      .post("/api/product/cart", cartItem, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
       .then((res) => {
         setShowModal(true);
       })
