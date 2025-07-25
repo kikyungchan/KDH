@@ -57,22 +57,40 @@ export function ProductDetail() {
     // }
     if (!selectedOption) {
       alert("옵션을 선택해주세요.");
-    } else {
-      navigate("/product/order", {
-        state: {
-          productId: product.id,
-          productName: product.productName,
-          price: selectedOption ? selectedOption.price : product.price,
-          quantity: quantity,
-          imagePath: thumbnail,
-          option: selectedOption?.optionName || null,
-        },
-      });
+      return;
     }
+    navigate("/product/order", {
+      state: {
+        productId: product.id,
+        productName: product.productName,
+        price: selectedOption ? selectedOption.price : product.price,
+        quantity: quantity,
+        imagePath: thumbnail,
+        option: selectedOption?.optionName || null,
+      },
+    });
   }
 
   function handleCartButton() {
-    setShowModal(true);
+    if (!selectedOption) {
+      alert("옵션을 선택해주세요.");
+      return;
+    }
+    const cartItem = {
+      productId: product.id,
+      productName: product.productName,
+      option: selectedOption.optionName,
+      quantity: quantity,
+      price: selectedOption ? selectedOption.price : product.price,
+      imagePath: thumbnail,
+    };
+    axios
+      .post("/api/product/cart", cartItem)
+      .then((res) => {
+        setShowModal(true);
+      })
+      .catch((err) => {})
+      .finally(() => {});
   }
 
   return (
@@ -184,7 +202,7 @@ export function ProductDetail() {
                 >
                   장바구니
                 </button>
-                {/*수정/삭제버튼, 재고메뉴는 관리자계정만 보이게*/}
+                {/*Todo: 수정삭제버튼 관리자만 보이게 수정*/}
                 <Button className="btn-secondary" onClick={handleEditButton}>
                   수정
                 </Button>
