@@ -28,12 +28,26 @@ function ProductCart(props) {
     }
   }, []);
 
+  function handleCheckboxChange(index, checked) {
+    if (checked) {
+      setCheckedIds((prev) => [...prev, index]);
+    } else {
+      setCheckedIds((prev) => prev.filter((item) => item !== index));
+    }
+  }
+
   return (
     <Container>
       <h2>장바구니</h2>
-      <Row></Row>
-      {cartItems.map((item) => (
-        <Row key={item.id} className="align-items-center border-bottom py-2">
+      {cartItems.map((item, index) => (
+        <Row key={index} className="align-items-center border-bottom py-2">
+          <Col>
+            <input
+              type="checkbox"
+              checked={checkedIds.includes(index)}
+              onChange={(e) => handleCheckboxChange(index, e.target.checked)}
+            />
+          </Col>
           <Col>
             <img src={item.imagePath} alt="상품이미지" width="100%" />
           </Col>
