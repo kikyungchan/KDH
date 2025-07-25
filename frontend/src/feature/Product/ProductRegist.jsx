@@ -11,16 +11,41 @@ export function ProductRegist() {
   const [category, setCategory] = useState("");
   const [info, setInfo] = useState("");
   const [images, setImages] = useState([]);
+  const [options, setOptions] = useState([{ optionName: "", price: "" }]);
 
   function handleSubmit(e) {
     e.preventDefault();
-
+    if (!productName.trim()) {
+      alert("상품명을 입력해주세요.");
+      return;
+    }
+    if (!price || isNaN(price)) {
+      alert("가격을 입력해주세요.");
+      return;
+    }
+    if (!quantity || isNaN(quantity)) {
+      alert("수량을 입력해주세요.");
+      return;
+    }
+    if (!category.trim()) {
+      alert("카테고리를 입력해주세요.");
+      return;
+    }
+    if (!info.trim()) {
+      alert("상세설명을 입력해주세요.");
+      return;
+    }
+    if (images.length === 0) {
+      alert("이미지를 한 장 이상 추가해주세요.");
+      return;
+    }
     const formData = new FormData();
     formData.append("productName", productName);
     formData.append("price", price);
     formData.append("quantity", quantity);
     formData.append("category", category);
     formData.append("info", info);
+    formData.append("options", JSON.stringify(options));
     images.forEach((file) => {
       formData.append("images", file);
     });
@@ -110,6 +135,55 @@ export function ProductRegist() {
             onChange={(e) => setInfo(e.target.value)}
           />
         </div>
+        <div style={{ marginTop: "20px" }}>
+          <label>옵션 목록 (메뉴이름 / 가격)</label>
+          {options.map((opt, index) => (
+            <div
+              key={index}
+              style={{ display: "flex", gap: "10px", marginBottom: "5px" }}
+            >
+              <input
+                type="text"
+                placeholder="메뉴이름"
+                value={opt.optionName}
+                onChange={(e) => {
+                  const newOptions = [...options];
+                  newOptions[index].optionName = e.target.value;
+                  setOptions(newOptions);
+                }}
+              />
+              <input
+                type="number"
+                placeholder="가격"
+                value={opt.price}
+                onChange={(e) => {
+                  const newOptions = [...options];
+                  newOptions[index].price = e.target.value;
+                  setOptions(newOptions);
+                }}
+              />
+              <button
+                type="button"
+                onClick={() => {
+                  const newOptions = [...options];
+                  newOptions.splice(index, 1);
+                  setOptions(newOptions);
+                }}
+                style={{ color: "red" }}
+              >
+                삭제
+              </button>
+            </div>
+          ))}
+          <button
+            type="button"
+            onClick={() =>
+              setOptions([...options, { optionName: "", price: "" }])
+            }
+          >
+            옵션 추가
+          </button>
+        </div>
         <div>
           상품 이미지
           <input
@@ -126,6 +200,7 @@ export function ProductRegist() {
               ))}
             </ul>
           )}
+          {/*파일 미리보기*/}
           {previewImages.length > 0 && (
             <div
               style={{

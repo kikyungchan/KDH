@@ -1,4 +1,4 @@
-package com.example.backend.entity;
+package com.example.backend.product.entity;
 
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -7,14 +7,14 @@ import lombok.Setter;
 @Entity
 @Getter
 @Setter
-@Table(name = "product_image")
-public class ProductImage {
+@Table(name = "product_option")
+public class ProductOption {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private Long id;
 
-    private String storedPath;
-    private String originalFileName;
+    private String optionName;
+    private Integer price;
 
     @ManyToOne
     @JoinColumn(name = "product_id")

@@ -14,6 +14,8 @@ import { MemberLogin } from "./feature/Member/MemberLogin.jsx";
 import { MemberLogout } from "./feature/Member/MemberLogout.jsx";
 import { createContext } from "react";
 import { AuthenticationContextProvider } from "./feature/common/AuthenticationContextProvider.jsx";
+import ProductOrder from "./feature/Product/ProductOrder.jsx";
+import ProductCart from "./feature/Product/ProductCart.jsx";
 
 function App() {
   // const username = prompt("닉네임을 입력해 주세요");
@@ -27,6 +29,8 @@ function App() {
             <Route path="product/list" element={<ProductList />} />
             <Route path="product/view" element={<ProductDetail />} />
             <Route path="product/edit" element={<ProductEdit />} />
+            <Route path="product/order" element={<ProductOrder />} />
+            <Route path="product/cart" element={<ProductCart />} />
             <Route path="/member/edit" element={<MemberEdit />} />
             <Route path="/member/list" element={<MemberList />} />
             <Route path="/member" element={<MemberDetail />} />

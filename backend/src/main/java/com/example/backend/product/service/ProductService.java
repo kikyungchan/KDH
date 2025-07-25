@@ -1,12 +1,15 @@
-package com.example.backend.service;
+package com.example.backend.product.service;
 
-import com.example.backend.dto.ProductDto;
-import com.example.backend.dto.ProductEditDto;
-import com.example.backend.entity.Product;
-import com.example.backend.dto.ProductForm;
-import com.example.backend.entity.ProductImage;
-import com.example.backend.repository.ProductImageRepository;
-import com.example.backend.repository.ProductRepository;
+import com.example.backend.product.dto.ProductDto;
+import com.example.backend.product.dto.ProductEditDto;
+import com.example.backend.product.dto.ProductOptionDto;
+import com.example.backend.product.entity.Product;
+import com.example.backend.product.dto.ProductForm;
+import com.example.backend.product.entity.ProductImage;
+import com.example.backend.product.entity.ProductOption;
+import com.example.backend.product.repository.ProductImageRepository;
+import com.example.backend.product.repository.ProductOptionRepository;
+import com.example.backend.product.repository.ProductRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -15,12 +18,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 
 @Service
 @Transactional
@@ -29,7 +30,14 @@ public class ProductService {
 
     private final ProductRepository productRepository;
     private final ProductImageRepository productImageRepository;
+    private final ProductOptionRepository productOptionRepository;
     private final S3Uploader s3Uploader;
+
+    // url에서 key만 따오는 메소드
+    private String extractS3Key(String url) {
+        // 예: https://bucket.s3.region.amazonaws.com/123/abc.jpg -> 123/abc.jpg
+        return url.substring(url.indexOf(".com/") + 5);
+    }
 
     public void add(ProductForm productForm) {
         // 상품 저장
@@ -41,14 +49,25 @@ public class ProductService {
         product.setQuantity(productForm.getQuantity());
         productRepository.save(product);
 
+        //옵션 저장
+        if (productForm.getOptions() != null && !productForm.getOptions().isEmpty()) {
+            List<ProductOption> optionList = new ArrayList<>();
+            for (ProductOptionDto dto : productForm.getOptions()) {
+                ProductOption option = new ProductOption();
+                option.setOptionName(dto.getOptionName());
+                option.setPrice(dto.getPrice());
+                option.setProduct(product);
+                optionList.add(option);
+            }
+            productOptionRepository.saveAll(optionList);
+        }
+
         // 이미지 저장
         List<ProductImage> imageList = new ArrayList<>();
 
         if (productForm.getImages() != null) {
             for (MultipartFile file : productForm.getImages()) {
-
                 try {
-
                     String s3Url = s3Uploader.upload(file, String.valueOf(product.getId()));
                     ProductImage image = new ProductImage();
                     image.setOriginalFileName(file.getOriginalFilename());
@@ -58,29 +77,9 @@ public class ProductService {
                 } catch (IOException e) {
                     throw new RuntimeException("업로드 실패 : " + e.getMessage(), e);
                 }
-//            String originalFileName = file.getOriginalFilename();
-//            String uuid = UUID.randomUUID().toString();
-//            String storedName = uuid + "_" + originalFileName;
-//            String uploadDir = "C:/Temp/prj4/productFile";
-
-//            File savedFile = new File(uploadDir, storedName);
-//            try {
-//                file.transferTo(savedFile);
-//            } catch (IOException e) {
-//                throw new RuntimeException("파일 저장에 실패했습니다");
-//            }
-//
-//            ProductImage image = new ProductImage();
-//            image.setOriginalFileName(originalFileName);
-//            image.setStoredPath(uploadDir + "/" + storedName);
-//            image.setProduct(product);
-//            imageList.add(image);
-
             }
         }
         productImageRepository.saveAll(imageList);
-
-        // 이미지 DB에 저장
     }
 
     public Map<String, Object> list(Integer pageNumber) {
@@ -131,13 +130,33 @@ public class ProductService {
         List<String> imagePaths = product.getImages().stream().map(ProductImage::getStoredPath).toList();
 
         dto.setImagePath(imagePaths);
+
+        //옵션리스트
+        List<ProductOptionDto> options = product.getOptions().stream()
+                .map(opt -> {
+                    ProductOptionDto option = new ProductOptionDto();
+                    option.setOptionName(opt.getOptionName());
+                    option.setPrice(opt.getPrice());
+                    return option;
+                }).toList();
+        dto.setOptions(options);
         return dto;
     }
 
     public void delete(Long id) {
-        Product product = productRepository.findById(id).get();
+        Product product = productRepository.findById(id).orElseThrow();
+
+        // 상품에 연결된 이미지 전체 삭제 (S3 + DB)
+        List<ProductImage> images = product.getImages();
+        for (ProductImage image : images) {
+            s3Uploader.delete(extractS3Key(image.getStoredPath())); // S3 삭제
+            productImageRepository.delete(image); // DB 삭제
+        }
+
+        // 상품 삭제
         productRepository.delete(product);
     }
+
 
     public void edit(Long id, ProductEditDto dto) {
         Product product = productRepository.findById(id).get();
@@ -146,42 +165,33 @@ public class ProductService {
         product.setCategory(dto.getCategory());
         product.setInfo(dto.getInfo());
         product.setQuantity(dto.getQuantity());
+
+        // 삭제 처리
         if (dto.getDeletedImages() != null) {
             for (String path : dto.getDeletedImages()) {
-                productImageRepository.deleteByStoredPath(path); // or deleteByPath(path)
-                File file = new File("C:/Temp/prj4/productFile", extractFileName(path));
-                file.delete();
+                s3Uploader.delete(extractS3Key(path));
+                productImageRepository.deleteByStoredPath(path);
             }
-            productRepository.save(product);
         }
+        // 파일 저장
         if (dto.getNewImages() != null) {
             List<ProductImage> imageList = new ArrayList<>();
+
             for (MultipartFile file : dto.getNewImages()) {
-                String originalFileName = file.getOriginalFilename();
-                String uuid = UUID.randomUUID().toString();
-                String storedName = uuid + "_" + originalFileName;
-                String uploadDir = "C:/Temp/prj4/productFile";
-
-                File savedFile = new File(uploadDir, storedName);
+                String s3Url = null;
                 try {
-                    file.transferTo(savedFile);
+                    s3Url = s3Uploader.upload(file, String.valueOf(product.getId()));
+                    ProductImage image = new ProductImage();
+                    image.setOriginalFileName(file.getOriginalFilename());
+                    image.setStoredPath(s3Url);
+                    image.setProduct(product);
+                    imageList.add(image);
                 } catch (IOException e) {
-                    throw new RuntimeException("파일 저장 실패");
+                    throw new RuntimeException(e);
                 }
-
-                ProductImage image = new ProductImage();
-                image.setOriginalFileName(originalFileName);
-                image.setStoredPath(uploadDir + "/" + storedName);
-                image.setProduct(product);
-                imageList.add(image);
             }
-
             productImageRepository.saveAll(imageList);
         }
-
     }
 
-    private String extractFileName(String path) {
-        return path.substring(path.lastIndexOf("/") + 1);
-    }
 }

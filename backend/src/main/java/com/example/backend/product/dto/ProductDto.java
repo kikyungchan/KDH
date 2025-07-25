@@ -1,4 +1,4 @@
-package com.example.backend.dto;
+package com.example.backend.product.dto;
 
 import lombok.Data;
 
@@ -13,6 +13,7 @@ public class ProductDto {
     private String info;
     private Integer quantity;
 
+    private List<ProductOptionDto> options;
     private List<String> imagePath;
 
 

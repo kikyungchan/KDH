@@ -3,6 +3,7 @@ import axios from "axios";
 import "./ProductList.css";
 // import { Link, useSearchParams } from "react-router-dom";
 import { Link, useSearchParams } from "react-router";
+import { Col, Container, Row } from "react-bootstrap";
 
 export function ProductList() {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -27,66 +28,74 @@ export function ProductList() {
   };
 
   return (
-    <div className="product-list-container">
-      <h2>상품 목록</h2>
-      <div className="product-grid">
-        {products.map((product) => (
-          <Link
-            to={`/product/view?id=${product.id}`}
-            className="product-card"
-            key={product.id}
-          >
-            {product.imagePath && (
-              <div className="product-image-wrapper">
-                <img
-                  src={product.imagePath?.[0]}
-                  alt={product.productName}
-                  className="product-image"
-                />
-              </div>
-            )}
-            <div className="product-name">{product.productName}</div>
-            <div className="product-price">
-              {product.price.toLocaleString()}원
-            </div>
-          </Link>
-        ))}
-      </div>
-      {/* 페이지네이션 */}
-      <div className="pagination d-flex justify-content-center align-items-center">
-        {/*이전*/}
-        <button
-          onClick={() => handlePageClick(pageInfo.leftPageNumber - 1)}
-          disabled={pageInfo.leftPageNumber < 6}
-          className="page-nav-button"
-        >
-          이전
-        </button>
-        {/*페이지 번호 버튼들*/}
-        {Array.from(
-          { length: pageInfo.rightPageNumber - pageInfo.leftPageNumber + 1 },
-          (_, i) => {
-            const page = pageInfo.leftPageNumber + i;
-            return (
-              <button
-                key={page}
-                onClick={() => handlePageClick(page)}
-                className={page === pageInfo.currentPageNumber ? "active" : ""}
+    <Row className="justify-content-center">
+      <Col>
+        <div className="product-list-container mb-4">
+          <h2>상품 목록</h2>
+          <div className="product-grid mb-4">
+            {products.map((product) => (
+              <Link
+                to={`/product/view?id=${product.id}`}
+                className="product-card"
+                key={product.id}
               >
-                {page}
-              </button>
-            );
-          },
-        )}
-        {/*  다음*/}
-        <button
-          onClick={() => handlePageClick(pageInfo.rightPageNumber + 1)}
-          disabled={pageInfo.rightPageNumber > pageInfo.totalPages - 5}
-          className="page-nav-button"
-        >
-          다음
-        </button>
-      </div>
-    </div>
+                {product.imagePath && (
+                  <div className="product-image-wrapper mb-4">
+                    <img
+                      src={product.imagePath?.[0]}
+                      alt={product.productName}
+                      className="product-image"
+                    />
+                  </div>
+                )}
+                <div className="product-name mb-3">{product.productName}</div>
+                <div className="product-price mb-3">
+                  {product.price.toLocaleString()}원
+                </div>
+              </Link>
+            ))}
+          </div>
+          {/* 페이지네이션 */}
+          <div className="pagination d-flex justify-content-center align-items-center">
+            {/*이전*/}
+            <button
+              onClick={() => handlePageClick(pageInfo.leftPageNumber - 1)}
+              disabled={pageInfo.leftPageNumber < 6}
+              className="page-nav-button"
+            >
+              이전
+            </button>
+            {/*페이지 번호 버튼들*/}
+            {Array.from(
+              {
+                length: pageInfo.rightPageNumber - pageInfo.leftPageNumber + 1,
+              },
+              (_, i) => {
+                const page = pageInfo.leftPageNumber + i;
+                return (
+                  <button
+                    key={page}
+                    onClick={() => handlePageClick(page)}
+                    className={
+                      page === pageInfo.currentPageNumber ? "active" : ""
+                    }
+                  >
+                    {page}
+                  </button>
+                );
+              },
+            )}
+            {/*  다음*/}
+            <button
+              onClick={() => handlePageClick(pageInfo.rightPageNumber + 1)}
+              disabled={pageInfo.rightPageNumber > pageInfo.totalPages - 5}
+              className="page-nav-button"
+            >
+              다음
+            </button>
+          </div>
+        </div>
+      </Col>
+    </Row>
   );
 }
