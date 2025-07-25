@@ -51,4 +51,7 @@ public class Question {
     @Column(name = "updated_at", nullable = false)
     private Instant updatedAt;
 
+    @Column(name = "category", nullable = false)
+    private String category;
+
 }

@@ -21,4 +21,6 @@ public class QuestionDto implements Serializable {
     String status;
     Instant createdAt;
     Instant updatedAt;
+    String category;
+
 }
