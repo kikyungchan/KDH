@@ -70,5 +70,19 @@ ALTER TABLE cart
     ADD CONSTRAINT fk_cart_member
         FOREIGN KEY (member_id)
             REFERENCES member (id);
+# 중복방지 제약조건
+ALTER TABLE cart
+    ADD CONSTRAINT unique_cart UNIQUE (member_id, product_id, option_id);
 
+SELECT *
+FROM cart
+WHERE member_id = 132
+  AND product_id = 2089
+  AND option_id = 1;
 
+DELETE
+FROM cart
+WHERE member_id = 132
+  AND product_id = 2089
+  AND option_id = 1
+LIMIT 1;

@@ -2,6 +2,7 @@ package com.example.backend.product.service;
 
 import com.example.backend.member.entity.Member;
 import com.example.backend.member.repository.MemberRepository;
+import com.example.backend.product.dto.CartDeleteRequest;
 import com.example.backend.product.dto.CartItemDto;
 import com.example.backend.product.dto.CartResponseDto;
 import com.example.backend.product.entity.Cart;
@@ -35,12 +36,18 @@ public class CartService {
         ProductOption option = productOptionRepository.findByProductAndOptionName(product, dto.getOptionName());
 
         // 옵션 중복 체크 ( 동일회원 + 상품 + 옵션)
-        Cart existing = cartRepository.findByMemberAndProductAndOption(member, product, option);
+        List<Cart> existingList = cartRepository.findByMemberAndProductAndOption(member, product, option);
 
-        if (existing != null) {
-            // 수량만 증가시키기
-            existing.setQuantity(existing.getQuantity() + dto.getQuantity());
-            cartRepository.save(existing);
+        if (!existingList.isEmpty()) {
+            Cart merged = existingList.get(0);
+            int totalQty = dto.getQuantity();
+
+            for (int i = 1; i < existingList.size(); i++) {
+                totalQty += existingList.get(i).getQuantity();
+                cartRepository.delete(existingList.get(i));
+            }
+            merged.setQuantity(merged.getQuantity() + dto.getQuantity());
+            cartRepository.save(merged);
         } else {
             Cart cart = new Cart();
             cart.setProduct(product);
@@ -60,5 +67,13 @@ public class CartService {
             result.add(dto);
         }
         return result;
+    }
+
+
+    public void deleteCartItem(Long memberId, List<CartDeleteRequest> deleteList) {
+        for (CartDeleteRequest req : deleteList) {
+            cartRepository.deleteByMemberIdAndProductIdAndOptionId(memberId, req.getProductId(), req.getOptionId());
+        }
+
     }
 }

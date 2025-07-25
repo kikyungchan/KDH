@@ -51,6 +51,52 @@ function ProductCart(props) {
     }
   }
 
+  function handleDeleteSelected() {
+    const newCartItems = cartItems.filter(
+      (_, idx) => !checkedIds.includes(idx),
+    );
+    setCartItems(newCartItems);
+    setCheckedIds([]);
+
+    const token = localStorage.getItem("token");
+    // 비로그인
+    if (!token) {
+      localStorage.setItem("guestCart", JSON.stringify(newCartItems));
+      // 로그인
+    } else {
+      const deleteList = checkedIds.map((index) => ({
+        productId: cartItems[index].productId,
+        optionId: cartItems[index].optionId,
+      }));
+      const selected = checkedIds.map((idx) => cartItems[idx]);
+      const deletePayload = selected.map((item) => ({
+        productId: item.productId,
+        optionId: item.optionId,
+      }));
+
+      axios
+        .delete("/api/product/cart/delete", deletePayload, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            data: deleteList,
+          },
+        })
+        .then((res) => {
+          // 다시 cart 불러오기
+          return axios.get("/api/product/cart", {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          });
+        })
+        .then((res) => {
+          setCartItems(res.data);
+          setCheckedIds([]);
+        })
+        .catch((err) => console.log(err));
+    }
+  }
+
   return (
     <Container>
       <h2>장바구니</h2>
@@ -114,7 +160,9 @@ function ProductCart(props) {
         </Row>
       ))}
       <div className="mt-1 d-flex gap-1 ">
-        <button style={{ height: "40px" }}>선택 삭제</button>
+        <button onClick={handleDeleteSelected} style={{ height: "40px" }}>
+          선택 삭제
+        </button>
         <button style={{ height: "40px" }}>구매</button>
         <div
           className="ms-auto"
