@@ -16,6 +16,8 @@ import { createContext } from "react";
 import { AuthenticationContextProvider } from "./feature/common/AuthenticationContextProvider.jsx";
 import ProductOrder from "./feature/Product/ProductOrder.jsx";
 import ProductCart from "./feature/Product/ProductCart.jsx";
+import { Chat } from "./feature/Chat/Chat.jsx";
+import { QnaAdd } from "./feature/Qna/QnaAdd.jsx";
 
 function App() {
   // const username = prompt("닉네임을 입력해 주세요");
@@ -37,7 +39,9 @@ function App() {
             <Route path="/signup" element={<MemberAdd />} />
             <Route path="/login" element={<MemberLogin />} />
             <Route path="/logout" element={<MemberLogout />} />
+            <Route path="/qna/view" element={<QnaAdd />} />
             {/*<Route path="chat/chatting" element={<Chat username={username} />} />*/}
+            <Route path="chat/chatting" element={<Chat />} />
           </Route>
         </Routes>
       </BrowserRouter>

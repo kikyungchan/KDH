@@ -15,6 +15,8 @@ function NavBar(props) {
       {user === null && <Link to="/login">로그인</Link>}
       {user !== null && <Link to="/logout">로그아웃</Link>}
       {user !== null && <Link to={`/member?id=${user.id}`}>{user.name}</Link>}
+      <br />
+      <Link to="/chat/chatting">채팅 프로토콜</Link>
     </nav>
   );
 }
