@@ -28,12 +28,6 @@ function ProductCart(props) {
     }
   }, []);
 
-  function handleDeleteButton() {}
-
-  function handleBuyButton() {}
-
-  function handleSelectAllChange() {}
-
   return (
     <Container>
       <h2>장바구니</h2>
@@ -56,8 +50,8 @@ function ProductCart(props) {
         </Row>
       ))}
       <div className="mt-4 d-flex gap-2">
-        <button onClick={handleDeleteButton}>선택 삭제</button>
-        <button onClick={handleBuyButton}>구매</button>
+        <button>선택 삭제</button>
+        <button>구매</button>
       </div>
     </Container>
   );

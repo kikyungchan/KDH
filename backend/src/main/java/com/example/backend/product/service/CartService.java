@@ -29,17 +29,26 @@ public class CartService {
 
 
     public void add(CartItemDto dto) {
-        Product product = productRepository.findById(dto.getProductId()).get();
-        ProductOption option = productOptionRepository.findByProductAndOptionName(product, dto.getOptionName());
-        Cart cart = new Cart();
-        cart.setProduct(product);
-        cart.setOption(option);
-        cart.setQuantity(dto.getQuantity());
-
         Long memberId = loginUtill.getLoginMemberId();
         Member member = memberRepository.findById(memberId).get();
-        cart.setMember(member);
-        cartRepository.save(cart);
+        Product product = productRepository.findById(dto.getProductId()).get();
+        ProductOption option = productOptionRepository.findByProductAndOptionName(product, dto.getOptionName());
+
+        // 옵션 중복 체크 ( 동일회원 + 상품 + 옵션)
+        Cart existing = cartRepository.findByMemberAndProductAndOption(member, product, option);
+
+        if (existing != null) {
+            // 수량만 증가시키기
+            existing.setQuantity(existing.getQuantity() + dto.getQuantity());
+            cartRepository.save(existing);
+        } else {
+            Cart cart = new Cart();
+            cart.setProduct(product);
+            cart.setOption(option);
+            cart.setQuantity(dto.getQuantity());
+            cart.setMember(member);
+            cartRepository.save(cart);
+        }
     }
 
     public List<CartResponseDto> getCartList() {
