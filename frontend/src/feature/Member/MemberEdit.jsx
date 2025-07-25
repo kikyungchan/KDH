@@ -12,6 +12,7 @@ import {
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate, useSearchParams } from "react-router";
+import { jwtDecode } from "jwt-decode";
 
 export function MemberEdit() {
   // 입력 항목 정규식
@@ -34,11 +35,15 @@ export function MemberEdit() {
   });
   const navigate = useNavigate();
   const [memberParams] = useSearchParams();
-  const [password, setPassword] = useState("");
+  // 비밀번호 변경
+  const [oldPassword, setOldPassword] = useState("");
+  const [newPassword1, setNewPassword1] = useState("");
+  const [newPassword2, setNewPassword2] = useState("");
+
   // Modal
 
-  const [passwordModalShow, setPasswordModalShow] = useState(false);
   const [saveModalShow, setSaveModalShow] = useState(false);
+  const [changePasswordModalShow, setChangePasswordModalShow] = useState(false);
 
   // 정규식과 일치하는지
   const [passwordValid, setPasswordValid] = useState(true);
@@ -73,14 +78,14 @@ export function MemberEdit() {
 
   // 수정버튼
   function handleMemberInfoChangeButton() {
-    const isPasswordOk = passwordRegEx.test(password);
+    const isPasswordOk = oldPassword.trim() !== "";
     const isNameOk = nameRegEx.test(member.name);
     const isPhoneOk = phoneRegEx.test(member.phone);
     const isEmailOk = emailRegEx.test(member.email);
 
     // 각 항목을 입력하지 않으면 수정 버튼 비활성화
     const requiredFields = [
-      password,
+      oldPassword,
       member?.name,
       member?.birthday,
       member?.phone,
@@ -105,13 +110,13 @@ export function MemberEdit() {
       !isEmailOk ||
       !allFieldsFilled
     ) {
-      console.log("입력값 유효성 실패로 요청 중단");
       return; // 유효하지 않으면 요청 중단
     }
     axios
       .put(`/api/member/${member.id}`, {
         ...member,
-        password: password,
+        oldPassword: oldPassword,
+        newPassword: newPassword1,
       })
       .then((res) => {
         navigate(`/member?id=${member.id}`);
@@ -146,6 +151,56 @@ export function MemberEdit() {
       },
     }).open();
   };
+
+  // 암호 변경 버튼 활성화 여부
+  let changePasswordButtonDisabled = false;
+  let passwordConfirm = true;
+  if (oldPassword === "") {
+    changePasswordButtonDisabled = true;
+  }
+  if (newPassword1 === "") {
+    changePasswordButtonDisabled = true;
+  }
+  if (newPassword2 === "") {
+    changePasswordButtonDisabled = true;
+  }
+  if (newPassword1 !== newPassword2) {
+    changePasswordButtonDisabled = true;
+    passwordConfirm = false;
+  }
+
+  // 비밀번호 수정
+  function handleChangePasswordClick() {
+    // JWT Token 디코드
+    const token = localStorage.getItem("token");
+    if (token) {
+      const payload = jwtDecode(token);
+      console.log("🔐 JWT payload:", payload);
+      console.log("→ sub:", payload.sub); // ← 이게 백엔드에서 받는 memberId임
+      console.log("→ loginId:", payload.loginId); // ← 클레임 확인
+    }
+    axios
+      .put(`/api/member/changePassword`, {
+        id: member.id,
+        oldPassword: oldPassword,
+        newPassword: newPassword1,
+      })
+      .then((res) => {
+        console.log("비밀번호 변경 성공");
+      })
+      .catch((err) => {
+        console.log("비밀번호 변경 실패");
+      })
+      .finally(() => {
+        console.log("비밀번호 항상 보이는 코드");
+        console.log("보내는 oldPassword:", oldPassword);
+        console.log("보내는 newPassword:", newPassword1);
+        setOldPassword("");
+        setNewPassword1("");
+        setNewPassword2("");
+        setChangePasswordModalShow(false);
+      });
+  }
 
   return (
     <Row>
@@ -220,7 +275,7 @@ export function MemberEdit() {
         </div>
         <div className="d-flex justify-content-between">
           <div>
-            <Button onClick={() => setPasswordModalShow(true)}>
+            <Button onClick={() => setChangePasswordModalShow(true)}>
               암호 변경
             </Button>
           </div>
@@ -238,7 +293,7 @@ export function MemberEdit() {
                 // !password.trim()
               }
             >
-              수정
+              저장
             </Button>
             <Button onClick={() => navigate(`/member?id=${member.id}`)}>
               취소
@@ -256,11 +311,11 @@ export function MemberEdit() {
             <FormLabel>암호 입력</FormLabel>
             <FormControl
               type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
+              value={oldPassword}
+              onChange={(e) => setOldPassword(e.target.value)}
             />
-            {isSubmitted && password.trim() === "" && (
-              <FormText className="text-danger">암호를 입력해 주세요.</FormText>
+            {isSubmitted && oldPassword.trim() === "" && (
+              <FormText className="text-danger">암호를 입력해주세요.</FormText>
             )}
           </FormGroup>
         </Modal.Body>
@@ -269,7 +324,64 @@ export function MemberEdit() {
           <Button onClick={() => setSaveModalShow(false)}>취소</Button>
         </Modal.Footer>
       </Modal>
-      {/*  TODO : 비밀 번호 변경 모달 */}
+      {/*  비밀 번호 변경 모달 */}
+      <Modal
+        show={changePasswordModalShow}
+        onHide={() => setChangePasswordModalShow(false)}
+      >
+        <Modal.Header closeButton>
+          <Modal.Title>비밀번호 변경</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <p className="mb-3" style={{ fontSize: "13px" }}>
+            비밀번호는 영문+숫자 조합, 8~20자 사이로 입력하세요.
+          </p>
+          <FormGroup>
+            <FormLabel>현재 비밀번호</FormLabel>
+            <FormControl
+              id="withdraw-password"
+              type="password"
+              value={oldPassword}
+              onChange={(e) => setOldPassword(e.target.value)}
+              autoFocus
+            />
+          </FormGroup>
+          <FormGroup>
+            <FormLabel>변경할 비밀번호</FormLabel>
+            <FormControl
+              id="withdraw-password"
+              type="password"
+              value={newPassword1}
+              onChange={(e) => setNewPassword1(e.target.value)}
+            />
+          </FormGroup>
+          <FormGroup>
+            <FormLabel>변경할 비밀번호 확인</FormLabel>
+            <FormControl
+              id="withdraw-password"
+              type="password"
+              value={newPassword2}
+              onChange={(e) => setNewPassword2(e.target.value)}
+            />
+            {passwordConfirm || (
+              <FormText className="text-danger">
+                비밀번호가 일치하지 않습니다.
+              </FormText>
+            )}
+          </FormGroup>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button onClick={() => setChangePasswordModalShow(false)}>
+            취소
+          </Button>
+          <Button
+            onClick={handleChangePasswordClick}
+            disabled={changePasswordButtonDisabled}
+          >
+            변경
+          </Button>
+        </Modal.Footer>
+      </Modal>
     </Row>
   );
 }

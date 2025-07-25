@@ -1,11 +1,15 @@
 package com.example.backend.member.controller;
 
+import com.example.backend.member.dto.ChangePasswordForm;
 import com.example.backend.member.dto.MemberForm;
 import com.example.backend.member.dto.MemberListInfo;
+import com.example.backend.member.dto.MemberLoginForm;
 import com.example.backend.member.service.MemberService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
@@ -51,13 +55,24 @@ public class MemberController {
 
     // 회원 정보 조회
     @GetMapping(params = "id")
-    public ResponseEntity<?> getMember(@RequestParam Long id) {
-        return ResponseEntity.ok().body(memberService.get(id));
+    @PreAuthorize("isAuthenticated()")
+    public ResponseEntity<?> getMember(@RequestParam Long id, Authentication authentication) {
+        if (authentication.getName().equals(id.toString())) {
+            return ResponseEntity.ok().body(memberService.get(id));
+        } else {
+            return ResponseEntity.status(403).build();
+        }
     }
 
     // 회원 탈퇴
     @DeleteMapping
-    public ResponseEntity<?> deleteMember(@RequestBody MemberForm memberForm) {
+    @PreAuthorize("isAuthenticated()")
+    public ResponseEntity<?> deleteMember(@RequestBody MemberForm memberForm,
+                                          Authentication authentication) {
+        // 로그인한 회원 본인만 탈퇴 가능
+        if (!authentication.getName().equals(memberForm.getId().toString())) {
+            return ResponseEntity.status(403).build();
+        }
         boolean deleted = memberService.delete(memberForm);
         if (deleted) {
             return ResponseEntity.ok().build();
@@ -68,9 +83,16 @@ public class MemberController {
 
     // 회원 정보 수정
     @PutMapping("{id}")
+    @PreAuthorize("isAuthenticated()")
     public ResponseEntity<?> updateMember(@PathVariable long id,
                                           @RequestBody @Valid MemberForm memberForm,
+                                          Authentication authentication,
                                           BindingResult bindingResult) {
+
+        // 로그인한 회원 본인만 수정 가능
+        if (!authentication.getName().equals(memberForm.getId().toString())) {
+            return ResponseEntity.status(403).build();
+        }
 
         // 입력값 일치하지않았을때
         if (bindingResult.hasErrors()) {
@@ -86,7 +108,7 @@ public class MemberController {
         } catch (Exception e) {
             e.printStackTrace();
             String message = e.getMessage();
-            return ResponseEntity.status(403).body(
+            return ResponseEntity.status(401).body(
                     Map.of("message",
                             Map.of("type", "error",
                                     "text", message)));
@@ -97,6 +119,38 @@ public class MemberController {
                                 "text", "회원 정보가 수정되었습니다.")));
     }
 
+    // 비밀번호 수정
+    @PutMapping("changePassword")
+    @PreAuthorize("isAuthenticated()")
+    public ResponseEntity<?> changePassword(@RequestBody @Valid ChangePasswordForm data,
+                                            Authentication authentication) {
+        // 로그인한 본인 아이디
+        Long memberId = Long.valueOf(authentication.getName()); // JWT sub에서 추출
+
+        try {
+            memberService.changePassword(memberId, data);
+        } catch (RuntimeException e) {
+            e.printStackTrace();
+            String message = e.getMessage();
+            return ResponseEntity.status(403).body(
+                    Map.of("message",
+                            Map.of("type", "error",
+                                    "text", message)));
+        } catch (Exception e) {
+            e.printStackTrace();
+            String message = e.getMessage();
+            // 403 : 권한 없음
+            return ResponseEntity.status(500).body(
+                    Map.of("message",
+                            Map.of("type", "error",
+                                    "text", message)));
+        }
+        return ResponseEntity.ok().body(
+                Map.of("message",
+                        Map.of("type", "success",
+                                "text", "암호가 수정 되었습니다.")));
+    }
+
     // 아이디 중복 확인
     @GetMapping("/check-id")
     public ResponseEntity<?> checkLoginId(@RequestParam String loginId) {
@@ -105,4 +159,27 @@ public class MemberController {
 
         return ResponseEntity.ok(Map.of("exists", exists));
     }
+
+    // 로그인
+    @PostMapping("login")
+    public ResponseEntity<?> login(@RequestBody MemberLoginForm loginForm) {
+
+
+        try {
+            String token = memberService.getToken(loginForm);
+            return ResponseEntity.ok().body(
+                    Map.of("token", token,
+                            "message",
+                            Map.of("type", "success",
+                                    "text", "로그인 되었습니다")));
+        } catch (Exception e) {
+            e.printStackTrace();
+            String message = e.getMessage();
+            return ResponseEntity.status(401).body(
+                    Map.of("message",
+                            Map.of("type", "error",
+                                    "text", message)));
+        }
+    }
 }
+

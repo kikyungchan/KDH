@@ -11,6 +11,7 @@ import {
 } from "react-bootstrap";
 import { useState } from "react";
 import axios from "axios";
+import { useNavigate } from "react-router";
 
 export function MemberAdd() {
   // 입력 항목 정규식
@@ -56,6 +57,8 @@ export function MemberAdd() {
   const [loginIdChecked, setLoginIdChecked] = useState(false);
   const [loginIdCheckMessage, setLoginIdCheckMessage] = useState("");
 
+  const navigate = useNavigate();
+
   // 각 항목을 입력하지 않으면 가입 버튼 비활성화
   const requiredFields = [
     loginId,
@@ -74,6 +77,15 @@ export function MemberAdd() {
 
   // 회원가입 버튼
   function handleSignUpClick() {
+    console.log("회원가입 시 전송할 데이터", {
+      loginId,
+      password,
+      name,
+      birthday,
+      phone,
+      email,
+      address,
+    });
     // 모든 입력값 유효성 검사 실행
     const isLoginIdOk = loginIdRegEx.test(loginId);
     const isPasswordOk = passwordRegEx.test(password);
@@ -111,6 +123,7 @@ export function MemberAdd() {
       })
       .then((res) => {
         console.log("잘됨");
+        navigate("/member/list");
       })
       .catch((err) => {
         console.log("에러응답", err.response?.data);
