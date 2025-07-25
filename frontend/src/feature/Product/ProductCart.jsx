@@ -5,6 +5,12 @@ import axios from "axios";
 function ProductCart(props) {
   const [checkedIds, setCheckedIds] = useState([]);
   const [cartItems, setCartItems] = useState([]);
+  const selectedItems = cartItems.filter((_, idx) => checkedIds.includes(idx));
+  const totalItemPrice = selectedItems.reduce(
+    (sum, item) => sum + item.price * item.quantity,
+    0,
+  );
+  const shippingFee = totalItemPrice >= 100000 ? 0 : 3000;
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -110,6 +116,34 @@ function ProductCart(props) {
       <div className="mt-4 d-flex gap-2">
         <button>선택 삭제</button>
         <button>구매</button>
+        <p
+          style={{
+            display: "flex",
+            textAlign: "right",
+            justifyContent: "flex-end",
+          }}
+        >
+          dddddddadssdsaadsaasdad왜 우측정렬안해
+        </p>
+      </div>
+      <hr />
+      {/*  주문요약정보*/}
+      <div className="py-4 text-center">
+        <div style={{ fontSize: "1.5em", fontWeight: "bold" }}>
+          {totalItemPrice.toLocaleString()}원
+          <span style={{ margin: "0 10px" }}>+</span>
+          {shippingFee.toLocaleString()}원
+          <span style={{ margin: "0 10px" }}>=</span>
+          {(totalItemPrice + shippingFee).toLocaleString()}원
+        </div>
+        <div
+          className="text-secondary d-flex justify-content-center gap-5 mt-2"
+          style={{ fontSize: "0.9em" }}
+        >
+          <div>상품금액</div>
+          <div>배송비</div>
+          <div>총 주문금액</div>
+        </div>
       </div>
     </Container>
   );
