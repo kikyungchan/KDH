@@ -38,6 +38,7 @@ public class CartService {
 
         Long memberId = loginUtill.getLoginMemberId();
         Member member = memberRepository.findById(memberId).get();
+        cart.setMember(member);
         cartRepository.save(cart);
     }
 
