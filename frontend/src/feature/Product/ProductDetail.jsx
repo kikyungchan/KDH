@@ -218,6 +218,8 @@ export function ProductDetail() {
           </div>
         </Col>
       </Row>
+
+      {/*장바구니 버튼 모달*/}
       <Modal show={showModal} onHide={() => setShowModal(false)} centered>
         <Modal.Body
           className="text-center d-flex justify-content-center align-items-center"
@@ -254,6 +256,7 @@ export function ProductDetail() {
             계속쇼핑
           </button>
           <button
+            onClick={() => navigate("/product/cart")}
             style={{
               flex: 1,
               padding: "12px 0",
