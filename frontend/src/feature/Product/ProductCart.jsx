@@ -113,22 +113,21 @@ function ProductCart(props) {
           </Col>
         </Row>
       ))}
-      <div className="mt-4 d-flex gap-2">
-        <button>선택 삭제</button>
-        <button>구매</button>
-        <p
-          style={{
-            display: "flex",
-            textAlign: "right",
-            justifyContent: "flex-end",
-          }}
+      <div className="mt-1 d-flex gap-1 ">
+        <button style={{ height: "40px" }}>선택 삭제</button>
+        <button style={{ height: "40px" }}>구매</button>
+        <div
+          className="ms-auto"
+          style={{ textAlign: "right", fontSize: "0.8rem" }}
         >
-          dddddddadssdsaadsaasdad왜 우측정렬안해
-        </p>
+          <p>배송시 문제생겨도 책임안집니다.</p>
+          <p>어쩌구 저쩌구</p>
+        </div>
       </div>
+
       <hr />
       {/*  주문요약정보*/}
-      <div className="py-4 text-center">
+      <div className="py-2 text-center">
         <div style={{ fontSize: "1.5em", fontWeight: "bold" }}>
           {totalItemPrice.toLocaleString()}원
           <span style={{ margin: "0 10px" }}>+</span>
