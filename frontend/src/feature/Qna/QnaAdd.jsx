@@ -40,6 +40,7 @@ export function QnaAdd() {
   }, [category]);
 
   useEffect(() => {
+    axios.get(`/api/qna/view?id=${id}`).then((res) => {});
     console.log("user : ", user);
   }, []);
 

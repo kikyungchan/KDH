@@ -13,6 +13,7 @@ export function ProductDetail() {
   const [searchParams] = useSearchParams();
   const id = searchParams.get("id");
   const navigate = useNavigate();
+  const [isProcessing, setIsProcessing] = useState(false);
 
   useEffect(() => {
     axios
@@ -88,6 +89,25 @@ export function ProductDetail() {
       })
       .catch((err) => {})
       .finally(() => {});
+  }
+
+  function handleQuestionButton() {
+    setIsProcessing(true);
+    navigate(`/qna/view?${product.id}`);
+    /*axios
+      .get(`/api/qna/view?${product.id}`)
+      .then((res) => {
+        console.log("성공");
+        console.log(res);
+        // navigate(`/qna/view?id=${id}`);
+      })
+      .catch((err) => {
+        console.log("실패");
+        console.log(err);
+      })
+      .finally(() => {
+        setIsProcessing(false);
+      });*/
   }
 
   return (
@@ -205,6 +225,16 @@ export function ProductDetail() {
                 </Button>
                 <Button className="btn-danger" onClick={handleDeleteButton}>
                   삭제
+                </Button>
+              </div>
+              <br />
+              <div>
+                <Button
+                  className="btn-primary"
+                  onClick={handleQuestionButton}
+                  disabled={isProcessing}
+                >
+                  문의하기
                 </Button>
               </div>
             </div>

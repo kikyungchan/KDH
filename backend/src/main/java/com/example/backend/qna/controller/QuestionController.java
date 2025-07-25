@@ -19,11 +19,14 @@ public class QuestionController {
     private final QuestionService questionService;
 
     @GetMapping("view")
-    public void QnAview() {
+    public void view(@RequestParam() int id) {
+        System.out.println("id = " + id);
+        System.out.println("지나감~~");
 
-//        return QnAservice.view(id);
+//        return questionService.view(id);
 
     }
+
 
     @PostMapping("add")
     @PreAuthorize("isAuthenticated()")
@@ -42,7 +45,6 @@ public class QuestionController {
                     "message", Map.of(
                             "type", "success",
                             "text", "문의가 등록되었습니다.")));
-
         } else {
             return ResponseEntity.badRequest().body(Map.of(
                     "message", Map.of(
