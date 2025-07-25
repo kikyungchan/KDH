@@ -1,11 +1,12 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { Button, Col, Container, Row, Spinner } from "react-bootstrap";
+import { Button, Col, Container, Modal, Row, Spinner } from "react-bootstrap";
 // import { useNavigate, useSearchParams } from "react-router-dom";
 import { useNavigate, useSearchParams } from "react-router";
 import "./ProductDetail.css";
 
 export function ProductDetail() {
+  const [showModal, setShowModal] = useState(false);
   const [selectedOption, setSelectedOption] = useState(null);
   const [quantity, setQuantity] = useState(1);
   const [product, setProduct] = useState(null);
@@ -68,6 +69,10 @@ export function ProductDetail() {
         },
       });
     }
+  }
+
+  function handleCartButton() {
+    setShowModal(true);
   }
 
   return (
@@ -173,7 +178,10 @@ export function ProductDetail() {
                 >
                   구매하기
                 </button>
-                <button style={{ border: "3", width: "150px" }}>
+                <button
+                  onClick={handleCartButton}
+                  style={{ border: "3", width: "150px" }}
+                >
                   장바구니
                 </button>
                 {/*수정/삭제버튼, 재고메뉴는 관리자계정만 보이게*/}
@@ -210,6 +218,15 @@ export function ProductDetail() {
           </div>
         </Col>
       </Row>
+      <Modal show={showModal} onHide={() => setShowModal(false)} centered>
+        <Modal.Body className="text-center" style={{ padding: "40px 20px 0" }}>
+          <p style={{ marginBottom: "0", fontSize: "16px" }}>
+            선택하신 상품을 장바구니에 담았습니다
+          </p>
+        </Modal.Body>
+        <Button variant="secondary">계속쇼핑</Button>
+        <Button variant="primary">장바구니</Button>
+      </Modal>
     </Container>
   );
 }
