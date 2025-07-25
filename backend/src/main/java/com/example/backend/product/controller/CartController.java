@@ -5,6 +5,7 @@ import com.example.backend.product.dto.CartItemDto;
 import com.example.backend.product.dto.CartResponseDto;
 import com.example.backend.product.service.CartService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.jwt.Jwt;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import java.security.Principal;
 import java.util.List;
 
+@Slf4j
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/product")
@@ -22,6 +24,8 @@ public class CartController {
     @DeleteMapping("/cart/delete")
     public ResponseEntity<?> deleteCartItem(@RequestBody List<CartDeleteRequest> deleteList,
                                             @AuthenticationPrincipal Jwt jwt) {
+
+        log.info("삭제요청 들어옴:{}", deleteList);
         Long memberId = Long.parseLong(jwt.getSubject());
         cartService.deleteCartItem(memberId, deleteList);
         return ResponseEntity.ok().build();

@@ -23,6 +23,7 @@ function ProductCart(props) {
           },
         })
         .then((res) => {
+          console.log(res.data);
           setCartItems(res.data);
         })
         .catch((err) => console.log(err));
@@ -52,37 +53,27 @@ function ProductCart(props) {
   }
 
   function handleDeleteSelected() {
-    const newCartItems = cartItems.filter(
-      (_, idx) => !checkedIds.includes(idx),
-    );
-    setCartItems(newCartItems);
-    setCheckedIds([]);
-
     const token = localStorage.getItem("token");
-    // 비로그인
-    if (!token) {
-      localStorage.setItem("guestCart", JSON.stringify(newCartItems));
-      // 로그인
-    } else {
-      const deleteList = checkedIds.map((index) => ({
-        productId: cartItems[index].productId,
-        optionId: cartItems[index].optionId,
-      }));
-      const selected = checkedIds.map((idx) => cartItems[idx]);
-      const deletePayload = selected.map((item) => ({
-        productId: item.productId,
-        optionId: item.optionId,
-      }));
+    const deleteList = checkedIds.map((index) => {
+      const item = cartItems[index];
+      return {
+        cartId: item.cartId,
+      };
+    });
 
+    // 로그인 사용자인 경우
+    console.log("🧾 삭제 요청 보낼 데이터:", deleteList);
+    if (token) {
       axios
-        .delete("/api/product/cart/delete", deletePayload, {
+        .delete("/api/product/cart/delete", {
           headers: {
             Authorization: `Bearer ${token}`,
-            data: deleteList,
+            "Content-Type": "application/json",
           },
+          data: deleteList,
         })
-        .then((res) => {
-          // 다시 cart 불러오기
+        .then(() => {
+          // 삭제 성공하면 다시 장바구니 목록 불러오기
           return axios.get("/api/product/cart", {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -90,10 +81,20 @@ function ProductCart(props) {
           });
         })
         .then((res) => {
-          setCartItems(res.data);
+          setCartItems(res.data); //
           setCheckedIds([]);
         })
-        .catch((err) => console.log(err));
+        .catch((err) => {
+          console.error("삭제 실패:", err);
+        });
+    } else {
+      // 비로그인 사용자 - localStorage 에서 삭제 처리
+      const newCartItems = cartItems.filter(
+        (_, idx) => !checkedIds.includes(idx),
+      );
+      setCartItems(newCartItems);
+      setCheckedIds([]);
+      localStorage.setItem("guestCart", JSON.stringify(newCartItems));
     }
   }
 

@@ -72,7 +72,7 @@ public class CartService {
 
     public void deleteCartItem(Long memberId, List<CartDeleteRequest> deleteList) {
         for (CartDeleteRequest req : deleteList) {
-            cartRepository.deleteByMemberIdAndProductIdAndOptionId(memberId, req.getProductId(), req.getOptionId());
+            cartRepository.deleteById(req.getCartId());
         }
 
     }
