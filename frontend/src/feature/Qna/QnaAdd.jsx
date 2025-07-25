@@ -5,6 +5,7 @@ import {
   FormControl,
   FormGroup,
   FormLabel,
+  Image,
   Row,
   ToggleButton,
 } from "react-bootstrap";
@@ -12,13 +13,14 @@ import Form from "react-bootstrap/Form";
 import { useEffect, useRef, useState } from "react";
 import { toast } from "react-toastify";
 import { useForm } from "react-hook-form";
+import axios from "axios";
+import { useNavigate } from "react-router";
 
 // import { AuthenticationContext } from "../../common/AuthenticationContextProvider.jsx";
 
 export function QnaAdd() {
   const [category, setCategory] = useState("");
   const [title, setTitle] = useState("");
-  const [board, setBoard] = useState("");
   const [content, setContent] = useState("");
   // const { user } = useContext(AuthenticationContext);
   const [isProcessing, setIsProcessing] = useState(false);
@@ -30,27 +32,16 @@ export function QnaAdd() {
     { name: "상품문의", value: "상품문의" },
     { name: "상담내역", value: "상담내역" },
   ];
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-    // watch,
-  } = useForm({
-    mode: "onSubmit",
-    shouldFocusError: true,
-  });
 
-  const onSubmit = (data) => {
-    console.log("제출된 데이터:", data);
-    alert("상담유형이 성공적으로 제출되었습니다.");
-  };
+  const navigate = useNavigate();
 
   useEffect(() => {
     console.log(category);
   }, [category]);
 
+  useEffect(() => {}, []);
+
   function handleSaveButtonClick() {
-    let validate = true;
     if (category.trim() === "" || category === "0") {
       toast("상담유형을 선택해 주세요", { type: "error" });
       if (categoryRef.current) {
@@ -63,20 +54,37 @@ export function QnaAdd() {
     } else if (title.trim() === "") {
       toast("제목을 입력해 주세요", { type: "error" });
     } else if (content.trim() === "") {
-      toast("내용를 입력해 주세요", { type: "error" });
-    }
-  }
+      toast("문의 내용를 입력해 주세요", { type: "error" });
+    } else {
+      setIsProcessing(true);
+      axios
+        .post("/api/qna/add", {
+          title: title,
+          content: content,
+          category: category,
+        })
+        .then((res) => {
+          const message = res.data.message;
+          if (message) {
+            toast(message.text, { type: message.type });
+          }
+          navigate(-1);
+        })
+        .catch((err) => {
+          console.log("잘 안되면 실행되는 코드");
+          console.log(err);
+          const message = err.response.data.message;
 
-  // 작성자, 제목, 본문 썼는 지
-  let validate = true;
-  if (title.trim() === "") {
-    validate = false;
-  }
-  if (content.trim() === "") {
-    validate = false;
-  }
-  if (category.trim() === "" || category === "0") {
-    validate = false;
+          if (message) {
+            // toast 띄우기
+            toast(message.text, { type: message.type });
+          }
+        })
+        .finally(() => {
+          console.log("항상 실행되는 코드");
+          setIsProcessing(false);
+        });
+    }
   }
 
   /*if (!user) {
@@ -130,11 +138,25 @@ export function QnaAdd() {
                   <option value="5">반품·교환 관련</option>
                   <option value="6">기타 문의</option>
                 </Form.Select>
-                {errors.category && (
-                  <Form.Control.Feedback type="invalid">
-                    {errors.category.message}
-                  </Form.Control.Feedback>
-                )}
+              </FormGroup>
+            </div>
+            <br />
+            <div>
+              <FormGroup>
+                <FormLabel>문의 하실 상품</FormLabel>
+                <div>
+                  {/*상품 이미지*/}
+                  <Image fluid style={{ width: 200, height: 200 }} />
+                  <br />
+                  <br />
+
+                  {/*상품명*/}
+                  <FormControl
+                    // style={{ width: 50 }}
+                    placeholder={"상품명"}
+                    disabled={true}
+                  />
+                </div>
               </FormGroup>
             </div>
             <br />
@@ -153,7 +175,7 @@ export function QnaAdd() {
             </div>
             <div ref={contentRef}>
               <FormGroup className="mb-3" controlId="content1">
-                <FormLabel>본문</FormLabel>
+                <FormLabel>문의 내용</FormLabel>
                 <FormControl
                   as="textarea"
                   rows={6}
