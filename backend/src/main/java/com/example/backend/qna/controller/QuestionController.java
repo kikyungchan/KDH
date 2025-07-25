@@ -19,11 +19,11 @@ public class QuestionController {
     private final QuestionService questionService;
 
     @GetMapping("view")
-    public void view(@RequestParam() int id) {
+    @PreAuthorize("isAuthenticated()")
+    public Map<String, ?> view(@RequestParam int id, Authentication authentication) {
         System.out.println("id = " + id);
-        System.out.println("지나감~~");
 
-//        return questionService.view(id);
+        return questionService.view(id, authentication);
 
     }
 

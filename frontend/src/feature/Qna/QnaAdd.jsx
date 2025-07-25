@@ -14,7 +14,7 @@ import { useContext, useEffect, useRef, useState } from "react";
 import { toast } from "react-toastify";
 import { useForm } from "react-hook-form";
 import axios from "axios";
-import { useNavigate } from "react-router";
+import { useNavigate, useParams } from "react-router";
 
 import { AuthenticationContext } from "../common/AuthenticationContextProvider.jsx";
 
@@ -28,11 +28,15 @@ export function QnaAdd() {
   const categoryRef = useRef(null);
   const titleRef = useRef(null);
   const contentRef = useRef(null);
+  const [productId, setProductId] = useState(null);
+  const [productPrice, setProductPrice] = useState(null);
+  const [productName, setProductName] = useState(null);
   const radios = [
     { name: "상품문의", value: "상품문의", selected: true },
     { name: "문의내역", value: "문의내역" },
   ];
-
+  let params = useParams();
+  console.log(params.id);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -40,8 +44,15 @@ export function QnaAdd() {
   }, [category]);
 
   useEffect(() => {
-    axios.get(`/api/qna/view?id=${id}`).then((res) => {});
+    axios.get(`/api/qna/view?id=${params.id}`).then((res) => {
+      console.log(res.data);
+      setProductId(res.data.id);
+      // setimage(res.data.images);
+      setProductPrice(res.data.price);
+      setProductName(res.data.productName);
+    });
     console.log("user : ", user);
+    console.log("productName : ", productName);
   }, []);
 
   function handleSaveButtonClick() {
@@ -177,7 +188,7 @@ export function QnaAdd() {
                   {/*상품명*/}
                   <FormControl
                     // style={{ width: 50 }}
-                    placeholder={"상품명"}
+                    placeholder={productName}
                     disabled={true}
                   />
                 </div>

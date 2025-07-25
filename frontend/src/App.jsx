@@ -39,7 +39,7 @@ function App() {
             <Route path="/signup" element={<MemberAdd />} />
             <Route path="/login" element={<MemberLogin />} />
             <Route path="/logout" element={<MemberLogout />} />
-            <Route path="/qna/view" element={<QnaAdd />} />
+            <Route path="/qna/view/:id" element={<QnaAdd />} />
             {/*<Route path="chat/chatting" element={<Chat username={username} />} />*/}
             <Route path="chat/chatting" element={<Chat />} />
           </Route>
