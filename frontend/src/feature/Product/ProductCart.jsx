@@ -59,28 +59,47 @@ function ProductCart(props) {
           />
         </Col>
         <Col>상품 정보</Col>
-        <Col>옵션</Col>
-        <Col>수량</Col>
-        <Col>가격</Col>
-        <Col>총 금액</Col>
+        <Col xs="2">수량</Col>
+        <Col xs="2">가격</Col>
+        <Col xs="2">총 금액</Col>
       </Row>
       {cartItems.map((item, index) => (
         <Row key={index} className="align-items-center border-bottom py-2">
-          <Col>
+          {/*체크박스*/}
+          <Col xs="auto">
             <input
               type="checkbox"
               checked={checkedIds.includes(index)}
               onChange={(e) => handleCheckboxChange(index, e.target.checked)}
             />
           </Col>
+
+          {/* 이미지 + 상품명/옵션 */}
           <Col>
-            <img src={item.imagePath} alt="상품이미지" width="100%" />
+            <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
+              <img
+                src={item.imagePath}
+                alt="상품이미지"
+                style={{
+                  width: "80px",
+                  height: "80px",
+                  objectFit: "cover",
+                  borderRadius: "6px",
+                }}
+              />
+              <div style={{ display: "flex", flexDirection: "column" }}>
+                <div style={{ fontWeight: "bold" }}>{item.productName}</div>
+                <div style={{ fontSize: "0.85em", color: "#555" }}>
+                  {item.optionName}
+                </div>
+              </div>
+            </div>
           </Col>
-          <Col>{item.productName}</Col>
-          <Col>{item.optionName}</Col>
-          <Col>{item.quantity}개</Col>
-          <Col>{item.price ? item.price.toLocaleString() : "-"}원</Col>
-          <Col>
+
+          {/* 수량 / 가격 / 총금액 */}
+          <Col xs="2">{item.quantity}개</Col>
+          <Col xs="2">{item.price?.toLocaleString() || "-"}원</Col>
+          <Col xs="2">
             {item.price && item.quantity
               ? (item.price * item.quantity).toLocaleString()
               : "-"}
