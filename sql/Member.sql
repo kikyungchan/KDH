@@ -1,6 +1,6 @@
 CREATE TABLE member
 (
-    id       BIGINT AUTO_INCREMENT PRIMARY KEY,
+    id       INT AUTO_INCREMENT PRIMARY KEY,
     login_id VARCHAR(30) UNIQUE NOT NULL,
     password VARCHAR(200)       NOT NULL,
     name     VARCHAR(50)        NOT NULL,

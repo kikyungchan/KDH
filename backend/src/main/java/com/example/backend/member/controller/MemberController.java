@@ -56,7 +56,7 @@ public class MemberController {
     // 회원 정보 조회
     @GetMapping(params = "id")
     @PreAuthorize("isAuthenticated()")
-    public ResponseEntity<?> getMember(@RequestParam Long id, Authentication authentication) {
+    public ResponseEntity<?> getMember(@RequestParam Integer id, Authentication authentication) {
         if (authentication.getName().equals(id.toString())) {
             return ResponseEntity.ok().body(memberService.get(id));
         } else {
@@ -84,7 +84,7 @@ public class MemberController {
     // 회원 정보 수정
     @PutMapping("{id}")
     @PreAuthorize("isAuthenticated()")
-    public ResponseEntity<?> updateMember(@PathVariable long id,
+    public ResponseEntity<?> updateMember(@PathVariable Integer id,
                                           @RequestBody @Valid MemberForm memberForm,
                                           Authentication authentication,
                                           BindingResult bindingResult) {
@@ -125,7 +125,7 @@ public class MemberController {
     public ResponseEntity<?> changePassword(@RequestBody @Valid ChangePasswordForm data,
                                             Authentication authentication) {
         // 로그인한 본인 아이디
-        Long memberId = Long.valueOf(authentication.getName()); // JWT sub에서 추출
+        Integer memberId = Integer.valueOf(authentication.getName()); // JWT sub에서 추출
 
         try {
             memberService.changePassword(memberId, data);
