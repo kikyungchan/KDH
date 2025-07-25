@@ -76,25 +76,53 @@ export function ProductDetail() {
       alert("옵션을 선택해주세요.");
       return;
     }
-    const cartItem = {
-      productId: product.id,
-      optionName: selectedOption.optionName,
-      quantity: quantity,
-    };
 
     const token = localStorage.getItem("token");
+    // 로그인유저
+    if (token) {
+      const cartItem = {
+        productId: product.id,
+        optionName: selectedOption.optionName,
+        quantity: quantity,
+      };
+      axios
+        .post("/api/product/cart", cartItem, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        })
+        .then((res) => {
+          setShowModal(true);
+        })
+        .catch((err) => {})
+        .finally(() => {});
+    } else {
+      // 비로그인유저
+      const cartItem = {
+        productId: product.id,
+        productName: product.productName,
+        optionName: selectedOption.optionName,
+        price: selectedOption.price, // ★ 추가
+        quantity: quantity,
+        imagePath: thumbnail, // ★ 추가
+      };
+      const existingCart = JSON.parse(
+        localStorage.getItem("guestCart") || "[]",
+      );
+      const existingIndex = existingCart.findIndex(
+        (item) =>
+          item.productId === cartItem.productId &&
+          item.optionName === cartItem.optionName,
+      );
+      if (existingIndex > -1) {
+        existingCart[existingIndex].quantity += cartItem.quantity;
+      } else {
+        existingCart.push(cartItem);
+      }
 
-    axios
-      .post("/api/product/cart", cartItem, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      })
-      .then((res) => {
-        setShowModal(true);
-      })
-      .catch((err) => {})
-      .finally(() => {});
+      localStorage.setItem("guestCart", JSON.stringify(existingCart));
+      setShowModal(true);
+    }
   }
 
   return (

@@ -8,12 +8,24 @@ function ProductCart(props) {
   const [cartItems, setCartItems] = useState([]);
 
   useEffect(() => {
-    axios
-      .get("/api/product/cart")
-      .then((res) => {
-        setCartItems(res.data);
-      })
-      .catch((err) => console.log(err));
+    const token = localStorage.getItem("token");
+    if (token) {
+      // 로그인사용자
+      axios
+        .get("/api/product/cart", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        })
+        .then((res) => {
+          setCartItems(res.data);
+        })
+        .catch((err) => console.log(err));
+    } else {
+      // 비로그인 사용자 => localStorage 에서 guestCart 가져옴
+      const localCart = JSON.parse(localStorage.getItem("guestCart") || "[]");
+      setCartItems(localCart);
+    }
   }, []);
 
   function handleDeleteButton() {}
@@ -34,8 +46,13 @@ function ProductCart(props) {
           <Col>{item.productName}</Col>
           <Col>{item.optionName}</Col>
           <Col>{item.quantity}개</Col>
-          <Col>{item.price.toLocaleString()}원</Col>
-          <Col>{(item.price * item.quantity).toLocaleString()}원</Col>
+          <Col>{item.price ? item.price.toLocaleString() : "-"}원</Col>
+          <Col>
+            {item.price && item.quantity
+              ? (item.price * item.quantity).toLocaleString()
+              : "-"}
+            원
+          </Col>
         </Row>
       ))}
       <div className="mt-4 d-flex gap-2">
