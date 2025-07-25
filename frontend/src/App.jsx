@@ -11,6 +11,7 @@ import { MemberDetail } from "./feature/Member/MemberDetail.jsx";
 
 import { MemberEdit } from "./feature/Member/MemberEdit.jsx";
 import ProductOrder from "./feature/Product/ProductOrder.jsx";
+import ProductCart from "./feature/Product/ProductCart.jsx";
 
 function App() {
   // const username = prompt("닉네임을 입력해 주세요");
@@ -24,6 +25,7 @@ function App() {
           <Route path="product/view" element={<ProductDetail />} />
           <Route path="product/edit" element={<ProductEdit />} />
           <Route path="product/order" element={<ProductOrder />} />
+          <Route path="product/cart" element={<ProductCart />} />
           <Route path="/member/edit" element={<MemberEdit />} />
           <Route path="/member/list" element={<MemberList />} />
           <Route path="/signup" element={<MemberAdd />} />

@@ -78,11 +78,8 @@ export function ProductDetail() {
     }
     const cartItem = {
       productId: product.id,
-      productName: product.productName,
-      option: selectedOption.optionName,
+      optionName: selectedOption.optionName,
       quantity: quantity,
-      price: selectedOption ? selectedOption.price : product.price,
-      imagePath: thumbnail,
     };
     axios
       .post("/api/product/cart", cartItem)

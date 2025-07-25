@@ -1,8 +1,19 @@
-import React from "react";
-import * as cartItems from "react-bootstrap/ElementChildren";
+import React, { useEffect, useState } from "react";
 import { Col, Container, Row } from "react-bootstrap";
+import axios from "axios";
 
 function ProductCart(props) {
+  const [cartItems, setCartItems] = useState([]);
+
+  useEffect(() => {
+    axios
+      .get("/api/product/cart")
+      .then((res) => {
+        setCartItems(res.data);
+      })
+      .catch((err) => console.log(err));
+  }, []);
+
   function handleDeleteButton() {}
 
   function handleBuyButton() {}
@@ -13,22 +24,16 @@ function ProductCart(props) {
       {cartItems.map((item) => (
         <Row key={item.id} className="align-items-center border-bottom py-2">
           <Col>
-            <Form.Check
-              type="checkbox"
-              checked={checkedIds.includes(item.id)}
-              onChange={() => handleCheckChange(item.id)}
-            />
-          </Col>
-          <Col>
             <img src={item.imagePath} alt="상품이미지" width="100%" />
           </Col>
           <Col>{item.productName}</Col>
-          <Col>{item.option}</Col>
+          <Col>{item.optionName}</Col>
           <Col>{item.quantity}개</Col>
+          <Col>{item.price}원</Col>
           <Col>{(item.price * item.quantity).toLocaleString()}원</Col>
         </Row>
       ))}
-      <div>
+      <div className="mt-4 d-flex gap-2">
         <button onClick={handleDeleteButton}>선택 삭제</button>
         <button onClick={handleBuyButton}>선택 구매</button>
       </div>
