@@ -10,27 +10,27 @@ import {
   ToggleButton,
 } from "react-bootstrap";
 import Form from "react-bootstrap/Form";
-import { useEffect, useRef, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import { toast } from "react-toastify";
 import { useForm } from "react-hook-form";
 import axios from "axios";
 import { useNavigate } from "react-router";
 
-// import { AuthenticationContext } from "../../common/AuthenticationContextProvider.jsx";
+import { AuthenticationContext } from "../common/AuthenticationContextProvider.jsx";
 
 export function QnaAdd() {
   const [category, setCategory] = useState("");
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
-  // const { user } = useContext(AuthenticationContext);
+  const { user } = useContext(AuthenticationContext);
   const [isProcessing, setIsProcessing] = useState(false);
   const [radioValue, setRadioValue] = useState("1");
   const categoryRef = useRef(null);
   const titleRef = useRef(null);
   const contentRef = useRef(null);
   const radios = [
-    { name: "상품문의", value: "상품문의" },
-    { name: "상담내역", value: "상담내역" },
+    { name: "상품문의", value: "상품문의", selected: true },
+    { name: "문의내역", value: "문의내역" },
   ];
 
   const navigate = useNavigate();
@@ -39,7 +39,9 @@ export function QnaAdd() {
     console.log(category);
   }, [category]);
 
-  useEffect(() => {}, []);
+  useEffect(() => {
+    console.log("user : ", user);
+  }, []);
 
   function handleSaveButtonClick() {
     if (category.trim() === "" || category === "0") {
@@ -53,22 +55,43 @@ export function QnaAdd() {
       }
     } else if (title.trim() === "") {
       toast("제목을 입력해 주세요", { type: "error" });
+      if (titleRef.current) {
+        console.log("moved");
+        titleRef.current.scrollIntoView({
+          behavior: "smooth",
+          block: "start",
+        });
+      }
     } else if (content.trim() === "") {
       toast("문의 내용를 입력해 주세요", { type: "error" });
+      if (contentRef.current) {
+        console.log("moved");
+        contentRef.current.scrollIntoView({
+          behavior: "smooth",
+          block: "start",
+        });
+      }
     } else {
       setIsProcessing(true);
+      console.log(title);
+      console.log(content);
+      console.log(category);
+      console.log(user);
       axios
         .post("/api/qna/add", {
           title: title,
           content: content,
           category: category,
+          username: user,
+          productId: "0",
         })
         .then((res) => {
           const message = res.data.message;
           if (message) {
             toast(message.text, { type: message.type });
           }
-          navigate(-1);
+          // navigate(-1);
+          navigate("/");
         })
         .catch((err) => {
           console.log("잘 안되면 실행되는 코드");
@@ -143,7 +166,7 @@ export function QnaAdd() {
             <br />
             <div>
               <FormGroup>
-                <FormLabel>문의 하실 상품</FormLabel>
+                <FormLabel>문의하실 상품</FormLabel>
                 <div>
                   {/*상품 이미지*/}
                   <Image fluid style={{ width: 200, height: 200 }} />

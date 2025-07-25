@@ -52,6 +52,6 @@ public class Question {
     private Instant updatedAt;
 
     @Column(name = "category", nullable = false)
-    private String category;
+    private int category;
 
 }
