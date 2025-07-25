@@ -4,7 +4,6 @@ import axios from "axios";
 
 function ProductCart(props) {
   const [checkedIds, setCheckedIds] = useState([]);
-  const [selectAll, setSelectAll] = useState(false);
   const [cartItems, setCartItems] = useState([]);
 
   useEffect(() => {
@@ -36,9 +35,35 @@ function ProductCart(props) {
     }
   }
 
+  function handleSelectAllCheckboxChange(e) {
+    const checked = e.target.checked;
+    if (checked) {
+      const all = cartItems.map((_, index) => index);
+      setCheckedIds(all);
+    } else {
+      setCheckedIds([]);
+    }
+  }
+
   return (
     <Container>
       <h2>장바구니</h2>
+      <Row className="align-items-center border-bottom py-2 fw-bold">
+        <Col xs="auto">
+          <input
+            type="checkbox"
+            checked={
+              checkedIds.length === cartItems.length && cartItems.length > 0
+            }
+            onChange={handleSelectAllCheckboxChange}
+          />
+        </Col>
+        <Col>상품 정보</Col>
+        <Col>옵션</Col>
+        <Col>수량</Col>
+        <Col>가격</Col>
+        <Col>총 금액</Col>
+      </Row>
       {cartItems.map((item, index) => (
         <Row key={index} className="align-items-center border-bottom py-2">
           <Col>
