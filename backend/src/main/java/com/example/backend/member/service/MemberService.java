@@ -69,7 +69,7 @@ public class MemberService {
     }
 
     // 회원 상세 정보 불러오기
-    public MemberDto get(Long id) {
+    public MemberDto get(Integer id) {
         Member member = memberRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("존재하지 않는 회원입니다."));
 
@@ -100,7 +100,7 @@ public class MemberService {
         return true;
     }
 
-    public void update(long id, MemberForm memberForm) {
+    public void update(Integer id, MemberForm memberForm) {
 
         // 1. 회원 조회
         Member member = memberRepository.findById(id)
@@ -139,7 +139,7 @@ public class MemberService {
         return memberRepository.existsByLoginId(loginId);
     }
 
-    public void changePassword(Long memberId, ChangePasswordForm data) {
+    public void changePassword(Integer memberId, ChangePasswordForm data) {
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new RuntimeException("존재하지 않는 회원입니다."));
 
