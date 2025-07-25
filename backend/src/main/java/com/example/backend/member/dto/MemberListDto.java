@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class MemberListDto {
 
-    private Long id;
+    private Integer id;
 
     private String loginId;
 

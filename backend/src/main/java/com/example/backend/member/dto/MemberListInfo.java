@@ -2,7 +2,7 @@ package com.example.backend.member.dto;
 
 
 public interface MemberListInfo {
-    Long getId();
+    Integer getId();
 
     String getLoginId();
 

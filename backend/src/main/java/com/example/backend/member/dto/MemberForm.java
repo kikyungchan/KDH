@@ -7,7 +7,7 @@ import java.time.LocalDate;
 
 @Data
 public class MemberForm {
-    private Long id;
+    private Integer id;
 
     @NotBlank(message = "아이디는 필수입니다.")
     @Pattern(
