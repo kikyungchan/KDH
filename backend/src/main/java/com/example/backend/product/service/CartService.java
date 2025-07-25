@@ -1,5 +1,7 @@
 package com.example.backend.product.service;
 
+import com.example.backend.member.entity.Member;
+import com.example.backend.member.repository.MemberRepository;
 import com.example.backend.product.dto.CartItemDto;
 import com.example.backend.product.dto.CartResponseDto;
 import com.example.backend.product.entity.Cart;
@@ -22,6 +24,8 @@ public class CartService {
     private final CartRepository cartRepository;
     private final ProductRepository productRepository;
     private final ProductOptionRepository productOptionRepository;
+    private final LoginUtill loginUtill;
+    private final MemberRepository memberRepository;
 
 
     public void add(CartItemDto dto) {
@@ -32,11 +36,14 @@ public class CartService {
         cart.setOption(option);
         cart.setQuantity(dto.getQuantity());
 
+        Long memberId = loginUtill.getLoginMemberId();
+        Member member = memberRepository.findById(memberId).get();
         cartRepository.save(cart);
     }
 
     public List<CartResponseDto> getCartList() {
-        List<Cart> carts = cartRepository.findAll();
+        Long memberId = loginUtill.getLoginMemberId();
+        List<Cart> carts = cartRepository.findByMemberId(memberId);
         List<CartResponseDto> result = new ArrayList<>();
         for (Cart cart : carts) {
             CartResponseDto dto = new CartResponseDto(cart);
