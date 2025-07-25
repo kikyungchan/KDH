@@ -1,6 +1,6 @@
 package com.example.backend.qna.entity;
 
-import com.example.backend.entity.Product;
+import com.example.backend.product.entity.Product;
 import com.example.backend.member.entity.Member;
 import jakarta.persistence.*;
 import lombok.Getter;

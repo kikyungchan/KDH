@@ -1,6 +1,6 @@
 package com.example.backend.qna.dto;
 
-import com.example.backend.dto.ProductDto;
+import com.example.backend.product.dto.ProductDto;
 import com.example.backend.member.dto.MemberDto;
 import com.example.backend.qna.entity.Question;
 import lombok.Value;
