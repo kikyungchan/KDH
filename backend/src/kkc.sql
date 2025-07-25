@@ -66,5 +66,3 @@ ALTER TABLE cart
     ADD CONSTRAINT FK_CART_ON_PRODUCT FOREIGN KEY (product_id) REFERENCES product (id);
 
 
-
-

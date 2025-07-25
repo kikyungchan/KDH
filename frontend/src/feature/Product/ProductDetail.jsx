@@ -117,7 +117,7 @@ export function ProductDetail() {
               <h2>{product.productName}!!!</h2>
               <p>{product.price.toLocaleString()}원</p>
               <hr />
-              <p>{product.info}귀여운 공룡이에요~</p>
+              <p>{product.info}</p>
 
               {/*옵션선택 드롭다운*/}
               <div style={{ margin: "10px 0" }}>
