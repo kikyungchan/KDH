@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { Button, Col, Container, Modal, Row, Spinner } from "react-bootstrap";
-// import { useNavigate, useSearchParams } from "react-router-dom";
 import { useNavigate, useSearchParams } from "react-router";
 import "./ProductDetail.css";
 
@@ -102,9 +101,9 @@ export function ProductDetail() {
         productId: product.id,
         productName: product.productName,
         optionName: selectedOption.optionName,
-        price: selectedOption.price, // ★ 추가
+        price: selectedOption.price,
         quantity: quantity,
-        imagePath: thumbnail, // ★ 추가
+        imagePath: thumbnail,
       };
       const existingCart = JSON.parse(
         localStorage.getItem("guestCart") || "[]",
