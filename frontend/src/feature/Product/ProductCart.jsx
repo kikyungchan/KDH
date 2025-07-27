@@ -53,7 +53,6 @@ function ProductCart(props) {
   }
 
   function handleDeleteSelected() {
-    alert("선택하신 상품을 삭제하시겠습니까?");
     const token = localStorage.getItem("token");
     const deleteList = checkedIds.map((index) => {
       const item = cartItems[index];
@@ -161,6 +160,7 @@ function ProductCart(props) {
           </Col>
         </Row>
       ))}
+      <hr />
       <div className="mt-1 d-flex gap-1 ">
         <button onClick={handleDeleteSelected} style={{ height: "40px" }}>
           선택 삭제
@@ -194,6 +194,7 @@ function ProductCart(props) {
           <div>총 주문금액</div>
         </div>
       </div>
+      <hr />
     </Container>
   );
 }
