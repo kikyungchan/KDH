@@ -81,8 +81,24 @@ public class CartService {
     public void updateCartItem(Long memberId, CartUpdateRequest req) {
         Cart cart = cartRepository.findById(req.getCartId()).get();
         ProductOption option = productOptionRepository.findById(req.getOptionId()).get();
-        cart.setOption(option);
-        cart.setQuantity(req.getQuantity());
-        cartRepository.save(cart);
+        ProductOption newOption = productOptionRepository.findById(req.getOptionId()).get();
+        Product product = cart.getProduct();
+        List<Cart> existingList = cartRepository.findByMemberAndProductAndOption(cart.getMember(), product, newOption);
+        Cart duplicate = existingList.stream()
+                .filter(c -> !c.getId().equals(cart.getId()))
+                .findFirst()
+                .orElse(null);
+
+        if (duplicate != null) {
+            // 병합: 기존 항목에 수량 추가, 현재 항목 삭제
+            duplicate.setQuantity(duplicate.getQuantity() + req.getQuantity());
+            cartRepository.save(duplicate);
+            cartRepository.delete(cart);
+        } else {
+            // 중복 항목 없음 → 그냥 수정
+            cart.setOption(newOption);
+            cart.setQuantity(req.getQuantity());
+            cartRepository.save(cart);
+        }
     }
 }

@@ -39,9 +39,26 @@ function ProductCart(props) {
 
   function handleEditOption(item) {
     setSelectedItem(item);
-    setSelectedOptionId(item.optionId); // 기존 선택 옵션
+    setSelectedOptionId(item.optionId); // 기본 선택
     setSelectedQuantity(item.quantity); // 기존 수량
-    setShowModal(true);
+
+    const token = localStorage.getItem("token");
+    if (token) {
+      setShowModal(true); // 로그인 사용자는 이미 옵션 있음
+    } else {
+      // 비회원 → 옵션 목록을 API로 받아서 selectedItem에 넣고 모달 열기
+      axios
+        .get(`/api/product/options?productId=${item.productId}`)
+        .then((res) => {
+          const options = res.data;
+          setSelectedItem({ ...item, options }); // options 포함시켜 저장
+          setShowModal(true);
+        })
+        .catch((err) => {
+          console.error("옵션 로딩 실패:", err);
+          alert("옵션 정보를 불러오지 못했습니다.");
+        });
+    }
   }
 
   function handleCheckboxChange(index, checked) {
@@ -109,36 +126,61 @@ function ProductCart(props) {
 
   function handleUpdateCartItem() {
     const token = localStorage.getItem("token");
-    if (!token) {
-      alert("로그인이 필요합니다.");
-      return;
-    }
+    // 회원 장바구니 수정
+    if (token) {
+      const data = {
+        cartId: selectedItem.cartId,
+        optionId: selectedOptionId,
+        quantity: selectedQuantity,
+      };
 
-    const data = {
-      cartId: selectedItem.cartId,
-      optionId: selectedOptionId,
-      quantity: selectedQuantity,
-    };
-
-    axios
-      .put("/api/product/cart/update", data, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      })
-      .then(() => {
-        //변경 성공시 장바구니 목록 갱신
-        return axios.get("/api/product/cart", {
+      axios
+        .put("/api/product/cart/update", data, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
-        });
-      })
-      .then((res) => {
-        setCartItems(res.data);
-        setShowModal(false);
-      })
-      .catch((err) => {});
+        })
+        .then(() => {
+          //변경 성공시 장바구니 목록 갱신
+          return axios.get("/api/product/cart", {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          });
+        })
+        .then((res) => {
+          setCartItems(res.data);
+          setShowModal(false);
+        })
+        .catch((err) => {});
+    } else {
+      // 비회원 수정 처리
+      const existingCart = JSON.parse(
+        localStorage.getItem("guestCart") || "[]",
+      );
+
+      const updatedCart = existingCart.map((item) => {
+        const isTarget =
+          item.productName === selectedItem.productName &&
+          item.optionName === selectedItem.optionName;
+
+        if (!isTarget) return item;
+
+        const newOption = selectedItem.options.find(
+          (opt) => opt.id === selectedOptionId,
+        );
+        return {
+          ...item,
+          optionName: newOption.optionName,
+          price: newOption.price,
+          quantity: selectedQuantity,
+        };
+      });
+
+      localStorage.setItem("guestCart", JSON.stringify(updatedCart));
+      setCartItems(updatedCart);
+      setShowModal(false);
+    }
   }
 
   return (
