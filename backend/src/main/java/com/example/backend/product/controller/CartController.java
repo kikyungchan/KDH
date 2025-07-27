@@ -3,6 +3,7 @@ package com.example.backend.product.controller;
 import com.example.backend.product.dto.CartDeleteRequest;
 import com.example.backend.product.dto.CartItemDto;
 import com.example.backend.product.dto.CartResponseDto;
+import com.example.backend.product.dto.CartUpdateRequest;
 import com.example.backend.product.service.CartService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -42,6 +43,14 @@ public class CartController {
     public ResponseEntity<List<CartResponseDto>> cartList() {
         List<CartResponseDto> list = cartService.getCartList();
         return ResponseEntity.ok(list);
+    }
+
+    @PutMapping("/cart/update")
+    public ResponseEntity<?> updateCartItem(@RequestBody CartUpdateRequest req,
+                                            @AuthenticationPrincipal Jwt jwt) {
+        Long memberId = Long.parseLong(jwt.getSubject());
+        cartService.updateCartItem(memberId, req);
+        return ResponseEntity.ok().build();
     }
 
 }

@@ -5,6 +5,7 @@ import com.example.backend.member.repository.MemberRepository;
 import com.example.backend.product.dto.CartDeleteRequest;
 import com.example.backend.product.dto.CartItemDto;
 import com.example.backend.product.dto.CartResponseDto;
+import com.example.backend.product.dto.CartUpdateRequest;
 import com.example.backend.product.entity.Cart;
 import com.example.backend.product.entity.Product;
 import com.example.backend.product.entity.ProductOption;
@@ -75,5 +76,13 @@ public class CartService {
             cartRepository.deleteById(req.getCartId());
         }
 
+    }
+
+    public void updateCartItem(Long memberId, CartUpdateRequest req) {
+        Cart cart = cartRepository.findById(req.getCartId()).get();
+        ProductOption option = productOptionRepository.findById(req.getOptionId()).get();
+        cart.setOption(option);
+        cart.setQuantity(req.getQuantity());
+        cartRepository.save(cart);
     }
 }
