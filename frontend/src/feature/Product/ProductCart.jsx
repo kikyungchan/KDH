@@ -142,23 +142,49 @@ function ProductCart(props) {
         localStorage.getItem("guestCart") || "[]",
       );
 
-      const updatedCart = existingCart.map((item) => {
-        const isTarget =
+      const newOption = selectedItem.options.find(
+        (opt) => opt.id === selectedOptionId,
+      );
+      if (!newOption) return;
+
+      let updatedCart = [...existingCart];
+
+      for (let i = 0; i < updatedCart.length; i++) {
+        const item = updatedCart[i];
+
+        const isEditingTarget =
           item.productName === selectedItem.productName &&
           item.optionName === selectedItem.optionName;
 
-        if (!isTarget) return item;
+        const isTargetMerged =
+          item.productName === selectedItem.productName &&
+          item.optionName === newOption.optionName;
 
-        const newOption = selectedItem.options.find(
-          (opt) => opt.id === selectedOptionId,
-        );
-        return {
-          ...item,
-          optionName: newOption.optionName,
-          price: newOption.price,
-          quantity: selectedQuantity,
-        };
-      });
+        // 병합 대상이 있음 (선택한 옵션이 이미 있음)
+        if (isTargetMerged && !isEditingTarget) {
+          item.quantity += selectedQuantity;
+
+          // 기존 편집 대상 항목 제거
+          updatedCart = updatedCart.filter(
+            (it) =>
+              !(
+                it.productName === selectedItem.productName &&
+                it.optionName === selectedItem.optionName
+              ),
+          );
+
+          break;
+        }
+
+        // 단순 수정만 필요한 경우
+        if (isEditingTarget) {
+          item.optionName = newOption.optionName;
+          item.price = newOption.price;
+          item.quantity = selectedQuantity;
+          item.optionId = newOption.id;
+          break;
+        }
+      }
 
       localStorage.setItem("guestCart", JSON.stringify(updatedCart));
       setCartItems(updatedCart);
