@@ -53,6 +53,7 @@ function ProductCart(props) {
   }
 
   function handleDeleteSelected() {
+    alert("선택하신 상품을 삭제하시겠습니까?");
     const token = localStorage.getItem("token");
     const deleteList = checkedIds.map((index) => {
       const item = cartItems[index];
@@ -62,7 +63,7 @@ function ProductCart(props) {
     });
 
     // 로그인 사용자인 경우
-    console.log("🧾 삭제 요청 보낼 데이터:", deleteList);
+    console.log("삭제 요청 보낼 데이터:", deleteList);
     if (token) {
       axios
         .delete("/api/product/cart/delete", {
