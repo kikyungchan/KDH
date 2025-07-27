@@ -25,22 +25,6 @@ public class ProductController {
     private final ProductService productService;
     private final ProductRepository productRepository;
 
-    @GetMapping("/options")
-    public ResponseEntity<List<ProductOptionDto>> getOptions(@RequestParam Long productId) {
-        Product product = productRepository.findById(productId)
-                .orElseThrow(() -> new RuntimeException("상품을 찾을 수 없습니다."));
-
-        List<ProductOptionDto> options = product.getOptions().stream().map(opt -> {
-            ProductOptionDto dto = new ProductOptionDto();
-            dto.setId(opt.getId());
-            dto.setOptionName(opt.getOptionName());
-            dto.setPrice(opt.getPrice());
-            return dto;
-        }).toList();
-
-        return ResponseEntity.ok(options);
-    }
-
     @PutMapping(value = "/edit", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public void editProduct(@RequestParam Long id,
                             @RequestParam String productName,

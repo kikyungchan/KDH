@@ -41,24 +41,7 @@ function ProductCart(props) {
     setSelectedItem(item);
     setSelectedOptionId(item.optionId); // 기본 선택
     setSelectedQuantity(item.quantity); // 기존 수량
-
-    const token = localStorage.getItem("token");
-    if (token) {
-      setShowModal(true); // 로그인 사용자는 이미 옵션 있음
-    } else {
-      // 비회원 → 옵션 목록을 API로 받아서 selectedItem에 넣고 모달 열기
-      axios
-        .get(`/api/product/options?productId=${item.productId}`)
-        .then((res) => {
-          const options = res.data;
-          setSelectedItem({ ...item, options }); // options 포함시켜 저장
-          setShowModal(true);
-        })
-        .catch((err) => {
-          console.error("옵션 로딩 실패:", err);
-          alert("옵션 정보를 불러오지 못했습니다.");
-        });
-    }
+    setShowModal(true); // 로그인 사용자는 이미 옵션 있음
   }
 
   function handleCheckboxChange(index, checked) {
@@ -346,12 +329,18 @@ function ProductCart(props) {
               <label>옵션 선택</label>
               <select
                 className="form-select"
-                value={selectedOptionId || ""}
-                onChange={(e) => setSelectedOptionId(Number(e.target.value))}
+                value={
+                  selectedOptionId !== null ? String(selectedOptionId) : ""
+                }
+                onChange={(e) => {
+                  const value = e.target.value;
+                  console.log("선택된 값:", value);
+                  setSelectedOptionId(Number(value));
+                }}
               >
                 <option value="">옵션 선택</option>
                 {(selectedItem.options || []).map((opt) => (
-                  <option key={opt.id} value={opt.id}>
+                  <option key={opt.id} value={String(opt.id)}>
                     {opt.optionName} (+{opt.price?.toLocaleString()}원)
                   </option>
                 ))}

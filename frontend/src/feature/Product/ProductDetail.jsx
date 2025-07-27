@@ -96,14 +96,26 @@ export function ProductDetail() {
         .catch((err) => {})
         .finally(() => {});
     } else {
+      // 옵션에 id 없으면 index를 임시 id로 할당
       // 비로그인유저
+      const enrichedOptions = (product.options || []).map((opt, idx) => ({
+        ...opt,
+        id: idx + 1,
+      }));
+
+      const selectedId = enrichedOptions.find(
+        (opt) => opt.optionName === selectedOption.optionName,
+      )?.id;
+
       const cartItem = {
         productId: product.id,
         productName: product.productName,
         optionName: selectedOption.optionName,
+        optionId: selectedId,
         price: selectedOption.price,
         quantity: quantity,
         imagePath: thumbnail,
+        options: enrichedOptions, // ✅ 반드시 이걸로 저장!
       };
       const existingCart = JSON.parse(
         localStorage.getItem("guestCart") || "[]",
