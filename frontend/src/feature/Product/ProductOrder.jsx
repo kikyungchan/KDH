@@ -4,6 +4,8 @@ import axios from "axios";
 import "./css/Order.css";
 
 function Order(props) {
+  const [postalCode, setPostalCode] = useState("");
+  const [detailedAddress, setDetailedAddress] = useState("");
   const [memo, setMemo] = useState("");
   const [customMemo, setCustomMemo] = useState("");
   const [receiverName, setReceiverName] = useState("");
@@ -17,7 +19,7 @@ function Order(props) {
   // items가 배열이 아니더라도 자동으로 배열로 감싸줌.
   const items = state?.items ?? (state ? [state] : []);
   const navigate = useNavigate();
-  // TODO: 우편번호 상세주소 회원가입시 받을것인지?
+  // TODO: 우편번호 상세주소 회원가입시 주소입력하면서 받으면 좋을듯
   useEffect(() => {
     const token = localStorage.getItem("token");
     if (token) {
@@ -49,6 +51,23 @@ function Order(props) {
   }
 
   function handleOrderButton() {
+    // 입력값 유효성 검사
+    // 주문자 정보
+    if (!name.trim() || !phone.trim() || !address.trim()) {
+      alert("주문자 정보를 모두 입력해 주세요.");
+      return;
+    }
+    // 배송 정보
+    if (
+      !receiverName.trim() ||
+      !receiverPhone.trim() ||
+      !receiverAddress.trim() ||
+      !detailedAddress.trim() ||
+      !postalCode.trim()
+    ) {
+      alert("배송지 정보를 모두 입력해 주세요.");
+      return;
+    }
     const token = localStorage.getItem("token");
     // const orderMemo = memo === "직접 작성" ? customMemo : memo;
     // const totalPrice = state.price * state.quantity;
@@ -98,8 +117,8 @@ function Order(props) {
         receiverName: receiverName,
         receiverPhone: receiverPhone,
         receiverAddress: receiverAddress,
-        postalCode: "",
-        detailedAddress: "",
+        postalCode: postalCode,
+        detailedAddress: detailedAddress,
       }));
       axios
         .post("/api/product/order/guest", payloadList)
@@ -209,7 +228,12 @@ function Order(props) {
         </div>
 
         <div className="order-input-zipcode">
-          <input placeholder="우편번호" className="order-input-full" />
+          <input
+            placeholder="우편번호"
+            className="order-input-full"
+            value={postalCode}
+            onChange={(e) => setPostalCode(e.target.value)}
+          />
           <button className="order-input-full">주소찾기</button>
         </div>
         <input
@@ -218,7 +242,12 @@ function Order(props) {
           value={receiverAddress}
           onChange={(e) => setReceiverAddress(e.target.value)}
         />
-        <input placeholder="상세주소" className="order-input-full" />
+        <input
+          placeholder="상세주소"
+          className="order-input-full"
+          value={detailedAddress}
+          onChange={(e) => setDetailedAddress(e.target.value)}
+        />
       </div>
 
       {/* 배송 메모 */}
