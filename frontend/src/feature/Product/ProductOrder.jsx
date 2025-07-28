@@ -4,6 +4,10 @@ import axios from "axios";
 import "./css/Order.css";
 
 function Order(props) {
+  const [receiverName, setReceiverName] = useState("");
+  const [receiverPhone, setReceiverPhone] = useState("");
+  const [receiverAddress, setReceiverAddress] = useState("");
+  const [sameAsOrderer, setSameAsOrderer] = useState(false);
   const [name, setName] = useState("");
   const [address, setAddress] = useState("");
   const [phone, setPhone] = useState("");
@@ -20,6 +24,7 @@ function Order(props) {
           },
         })
         .then((res) => {
+          console.log("res.data:", res.data);
           setAddress(res.data.address);
           setName(res.data.name);
           setPhone(res.data.phone);
@@ -65,6 +70,21 @@ function Order(props) {
         });
     } else {
       alert("비회원은 아직 미구현");
+    }
+  }
+
+  // 체크박스 핸들러
+  function handleSameAsOrdererChange(e) {
+    const checked = e.target.checked;
+    setSameAsOrderer(checked);
+    if (checked) {
+      setReceiverName(name);
+      setReceiverPhone(phone);
+      setReceiverAddress(address);
+    } else {
+      setReceiverName("");
+      setReceiverPhone("");
+      setReceiverAddress("");
     }
   }
 
@@ -124,18 +144,39 @@ function Order(props) {
       <div className="order-box">
         <h4>배송 정보</h4>
         <div style={{ marginBottom: "10px" }}>
-          <input type="checkbox" />
+          <input
+            type="checkbox"
+            checked={sameAsOrderer}
+            onChange={handleSameAsOrdererChange}
+          />
           <label style={{ marginLeft: "6px" }}>주문자 정보와 동일</label>
         </div>
+
         <div className="order-input-row">
-          <input placeholder="수령인" className="order-input-half" />
-          <input placeholder="연락처" className="order-input-half" />
+          <input
+            placeholder="수령인"
+            className="order-input-half"
+            value={receiverName}
+            onChange={(e) => setReceiverName(e.target.value)}
+          />
+          <input
+            placeholder="연락처"
+            className="order-input-half"
+            value={receiverPhone}
+            onChange={(e) => setReceiverPhone(e.target.value)}
+          />
         </div>
+
         <div className="order-input-zipcode">
           <input placeholder="우편번호" className="order-input-full" />
           <button className="order-input-full">주소찾기</button>
         </div>
-        <input placeholder="주소" className="order-input-full" />
+        <input
+          placeholder="주소"
+          className="order-input-full"
+          value={receiverAddress}
+          onChange={(e) => setReceiverAddress(e.target.value)}
+        />
         <input placeholder="상세주소" className="order-input-full" />
       </div>
 
