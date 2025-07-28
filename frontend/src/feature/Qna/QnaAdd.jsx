@@ -28,26 +28,25 @@ export function QnaAdd() {
   const categoryRef = useRef(null);
   const titleRef = useRef(null);
   const contentRef = useRef(null);
-  const [productId, setProductId] = useState(null);
+  const [productId, setProductId] = useState(0);
   const [productPrice, setProductPrice] = useState(null);
   const [productName, setProductName] = useState(null);
+  const [image, setImage] = useState();
   const radios = [
     { name: "상품문의", value: "상품문의", selected: true },
     { name: "문의내역", value: "문의내역" },
   ];
   let params = useParams();
-  console.log(params.id);
   const navigate = useNavigate();
 
-  useEffect(() => {
-    console.log(category);
-  }, [category]);
+  useEffect(() => {}, [category]);
 
   useEffect(() => {
     axios.get(`/api/qna/view?id=${params.id}`).then((res) => {
       console.log(res.data);
       setProductId(res.data.id);
-      // setimage(res.data.images);
+      console.log(res.data.id);
+      setImage(res.data.image?.[0]);
       setProductPrice(res.data.price);
       setProductName(res.data.productName);
     });
@@ -89,13 +88,14 @@ export function QnaAdd() {
       console.log(content);
       console.log(category);
       console.log(user);
+      console.log(productId);
       axios
         .post("/api/qna/add", {
           title: title,
           content: content,
           category: category,
           username: user,
-          productId: "0",
+          productId: productId,
         })
         .then((res) => {
           const message = res.data.message;
@@ -181,19 +181,31 @@ export function QnaAdd() {
                 <FormLabel>문의하실 상품</FormLabel>
                 <div>
                   {/*상품 이미지*/}
-                  <Image fluid style={{ width: 200, height: 200 }} />
+                  <Image
+                    src={image}
+                    fluid
+                    style={{
+                      width: "100%",
+                      height: "auto",
+                      objectFit: "contain",
+                    }}
+                  />
                   <br />
                   <br />
-
                   {/*상품명*/}
                   <FormControl
                     // style={{ width: 50 }}
                     placeholder={productName}
                     disabled={true}
                   />
+                  <h5 className="text-end fw-bold text-danger">
+                    {/* toLocaleString() : 세자리수마다 쉼표로 보기 쉽게 표현*/}
+                    {productPrice && productPrice.toLocaleString()}원
+                  </h5>
                 </div>
               </FormGroup>
             </div>
+            <br />
             <br />
             <div ref={titleRef}>
               <FormGroup>

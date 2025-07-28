@@ -11,6 +11,7 @@ import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
 import java.time.Instant;
+import java.time.LocalDateTime;
 
 @Getter
 @Setter
@@ -39,17 +40,16 @@ public class Question {
     private String content;
 
     @ColumnDefault("'open'")
-    @Lob
-    @Column(name = "status", nullable = false)
+    @Column(name = "status")
     private String status;
 
     @ColumnDefault("current_timestamp()")
-    @Column(name = "created_at", nullable = false)
-    private Instant createdAt;
+    @Column(insertable = false, name = "created_at")
+    private LocalDateTime createdAt;
 
     @ColumnDefault("current_timestamp()")
-    @Column(name = "updated_at", nullable = false)
-    private Instant updatedAt;
+    @Column(insertable = false, name = "updated_at")
+    private LocalDateTime updatedAt;
 
     @Column(name = "category", nullable = false)
     private int category;

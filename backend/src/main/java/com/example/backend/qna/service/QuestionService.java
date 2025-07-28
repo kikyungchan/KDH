@@ -2,6 +2,7 @@ package com.example.backend.qna.service;
 
 import com.example.backend.member.entity.Member;
 import com.example.backend.product.entity.Product;
+import com.example.backend.product.entity.ProductImage;
 import com.example.backend.product.repository.ProductRepository;
 import com.example.backend.qna.dto.QuestionAddForm;
 import com.example.backend.qna.entity.Question;
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import com.example.backend.member.repository.MemberRepository;
 
+import java.util.List;
 import java.util.Map;
 
 @Service
@@ -25,11 +27,10 @@ public class QuestionService {
 
     public Map<String, ?> view(int id, Authentication authentication) {
         Product product = productRepository.findById(Long.valueOf(String.valueOf(id))).get();
-        System.out.println("getid : " + product.getId());
-
-        // todo : 이 값들을 넘겨줘야 함
+        List<String> imagePaths = product.getImages().stream().map(ProductImage::getStoredPath).toList();
+        
         var qnainfo = Map.of("id", product.getId(),
-//                "image", product.getImages(),
+                "image", imagePaths,
                 "price", product.getPrice(),
                 "productName", product.getProductName()
         );
@@ -41,20 +42,20 @@ public class QuestionService {
             throw new RuntimeException("권한이 없습니다.");
         }
 
+
         Question question = new Question();
         question.setTitle(dto.getTitle());
         question.setContent(dto.getContent());
         question.setCategory(dto.getCategory());
-        System.out.println("getname : " + Integer.valueOf(authentication.getName()));
-        Member user = memberRepository.findById(Integer.valueOf(authentication.getName())).get();
-        System.out.println("user : " + user);
-        question.setUser(user);
-//        Product product = productRepository.findById(Long.valueOf(String.valueOf(dto.getProduct_id()))).get();
-//        System.out.println("product : " + product);
-//        question.setProduct(product);
+//        System.out.println("product : " + productRepository.findById(Long.valueOf(String.valueOf(dto.getProductId()))).get());
+        Product product = productRepository.findById(Long.valueOf(String.valueOf(dto.getProductId()))).get();
+        question.setProduct(product);
 
-        System.out.println("question : " + question);
-//        questionRepository.save(question);
+        Member user = memberRepository.findById(Integer.valueOf(authentication.getName())).get();
+        question.setUser(user);
+
+        question.setStatus("open");
+        questionRepository.save(question);
 
 
     }

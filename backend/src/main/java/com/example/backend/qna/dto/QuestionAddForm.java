@@ -10,5 +10,5 @@ public class QuestionAddForm {
     private String title;
     private String content;
     private int category;
-    private Product product_id;
+    private Integer productId;
 }

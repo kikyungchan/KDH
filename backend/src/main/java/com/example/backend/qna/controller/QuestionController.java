@@ -21,10 +21,7 @@ public class QuestionController {
     @GetMapping("view")
     @PreAuthorize("isAuthenticated()")
     public Map<String, ?> view(@RequestParam int id, Authentication authentication) {
-        System.out.println("id = " + id);
-
         return questionService.view(id, authentication);
-
     }
 
 
@@ -32,9 +29,6 @@ public class QuestionController {
     @PreAuthorize("isAuthenticated()")
     public ResponseEntity<?> add(@RequestBody QuestionAddForm dto,
                                  Authentication authentication) {
-        System.out.println("dto : " + dto);
-        System.out.println("authentication : " + authentication);
-
         // 유효성 검사
         boolean result = questionService.validateForAdd(dto);
 
