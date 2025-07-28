@@ -33,6 +33,7 @@ public class ProductController {
     private final JwtDecoder jwtDecoder;
     private final MemberRepository memberRepository;
     private final GuestOrderRepository guestOrderRepository;
+    private final ProductRepository productRepository;
 
     public class OrderTokenGenerator {
         private static final SecureRandom random = new SecureRandom();
@@ -52,6 +53,14 @@ public class ProductController {
         List<GuestOrder> result = new ArrayList<>();
         // 비회원 주문 시
         for (GuestOrderRequestDto dtoList : dto) {
+            Product product = productRepository.findById(Long.valueOf(dtoList.getProductId())).get();
+            if (product.getQuantity() < dtoList.getQuantity()) {
+                throw new RuntimeException("재고가 부족합니다.");
+            }
+            product.setQuantity(product.getQuantity() - dtoList.getQuantity());
+            productRepository.save(product);
+
+            // 주문객체 생성
             GuestOrder order = new GuestOrder();
             order.setGuestName(dtoList.getGuestName());
             order.setGuestPhone(dtoList.getGuestPhone());

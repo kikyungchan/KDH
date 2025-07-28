@@ -205,11 +205,14 @@ public class ProductService {
         Integer memberId = Integer.parseInt(memberIdStr);
         Member member = memberRepository.findById(Long.valueOf(memberId)).get();
 
+
         for (OrderRequest req : reqList) {
             Product product = productRepository.findById(Long.valueOf(req.getProductId())).get();
             ProductOption option = productOptionRepository.findById(Long.valueOf(req.getOptionId())).get();
-
+            // 재고 차감
+            product.setQuantity(product.getQuantity() - req.getQuantity());
             Order order = new Order();
+            order.setMember(member);
             order.setMemo(req.getMemo());
             order.setProductName(product.getProductName());
             order.setOptionName(option.getOptionName());
@@ -218,7 +221,6 @@ public class ProductService {
             order.setMemberName(member.getName());
             order.setShippingAddress(req.getShippingAddress());
             order.setTotalPrice(req.getPrice() * req.getQuantity());
-            order.setMember(member);
             orderRepository.save(order);
 
             OrderItem item = new OrderItem();
