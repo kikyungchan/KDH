@@ -56,6 +56,11 @@ export function ProductDetail() {
       return;
     }
 
+    if (quantity > product.quantity) {
+      alert(`재고가 ${product.quantity}개 남아있습니다.`);
+      return;
+    }
+
     const token = localStorage.getItem("token");
 
     if (token) {
@@ -104,6 +109,11 @@ export function ProductDetail() {
   function handleCartButton() {
     if (!selectedOption) {
       alert("옵션을 선택해주세요.");
+      return;
+    }
+
+    if (quantity > product.quantity) {
+      alert(`재고가 ${product.quantity}개 남아있습니다.`);
       return;
     }
 
