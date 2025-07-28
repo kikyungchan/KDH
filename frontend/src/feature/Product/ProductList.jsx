@@ -32,31 +32,41 @@ export function ProductList() {
         <div className="product-list-container mb-4">
           <h2>상품 목록</h2>
           <div className="product-grid mb-4">
-            {products.map((product) => (
-              <Link
-                to={`/product/view?id=${product.id}`}
-                className="product-card"
-                key={product.id}
-              >
-                {product.imagePath && (
-                  <div className="product-image-wrapper mb-4">
-                    <img
-                      src={product.imagePath?.[0]}
-                      alt={product.productName}
-                      className="product-image"
-                    />
+            {products.map((product) => {
+              console.log(product); // 확인용
+              return (
+                <Link
+                  to={`/product/view?id=${product.id}`}
+                  className="product-card"
+                  key={product.id}
+                >
+                  {product.imagePath && (
+                    <div
+                      className="product-image-wrapper mb-4"
+                      style={{ position: "relative" }}
+                    >
+                      <img
+                        src={product.imagePath[0]}
+                        alt={product.productName}
+                        className="product-image"
+                      />
+                      {product.quantity === 0 && (
+                        <div className="sold-out-badge">SOLD OUT</div>
+                      )}
+                    </div>
+                  )}
+                  <div className="product-name mb-3">{product.productName}</div>
+                  <div className="product-price mb-3">
+                    {product.price.toLocaleString()}원
                   </div>
-                )}
-                <div className="product-name mb-3">{product.productName}</div>
-                <div className="product-price mb-3">
-                  {product.price.toLocaleString()}원
-                </div>
-              </Link>
-            ))}
+                </Link>
+              );
+            })}
           </div>
+
           {/* 페이지네이션 */}
           <div className="pagination d-flex justify-content-center align-items-center">
-            {/*이전*/}
+            {/* 이전 */}
             <button
               onClick={() => handlePageClick(pageInfo.leftPageNumber - 1)}
               disabled={pageInfo.leftPageNumber < 6}
@@ -64,7 +74,8 @@ export function ProductList() {
             >
               이전
             </button>
-            {/*페이지 번호 버튼들*/}
+
+            {/* 페이지 번호 버튼들 */}
             {Array.from(
               {
                 length: pageInfo.rightPageNumber - pageInfo.leftPageNumber + 1,
@@ -84,7 +95,8 @@ export function ProductList() {
                 );
               },
             )}
-            {/*  다음*/}
+
+            {/* 다음 */}
             <button
               onClick={() => handlePageClick(pageInfo.rightPageNumber + 1)}
               disabled={pageInfo.rightPageNumber > pageInfo.totalPages - 5}
