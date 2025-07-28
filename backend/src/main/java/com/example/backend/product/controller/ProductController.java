@@ -19,7 +19,9 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.security.SecureRandom;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 @RestController
@@ -46,38 +48,38 @@ public class ProductController {
 
     // 비회원 주문
     @PostMapping("/order/guest")
-    public GuestOrder createGuestOrder(@RequestBody GuestOrderRequestDto dto) {
-
+    public ResponseEntity<?> createGuestOrder(@RequestBody List<GuestOrderRequestDto> dto) {
+        List<GuestOrder> result = new ArrayList<>();
         // 비회원 주문 시
-        GuestOrder order = new GuestOrder();
-        order.setGuestName(dto.getGuestName());
-        order.setGuestPhone(dto.getGuestPhone());
-        order.setReceiverName(dto.getReceiverName());
-        order.setReceiverPhone(dto.getReceiverPhone());
-        order.setShippingAddress(dto.getShippingAddress());
-        order.setDetailedAddress(dto.getDetailedAddress());
-        order.setPostalCode(dto.getPostalCode());
-        order.setProductId(dto.getProductId());
-        order.setProductName(dto.getProductName());
-        order.setOptionId(dto.getOptionId());
-        order.setOptionName(dto.getOptionName());
-        order.setQuantity(dto.getQuantity());
-        order.setPrice(dto.getPrice());
-        order.setMemo(dto.getMemo());
-        order.setTotalPrice(dto.getTotalPrice());
+        for (GuestOrderRequestDto dtoList : dto) {
+            GuestOrder order = new GuestOrder();
+            order.setGuestName(dtoList.getGuestName());
+            order.setGuestPhone(dtoList.getGuestPhone());
+            order.setReceiverName(dtoList.getReceiverName());
+            order.setReceiverPhone(dtoList.getReceiverPhone());
+            order.setShippingAddress(dtoList.getShippingAddress());
+            order.setDetailedAddress(dtoList.getDetailedAddress());
+            order.setPostalCode(dtoList.getPostalCode());
+            order.setProductId(dtoList.getProductId());
+            order.setProductName(dtoList.getProductName());
+            order.setOptionId(dtoList.getOptionId());
+            order.setOptionName(dtoList.getOptionName());
+            order.setQuantity(dtoList.getQuantity());
+            order.setPrice(dtoList.getPrice());
+            order.setMemo(dtoList.getMemo());
+            order.setTotalPrice(dtoList.getTotalPrice());
 
+            String token = OrderTokenGenerator.generateToken();
+            order.setGuestOrderToken(token);
 
-        // guestOrderToken(주문번호) 자동생성(UUID)
-//        String token = UUID.randomUUID().toString();
-//        order.setGuestOrderToken(token);
-        String token = OrderTokenGenerator.generateToken();
-        order.setGuestOrderToken(token);
+            GuestOrder saved = guestOrderRepository.save(order);
+            result.add(saved);
+        }
 
-        //저장
-        GuestOrder saved = guestOrderRepository.save(order);
-
-        // 클라이언트에서 주문번호 확인할 수 있도록 전체 객체 또는 token만 리턴
-        return saved;
+        // 여러 건 주문이지만 첫 번째 주문번호를 리턴하거나 전체를 리턴
+        return ResponseEntity.ok(Map.of(
+                "guestOrderToken", result.get(0).getGuestOrderToken()  // 예시
+        ));
     }
 
     @GetMapping("/member/info")

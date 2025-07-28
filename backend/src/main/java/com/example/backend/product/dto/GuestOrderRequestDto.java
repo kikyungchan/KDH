@@ -6,7 +6,6 @@ import lombok.Data;
 public class GuestOrderRequestDto {
     private String guestName;
     private String guestPhone;
-    private String guestEmail;
 
     private String receiverName;
     private String receiverPhone;
