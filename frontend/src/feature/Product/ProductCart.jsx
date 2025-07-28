@@ -202,7 +202,15 @@ function ProductCart(props) {
     const selectedItems = cartItems.filter((_, idx) =>
       checkedIds.includes(idx),
     );
-    navigate("/product/order", { state: { items: selectedItems } });
+    navigate("/product/order", {
+      state: {
+        items: selectedItems.map((item) => ({
+          ...item,
+          productId: item.productId,
+          optionId: item.optionId,
+        })),
+      },
+    });
   }
 
   return (

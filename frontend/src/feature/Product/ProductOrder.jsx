@@ -40,8 +40,8 @@ function Order(props) {
     return <div>잘못된 접근입니다.</div>;
   }
 
-  const totalPrice = state.price * state.quantity;
-  const shippingFee = totalPrice >= 100000 ? 0 : 3000;
+  // const totalPrice = state.price * state.quantity;
+  // const shippingFee = totalPrice >= 100000 ? 0 : 3000;
 
   function handleCancelButton() {
     alert("주문이 취소되었습니다.");
@@ -50,38 +50,26 @@ function Order(props) {
 
   function handleOrderButton() {
     const token = localStorage.getItem("token");
-    const orderMemo = memo === "직접 작성" ? customMemo : memo;
-    const totalPrice = state.price * state.quantity;
-
-    const payload = {
-      productId: state.productId,
-      productName: state.productName,
-      optionName: state.option,
-      quantity: state.quantity,
-      optionId: state.optionId,
-      price: state.price,
+    // const orderMemo = memo === "직접 작성" ? customMemo : memo;
+    // const totalPrice = state.price * state.quantity;
+    console.log(items);
+    const payloadList = items.map((item) => ({
+      productId: item.productId ?? item.product?.id,
+      optionId: item.optionId ?? item.option?.id,
+      productName: item.productName,
+      optionName: item.optionName ?? item.option,
+      quantity: item.quantity,
+      price: item.price,
       shippingAddress: address,
-      memo: orderMemo,
-      totalPrice: totalPrice,
-
-      //비회원 주문자
-      guestName: name,
-      guestPhone: phone,
-
-      //비회원 수령자
-      receiverName: receiverName,
-      receiverPhone: receiverPhone,
-      receiverAddress: receiverAddress,
-
-      // 주소 관련
-      postalCode: "",
-      detailedAddress: "",
-    };
+      memo: memo === "직접 작성" ? customMemo : memo,
+      totalPrice: item.price * item.quantity,
+    }));
+    console.log(payloadList);
 
     if (token) {
       // 회원 주문
       axios
-        .post("/api/product/order", payload, {
+        .post("/api/product/order", payloadList, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -95,8 +83,26 @@ function Order(props) {
         });
     } else {
       // 비회원
+      const payloadList = items.map((item) => ({
+        productId: item.productId ?? item.product?.id,
+        optionId: item.optionId ?? item.option?.id,
+        productName: item.productName,
+        optionName: item.optionName ?? item.option,
+        quantity: item.quantity,
+        price: item.price,
+        shippingAddress: address,
+        memo: memo === "직접 작성" ? customMemo : memo,
+        totalPrice: item.price * item.quantity,
+        guestName: name,
+        guestPhone: phone,
+        receiverName: receiverName,
+        receiverPhone: receiverPhone,
+        receiverAddress: receiverAddress,
+        postalCode: "",
+        detailedAddress: "",
+      }));
       axios
-        .post("/api/product/order/guest", payload)
+        .post("/api/product/order/guest", payloadList)
         .then((res) => {
           const token = res.data.guestOrderToken;
           alert("비회원 주문 완료\n주문번호: " + token);

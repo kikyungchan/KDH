@@ -106,9 +106,9 @@ export function ProductDetail() {
 
       const cartItem = {
         productId: product.id,
+        optionId: selectedId,
         productName: product.productName,
         optionName: selectedOption.optionName,
-        optionId: selectedId,
         price: selectedOption.price,
         quantity: quantity,
         imagePath: thumbnail,

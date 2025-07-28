@@ -15,6 +15,8 @@ public class CartResponseDto {
     private Integer quantity;
     private Integer price;
     private Integer totalPrice;
+    private Long productId;
+    private Long optionId;
 
     private List<ProductOptionDto> options;
 
@@ -26,6 +28,8 @@ public class CartResponseDto {
         this.price = cart.getOption().getPrice();
         this.optionName = cart.getOption().getOptionName();
         this.totalPrice = this.price * this.quantity;
+        this.productId = Long.valueOf(cart.getProduct().getId());
+        this.optionId = cart.getOption().getId();
 
         //썸네일
         List<ProductImage> images = cart.getProduct().getImages();

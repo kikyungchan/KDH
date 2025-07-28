@@ -87,9 +87,9 @@ public class ProductController {
     }
 
     @PostMapping("/order")
-    public ResponseEntity<?> createOrder(@RequestBody OrderRequest req,
+    public ResponseEntity<?> createOrder(@RequestBody List<OrderRequest> reqList,
                                          @RequestHeader("Authorization") String auth) {
-        productService.order(req, auth);
+        productService.order(reqList, auth);
         return ResponseEntity.ok().build();
     }
 

@@ -198,40 +198,37 @@ public class ProductService {
         }
     }
 
-    public void order(OrderRequest req, String auth) {
+    public void order(List<OrderRequest> reqList, String auth) {
         String token = auth.replace("Bearer ", "");
         Jwt decoded = jwtDecoder.decode(token);
         String memberIdStr = decoded.getSubject();
         Integer memberId = Integer.parseInt(memberIdStr);
-
         Member member = memberRepository.findById(Long.valueOf(memberId)).get();
-        Product product = productRepository.findById(Long.valueOf(req.getProductId())).get();
-        Optional<ProductOption> option = productOptionRepository.findById(Long.valueOf(req.getOptionId()));
 
-        //주문 저장
-        Order order = new Order();
-        order.setMemo(req.getMemo());
-        order.setProductName(product.getProductName());
-        order.setOptionName(option.get().getOptionName());
-//        order.setPostalCode(member.getPostalCode);
-//        order.setDetailedAddress(member.getDetailedAddress);
-        order.setLoginId(member.getLoginId());
-        order.setPhone(member.getPhone());
-        order.setMemberName(member.getName());
-        order.setMember(member);
-        order.setTotalPrice(req.getPrice() * req.getQuantity());
-        order.setShippingAddress(req.getShippingAddress());
-        orderRepository.save(order);
+        for (OrderRequest req : reqList) {
+            Product product = productRepository.findById(Long.valueOf(req.getProductId())).get();
+            ProductOption option = productOptionRepository.findById(Long.valueOf(req.getOptionId())).get();
 
-        // 주문 상세 저장
-        OrderItem item = new OrderItem();
-        item.setOrder(order);
-        item.setProduct(product);
-        item.setOption(option.get());
-        item.setQuantity(req.getQuantity());
-        item.setPrice(req.getPrice());
-        orderItemRepository.save(item);
+            Order order = new Order();
+            order.setMemo(req.getMemo());
+            order.setProductName(product.getProductName());
+            order.setOptionName(option.getOptionName());
+            order.setLoginId(member.getLoginId());
+            order.setPhone(member.getPhone());
+            order.setMemberName(member.getName());
+            order.setShippingAddress(req.getShippingAddress());
+            order.setTotalPrice(req.getPrice() * req.getQuantity());
+            order.setMember(member);
+            orderRepository.save(order);
 
+            OrderItem item = new OrderItem();
+            item.setOrder(order);
+            item.setProduct(product);
+            item.setOption(option);
+            item.setQuantity(req.getQuantity());
+            item.setPrice(req.getPrice());
+            orderItemRepository.save(item);
+        }
     }
 
     public MemberDto getmemberinfo(String auth) {
