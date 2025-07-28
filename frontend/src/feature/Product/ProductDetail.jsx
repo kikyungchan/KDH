@@ -167,6 +167,97 @@ export function ProductDetail() {
     }
   }
 
+  function handleGoToCartWithCurrenProduct() {
+    const token = localStorage.getItem("token");
+
+    if (!selectedOption) {
+      alert("옵션을 선택해주세요.");
+      return;
+    }
+
+    if (token) {
+      const cartItem = {
+        productId: product.id,
+        optionName: selectedOption.optionName,
+        quantity: quantity,
+      };
+      axios
+        .post("/api/product/cart", cartItem, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        })
+        .then(() => {
+          setShowCartConfirmModal(false);
+          navigate("/product/cart");
+        })
+        .catch((err) => {
+          console.error("장바구니 추가 실패", err);
+          alert("장바구니 추가에 실패했습니다.");
+        });
+    } else {
+      const enrichedOptions = (product.options || []).map((opt, idx) => ({
+        ...opt,
+        id: idx + 1,
+      }));
+
+      const selectedId = enrichedOptions.find(
+        (opt) => opt.optionName === selectedOption.optionName,
+      )?.id;
+
+      const cartItem = {
+        productId: product.id,
+        optionId: selectedId,
+        productName: product.productName,
+        optionName: selectedOption.optionName,
+        price: selectedOption.price,
+        quantity: quantity,
+        imagePath: thumbnail,
+        options: enrichedOptions,
+      };
+
+      const existingCart = JSON.parse(
+        localStorage.getItem("guestCart") || "[]",
+      );
+      const existingIndex = existingCart.findIndex(
+        (item) =>
+          item.productId === cartItem.productId &&
+          item.optionName === cartItem.optionName,
+      );
+
+      if (existingIndex > -1) {
+        existingCart[existingIndex].quantity += cartItem.quantity;
+      } else {
+        existingCart.push(cartItem);
+      }
+
+      localStorage.setItem("guestCart", JSON.stringify(existingCart));
+      setShowCartConfirmModal(false);
+      navigate("/product/cart");
+    }
+  }
+
+  function handleBuyCurrentProductOnly() {
+    if (!selectedOption) {
+      alert("옵션을 선택해주세요.");
+      return;
+    }
+
+    setShowCartConfirmModal(false);
+
+    navigate("/product/order", {
+      state: {
+        productId: product.id,
+        productName: product.productName,
+        price: selectedOption ? selectedOption.price : product.price,
+        quantity: quantity,
+        imagePath: thumbnail,
+        option: selectedOption?.optionName || null,
+        optionId: selectedOption?.id || null,
+      },
+    });
+  }
+
   return (
     <Container>
       <Row className="justify-content-center">
@@ -432,7 +523,7 @@ export function ProductDetail() {
           }}
         >
           <button
-            onClick={() => setShowCartConfirmModal(false)}
+            onClick={handleBuyCurrentProductOnly}
             style={{
               flex: 1,
               padding: "12px 0",
@@ -445,74 +536,7 @@ export function ProductDetail() {
             아니요
           </button>
           <button
-            onClick={() => {
-              // 현재 상품을 장바구니에 추가한 후 이동
-              const token = localStorage.getItem("token");
-              const cartItem = {
-                productId: product.id,
-                optionName: selectedOption.optionName,
-                quantity: quantity,
-              };
-
-              if (token) {
-                axios
-                  .post("/api/product/cart", cartItem, {
-                    headers: {
-                      Authorization: `Bearer ${token}`,
-                    },
-                  })
-                  .then(() => {
-                    setShowCartConfirmModal(false);
-                    navigate("/product/cart");
-                  })
-                  .catch((err) => {
-                    console.error("장바구니 추가 실패", err);
-                    alert("장바구니 추가에 실패했습니다.");
-                  });
-              } else {
-                // 비회원일 경우 localStorage에 추가
-                const enrichedOptions = (product.options || []).map(
-                  (opt, idx) => ({
-                    ...opt,
-                    id: idx + 1,
-                  }),
-                );
-
-                const selectedId = enrichedOptions.find(
-                  (opt) => opt.optionName === selectedOption.optionName,
-                )?.id;
-
-                const cartItem = {
-                  productId: product.id,
-                  optionId: selectedId,
-                  productName: product.productName,
-                  optionName: selectedOption.optionName,
-                  price: selectedOption.price,
-                  quantity: quantity,
-                  imagePath: thumbnail,
-                  options: enrichedOptions,
-                };
-
-                const existingCart = JSON.parse(
-                  localStorage.getItem("guestCart") || "[]",
-                );
-                const existingIndex = existingCart.findIndex(
-                  (item) =>
-                    item.productId === cartItem.productId &&
-                    item.optionName === cartItem.optionName,
-                );
-
-                if (existingIndex > -1) {
-                  existingCart[existingIndex].quantity += cartItem.quantity;
-                } else {
-                  existingCart.push(cartItem);
-                }
-
-                localStorage.setItem("guestCart", JSON.stringify(existingCart));
-                setShowCartConfirmModal(false);
-                navigate("/product/cart");
-              }
-            }}
+            onClick={handleGoToCartWithCurrenProduct}
             style={{
               flex: 1,
               padding: "12px 0",
