@@ -9,5 +9,7 @@ public class OrderRequest {
     private Integer quantity;
     private Integer price;
     private String shippingAddress;
+    private String memo;
+
 
 }

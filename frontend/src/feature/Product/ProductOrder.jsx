@@ -4,6 +4,7 @@ import axios from "axios";
 import "./css/Order.css";
 
 function Order(props) {
+  const [memo, setMemo] = useState("");
   const [receiverName, setReceiverName] = useState("");
   const [receiverPhone, setReceiverPhone] = useState("");
   const [receiverAddress, setReceiverAddress] = useState("");
@@ -54,6 +55,7 @@ function Order(props) {
         optionId: state.optionId,
         price: state.price,
         shippingAddress: address,
+        memo: memo,
       };
       axios
         .post("/api/product/order", payload, {
@@ -183,11 +185,15 @@ function Order(props) {
       {/* 배송 메모 */}
       <div className="order-box">
         <h4>배송 메모</h4>
-        <select className="order-select">
-          <option>배송메모를 선택해 주세요.</option>
-          <option>문 앞에 두고 가주세요</option>
-          <option>부재 시 전화주세요</option>
-          <option>경비실에 맡겨주세요</option>
+        <select
+          className="order-select"
+          value={memo}
+          onChange={(e) => setMemo(e.target.value)}
+        >
+          <option value="">배송메모를 선택해 주세요.</option>
+          <option value="문 앞에 두고 가주세요">문 앞에 두고 가주세요</option>
+          <option value="부재 시 전화주세요">부재 시 전화주세요</option>
+          <option value="경비실에 맡겨주세요">경비실에 맡겨주세요</option>
         </select>
       </div>
 
