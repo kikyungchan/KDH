@@ -18,6 +18,7 @@ import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.security.SecureRandom;
 import java.util.List;
 import java.util.UUID;
 
@@ -31,15 +32,26 @@ public class ProductController {
     private final MemberRepository memberRepository;
     private final GuestOrderRepository guestOrderRepository;
 
+    public class OrderTokenGenerator {
+        private static final SecureRandom random = new SecureRandom();
+
+        public static String generateToken() {
+            StringBuilder sb = new StringBuilder();
+            for (int i = 0; i < 12; i++) {
+                sb.append(random.nextInt(10));
+            }
+            return sb.toString();
+        }
+    }
 
     // 비회원 주문
     @PostMapping("/order/guest")
     public GuestOrder createGuestOrder(@RequestBody GuestOrderRequestDto dto) {
 
+        // 비회원 주문 시
         GuestOrder order = new GuestOrder();
         order.setGuestName(dto.getGuestName());
         order.setGuestPhone(dto.getGuestPhone());
-        order.setGuestEmail(dto.getGuestEmail());
         order.setReceiverName(dto.getReceiverName());
         order.setReceiverPhone(dto.getReceiverPhone());
         order.setShippingAddress(dto.getShippingAddress());
@@ -52,9 +64,13 @@ public class ProductController {
         order.setQuantity(dto.getQuantity());
         order.setPrice(dto.getPrice());
         order.setMemo(dto.getMemo());
+        order.setTotalPrice(dto.getTotalPrice());
+
 
         // guestOrderToken(주문번호) 자동생성(UUID)
-        String token = UUID.randomUUID().toString();
+//        String token = UUID.randomUUID().toString();
+//        order.setGuestOrderToken(token);
+        String token = OrderTokenGenerator.generateToken();
         order.setGuestOrderToken(token);
 
         //저장

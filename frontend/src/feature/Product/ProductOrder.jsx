@@ -49,16 +49,31 @@ function Order(props) {
   function handleOrderButton() {
     const token = localStorage.getItem("token");
     const orderMemo = memo === "직접 작성" ? customMemo : memo;
+    const totalPrice = state.price * state.quantity;
 
     const payload = {
       productId: state.productId,
       productName: state.productName,
-      optionName: state.optionName,
+      optionName: state.option,
       quantity: state.quantity,
       optionId: state.optionId,
       price: state.price,
       shippingAddress: address,
       memo: orderMemo,
+      totalPrice: totalPrice,
+
+      //비회원 주문자
+      guestName: name,
+      guestPhone: phone,
+
+      //비회원 수령자
+      receiverName: receiverName,
+      receiverPhone: receiverPhone,
+      receiverAddress: receiverAddress,
+
+      // 주소 관련
+      postalCode: "",
+      detailedAddress: "",
     };
 
     if (token) {
@@ -123,7 +138,7 @@ function Order(props) {
             <div>
               {state.option} / {state.quantity}개
             </div>
-            <div>{state.price.toLocaleString()}원</div>
+            <div>{(state.price * state.quantity).toLocaleString()}원</div>
             <div className="delivery-fee">
               배송비 {shippingFee.toLocaleString()}원
             </div>

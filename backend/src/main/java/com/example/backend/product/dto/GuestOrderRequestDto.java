@@ -21,6 +21,7 @@ public class GuestOrderRequestDto {
 
     private Integer quantity;
     private Integer price;
+    private Integer totalPrice;
     private String memo;
 
 }

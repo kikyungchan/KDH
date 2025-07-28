@@ -25,9 +25,6 @@ public class GuestOrder {
     @Column(name = "guest_phone", length = 50)
     private String guestPhone;
 
-    @Column(name = "guest_email", length = 100)
-    private String guestEmail;
-
     @Column(name = "receiver_name", length = 100)
     private String receiverName;
 
@@ -60,6 +57,8 @@ public class GuestOrder {
 
     @Column(name = "price")
     private Integer price;
+
+    private Integer totalPrice;
 
     @Column(name = "memo")
     private String memo;

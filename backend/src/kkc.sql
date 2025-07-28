@@ -109,6 +109,10 @@ CREATE TABLE guest_orders
     created_at        DATETIME DEFAULT NOW()
 );
 
+ALTER TABLE guest_orders
+    ADD COLUMN total_price INT;
+
+
 
 # order_item(주문상세)
 # price: 주문 시점의 옵션 가격 (가격 변경 이력 보존용)
