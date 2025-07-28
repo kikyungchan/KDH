@@ -10,6 +10,8 @@ public class OrderRequest {
     private Integer price;
     private String shippingAddress;
     private String memo;
+    private String productName;
+    private String optionName;
 
 
 }

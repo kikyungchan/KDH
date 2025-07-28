@@ -211,6 +211,8 @@ public class ProductService {
         //주문 저장
         Order order = new Order();
         order.setMemo(req.getMemo());
+        order.setProductName(product.getProductName());
+        order.setOptionName(option.get().getOptionName());
 //        order.setPostalCode(member.getPostalCode);
 //        order.setDetailedAddress(member.getDetailedAddress);
         order.setLoginId(member.getLoginId());

@@ -5,6 +5,7 @@ import "./css/Order.css";
 
 function Order(props) {
   const [memo, setMemo] = useState("");
+  const [customMemo, setCustomMemo] = useState("");
   const [receiverName, setReceiverName] = useState("");
   const [receiverPhone, setReceiverPhone] = useState("");
   const [receiverAddress, setReceiverAddress] = useState("");
@@ -48,14 +49,17 @@ function Order(props) {
 
   function handleOrderButton() {
     const token = localStorage.getItem("token");
+    console.log("state=" + state);
     if (token) {
       const payload = {
         productId: state.productId,
+        productName: state.productName,
+        optionName: state.optionName,
         quantity: state.quantity,
         optionId: state.optionId,
         price: state.price,
         shippingAddress: address,
-        memo: memo,
+        memo: memo === "직접 작성" ? customMemo : memo,
       };
       axios
         .post("/api/product/order", payload, {
@@ -194,7 +198,17 @@ function Order(props) {
           <option value="문 앞에 두고 가주세요">문 앞에 두고 가주세요</option>
           <option value="부재 시 전화주세요">부재 시 전화주세요</option>
           <option value="경비실에 맡겨주세요">경비실에 맡겨주세요</option>
+          <option value="직접 작성">직접 작성</option>
         </select>
+        {memo === "직접 작성" && (
+          <input
+            type="text"
+            className="order-input-full"
+            placeholder="배송 메모를 직접 입력하세요"
+            value={customMemo}
+            onChange={(e) => setCustomMemo(e.target.value)}
+          />
+        )}
       </div>
 
       {/* 버튼 영역 */}

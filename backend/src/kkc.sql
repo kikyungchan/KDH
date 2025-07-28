@@ -84,25 +84,9 @@ ALTER TABLE orders
     ADD COLUMN member_name VARCHAR(50) NOT NULL;
 
 ALTER TABLE orders
-    ADD COLUMN phone VARCHAR(30) NOT NULL;
+    ADD COLUMN product_name VARCHAR(255),
+    ADD COLUMN option_name  VARCHAR(255);
 
-ALTER TABLE orders
-    ADD COLUMN memo VARCHAR(200) NULL;
-
-ALTER TABLE orders
-    ADD COLUMN postal_code VARCHAR(50) NOT NULL;
-
-ALTER TABLE orders
-    ADD COLUMN detailed_address VARCHAR(100) NOT NULL;
-
-ALTER TABLE orders
-    DROP COLUMN detailed_address;
-
-ALTER TABLE orders
-    DROP COLUMN postal_code;
-
-ALTER TABLE orders
-    DROP COLUMN phone;
 
 # order_item(주문상세)
 # price: 주문 시점의 옵션 가격 (가격 변경 이력 보존용)
