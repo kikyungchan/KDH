@@ -5,13 +5,17 @@ import com.example.backend.product.entity.Product;
 import com.example.backend.product.entity.ProductImage;
 import com.example.backend.product.repository.ProductRepository;
 import com.example.backend.qna.dto.QuestionAddForm;
+import com.example.backend.qna.dto.QuestionListDto;
 import com.example.backend.qna.entity.Question;
 import com.example.backend.qna.repository.QuestionRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import com.example.backend.member.repository.MemberRepository;
+import software.amazon.awssdk.awscore.util.SignerOverrideUtils;
 
 import java.util.List;
 import java.util.Map;
@@ -28,7 +32,7 @@ public class QuestionService {
     public Map<String, ?> view(int id, Authentication authentication) {
         Product product = productRepository.findById(Long.valueOf(String.valueOf(id))).get();
         List<String> imagePaths = product.getImages().stream().map(ProductImage::getStoredPath).toList();
-        
+
         var qnainfo = Map.of("id", product.getId(),
                 "image", imagePaths,
                 "price", product.getPrice(),
@@ -70,5 +74,27 @@ public class QuestionService {
         }
 
         return true;
+    }
+
+    public Map<String, Object> list(String keyword, Integer pageNumber) {
+
+        Page<QuestionListDto> questionListDtoPage
+                = questionRepository.findAllBy(keyword, PageRequest.of(pageNumber - 1, 10));
+
+        int totalPages = questionListDtoPage.getTotalPages(); // 마지막 페이지
+        int rightPageNumber = ((pageNumber - 1) / 10 + 1) * 10;
+        int leftPageNumber = rightPageNumber - 9;
+        rightPageNumber = Math.min(rightPageNumber, totalPages);
+        leftPageNumber = Math.max(leftPageNumber, 1);
+
+        System.out.println("QnaList" + questionListDtoPage.getContent());
+
+        var pageInfo = Map.of("totalPages", totalPages,
+                "rightPageNumber", rightPageNumber,
+                "leftPageNumber", leftPageNumber,
+                "currentPageNumber", pageNumber);
+
+        return Map.of("pageInfo", pageInfo,
+                "questionList", questionListDtoPage.getContent());
     }
 }

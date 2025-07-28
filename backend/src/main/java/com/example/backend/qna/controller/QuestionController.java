@@ -24,6 +24,17 @@ public class QuestionController {
         return questionService.view(id, authentication);
     }
 
+    @GetMapping("list")
+    @PreAuthorize("isAuthenticated()")
+    public Map<String, Object> getAllBoards(
+            @RequestParam(value = "q", defaultValue = "") String keyword,
+            @RequestParam(value = "p", defaultValue = "1") Integer pageNumber) {
+
+        System.out.println("keyword : " + keyword);
+        System.out.println("pageNumber : " + pageNumber);
+        return questionService.list(keyword, pageNumber);
+    }
+
 
     @PostMapping("add")
     @PreAuthorize("isAuthenticated()")

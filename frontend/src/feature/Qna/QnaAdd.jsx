@@ -33,8 +33,8 @@ export function QnaAdd() {
   const [productName, setProductName] = useState(null);
   const [image, setImage] = useState();
   const radios = [
-    { name: "상품문의", value: "상품문의", selected: true },
-    { name: "문의내역", value: "문의내역" },
+    { name: "상품문의", value: "1", checked: true },
+    { name: "문의내역", value: "2" },
   ];
   let params = useParams();
   const navigate = useNavigate();
@@ -126,6 +126,10 @@ export function QnaAdd() {
     return <Spinner />;
   }*/
 
+  function handleQnalistButtonClick() {
+    navigate("/qna/list");
+  }
+
   return (
     <Row className="justify-content-center">
       <Col md={8} lg={6} className="mt-5">
@@ -144,7 +148,11 @@ export function QnaAdd() {
                   name="radio"
                   value={radio.value}
                   checked={radioValue === radio.value}
+                  sele
                   onChange={(e) => setRadioValue(e.currentTarget.value)}
+                  onClick={
+                    radio.value === "2" ? handleQnalistButtonClick : null
+                  }
                 >
                   {radio.name}
                 </ToggleButton>
