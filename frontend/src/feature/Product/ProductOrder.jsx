@@ -18,6 +18,11 @@ function Order(props) {
   const { state } = useLocation();
   // items가 배열이 아니더라도 자동으로 배열로 감싸줌.
   const items = state?.items ?? (state ? [state] : []);
+  const totalItemPrice = items.reduce(
+    (sum, item) => sum + item.price * item.quantity,
+    0,
+  );
+  const shippingFee = totalItemPrice >= 100000 ? 0 : 3000;
   const navigate = useNavigate();
   // TODO: 우편번호 상세주소 회원가입시 주소입력하면서 받으면 좋을듯
   useEffect(() => {
@@ -164,25 +169,64 @@ function Order(props) {
     <div className="order-container">
       <h2>결제하기</h2>
 
-      {/* 주문 상품 정보 */}
-      <div className="order-box">
-        <h4>주문 상품 정보</h4>
-        {items.map((item, idx) => (
-          <div key={idx} className="order-product">
-            <img src={item.imagePath} width={100} alt="상품" />
-            <div className="order-product-info">
-              <div>
-                <strong>{item.productName}</strong>
+      <div className="order-box" style={{ display: "flex", gap: "20px" }}>
+        {/* 왼쪽: 주문 상품 목록 */}
+        <div style={{ flex: 2 }}>
+          <h4>주문 상품 정보</h4>
+          {items.map((item, idx) => (
+            <div key={idx} className="order-product">
+              <img src={item.imagePath} width={100} alt="상품" />
+              <div className="order-product-info">
+                <div>
+                  <strong>{item.productName}</strong>
+                </div>
+                <div>
+                  {item.optionName ?? item.option} / {item.quantity}개
+                </div>
+                <div>{(item.price * item.quantity).toLocaleString()}원</div>
               </div>
-              <div>
-                {item.optionName ?? item.option} / {item.quantity}개
-              </div>
-              <div>{(item.price * item.quantity).toLocaleString()}원</div>
             </div>
+          ))}
+        </div>
+        {/* 오른쪽: 주문 요약 */}
+        <div
+          style={{
+            flex: 1,
+            background: "#f9f9f9",
+            padding: "16px",
+            border: "1px solid #ddd",
+            borderRadius: "8px",
+            height: "fit-content",
+          }}
+        >
+          <h5 style={{ marginBottom: "12px" }}>주문 요약</h5>
+          <div style={{ display: "flex", justifyContent: "space-between" }}>
+            <span>상품가격</span>
+            <span>{totalItemPrice.toLocaleString()}원</span>
           </div>
-        ))}
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "space-between",
+              marginTop: "6px",
+            }}
+          >
+            <span>배송비</span>
+            <span>+{shippingFee.toLocaleString()}원</span>
+          </div>
+          <hr />
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "space-between",
+              fontWeight: "bold",
+            }}
+          >
+            <span>총 주문금액</span>
+            <span>{(totalItemPrice + shippingFee).toLocaleString()}원</span>
+          </div>
+        </div>
       </div>
-
       {/* 주문자 정보 */}
       <div className="order-box">
         <h4>주문자 정보</h4>
