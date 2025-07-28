@@ -195,7 +195,14 @@ function ProductCart(props) {
   }
 
   function handleOrderButton() {
-    navigate("/product/order");
+    if (checkedIds.length === 0) {
+      alert("주문할 상품을 선택하세요.");
+      return;
+    }
+    const selectedItems = cartItems.filter((_, idx) =>
+      checkedIds.includes(idx),
+    );
+    navigate("/product/order", { state: { items: selectedItems } });
   }
 
   return (

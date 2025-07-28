@@ -14,8 +14,10 @@ function Order(props) {
   const [address, setAddress] = useState("");
   const [phone, setPhone] = useState("");
   const { state } = useLocation();
+  // items가 배열이 아니더라도 자동으로 배열로 감싸줌.
+  const items = state?.items ?? (state ? [state] : []);
   const navigate = useNavigate();
-
+  // TODO: 우편번호 상세주소 회원가입시 받을것인지?
   useEffect(() => {
     const token = localStorage.getItem("token");
     if (token) {
@@ -34,7 +36,7 @@ function Order(props) {
     }
   }, []);
 
-  if (!state) {
+  if (!state || items.length === 0) {
     return <div>잘못된 접근입니다.</div>;
   }
 
@@ -129,21 +131,20 @@ function Order(props) {
       {/* 주문 상품 정보 */}
       <div className="order-box">
         <h4>주문 상품 정보</h4>
-        <div className="order-product">
-          <img src={state.imagePath} width={100} alt="상품" />
-          <div className="order-product-info">
-            <div>
-              <strong>{state.productName}</strong>
-            </div>
-            <div>
-              {state.option} / {state.quantity}개
-            </div>
-            <div>{(state.price * state.quantity).toLocaleString()}원</div>
-            <div className="delivery-fee">
-              배송비 {shippingFee.toLocaleString()}원
+        {items.map((item, idx) => (
+          <div key={idx} className="order-product">
+            <img src={item.imagePath} width={100} alt="상품" />
+            <div className="order-product-info">
+              <div>
+                <strong>{item.productName}</strong>
+              </div>
+              <div>
+                {item.optionName ?? item.option} / {item.quantity}개
+              </div>
+              <div>{(item.price * item.quantity).toLocaleString()}원</div>
             </div>
           </div>
-        </div>
+        ))}
       </div>
 
       {/* 주문자 정보 */}
