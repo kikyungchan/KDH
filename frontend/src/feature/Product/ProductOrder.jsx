@@ -126,6 +126,9 @@ function Order(props) {
           const token = res.data.guestOrderToken;
           alert("비회원 주문 완료\n주문번호: " + token);
           localStorage.setItem("guestOrderToken", token);
+
+          localStorage.removeItem("guestCart");
+          localStorage.removeItem("guestOrderToken");
         })
         .catch((err) => {
           console.log(err);
