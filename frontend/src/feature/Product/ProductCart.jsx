@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { Col, Container, Row } from "react-bootstrap";
 import axios from "axios";
+import { useNavigate } from "react-router";
 
 function ProductCart(props) {
+  const navigate = useNavigate();
   const [showModal, setShowModal] = useState(false);
   const [selectedItem, setSelectedItem] = useState(null);
   const [selectedOptionId, setSelectedOptionId] = useState(null);
@@ -192,6 +194,10 @@ function ProductCart(props) {
     }
   }
 
+  function handleOrderButton() {
+    navigate("/product/order");
+  }
+
   return (
     <Container>
       <h2>장바구니</h2>
@@ -276,7 +282,7 @@ function ProductCart(props) {
         <button onClick={handleDeleteSelected} style={{ height: "40px" }}>
           선택 삭제
         </button>
-        <button style={{ height: "40px" }}>구매</button>
+
         <div
           className="ms-auto"
           style={{ textAlign: "right", fontSize: "0.8rem" }}
@@ -306,7 +312,11 @@ function ProductCart(props) {
         </div>
       </div>
       <hr />
-
+      <div className="text-center">
+        <button onClick={handleOrderButton} className="btn btn-dark mt-2">
+          주문하기
+        </button>
+      </div>
       {/*옵션/수량 변경 모달*/}
       {showModal && selectedItem && (
         <div

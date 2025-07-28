@@ -1,9 +1,6 @@
 package com.example.backend.product.controller;
 
-import com.example.backend.product.dto.ProductDto;
-import com.example.backend.product.dto.ProductEditDto;
-import com.example.backend.product.dto.ProductForm;
-import com.example.backend.product.dto.ProductOptionDto;
+import com.example.backend.product.dto.*;
 import com.example.backend.product.entity.Product;
 import com.example.backend.product.repository.ProductRepository;
 import com.example.backend.product.service.ProductService;
@@ -23,7 +20,13 @@ import java.util.List;
 public class ProductController {
 
     private final ProductService productService;
-    private final ProductRepository productRepository;
+
+    @PostMapping("/order")
+    public ResponseEntity<?> createOrder(@RequestBody OrderRequest req,
+                                         @RequestHeader("Authorization") String auth) {
+        productService.order(req, auth);
+        return ResponseEntity.ok().build();
+    }
 
     @PutMapping(value = "/edit", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public void editProduct(@RequestParam Long id,

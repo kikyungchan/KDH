@@ -1,19 +1,16 @@
 package com.example.backend.product.service;
 
-import com.example.backend.product.dto.ProductDto;
-import com.example.backend.product.dto.ProductEditDto;
-import com.example.backend.product.dto.ProductOptionDto;
-import com.example.backend.product.entity.Product;
-import com.example.backend.product.dto.ProductForm;
-import com.example.backend.product.entity.ProductImage;
-import com.example.backend.product.entity.ProductOption;
-import com.example.backend.product.repository.ProductImageRepository;
-import com.example.backend.product.repository.ProductOptionRepository;
-import com.example.backend.product.repository.ProductRepository;
+import com.example.backend.member.entity.Member;
+import com.example.backend.member.repository.MemberRepository;
+import com.example.backend.product.dto.*;
+import com.example.backend.product.entity.*;
+import com.example.backend.product.repository.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.oauth2.jwt.Jwt;
+import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -22,6 +19,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 @Service
 @Transactional
@@ -32,6 +30,10 @@ public class ProductService {
     private final ProductImageRepository productImageRepository;
     private final ProductOptionRepository productOptionRepository;
     private final S3Uploader s3Uploader;
+    private final JwtDecoder jwtDecoder;
+    private final MemberRepository memberRepository;
+    private final OrderRepository orderRepository;
+    private final OrderItemRepository orderItemRepository;
 
     // url에서 key만 따오는 메소드
     private String extractS3Key(String url) {
@@ -137,6 +139,7 @@ public class ProductService {
                     ProductOptionDto option = new ProductOptionDto();
                     option.setOptionName(opt.getOptionName());
                     option.setPrice(opt.getPrice());
+                    option.setId(opt.getId());
                     return option;
                 }).toList();
         dto.setOptions(options);
@@ -194,4 +197,33 @@ public class ProductService {
         }
     }
 
+    public void order(OrderRequest req, String auth) {
+        System.out.println("OrderRequest: " + req);
+        System.out.println("optionId: " + req.getOptionId());
+        String token = auth.replace("Bearer ", "");
+        Jwt decoded = jwtDecoder.decode(token);
+        String memberIdStr = decoded.getSubject();
+        Integer memberId = Integer.parseInt(memberIdStr);
+
+        Member member = memberRepository.findById(Long.valueOf(memberId)).get();
+        Product product = productRepository.findById(Long.valueOf(req.getProductId())).get();
+        Optional<ProductOption> option = productOptionRepository.findById(Long.valueOf(req.getOptionId()));
+
+        //주문 저장
+        Order order = new Order();
+        order.setMember(member);
+        order.setTotalPrice(req.getPrice() * req.getQuantity());
+        order.setShippingAddress(req.getShippingAddress());
+        orderRepository.save(order);
+
+        // 주문 상세 저장
+        OrderItem item = new OrderItem();
+        item.setOrder(order);
+        item.setProduct(product);
+        item.setOption(option.get());
+        item.setQuantity(req.getQuantity());
+        item.setPrice(req.getPrice());
+        orderItemRepository.save(item);
+
+    }
 }

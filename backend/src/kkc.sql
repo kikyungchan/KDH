@@ -3,7 +3,7 @@ CREATE TABLE product
 (
     id           INT AUTO_INCREMENT NOT NULL,
     product_name VARCHAR(500)       NOT NULL,
-    price        VARCHAR(255)       NOT NULL,
+    price        INT                NOT NULL,
     category     VARCHAR(255)       NOT NULL,
     info         VARCHAR(10000)     NULL,
     quantity     INT                NOT NULL,
@@ -58,28 +58,51 @@ CREATE TABLE cart
     inserted_at datetime           NOT NULL DEFAULT NOW(),
     CONSTRAINT pk_cart PRIMARY KEY (id)
 );
-
+# 외래키
 ALTER TABLE cart
     ADD CONSTRAINT FK_CART_ON_OPTION FOREIGN KEY (option_id) REFERENCES product_option (id);
 
 ALTER TABLE cart
     ADD CONSTRAINT FK_CART_ON_PRODUCT FOREIGN KEY (product_id) REFERENCES product (id);
 
-ALTER TABLE cart
-    ADD COLUMN member_id INT,
-    ADD CONSTRAINT fk_cart_member
-        FOREIGN KEY (member_id)
-            REFERENCES member (id);
+# order(주문정보) 테이블
+CREATE TABLE orders
+(
+    id               INT AUTO_INCREMENT PRIMARY KEY,
+    member_id        INT          NOT NULL,
+    order_date       DATETIME     NOT NULL DEFAULT NOW(),
+    total_price      INT          NOT NULL,
+    shipping_address VARCHAR(255) NOT NULL,
 
-SELECT *
-FROM cart
-WHERE member_id = 132
-  AND product_id = 2089
-  AND option_id = 1;
+    CONSTRAINT fk_orders_member
+        FOREIGN KEY (member_id) REFERENCES member (id)
+            ON DELETE CASCADE
+);
 
-DELETE
-FROM cart
-WHERE member_id = 132
-  AND product_id = 2089
-  AND option_id = 1
-LIMIT 1;
+DROP TABLE orders;
+
+
+# order_item(주문상세)
+# price: 주문 시점의 옵션 가격 (가격 변경 이력 보존용)
+# 외래키로 orders, product, product_option 참조
+CREATE TABLE order_item
+(
+    id         INT AUTO_INCREMENT PRIMARY KEY,
+    order_id   INT NOT NULL,
+    product_id INT NOT NULL,
+    option_id  INT NOT NULL,
+    quantity   INT NOT NULL,
+    price      INT NOT NULL,
+
+    CONSTRAINT fk_order_item_order
+        FOREIGN KEY (order_id) REFERENCES orders (id)
+            ON DELETE CASCADE,
+
+    CONSTRAINT fk_order_item_product
+        FOREIGN KEY (product_id) REFERENCES product (id)
+            ON DELETE CASCADE,
+
+    CONSTRAINT fk_order_item_option
+        FOREIGN KEY (option_id) REFERENCES product_option (id)
+            ON DELETE CASCADE
+);

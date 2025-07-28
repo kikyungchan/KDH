@@ -17,6 +17,7 @@ export function ProductDetail() {
     axios
       .get(`/api/product/view?id=${id}`)
       .then((res) => {
+        console.log("🔍 product:", res.data);
         setProduct(res.data);
       })
       .catch((err) => {
@@ -50,10 +51,6 @@ export function ProductDetail() {
   const detailImages = product.imagePath?.slice(1);
 
   function handleBuyButton() {
-    // if (!isLogged) {
-    // alert("로그인이 필요합니다.");
-    // navigate("/login");
-    // }
     if (!selectedOption) {
       alert("옵션을 선택해주세요.");
       return;
@@ -66,6 +63,7 @@ export function ProductDetail() {
         quantity: quantity,
         imagePath: thumbnail,
         option: selectedOption?.optionName || null,
+        optionId: selectedOption?.id || null,
       },
     });
   }

@@ -1,6 +1,6 @@
 CREATE TABLE member
 (
-    id       BIGINT AUTO_INCREMENT PRIMARY KEY,
+    id       INT AUTO_INCREMENT PRIMARY KEY,
     login_id VARCHAR(30) UNIQUE NOT NULL,
     password VARCHAR(200)       NOT NULL,
     name     VARCHAR(50)        NOT NULL,
@@ -12,5 +12,9 @@ CREATE TABLE member
 
 DROP TABLE member;
 
-SELECT id, login_id, password FROM member WHERE login_id = 'choi1563';  -- 로그인 기준
-SELECT id, login_id, password FROM member WHERE id = 128;
+SELECT id, login_id, password
+FROM member
+WHERE login_id = 'choi1563'; -- 로그인 기준
+SELECT id, login_id, password
+FROM member
+WHERE id = 128;
