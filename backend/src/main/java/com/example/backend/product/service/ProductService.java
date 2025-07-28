@@ -198,8 +198,6 @@ public class ProductService {
     }
 
     public void order(OrderRequest req, String auth) {
-        System.out.println("OrderRequest: " + req);
-        System.out.println("optionId: " + req.getOptionId());
         String token = auth.replace("Bearer ", "");
         Jwt decoded = jwtDecoder.decode(token);
         String memberIdStr = decoded.getSubject();
@@ -211,6 +209,8 @@ public class ProductService {
 
         //주문 저장
         Order order = new Order();
+        order.setLoginId(member.getLoginId());
+        order.setMemberName(member.getName());
         order.setMember(member);
         order.setTotalPrice(req.getPrice() * req.getQuantity());
         order.setShippingAddress(req.getShippingAddress());

@@ -79,7 +79,9 @@ CREATE TABLE orders
             ON DELETE CASCADE
 );
 
-DROP TABLE orders;
+ALTER TABLE orders
+    ADD COLUMN login_id    VARCHAR(30) NOT NULL,
+    ADD COLUMN member_name VARCHAR(50) NOT NULL;
 
 
 # order_item(주문상세)

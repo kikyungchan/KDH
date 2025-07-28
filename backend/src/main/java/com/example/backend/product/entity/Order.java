@@ -39,6 +39,12 @@ public class Order {
     @Column(name = "shipping_address", nullable = false)
     private String shippingAddress;
 
+    @Column(name = "login_id", nullable = false)
+    private String loginId;
+
+    @Column(name = "member_name", nullable = false)
+    private String memberName;
+
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
     @ToString.Exclude
     private List<OrderItem> orderItems = new ArrayList<>();
