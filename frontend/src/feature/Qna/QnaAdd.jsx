@@ -42,7 +42,7 @@ export function QnaAdd() {
   useEffect(() => {}, [category]);
 
   useEffect(() => {
-    axios.get(`/api/qna/view?id=${params.id}`).then((res) => {
+    axios.get(`/api/qna/add?id=${params.id}`).then((res) => {
       console.log(res.data);
       setProductId(res.data.id);
       console.log(res.data.id);

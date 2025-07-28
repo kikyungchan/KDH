@@ -39,8 +39,9 @@ function App() {
             <Route path="/signup" element={<MemberAdd />} />
             <Route path="/login" element={<MemberLogin />} />
             <Route path="/logout" element={<MemberLogout />} />
-            <Route path="/qna/view/:id" element={<QnaAdd />} />
+            <Route path="/qna/add/:id" element={<QnaAdd />} />
             <Route path="/qna/list/" element={<QnaList />} />
+            {/*<Route path="/qna/view/" element={<QnaView />} />*/}
             {/*<Route path="chat/chatting" element={<Chat username={username} />} />*/}
             <Route path="chat/chatting" element={<Chat />} />
           </Route>

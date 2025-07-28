@@ -15,7 +15,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import com.example.backend.member.repository.MemberRepository;
-import software.amazon.awssdk.awscore.util.SignerOverrideUtils;
 
 import java.util.List;
 import java.util.Map;
@@ -29,7 +28,7 @@ public class QuestionService {
     private final ProductRepository productRepository;
     private final QuestionRepository questionRepository;
 
-    public Map<String, ?> view(int id, Authentication authentication) {
+    public Map<String, ?> addquestion(int id, Authentication authentication) {
         Product product = productRepository.findById(Long.valueOf(String.valueOf(id))).get();
         List<String> imagePaths = product.getImages().stream().map(ProductImage::getStoredPath).toList();
 

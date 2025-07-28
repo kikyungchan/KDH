@@ -93,7 +93,7 @@ export function ProductDetail() {
 
   function handleQuestionButton() {
     setIsProcessing(true);
-    navigate(`/qna/view/${product.id}`);
+    navigate(`/qna/add/${product.id}`);
     /*axios
       .get(`/api/qna/view?${product.id}`)
       .then((res) => {

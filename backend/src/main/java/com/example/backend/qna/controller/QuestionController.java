@@ -6,7 +6,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
@@ -18,10 +17,10 @@ public class QuestionController {
 
     private final QuestionService questionService;
 
-    @GetMapping("view")
+    @GetMapping("add")
     @PreAuthorize("isAuthenticated()")
-    public Map<String, ?> view(@RequestParam int id, Authentication authentication) {
-        return questionService.view(id, authentication);
+    public Map<String, ?> addQuestion(@RequestParam int id, Authentication authentication) {
+        return questionService.addquestion(id, authentication);
     }
 
     @GetMapping("list")
