@@ -45,6 +45,9 @@ public class Order {
     @Column(name = "member_name", nullable = false)
     private String memberName;
 
+    @Column(nullable = false)
+    private String phone;
+
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
     @ToString.Exclude
     private List<OrderItem> orderItems = new ArrayList<>();

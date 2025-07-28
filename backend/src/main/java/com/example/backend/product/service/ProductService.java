@@ -211,6 +211,7 @@ public class ProductService {
         //주문 저장
         Order order = new Order();
         order.setLoginId(member.getLoginId());
+        order.setPhone(member.getPhone());
         order.setMemberName(member.getName());
         order.setMember(member);
         order.setTotalPrice(req.getPrice() * req.getQuantity());
