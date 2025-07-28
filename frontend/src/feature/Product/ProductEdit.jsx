@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate, useSearchParams } from "react-router";
-import Swipe from "bootstrap/js/src/util/swipe.js";
 import { Button, Col, Row } from "react-bootstrap";
+import "./css/ProductEdit.css";
 
 export function ProductEdit() {
   const [newImages, setNewImages] = useState([]); // 새로 추가된 파일들
@@ -137,45 +137,33 @@ export function ProductEdit() {
   return (
     <Row className="justify-content-center">
       <Col>
-        <div>
+        <div className="product-edit-container">
           <h2 className="mb-4">상품 정보수정</h2>
+
+          {/* 등록된 이미지 */}
           <div>
             <h4 className="mb-3">등록된 이미지</h4>
-            <div style={{ display: "flex", flexWrap: "wrap", gap: "10px" }}>
-              {imagePaths.map((path, idx) => {
-                return (
-                  <div key={idx} style={{ position: "relative" }}>
-                    <img
-                      src={path}
-                      alt={`상품 이미지 ${idx + 1}`}
-                      width="150"
-                      height="100"
-                      style={{ border: "1px solid #ccc", borderRadius: "4px" }}
-                    />
-                    <Button
-                      variant="danger"
-                      size="sm"
-                      style={{
-                        position: "absolute",
-                        top: 5,
-                        right: 5,
-                        padding: "2px 6px",
-                        fontSize: "12px",
-                        color: "white",
-                        backgroundColor: "#dc3545", // 부트스트랩 danger 색
-                        border: "none",
-                        borderRadius: "4px", //
-                        cursor: "pointer",
-                      }}
-                      onClick={() => handleImageDelete(idx)}
-                    >
-                      삭제
-                    </Button>
-                  </div>
-                );
-              })}
+            <div className="product-edit-image-box">
+              {imagePaths.map((path, idx) => (
+                <div key={idx} className="product-edit-image-wrapper">
+                  <img
+                    src={path}
+                    alt={`상품 이미지 ${idx + 1}`}
+                    className="product-edit-image"
+                  />
+                  <Button
+                    size="sm"
+                    className="product-edit-button-delete"
+                    onClick={() => handleImageDelete(idx)}
+                  >
+                    삭제
+                  </Button>
+                </div>
+              ))}
             </div>
           </div>
+
+          {/* 새 이미지 추가 */}
           <div>
             <h4 className="mb-3">새 이미지 추가</h4>
             <input
@@ -185,55 +173,37 @@ export function ProductEdit() {
               onChange={handleAddImages}
             />
             {newImages.length > 0 && (
-              <ul style={{ marginTop: "10px" }}>
+              <ul className="product-edit-file-list">
                 {newImages.map((file, idx) => (
-                  <li key={idx} style={{ fontSize: "14px" }}>
+                  <li key={idx} className="product-edit-file-item">
                     {file.name}
                   </li>
                 ))}
               </ul>
             )}
           </div>
-          <div
-            style={{
-              display: "flex",
-              flexWrap: "wrap",
-              gap: "10px",
-              marginTop: "10px",
-            }}
-          >
+
+          {/* 미리보기 */}
+          <div className="product-edit-preview-box">
             {previewImages.map((url, idx) => (
-              <div key={idx} style={{ position: "relative" }}>
+              <div key={idx} className="product-edit-image-wrapper">
                 <img
                   src={url}
                   alt={`추가 이미지 ${idx + 1}`}
-                  width="150"
-                  height="100"
-                  style={{ border: "1px solid #aaa", borderRadius: "4px" }}
+                  className="product-edit-preview"
                 />
-                {/*  미리보기 취소버튼*/}
                 <Button
-                  variant="light"
                   size="sm"
+                  className="product-edit-button-cancel"
                   onClick={() => handleRemoveNewImage(idx)}
-                  style={{
-                    position: "absolute",
-                    top: 5,
-                    right: 5,
-                    padding: "2px 6px",
-                    fontSize: "12px",
-                    color: "white",
-                    backgroundColor: "#dc3545", // 부트스트랩 danger 색
-                    border: "none",
-                    borderRadius: "4px", //
-                    cursor: "pointer",
-                  }}
                 >
                   취소
                 </Button>
               </div>
             ))}
           </div>
+
+          {/* 입력폼 */}
           <div className="mb-2">
             상품명
             <input

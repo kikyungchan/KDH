@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { Button, Col, Container, Modal, Row, Spinner } from "react-bootstrap";
 import { useNavigate, useSearchParams } from "react-router";
-import "./ProductDetail.css";
+import "./css/ProductDetail.css";
 
 export function ProductDetail() {
   const [showModal, setShowModal] = useState(false);
@@ -17,7 +17,6 @@ export function ProductDetail() {
     axios
       .get(`/api/product/view?id=${id}`)
       .then((res) => {
-        console.log("🔍 product:", res.data);
         setProduct(res.data);
       })
       .catch((err) => {

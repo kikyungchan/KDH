@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router";
 import axios from "axios";
+import "./css/Order.css";
 
 function Order(props) {
   const [address, setAddress] = useState("");
@@ -64,23 +65,23 @@ function Order(props) {
   }
 
   return (
-    <div style={{ maxWidth: "700px", margin: "40px auto", padding: "20px" }}>
+    <div className="order-container">
       <h2>결제하기</h2>
 
       {/* 주문 상품 정보 */}
-      <div
-        style={{ border: "1px solid #ddd", padding: "16px", marginTop: "20px" }}
-      >
+      <div className="order-box">
         <h4>주문 상품 정보</h4>
-        <div style={{ display: "flex", alignItems: "center", gap: "16px" }}>
+        <div className="order-product">
           <img src={state.imagePath} width={100} alt="상품" />
-          <div>
-            <div style={{ fontWeight: "bold" }}>{state.productName}</div>
+          <div className="order-product-info">
+            <div>
+              <strong>{state.productName}</strong>
+            </div>
             <div>
               {state.option} / {state.quantity}개
             </div>
             <div>{state.price.toLocaleString()}원</div>
-            <div style={{ color: "#666", fontSize: "0.9em" }}>
+            <div className="delivery-fee">
               배송비 {shippingFee.toLocaleString()}원
             </div>
           </div>
@@ -88,64 +89,43 @@ function Order(props) {
       </div>
 
       {/* 주문자 정보 */}
-      {/* 주문자 정보 */}
-      <div
-        style={{ border: "1px solid #ddd", padding: "16px", marginTop: "20px" }}
-      >
+      <div className="order-box">
         <h4>주문자 정보</h4>
-
-        {/* 이름 + 연락처 */}
-        <div style={{ display: "flex", gap: "8px", marginBottom: "8px" }}>
-          <input placeholder="이름" style={{ flex: 1, padding: "8px" }} />
-          <input placeholder="연락처" style={{ flex: 1, padding: "8px" }} />
+        <div className="order-input-row">
+          <input placeholder="이름" className="order-input-half" />
+          <input placeholder="연락처" className="order-input-half" />
         </div>
-
-        {/*주소*/}
         <input
           type="text"
           value={address}
           readOnly
-          style={{ width: "100%", padding: "8px" }}
+          className="order-input-full"
         />
       </div>
 
       {/* 배송 정보 */}
-      <div
-        style={{ border: "1px solid #ddd", padding: "16px", marginTop: "20px" }}
-      >
+      <div className="order-box">
         <h4>배송 정보</h4>
         <div style={{ marginBottom: "10px" }}>
           <input type="checkbox" />
           <label style={{ marginLeft: "6px" }}>주문자 정보와 동일</label>
         </div>
-        <input
-          placeholder="수령인"
-          style={{ width: "49%", padding: "8px", marginBottom: "8px" }}
-        />
-        <input
-          placeholder="연락처"
-          style={{ width: "49%", padding: "8px", marginLeft: "2%" }}
-        />
-        <div style={{ display: "flex", marginTop: "8px", gap: "8px" }}>
-          <input placeholder="우편번호" style={{ flex: 1, padding: "8px" }} />
-          <button style={{ padding: "8px" }}>주소찾기</button>
+        <div className="order-input-row">
+          <input placeholder="수령인" className="order-input-half" />
+          <input placeholder="연락처" className="order-input-half" />
         </div>
-        <input
-          placeholder="주소"
-          style={{ width: "100%", marginTop: "8px", padding: "8px" }}
-        />
-        <input
-          placeholder="상세주소"
-          style={{ width: "100%", marginTop: "8px", padding: "8px" }}
-        />
+        <div className="order-input-zipcode">
+          <input placeholder="우편번호" className="order-input-full" />
+          <button className="order-input-full">주소찾기</button>
+        </div>
+        <input placeholder="주소" className="order-input-full" />
+        <input placeholder="상세주소" className="order-input-full" />
       </div>
 
       {/* 배송 메모 */}
-      <div
-        style={{ border: "1px solid #ddd", padding: "16px", marginTop: "20px" }}
-      >
+      <div className="order-box">
         <h4>배송 메모</h4>
-        <select style={{ width: "100%", padding: "8px" }}>
+        <select className="order-select">
           <option>배송메모를 선택해 주세요.</option>
           <option>문 앞에 두고 가주세요</option>
           <option>부재 시 전화주세요</option>
@@ -154,29 +134,11 @@ function Order(props) {
       </div>
 
       {/* 버튼 영역 */}
-      <div
-        style={{
-          marginTop: "30px",
-          display: "flex",
-          justifyContent: "center",
-          gap: "10px",
-        }}
-      >
-        <button
-          onClick={handleOrderButton}
-          style={{
-            padding: "10px 20px",
-            background: "black",
-            color: "white",
-            border: "none",
-          }}
-        >
+      <div className="order-buttons">
+        <button onClick={handleOrderButton} className="order-button confirm">
           결제하기
         </button>
-        <button
-          onClick={handleCancelButton}
-          style={{ padding: "10px 20px", background: "#ccc", border: "none" }}
-        >
+        <button onClick={handleCancelButton} className="order-button cancel">
           취소
         </button>
       </div>

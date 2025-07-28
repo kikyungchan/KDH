@@ -1,0 +1,69 @@
+.product-edit-container {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.product-edit-image-box {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.product-edit-image-wrapper {
+    position: relative;
+}
+
+.product-edit-image {
+    width: 150px;
+    height: 100px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.product-edit-button-delete {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    padding: 2px 6px;
+    font-size: 12px;
+    color: white;
+    background-color: #dc3545;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.product-edit-preview-box {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.product-edit-preview {
+    width: 150px;
+    height: 100px;
+    border: 1px solid #aaa;
+    border-radius: 4px;
+}
+
+.product-edit-button-cancel {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    padding: 2px 6px;
+    font-size: 12px;
+    color: white;
+    background-color: #dc3545;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.product-edit-file-list {
+    margin-top: 10px;
+}
+
+.product-edit-file-item {
+    font-size: 14px;
+}

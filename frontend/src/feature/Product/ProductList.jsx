@@ -1,9 +1,8 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
-import "./ProductList.css";
-// import { Link, useSearchParams } from "react-router-dom";
+import "./css/ProductList.css";
 import { Link, useSearchParams } from "react-router";
-import { Col, Container, Row } from "react-bootstrap";
+import { Col, Row } from "react-bootstrap";
 
 export function ProductList() {
   const [searchParams, setSearchParams] = useSearchParams();
