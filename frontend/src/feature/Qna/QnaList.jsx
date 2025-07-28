@@ -46,7 +46,7 @@ export function QnaList() {
 
   function handleTableRowClick(id) {
     // 게시물 보기로 이동
-    navigate(`/question/${id}`);
+    navigate(`/qna/view?${id}`);
   }
 
   const pageNumbers = [];
@@ -85,7 +85,7 @@ export function QnaList() {
                     name="radio"
                     value={radio.value}
                     checked={idx % 2 ? true : false}
-                    onChange={(e) => setRadioValue(e.currentTarget.value)}
+                    // onChange={(e) => setRadioValue(e.currentTarget.value)}
                     // onClick={
                     // radio.value === "2" ? handleQnalistButtonClick : null
                     //}

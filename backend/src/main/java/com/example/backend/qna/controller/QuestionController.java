@@ -19,12 +19,14 @@ public class QuestionController {
 
     @GetMapping("add")
     @PreAuthorize("isAuthenticated()")
+//    todo : 로그인 안했으면 추가 못하게
     public Map<String, ?> addQuestion(@RequestParam int id, Authentication authentication) {
         return questionService.addquestion(id, authentication);
     }
 
     @GetMapping("list")
     @PreAuthorize("isAuthenticated()")
+    //    todo : 로그인 안했으면 안보이게
     public Map<String, Object> getAllBoards(
             @RequestParam(value = "q", defaultValue = "") String keyword,
             @RequestParam(value = "p", defaultValue = "1") Integer pageNumber) {
@@ -34,11 +36,19 @@ public class QuestionController {
         return questionService.list(keyword, pageNumber);
     }
 
+    @GetMapping("view")
+    @PreAuthorize("isAuthenticated()")
+    public void view(@RequestParam int id, Authentication authentication) {
+        // todo : view list 추가
+        return;
+    }
+
 
     @PostMapping("add")
     @PreAuthorize("isAuthenticated()")
     public ResponseEntity<?> add(@RequestBody QuestionAddForm dto,
                                  Authentication authentication) {
+        //    todo : 로그인 안했으면 추가 못하게
         // 유효성 검사
         boolean result = questionService.validateForAdd(dto);
 

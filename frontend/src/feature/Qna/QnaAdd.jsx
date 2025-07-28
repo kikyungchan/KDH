@@ -84,11 +84,6 @@ export function QnaAdd() {
       }
     } else {
       setIsProcessing(true);
-      console.log(title);
-      console.log(content);
-      console.log(category);
-      console.log(user);
-      console.log(productId);
       axios
         .post("/api/qna/add", {
           title: title,
