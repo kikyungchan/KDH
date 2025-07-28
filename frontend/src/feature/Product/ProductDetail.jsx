@@ -5,6 +5,8 @@ import { useNavigate, useSearchParams } from "react-router";
 import "./css/ProductDetail.css";
 
 export function ProductDetail() {
+  const [showCartConfirmModal, setShowCartConfirmModal] = useState(false);
+  const [cartItems, setCartItems] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [selectedOption, setSelectedOption] = useState(null);
   const [quantity, setQuantity] = useState(1);
@@ -12,7 +14,6 @@ export function ProductDetail() {
   const [searchParams] = useSearchParams();
   const id = searchParams.get("id");
   const navigate = useNavigate();
-
   useEffect(() => {
     axios
       .get(`/api/product/view?id=${id}`)
@@ -54,17 +55,50 @@ export function ProductDetail() {
       alert("옵션을 선택해주세요.");
       return;
     }
-    navigate("/product/order", {
-      state: {
-        productId: product.id,
-        productName: product.productName,
-        price: selectedOption ? selectedOption.price : product.price,
-        quantity: quantity,
-        imagePath: thumbnail,
-        option: selectedOption?.optionName || null,
-        optionId: selectedOption?.id || null,
-      },
-    });
+
+    const token = localStorage.getItem("token");
+
+    if (token) {
+      axios
+        .get("/api/product/cart", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        })
+        .then((res) => {
+          if (res.data.length > 0) {
+            setCartItems(res.data);
+            setShowCartConfirmModal(true);
+          } else {
+            navigate("/product/order", {
+              state: {
+                productId: product.id,
+                productName: product.productName,
+                price: selectedOption ? selectedOption.price : product.price,
+                quantity: quantity,
+                imagePath: thumbnail,
+                option: selectedOption?.optionName || null,
+                optionId: selectedOption?.id || null,
+              },
+            });
+          }
+        })
+        .catch((err) => {
+          console.error(err);
+        });
+    } else {
+      navigate("/product/order", {
+        state: {
+          productId: product.id,
+          productName: product.productName,
+          price: selectedOption ? selectedOption.price : product.price,
+          quantity: quantity,
+          imagePath: thumbnail,
+          option: selectedOption?.optionName || null,
+          optionId: selectedOption?.id || null,
+        },
+      });
+    }
   }
 
   function handleCartButton() {
@@ -366,6 +400,128 @@ export function ProductDetail() {
             }}
           >
             장바구니
+          </button>
+        </div>
+      </Modal>
+
+      {/*  구매하기 버튼 눌렀을때 장바구니에 보관한 물품이 있을시 띄우는 모달*/}
+      <Modal
+        show={showCartConfirmModal}
+        onHide={() => setShowCartConfirmModal(false)}
+        centered
+      >
+        <Modal.Body
+          className="text-center d-flex justify-content-center align-items-center"
+          style={{
+            height: "130px",
+            fontSize: "14px",
+            padding: "0",
+          }}
+        >
+          <p style={{ marginBottom: "0", fontSize: "16px" }}>
+            장바구니에 담긴 상품도 함께 구매하시겠습니까?
+          </p>
+        </Modal.Body>
+        <div
+          style={{
+            display: "flex",
+            borderTop: "1px solid #ddd",
+            borderBottomLeftRadius: "10px",
+            borderBottomRightRadius: "10px",
+            overflow: "hidden",
+          }}
+        >
+          <button
+            onClick={() => setShowCartConfirmModal(false)}
+            style={{
+              flex: 1,
+              padding: "12px 0",
+              border: "none",
+              background: "white",
+              fontWeight: "bold",
+              borderRight: "1px solid #ddd",
+            }}
+          >
+            아니요
+          </button>
+          <button
+            onClick={() => {
+              // 현재 상품을 장바구니에 추가한 후 이동
+              const token = localStorage.getItem("token");
+              const cartItem = {
+                productId: product.id,
+                optionName: selectedOption.optionName,
+                quantity: quantity,
+              };
+
+              if (token) {
+                axios
+                  .post("/api/product/cart", cartItem, {
+                    headers: {
+                      Authorization: `Bearer ${token}`,
+                    },
+                  })
+                  .then(() => {
+                    setShowCartConfirmModal(false);
+                    navigate("/product/cart");
+                  })
+                  .catch((err) => {
+                    console.error("장바구니 추가 실패", err);
+                    alert("장바구니 추가에 실패했습니다.");
+                  });
+              } else {
+                // 비회원일 경우 localStorage에 추가
+                const enrichedOptions = (product.options || []).map(
+                  (opt, idx) => ({
+                    ...opt,
+                    id: idx + 1,
+                  }),
+                );
+
+                const selectedId = enrichedOptions.find(
+                  (opt) => opt.optionName === selectedOption.optionName,
+                )?.id;
+
+                const cartItem = {
+                  productId: product.id,
+                  optionId: selectedId,
+                  productName: product.productName,
+                  optionName: selectedOption.optionName,
+                  price: selectedOption.price,
+                  quantity: quantity,
+                  imagePath: thumbnail,
+                  options: enrichedOptions,
+                };
+
+                const existingCart = JSON.parse(
+                  localStorage.getItem("guestCart") || "[]",
+                );
+                const existingIndex = existingCart.findIndex(
+                  (item) =>
+                    item.productId === cartItem.productId &&
+                    item.optionName === cartItem.optionName,
+                );
+
+                if (existingIndex > -1) {
+                  existingCart[existingIndex].quantity += cartItem.quantity;
+                } else {
+                  existingCart.push(cartItem);
+                }
+
+                localStorage.setItem("guestCart", JSON.stringify(existingCart));
+                setShowCartConfirmModal(false);
+                navigate("/product/cart");
+              }
+            }}
+            style={{
+              flex: 1,
+              padding: "12px 0",
+              border: "none",
+              background: "white",
+              fontWeight: "bold",
+            }}
+          >
+            장바구니로 이동
           </button>
         </div>
       </Modal>
