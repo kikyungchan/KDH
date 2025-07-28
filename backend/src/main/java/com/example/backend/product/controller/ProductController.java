@@ -1,5 +1,7 @@
 package com.example.backend.product.controller;
 
+import com.example.backend.member.dto.MemberDto;
+import com.example.backend.member.repository.MemberRepository;
 import com.example.backend.product.dto.*;
 import com.example.backend.product.entity.Product;
 import com.example.backend.product.repository.ProductRepository;
@@ -9,6 +11,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.oauth2.jwt.Jwt;
+import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -20,6 +24,14 @@ import java.util.List;
 public class ProductController {
 
     private final ProductService productService;
+    private final JwtDecoder jwtDecoder;
+    private final MemberRepository memberRepository;
+
+    @GetMapping("/member/info")
+    public ResponseEntity<?> getMemberInfo(@RequestHeader("Authorization") String auth) {
+        MemberDto dto = productService.getmemberinfo(auth);
+        return ResponseEntity.ok(dto);
+    }
 
     @PostMapping("/order")
     public ResponseEntity<?> createOrder(@RequestBody OrderRequest req,

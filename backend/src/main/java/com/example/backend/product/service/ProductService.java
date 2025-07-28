@@ -1,5 +1,6 @@
 package com.example.backend.product.service;
 
+import com.example.backend.member.dto.MemberDto;
 import com.example.backend.member.entity.Member;
 import com.example.backend.member.repository.MemberRepository;
 import com.example.backend.product.dto.*;
@@ -224,6 +225,21 @@ public class ProductService {
         item.setQuantity(req.getQuantity());
         item.setPrice(req.getPrice());
         orderItemRepository.save(item);
+
+    }
+
+    public MemberDto getmemberinfo(String auth) {
+        String token = auth.replace("Bearer ", "");
+        Jwt decoded = jwtDecoder.decode(token);
+        Long memberId = Long.valueOf(decoded.getSubject());
+        Member member = memberRepository.findById(memberId).get();
+
+        MemberDto dto = new MemberDto();
+        dto.setLoginId(member.getLoginId());
+        dto.setName(member.getName());
+        dto.setAddress(member.getAddress());
+
+        return dto;
 
     }
 }
