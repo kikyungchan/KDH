@@ -83,6 +83,8 @@ ALTER TABLE orders
     ADD COLUMN login_id    VARCHAR(30) NOT NULL,
     ADD COLUMN member_name VARCHAR(50) NOT NULL;
 
+ALTER TABLE orders
+    ADD COLUMN phone VARCHAR(30) NOT NULL;
 
 # order_item(주문상세)
 # price: 주문 시점의 옵션 가격 (가격 변경 이력 보존용)

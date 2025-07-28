@@ -238,6 +238,7 @@ public class ProductService {
         dto.setLoginId(member.getLoginId());
         dto.setName(member.getName());
         dto.setAddress(member.getAddress());
+        dto.setPhone(member.getPhone());
 
         return dto;
 

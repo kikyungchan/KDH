@@ -4,7 +4,9 @@ import axios from "axios";
 import "./css/Order.css";
 
 function Order(props) {
+  const [name, setName] = useState("");
   const [address, setAddress] = useState("");
+  const [phone, setPhone] = useState("");
   const { state } = useLocation();
   const navigate = useNavigate();
 
@@ -19,6 +21,8 @@ function Order(props) {
         })
         .then((res) => {
           setAddress(res.data.address);
+          setName(res.data.name);
+          setPhone(res.data.phone);
         })
         .catch((err) => {});
     }
@@ -42,9 +46,9 @@ function Order(props) {
       const payload = {
         productId: state.productId,
         quantity: state.quantity,
-        optionId: state.optionId, //
+        optionId: state.optionId,
         price: state.price,
-        shippingAddress: address, // 추후 회원가입시 작성한 주소로 대체
+        shippingAddress: address,
       };
       axios
         .post("/api/product/order", payload, {
@@ -92,13 +96,26 @@ function Order(props) {
       <div className="order-box">
         <h4>주문자 정보</h4>
         <div className="order-input-row">
-          <input placeholder="이름" className="order-input-half" />
-          <input placeholder="연락처" className="order-input-half" />
+          <input
+            type="text"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            placeholder="이름"
+            className="order-input-half"
+          />
+          <input
+            type="text"
+            value={phone}
+            onChange={(e) => setPhone(e.target.value)}
+            placeholder="연락처"
+            className="order-input-half"
+          />
         </div>
         <input
           type="text"
           value={address}
-          readOnly
+          placeholder="주소"
+          onChange={(e) => setAddress(e.target.value)}
           className="order-input-full"
         />
       </div>

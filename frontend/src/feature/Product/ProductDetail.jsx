@@ -112,7 +112,7 @@ export function ProductDetail() {
         price: selectedOption.price,
         quantity: quantity,
         imagePath: thumbnail,
-        options: enrichedOptions, // ✅ 반드시 이걸로 저장!
+        options: enrichedOptions,
       };
       const existingCart = JSON.parse(
         localStorage.getItem("guestCart") || "[]",
