@@ -5,6 +5,7 @@ import com.example.backend.product.dto.CartItemDto;
 import com.example.backend.product.dto.CartResponseDto;
 import com.example.backend.product.dto.CartUpdateRequest;
 import com.example.backend.product.service.CartService;
+import com.example.backend.product.service.ProductService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -21,6 +22,14 @@ import java.util.List;
 @RequestMapping("/api/product")
 public class CartController {
     private final CartService cartService;
+    private final ProductService productService;
+
+    @DeleteMapping("/cart/deleteAll")
+    public ResponseEntity<?> deleteAllCart(@RequestHeader("Authorization") String auth) {
+        cartService.deleteAllCart(auth);
+        return ResponseEntity.ok().build();
+    }
+
 
     @DeleteMapping("/cart/delete")
     public ResponseEntity<?> deleteCartItem(@RequestBody List<CartDeleteRequest> deleteList,

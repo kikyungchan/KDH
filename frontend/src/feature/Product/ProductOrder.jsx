@@ -94,6 +94,14 @@ function Order(props) {
           },
         })
         .then((res) => {
+          //주문 성공후 장바구니 비우기
+          return axios.delete("/api/product/cart/deleteAll", {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          });
+        })
+        .then((res) => {
           alert("주문이 완료되었습니다.");
         })
         .catch((err) => {

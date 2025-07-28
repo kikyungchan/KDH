@@ -13,6 +13,8 @@ import com.example.backend.product.repository.CartRepository;
 import com.example.backend.product.repository.ProductOptionRepository;
 import com.example.backend.product.repository.ProductRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.oauth2.jwt.Jwt;
+import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -28,6 +30,7 @@ public class CartService {
     private final ProductOptionRepository productOptionRepository;
     private final LoginUtill loginUtill;
     private final MemberRepository memberRepository;
+    private final JwtDecoder jwtDecoder;
 
 
     public void add(CartItemDto dto) {
@@ -100,5 +103,12 @@ public class CartService {
             cart.setQuantity(req.getQuantity());
             cartRepository.save(cart);
         }
+    }
+
+    public void deleteAllCart(String auth) {
+        String token = auth.replace("Bearer ", "");
+        Jwt jwt = jwtDecoder.decode(token);
+        Long memberId = Long.parseLong(jwt.getSubject());
+        cartRepository.deleteByMemberId(memberId);
     }
 }
