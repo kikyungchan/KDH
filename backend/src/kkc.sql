@@ -87,6 +87,28 @@ ALTER TABLE orders
     ADD COLUMN product_name VARCHAR(255),
     ADD COLUMN option_name  VARCHAR(255);
 
+# 비회원 주문정보 테이블
+CREATE TABLE guest_orders
+(
+    id                INT PRIMARY KEY AUTO_INCREMENT,
+    guest_name        VARCHAR(100),
+    guest_phone       VARCHAR(50),
+    receiver_name     VARCHAR(100),
+    receiver_phone    VARCHAR(50),
+    shipping_address  VARCHAR(255),
+    detailed_address  VARCHAR(255),
+    postal_code       VARCHAR(20),
+    product_id        INT,
+    product_name      VARCHAR(255),
+    option_id         INT,
+    option_name       VARCHAR(255),
+    quantity          INT,
+    price             INT,
+    memo              VARCHAR(255),
+    guest_order_token VARCHAR(255), -- UUID 등
+    created_at        DATETIME DEFAULT NOW()
+);
+
 
 # order_item(주문상세)
 # price: 주문 시점의 옵션 가격 (가격 변경 이력 보존용)
