@@ -26,7 +26,6 @@ function Order(props) {
           },
         })
         .then((res) => {
-          console.log("res.data:", res.data);
           setAddress(res.data.address);
           setName(res.data.name);
           setPhone(res.data.phone);
@@ -49,18 +48,21 @@ function Order(props) {
 
   function handleOrderButton() {
     const token = localStorage.getItem("token");
-    console.log("state=" + state);
+    const orderMemo = memo === "직접 작성" ? customMemo : memo;
+
+    const payload = {
+      productId: state.productId,
+      productName: state.productName,
+      optionName: state.optionName,
+      quantity: state.quantity,
+      optionId: state.optionId,
+      price: state.price,
+      shippingAddress: address,
+      memo: orderMemo,
+    };
+
     if (token) {
-      const payload = {
-        productId: state.productId,
-        productName: state.productName,
-        optionName: state.optionName,
-        quantity: state.quantity,
-        optionId: state.optionId,
-        price: state.price,
-        shippingAddress: address,
-        memo: memo === "직접 작성" ? customMemo : memo,
-      };
+      // 회원 주문
       axios
         .post("/api/product/order", payload, {
           headers: {
@@ -75,7 +77,18 @@ function Order(props) {
           alert("주문 실패");
         });
     } else {
-      alert("비회원은 아직 미구현");
+      // 비회원
+      axios
+        .post("/api/product/order/guest", payload)
+        .then((res) => {
+          const token = res.data.guestOrderToken;
+          alert("비회원 주문 완료\n주문번호: " + token);
+          localStorage.setItem("guestOrderToken", token);
+        })
+        .catch((err) => {
+          console.log(err);
+          alert("주문 실패");
+        });
     }
   }
 

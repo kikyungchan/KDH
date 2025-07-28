@@ -3,7 +3,9 @@ package com.example.backend.product.controller;
 import com.example.backend.member.dto.MemberDto;
 import com.example.backend.member.repository.MemberRepository;
 import com.example.backend.product.dto.*;
+import com.example.backend.product.entity.GuestOrder;
 import com.example.backend.product.entity.Product;
+import com.example.backend.product.repository.GuestOrderRepository;
 import com.example.backend.product.repository.ProductRepository;
 import com.example.backend.product.service.ProductService;
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -17,6 +19,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequiredArgsConstructor
@@ -26,6 +29,40 @@ public class ProductController {
     private final ProductService productService;
     private final JwtDecoder jwtDecoder;
     private final MemberRepository memberRepository;
+    private final GuestOrderRepository guestOrderRepository;
+
+
+    // 비회원 주문
+    @PostMapping("/order/guest")
+    public GuestOrder createGuestOrder(@RequestBody GuestOrderRequestDto dto) {
+
+        GuestOrder order = new GuestOrder();
+        order.setGuestName(dto.getGuestName());
+        order.setGuestPhone(dto.getGuestPhone());
+        order.setGuestEmail(dto.getGuestEmail());
+        order.setReceiverName(dto.getReceiverName());
+        order.setReceiverPhone(dto.getReceiverPhone());
+        order.setShippingAddress(dto.getShippingAddress());
+        order.setDetailedAddress(dto.getDetailedAddress());
+        order.setPostalCode(dto.getPostalCode());
+        order.setProductId(dto.getProductId());
+        order.setProductName(dto.getProductName());
+        order.setOptionId(dto.getOptionId());
+        order.setOptionName(dto.getOptionName());
+        order.setQuantity(dto.getQuantity());
+        order.setPrice(dto.getPrice());
+        order.setMemo(dto.getMemo());
+
+        // guestOrderToken(주문번호) 자동생성(UUID)
+        String token = UUID.randomUUID().toString();
+        order.setGuestOrderToken(token);
+
+        //저장
+        GuestOrder saved = guestOrderRepository.save(order);
+
+        // 클라이언트에서 주문번호 확인할 수 있도록 전체 객체 또는 token만 리턴
+        return saved;
+    }
 
     @GetMapping("/member/info")
     public ResponseEntity<?> getMemberInfo(@RequestHeader("Authorization") String auth) {
