@@ -1,4 +1,13 @@
-import { Badge, Col, Pagination, Row, Spinner, Table } from "react-bootstrap";
+import {
+  Badge,
+  ButtonGroup,
+  Col,
+  Pagination,
+  Row,
+  Spinner,
+  Table,
+  ToggleButton,
+} from "react-bootstrap";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate, useSearchParams } from "react-router";
@@ -9,6 +18,15 @@ export function QnaList() {
   const [pageInfo, setPageInfo] = useState(null);
   const [searchParams, setSearchParams] = useSearchParams("1");
   const navigate = useNavigate();
+  const STATUS_TEXT = {
+    open: "대기중",
+    answered: "답변완료",
+    closed: "종료",
+  };
+  const radios = [
+    { name: "상품문의", value: "1", checked: true },
+    { name: "문의내역", value: "2" },
+  ];
 
   useEffect(() => {
     axios
@@ -17,7 +35,6 @@ export function QnaList() {
         console.log("잘 될 때 코드");
         setQuestionList(res.data.questionList);
         setPageInfo(res.data.pageInfo);
-        console.log(res.data);
       })
       .catch((err) => {
         console.log("잘 안될 때 코드");
@@ -56,14 +73,36 @@ export function QnaList() {
         <Col md={8} lg={6} className="mt-5">
           <div className="container">
             <h2 className="mb-4">문의 내역</h2>
+            <div>
+              {/* todo : onclick 시 상품 질문 페이지로 넘어가게 */}
+              <ButtonGroup>
+                {radios.map((radio, idx) => (
+                  <ToggleButton
+                    key={idx}
+                    id={`radio-${idx}`}
+                    type="radio"
+                    variant={idx % 2 ? "outline-primary" : "outline-primary"}
+                    name="radio"
+                    value={radio.value}
+                    checked={idx % 2 ? true : false}
+                    onChange={(e) => setRadioValue(e.currentTarget.value)}
+                    // onClick={
+                    // radio.value === "2" ? handleQnalistButtonClick : null
+                    //}
+                  >
+                    {radio.name}
+                  </ToggleButton>
+                ))}
+              </ButtonGroup>
+            </div>
+            <br />
             {questionList.length > 0 ? (
               <Table striped={true} hover={true}>
                 <thead>
-                  {/* todo : 이어서 추가하고 DB 까지 연결 */}
                   <tr>
                     <th style={{ width: "70px" }}>#</th>
-                    <th style={{ width: "140px" }}>답변여부</th>
-                    <th style={{ width: "70px" }}>제목</th>
+                    <th style={{ width: "100px" }}>답변여부</th>
+                    <th style={{ width: "270px" }}>제목</th>
                     <th
                       className="d-none d-md-table-cell"
                       style={{ width: "100px" }}
@@ -72,13 +111,13 @@ export function QnaList() {
                     </th>
                     <th
                       className="d-none d-lg-table-cell"
-                      style={{ width: "200px" }}
+                      style={{ width: "100px" }}
                     >
                       작성일시
                     </th>
                     <th
                       className="d-none d-lg-table-cell"
-                      style={{ width: "200px" }}
+                      style={{ width: "100px" }}
                     >
                       수정일시
                     </th>
@@ -92,14 +131,14 @@ export function QnaList() {
                       onClick={() => handleTableRowClick(question.id)}
                     >
                       <td>{question.id}</td>
-                      <td>{question.status}</td>
+                      <td>{STATUS_TEXT[question.status] || ""}</td>
                       <td>
                         <div className="d-flex gap-2">
                           <span>{question.title}</span>
                         </div>
                       </td>
                       <td className="d-none d-md-table-cell">
-                        {question.nickName}
+                        {question.name}
                       </td>
                       <td className="d-none d-lg-table-cell">
                         {question.timesAgo}

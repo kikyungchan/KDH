@@ -16,8 +16,8 @@ public class QuestionListDto {
     private Integer id;
     private String title;
     //    private Product Product;
-//    private String userid;
     private String status;
+    private String name;
     private int category;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;

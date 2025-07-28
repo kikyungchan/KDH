@@ -14,10 +14,12 @@ public interface QuestionRepository extends JpaRepository<Question, Integer> {
                                     q.id,
                                     q.title,
                                     q.status,
+                                    m.name,
                                     q.category,
                                     q.createdAt,
                                     q.updatedAt)
-                        FROM Question q
+                        FROM Question q JOIN Member m
+                                    ON q.user.loginId = m.loginId
                         WHERE q.title LIKE %:keyword%
                            OR q.content LIKE %:keyword%
                         ORDER BY q.id DESC
