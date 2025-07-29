@@ -320,7 +320,7 @@ export function ProductDetail() {
               />
             )}
             <div style={{ flex: 1 }}>
-              <h2>{product.productName}!!!</h2>
+              <h2>{product.productName}</h2>
               <p>{product.price.toLocaleString()}원</p>
               <p>{product.info}</p>
               <hr />
