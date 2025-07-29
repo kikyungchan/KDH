@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate, useSearchParams } from "react-router";
-import Swipe from "bootstrap/js/src/util/swipe.js";
-import { Button, Col, Row } from "react-bootstrap";
+import { Col, Container, Row } from "react-bootstrap";
+import "./css/ProductEdit.css";
 
 export function ProductEdit() {
   const [newImages, setNewImages] = useState([]); // 새로 추가된 파일들
@@ -135,155 +135,135 @@ export function ProductEdit() {
   }
 
   return (
-    <Row className="justify-content-center">
-      <Col>
-        <div>
-          <h2 className="mb-4">상품 정보수정</h2>
-          <div>
-            <h4 className="mb-3">등록된 이미지</h4>
-            <div style={{ display: "flex", flexWrap: "wrap", gap: "10px" }}>
-              {imagePaths.map((path, idx) => {
-                return (
-                  <div key={idx} style={{ position: "relative" }}>
+    <Container>
+      <Row className="justify-content-center">
+        <Col className="mb-3">
+          <div className="product-edit-container">
+            <h2 className="mb-4">상품 정보수정</h2>
+
+            {/* 등록된 이미지 */}
+            <div>
+              <h4 className="mb-3">등록된 이미지</h4>
+              <div className="product-edit-image-box">
+                {imagePaths.map((path, idx) => (
+                  <div key={idx} className="product-edit-image-wrapper">
                     <img
                       src={path}
                       alt={`상품 이미지 ${idx + 1}`}
-                      width="150"
-                      height="100"
-                      style={{ border: "1px solid #ccc", borderRadius: "4px" }}
+                      className="product-edit-image"
                     />
-                    <Button
-                      variant="danger"
-                      size="sm"
-                      style={{
-                        position: "absolute",
-                        top: 5,
-                        right: 5,
-                        padding: "2px 6px",
-                        fontSize: "12px",
-                        color: "white",
-                        backgroundColor: "#dc3545", // 부트스트랩 danger 색
-                        border: "none",
-                        borderRadius: "4px", //
-                        cursor: "pointer",
-                      }}
+                    <button
+                      className="product-edit-button-cancel"
                       onClick={() => handleImageDelete(idx)}
                     >
-                      삭제
-                    </Button>
+                      ×
+                    </button>
                   </div>
-                );
-              })}
+                ))}
+              </div>
+            </div>
+
+            {/* 새 이미지 추가 */}
+            <div className="product-edit-file-upload">
+              <label htmlFor="fileInput" className="product-edit-file-label">
+                파일 선택
+              </label>
+              <span className="product-edit-file-count">
+                파일 {newImages.length}개
+              </span>
+              <input
+                id="fileInput"
+                type="file"
+                accept="image/*"
+                multiple
+                onChange={handleAddImages}
+                className="product-edit-file-input"
+              />
+            </div>
+
+            {/* 미리보기 */}
+            <div className="product-edit-preview-box">
+              {previewImages.map((url, idx) => (
+                <div key={idx} className="product-edit-image-wrapper">
+                  <img
+                    src={url}
+                    alt={`추가 이미지 ${idx + 1}`}
+                    className="product-edit-preview"
+                  />
+                  <button
+                    className="product-edit-button-cancel"
+                    onClick={() => handleRemoveNewImage(idx)}
+                  >
+                    ×
+                  </button>
+                </div>
+              ))}
+            </div>
+
+            {/* 입력폼 */}
+            <div className="product-edit-field">
+              <label className="product-edit-label">상품명</label>
+              <input
+                name="productName"
+                onChange={handleChange}
+                value={form.productName}
+                type="text"
+                className="product-edit-input"
+              />
+            </div>
+            <div className="product-edit-field">
+              <label className="product-edit-label">가격</label>
+              <input
+                name="price"
+                onChange={handleChange}
+                value={form.price}
+                type="text"
+                className="product-edit-input"
+              />
+            </div>
+            <div className="product-edit-field">
+              <label className="product-edit-label">카테고리</label>
+              <input
+                name="category"
+                onChange={handleChange}
+                value={form.category}
+                type="text"
+                className="product-edit-input"
+              />
+            </div>
+            <div className="product-edit-field">
+              <label className="product-edit-label">수량</label>
+              <input
+                name="quantity"
+                onChange={handleChange}
+                value={form.quantity}
+                type="text"
+                className="product-edit-input"
+              />
+            </div>
+            <div className="product-edit-field">
+              <label className="product-edit-label">상품설명</label>
+              <textarea
+                value={form.info}
+                onChange={handleChange}
+                name="info"
+                className="product-edit-input"
+              ></textarea>
+            </div>
+            <div className="product-edit-submit-btns">
+              <button className="product-edit-btn confirm" onClick={handleSave}>
+                저장
+              </button>
+              <button
+                className="product-edit-btn cancel"
+                onClick={() => navigate(-1)}
+              >
+                취소
+              </button>
             </div>
           </div>
-          <div>
-            <h4 className="mb-3">새 이미지 추가</h4>
-            <input
-              type="file"
-              accept="image/*"
-              multiple
-              onChange={handleAddImages}
-            />
-            {newImages.length > 0 && (
-              <ul style={{ marginTop: "10px" }}>
-                {newImages.map((file, idx) => (
-                  <li key={idx} style={{ fontSize: "14px" }}>
-                    {file.name}
-                  </li>
-                ))}
-              </ul>
-            )}
-          </div>
-          <div
-            style={{
-              display: "flex",
-              flexWrap: "wrap",
-              gap: "10px",
-              marginTop: "10px",
-            }}
-          >
-            {previewImages.map((url, idx) => (
-              <div key={idx} style={{ position: "relative" }}>
-                <img
-                  src={url}
-                  alt={`추가 이미지 ${idx + 1}`}
-                  width="150"
-                  height="100"
-                  style={{ border: "1px solid #aaa", borderRadius: "4px" }}
-                />
-                {/*  미리보기 취소버튼*/}
-                <Button
-                  variant="light"
-                  size="sm"
-                  onClick={() => handleRemoveNewImage(idx)}
-                  style={{
-                    position: "absolute",
-                    top: 5,
-                    right: 5,
-                    padding: "2px 6px",
-                    fontSize: "12px",
-                    color: "white",
-                    backgroundColor: "#dc3545", // 부트스트랩 danger 색
-                    border: "none",
-                    borderRadius: "4px", //
-                    cursor: "pointer",
-                  }}
-                >
-                  취소
-                </Button>
-              </div>
-            ))}
-          </div>
-          <div className="mb-2">
-            상품명
-            <input
-              name="productName"
-              onChange={handleChange}
-              value={form.productName}
-              type="text"
-            />
-          </div>
-          <div className="mb-2">
-            가격
-            <input
-              name="price"
-              onChange={handleChange}
-              value={form.price}
-              type="text"
-            />
-          </div>
-          <div className="mb-2">
-            카테고리
-            <input
-              name="category"
-              onChange={handleChange}
-              value={form.category}
-              type="text"
-            />
-          </div>
-          <div className="mb-2">
-            수량
-            <input
-              name="quantity"
-              onChange={handleChange}
-              value={form.quantity}
-              type="text"
-            />
-          </div>
-          <div className="mb-2">
-            상품설명
-            <textarea
-              value={form.info}
-              onChange={handleChange}
-              name="info"
-            ></textarea>
-          </div>
-          <div className="mb-2">
-            <button onClick={handleSave}>저장</button>
-            <button onClick={() => navigate(-1)}>취소</button>
-          </div>
-        </div>
-      </Col>
-    </Row>
+        </Col>
+      </Row>
+    </Container>
   );
 }

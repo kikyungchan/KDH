@@ -1,19 +1,17 @@
 package com.example.backend.product.service;
 
-import com.example.backend.product.dto.ProductDto;
-import com.example.backend.product.dto.ProductEditDto;
-import com.example.backend.product.dto.ProductOptionDto;
-import com.example.backend.product.entity.Product;
-import com.example.backend.product.dto.ProductForm;
-import com.example.backend.product.entity.ProductImage;
-import com.example.backend.product.entity.ProductOption;
-import com.example.backend.product.repository.ProductImageRepository;
-import com.example.backend.product.repository.ProductOptionRepository;
-import com.example.backend.product.repository.ProductRepository;
+import com.example.backend.member.dto.MemberDto;
+import com.example.backend.member.entity.Member;
+import com.example.backend.member.repository.MemberRepository;
+import com.example.backend.product.dto.*;
+import com.example.backend.product.entity.*;
+import com.example.backend.product.repository.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.oauth2.jwt.Jwt;
+import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -22,6 +20,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 @Service
 @Transactional
@@ -32,6 +31,10 @@ public class ProductService {
     private final ProductImageRepository productImageRepository;
     private final ProductOptionRepository productOptionRepository;
     private final S3Uploader s3Uploader;
+    private final JwtDecoder jwtDecoder;
+    private final MemberRepository memberRepository;
+    private final OrderRepository orderRepository;
+    private final OrderItemRepository orderItemRepository;
 
     // url에서 key만 따오는 메소드
     private String extractS3Key(String url) {
@@ -92,6 +95,8 @@ public class ProductService {
             dto.setId(product.getId());
             dto.setProductName(product.getProductName());
             dto.setPrice(product.getPrice());
+            dto.setQuantity(product.getQuantity());
+            dto.setInsertedAt(product.getInsertedAt());
             if (!product.getImages().isEmpty()) {
                 dto.setImagePath(List.of(product.getImages().get(0).getStoredPath()));
             }
@@ -137,6 +142,7 @@ public class ProductService {
                     ProductOptionDto option = new ProductOptionDto();
                     option.setOptionName(opt.getOptionName());
                     option.setPrice(opt.getPrice());
+                    option.setId(opt.getId());
                     return option;
                 }).toList();
         dto.setOptions(options);
@@ -194,4 +200,64 @@ public class ProductService {
         }
     }
 
+    public void order(List<OrderRequest> reqList, String auth) {
+        String token = auth.replace("Bearer ", "");
+        Jwt decoded = jwtDecoder.decode(token);
+        String memberIdStr = decoded.getSubject();
+        Integer memberId = Integer.parseInt(memberIdStr);
+        Member member = memberRepository.findById(Long.valueOf(memberId)).get();
+
+
+        for (OrderRequest req : reqList) {
+            Product product = productRepository.findById(Long.valueOf(req.getProductId())).get();
+            // 재고 차감
+            product.setQuantity(product.getQuantity() - req.getQuantity());
+
+            Order order = new Order();
+            order.setMember(member);
+            order.setMemo(req.getMemo());
+            order.setProductName(product.getProductName());
+            order.setLoginId(member.getLoginId());
+            order.setPhone(member.getPhone());
+            order.setMemberName(member.getName());
+            order.setShippingAddress(req.getShippingAddress());
+            order.setTotalPrice(req.getPrice() * req.getQuantity());
+
+            if (req.getOptionId() != null) {
+                ProductOption option = productOptionRepository.findById(Long.valueOf(req.getOptionId())).get();
+                order.setOptionName(option.getOptionName());
+            }
+
+            orderRepository.save(order);
+
+            OrderItem item = new OrderItem();
+            item.setOrder(order);
+            item.setProduct(product);
+            item.setQuantity(req.getQuantity());
+            item.setPrice(req.getPrice());
+
+            if (req.getOptionId() != null) {
+                ProductOption option = productOptionRepository.findById(Long.valueOf(req.getOptionId())).get();
+                item.setOption(option);
+            }
+
+            orderItemRepository.save(item);
+        }
+    }
+
+    public MemberDto getmemberinfo(String auth) {
+        String token = auth.replace("Bearer ", "");
+        Jwt decoded = jwtDecoder.decode(token);
+        Long memberId = Long.valueOf(decoded.getSubject());
+        Member member = memberRepository.findById(memberId).get();
+
+        MemberDto dto = new MemberDto();
+        dto.setLoginId(member.getLoginId());
+        dto.setName(member.getName());
+        dto.setAddress(member.getAddress());
+        dto.setPhone(member.getPhone());
+
+        return dto;
+
+    }
 }

@@ -1,19 +1,28 @@
 package com.example.backend.product.controller;
 
-import com.example.backend.product.dto.ProductDto;
-import com.example.backend.product.dto.ProductEditDto;
-import com.example.backend.product.dto.ProductForm;
-import com.example.backend.product.dto.ProductOptionDto;
+import com.example.backend.member.dto.MemberDto;
+import com.example.backend.member.repository.MemberRepository;
+import com.example.backend.product.dto.*;
+import com.example.backend.product.entity.GuestOrder;
+import com.example.backend.product.entity.Product;
+import com.example.backend.product.repository.GuestOrderRepository;
+import com.example.backend.product.repository.ProductRepository;
 import com.example.backend.product.service.ProductService;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.oauth2.jwt.Jwt;
+import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.security.SecureRandom;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 
 @RestController
 @RequiredArgsConstructor
@@ -21,8 +30,79 @@ import java.util.List;
 public class ProductController {
 
     private final ProductService productService;
-    ;
+    private final JwtDecoder jwtDecoder;
+    private final MemberRepository memberRepository;
+    private final GuestOrderRepository guestOrderRepository;
+    private final ProductRepository productRepository;
 
+    public class OrderTokenGenerator {
+        private static final SecureRandom random = new SecureRandom();
+
+        public static String generateToken() {
+            StringBuilder sb = new StringBuilder();
+            for (int i = 0; i < 12; i++) {
+                sb.append(random.nextInt(10));
+            }
+            return sb.toString();
+        }
+    }
+
+    // 비회원 주문
+    @PostMapping("/order/guest")
+    public ResponseEntity<?> createGuestOrder(@RequestBody List<GuestOrderRequestDto> dto) {
+        List<GuestOrder> result = new ArrayList<>();
+        // 비회원 주문 시
+        for (GuestOrderRequestDto dtoList : dto) {
+            Product product = productRepository.findById(Long.valueOf(dtoList.getProductId())).get();
+            if (product.getQuantity() < dtoList.getQuantity()) {
+                throw new RuntimeException("재고가 부족합니다.");
+            }
+            product.setQuantity(product.getQuantity() - dtoList.getQuantity());
+            productRepository.save(product);
+
+            // 주문객체 생성
+            GuestOrder order = new GuestOrder();
+            order.setGuestName(dtoList.getGuestName());
+            order.setGuestPhone(dtoList.getGuestPhone());
+            order.setReceiverName(dtoList.getReceiverName());
+            order.setReceiverPhone(dtoList.getReceiverPhone());
+            order.setShippingAddress(dtoList.getShippingAddress());
+            order.setDetailedAddress(dtoList.getDetailedAddress());
+            order.setPostalCode(dtoList.getPostalCode());
+            order.setProductId(dtoList.getProductId());
+            order.setProductName(dtoList.getProductName());
+            order.setOptionId(dtoList.getOptionId());
+            order.setOptionName(dtoList.getOptionName());
+            order.setQuantity(dtoList.getQuantity());
+            order.setPrice(dtoList.getPrice());
+            order.setMemo(dtoList.getMemo());
+            order.setTotalPrice(dtoList.getTotalPrice());
+
+            String token = OrderTokenGenerator.generateToken();
+            order.setGuestOrderToken(token);
+
+            GuestOrder saved = guestOrderRepository.save(order);
+            result.add(saved);
+        }
+
+        // 여러 건 주문이지만 첫 번째 주문번호를 리턴하거나 전체를 리턴
+        return ResponseEntity.ok(Map.of(
+                "guestOrderToken", result.get(0).getGuestOrderToken()  // 예시
+        ));
+    }
+
+    @GetMapping("/member/info")
+    public ResponseEntity<?> getMemberInfo(@RequestHeader("Authorization") String auth) {
+        MemberDto dto = productService.getmemberinfo(auth);
+        return ResponseEntity.ok(dto);
+    }
+
+    @PostMapping("/order")
+    public ResponseEntity<?> createOrder(@RequestBody List<OrderRequest> reqList,
+                                         @RequestHeader("Authorization") String auth) {
+        productService.order(reqList, auth);
+        return ResponseEntity.ok().build();
+    }
 
     @PutMapping(value = "/edit", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public void editProduct(@RequestParam Long id,

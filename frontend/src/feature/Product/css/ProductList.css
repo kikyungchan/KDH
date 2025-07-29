@@ -1,0 +1,95 @@
+/* ProductList.css */
+.product-list-container {
+    padding: 2rem;
+}
+
+.product-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+    justify-content: flex-start;
+}
+
+.product-card {
+    text-decoration: none;
+    color: inherit;
+    display: block;
+    width: 180px; /* 카드 너비 고정 */
+    padding: 0;
+    border: none;
+    box-shadow: none;
+}
+
+.product-image-wrapper {
+    width: 100%;
+    height: 200px; /* 이미지 영역 높이 고정 */
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #ffffff;
+}
+
+.product-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+/* 이미지 자체 */
+.product-image {
+    height: 100%;
+    width: auto;
+    object-fit: contain;
+}
+
+/* 상품정보 */
+.product-info-wrapper {
+    text-align: center;
+    padding: 10px 0;
+    min-height: 100px;
+    /*display: flex;*/
+    flex-direction: column;
+    justify-content: flex-start;
+}
+
+/* 상품명 */
+.product-name {
+    font-weight: bold;
+    margin-bottom: 4px;
+    color: #333;
+}
+
+/* 가격 */
+.product-price {
+    font-size: 15px;
+    color: #555;
+    margin-bottom: 4px;
+}
+
+/* SOLD OUT 뱃지 - 가격 아래 표시 */
+.sold-out-badge {
+    font-size: 11px;
+    background-color: #444;
+    color: #fff;
+    padding: 3px 6px;
+    border-radius: 4px;
+    display: inline-block;
+}
+
+.product-badges {
+    display: flex;
+    justify-content: center;
+    gap: 6px;
+    margin-top: 4px;
+}
+
+.new-badge {
+    font-size: 11px;
+    background-color: #a7f3d0; /* 스카이그린 */
+    color: #065f46;
+    padding: 3px 6px;
+    border-radius: 4px;
+    font-weight: bold;
+    display: inline-block;
+}
+

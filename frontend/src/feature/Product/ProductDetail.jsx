@@ -1,11 +1,12 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { Button, Col, Container, Modal, Row, Spinner } from "react-bootstrap";
-// import { useNavigate, useSearchParams } from "react-router-dom";
 import { useNavigate, useSearchParams } from "react-router";
-import "./ProductDetail.css";
+import "./css/ProductDetail.css";
 
 export function ProductDetail() {
+  const [showCartConfirmModal, setShowCartConfirmModal] = useState(false);
+  const [cartItems, setCartItems] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [selectedOption, setSelectedOption] = useState(null);
   const [quantity, setQuantity] = useState(1);
@@ -13,7 +14,6 @@ export function ProductDetail() {
   const [searchParams] = useSearchParams();
   const id = searchParams.get("id");
   const navigate = useNavigate();
-
   useEffect(() => {
     axios
       .get(`/api/product/view?id=${id}`)
@@ -51,14 +51,238 @@ export function ProductDetail() {
   const detailImages = product.imagePath?.slice(1);
 
   function handleBuyButton() {
-    // if (!isLogged) {
-    // alert("로그인이 필요합니다.");
-    // navigate("/login");
-    // }
-    if (!selectedOption) {
+    if (product.options?.length > 0 && !selectedOption) {
       alert("옵션을 선택해주세요.");
       return;
     }
+
+    if (quantity > product.quantity) {
+      alert(`재고가 ${product.quantity}개 남아있습니다.`);
+      return;
+    }
+
+    const token = localStorage.getItem("token");
+
+    if (token) {
+      axios
+        .get("/api/product/cart", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        })
+        .then((res) => {
+          if (res.data.length > 0) {
+            setCartItems(res.data);
+            setShowCartConfirmModal(true);
+          } else {
+            navigate("/product/order", {
+              state: {
+                productId: product.id,
+                productName: product.productName,
+                price: selectedOption ? selectedOption.price : product.price,
+                quantity: quantity,
+                imagePath: thumbnail,
+                option: selectedOption?.optionName || null,
+                optionId: selectedOption?.id || null,
+              },
+            });
+          }
+        })
+        .catch((err) => {
+          console.error(err);
+        });
+    } else {
+      navigate("/product/order", {
+        state: {
+          productId: product.id,
+          productName: product.productName,
+          price: selectedOption ? selectedOption.price : product.price,
+          quantity: quantity,
+          imagePath: thumbnail,
+          option: selectedOption?.optionName || null,
+          optionId: selectedOption?.id || null,
+        },
+      });
+    }
+  }
+
+  function handleCartButton() {
+    if (product.options?.length > 0 && !selectedOption) {
+      alert("옵션을 선택해주세요.");
+      return;
+    }
+
+    if (quantity > product.quantity) {
+      alert(`재고가 ${product.quantity}개 남아있습니다.`);
+      return;
+    }
+
+    const token = localStorage.getItem("token");
+    // 로그인유저
+    if (token) {
+      const cartItem = {
+        productId: product.id,
+        optionName: selectedOption ? selectedOption.optionName : null,
+        quantity: quantity,
+      };
+      axios
+        .post("/api/product/cart", cartItem, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        })
+        .then((res) => {
+          setShowModal(true);
+        })
+        .catch((err) => {})
+        .finally(() => {});
+    } else {
+      //
+      if (product.options?.length > 0) {
+        // 옵션 있는 상품
+        const enrichedOptions = (product.options || []).map((opt, idx) => ({
+          ...opt,
+          id: idx + 1,
+        }));
+
+        const selectedId = enrichedOptions.find(
+          (opt) => opt.optionName === selectedOption.optionName,
+        )?.id;
+
+        const cartItem = {
+          productId: product.id,
+          optionId: selectedId,
+          productName: product.productName,
+          optionName: selectedOption.optionName,
+          price: selectedOption.price,
+          quantity: quantity,
+          imagePath: thumbnail,
+          options: enrichedOptions,
+        };
+
+        const existingCart = JSON.parse(
+          localStorage.getItem("guestCart") || "[]",
+        );
+        const existingIndex = existingCart.findIndex(
+          (item) =>
+            item.productId === cartItem.productId &&
+            item.optionName === cartItem.optionName,
+        );
+        if (existingIndex > -1) {
+          existingCart[existingIndex].quantity += cartItem.quantity;
+        } else {
+          existingCart.push(cartItem);
+        }
+        localStorage.setItem("guestCart", JSON.stringify(existingCart));
+      } else {
+        // 옵션 없는 상품
+        const cartItem = {
+          productId: product.id,
+          productName: product.productName,
+          price: product.price,
+          quantity: quantity,
+          imagePath: thumbnail,
+          optionName: null,
+          optionId: null,
+          options: [],
+        };
+
+        const existingCart = JSON.parse(
+          localStorage.getItem("guestCart") || "[]",
+        );
+        const existingIndex = existingCart.findIndex(
+          (item) => item.productId === cartItem.productId,
+        );
+        if (existingIndex > -1) {
+          existingCart[existingIndex].quantity += cartItem.quantity;
+        } else {
+          existingCart.push(cartItem);
+        }
+        localStorage.setItem("guestCart", JSON.stringify(existingCart));
+      }
+
+      setShowModal(true);
+    }
+  }
+
+  function handleGoToCartWithCurrenProduct() {
+    const token = localStorage.getItem("token");
+
+    if (product.options?.length > 0 && !selectedOption) {
+      alert("옵션을 선택해주세요.");
+      return;
+    }
+
+    if (token) {
+      const cartItem = {
+        productId: product.id,
+        optionName: selectedOption.optionName,
+        quantity: quantity,
+      };
+      axios
+        .post("/api/product/cart", cartItem, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        })
+        .then(() => {
+          setShowCartConfirmModal(false);
+          navigate("/product/cart");
+        })
+        .catch((err) => {
+          console.error("장바구니 추가 실패", err);
+          alert("장바구니 추가에 실패했습니다.");
+        });
+    } else {
+      const enrichedOptions = (product.options || []).map((opt, idx) => ({
+        ...opt,
+        id: idx + 1,
+      }));
+
+      const selectedId = enrichedOptions.find(
+        (opt) => opt.optionName === selectedOption.optionName,
+      )?.id;
+
+      const cartItem = {
+        productId: product.id,
+        optionId: selectedId,
+        productName: product.productName,
+        optionName: selectedOption.optionName,
+        price: selectedOption.price,
+        quantity: quantity,
+        imagePath: thumbnail,
+        options: enrichedOptions,
+      };
+
+      const existingCart = JSON.parse(
+        localStorage.getItem("guestCart") || "[]",
+      );
+      const existingIndex = existingCart.findIndex(
+        (item) =>
+          item.productId === cartItem.productId &&
+          item.optionName === cartItem.optionName,
+      );
+
+      if (existingIndex > -1) {
+        existingCart[existingIndex].quantity += cartItem.quantity;
+      } else {
+        existingCart.push(cartItem);
+      }
+
+      localStorage.setItem("guestCart", JSON.stringify(existingCart));
+      setShowCartConfirmModal(false);
+      navigate("/product/cart");
+    }
+  }
+
+  function handleBuyCurrentProductOnly() {
+    if (product.options?.length > 0 && !selectedOption) {
+      alert("옵션을 선택해주세요.");
+      return;
+    }
+
+    setShowCartConfirmModal(false);
+
     navigate("/product/order", {
       state: {
         productId: product.id,
@@ -67,27 +291,9 @@ export function ProductDetail() {
         quantity: quantity,
         imagePath: thumbnail,
         option: selectedOption?.optionName || null,
+        optionId: selectedOption?.id || null,
       },
     });
-  }
-
-  function handleCartButton() {
-    if (!selectedOption) {
-      alert("옵션을 선택해주세요.");
-      return;
-    }
-    const cartItem = {
-      productId: product.id,
-      optionName: selectedOption.optionName,
-      quantity: quantity,
-    };
-    axios
-      .post("/api/product/cart", cartItem)
-      .then((res) => {
-        setShowModal(true);
-      })
-      .catch((err) => {})
-      .finally(() => {});
   }
 
   return (
@@ -114,31 +320,33 @@ export function ProductDetail() {
               />
             )}
             <div style={{ flex: 1 }}>
-              <h2>{product.productName}!!!</h2>
+              <h2>{product.productName}</h2>
               <p>{product.price.toLocaleString()}원</p>
+              <p>{product.info}</p>
               <hr />
-              <p>{product.info}귀여운 공룡이에요~</p>
 
               {/*옵션선택 드롭다운*/}
-              <div style={{ margin: "10px 0" }}>
-                <label>선택:</label>
-                <select
-                  onChange={(e) => {
-                    const selected = product.options?.find(
-                      (opt) => opt.optionName === e.target.value,
-                    );
-                    setSelectedOption(selected);
-                  }}
-                  style={{ padding: "5px", marginLeft: "10px" }}
-                >
-                  <option value="">옵션을 선택하세요</option>
-                  {product.options?.map((opt, idx) => (
-                    <option key={idx} value={opt.optionName}>
-                      {opt.optionName} - {opt.price.toLocaleString()}원
-                    </option>
-                  ))}
-                </select>
-              </div>
+              {product.options?.length > 0 && (
+                <div style={{ margin: "10px 0" }}>
+                  <label>선택:</label>
+                  <select
+                    onChange={(e) => {
+                      const selected = product.options?.find(
+                        (opt) => opt.optionName === e.target.value,
+                      );
+                      setSelectedOption(selected);
+                    }}
+                    style={{ padding: "5px", marginLeft: "10px" }}
+                  >
+                    <option value="">옵션을 선택하세요</option>
+                    {product.options?.map((opt, idx) => (
+                      <option key={idx} value={opt.optionName}>
+                        {opt.optionName} - {opt.price.toLocaleString()}원
+                      </option>
+                    ))}
+                  </select>
+                </div>
+              )}
               {/* 수량 선택*/}
               <div style={{ marginTop: "10px" }}>
                 <div
@@ -181,37 +389,61 @@ export function ProductDetail() {
               </div>
 
               {/*버튼*/}
-              <div style={{ marginTop: "2px", display: "flex", gap: "10px" }}>
-                <button
-                  onClick={handleBuyButton}
-                  style={{
-                    border: "3",
-                    width: "150px",
-                    backgroundColor: "black",
-                    color: "white",
-                  }}
-                >
-                  구매하기
-                </button>
-                <button
-                  onClick={handleCartButton}
-                  style={{ border: "3", width: "150px" }}
-                >
-                  장바구니
-                </button>
-                {/*Todo: 수정삭제버튼 관리자만 보이게 수정*/}
-                <Button className="btn-secondary" onClick={handleEditButton}>
-                  수정
-                </Button>
-                <Button className="btn-danger" onClick={handleDeleteButton}>
-                  삭제
-                </Button>
-              </div>
+              {product.quantity === 0 ? (
+                // 품절 상태일 경우
+                <div style={{ marginTop: "2px" }}>
+                  <button
+                    disabled
+                    style={{
+                      width: "50%",
+                      backgroundColor: "#ccc",
+                      color: "#fff",
+                      padding: "12px",
+                      fontWeight: "bold",
+                      border: "none",
+                      cursor: "not-allowed",
+                    }}
+                  >
+                    품절된 상품입니다
+                  </button>
+                </div>
+              ) : (
+                // 재고 있는 경우 기존 버튼들
+                <div style={{ marginTop: "2px", display: "flex", gap: "10px" }}>
+                  <button
+                    onClick={handleBuyButton}
+                    style={{
+                      border: "3",
+                      width: "150px",
+                      backgroundColor: "black",
+                      color: "white",
+                    }}
+                  >
+                    구매하기
+                  </button>
+                  <button
+                    onClick={handleCartButton}
+                    style={{ border: "3", width: "150px" }}
+                  >
+                    장바구니
+                  </button>
+                  {/* 관리자용 수정/삭제 버튼 */}
+                  {/*Todo: 수정삭제버튼 관리자만 보이게 수정*/}
+                  <Button className="btn-secondary" onClick={handleEditButton}>
+                    수정
+                  </Button>
+                  <Button className="btn-danger" onClick={handleDeleteButton}>
+                    삭제
+                  </Button>
+                </div>
+              )}
             </div>
           </div>
           <hr />
-          {/* 상세 이미지 목록 */}
+          {/* 본문영역 */}
           <div style={{ marginTop: "35px" }}>
+            <h2>이거진짜좋음 이걸안사?</h2>
+            {/* 본문영역이미지 */}
             <div
               style={{ display: "flex", flexDirection: "column", gap: "15px" }}
             >
@@ -323,6 +555,61 @@ export function ProductDetail() {
             }}
           >
             장바구니
+          </button>
+        </div>
+      </Modal>
+
+      {/*  구매하기 버튼 눌렀을때 장바구니에 보관한 물품이 있을시 띄우는 모달*/}
+      <Modal
+        show={showCartConfirmModal}
+        onHide={() => setShowCartConfirmModal(false)}
+        centered
+      >
+        <Modal.Body
+          className="text-center d-flex justify-content-center align-items-center"
+          style={{
+            height: "130px",
+            fontSize: "14px",
+            padding: "0",
+          }}
+        >
+          <p style={{ marginBottom: "0", fontSize: "16px" }}>
+            장바구니에 담긴 상품도 함께 구매하시겠습니까?
+          </p>
+        </Modal.Body>
+        <div
+          style={{
+            display: "flex",
+            borderTop: "1px solid #ddd",
+            borderBottomLeftRadius: "10px",
+            borderBottomRightRadius: "10px",
+            overflow: "hidden",
+          }}
+        >
+          <button
+            onClick={handleBuyCurrentProductOnly}
+            style={{
+              flex: 1,
+              padding: "12px 0",
+              border: "none",
+              background: "white",
+              fontWeight: "bold",
+              borderRight: "1px solid #ddd",
+            }}
+          >
+            아니요
+          </button>
+          <button
+            onClick={handleGoToCartWithCurrenProduct}
+            style={{
+              flex: 1,
+              padding: "12px 0",
+              border: "none",
+              background: "white",
+              fontWeight: "bold",
+            }}
+          >
+            장바구니로 이동
           </button>
         </div>
       </Modal>

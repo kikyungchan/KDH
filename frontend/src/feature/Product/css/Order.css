@@ -1,0 +1,77 @@
+/* Order.css */
+
+.order-container {
+    max-width: 700px;
+    margin: 40px auto;
+    padding: 20px;
+}
+
+.order-box {
+    border: 1px solid #ddd;
+    padding: 16px;
+    margin-top: 20px;
+}
+
+.order-product {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.order-product-info div {
+    margin-bottom: 4px;
+}
+
+.order-product-info .delivery-fee {
+    color: #666;
+    font-size: 0.9em;
+}
+
+.order-input-row {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 8px;
+}
+
+.order-input-half {
+    flex: 1;
+    padding: 8px;
+}
+
+.order-input-full {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 8px;
+}
+
+.order-input-zipcode {
+    display: flex;
+    margin-top: 8px;
+    gap: 8px;
+}
+
+.order-select {
+    width: 100%;
+    padding: 8px;
+}
+
+.order-buttons {
+    margin-top: 30px;
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+}
+
+.order-button {
+    padding: 10px 20px;
+    border: none;
+}
+
+.order-button.confirm {
+    background: black;
+    color: white;
+}
+
+.order-button.cancel {
+    background: #ccc;
+}
