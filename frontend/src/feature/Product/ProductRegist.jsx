@@ -87,10 +87,10 @@ export function ProductRegist() {
 
   function handleImageChange(e) {
     const files = Array.from(e.target.files);
-    setImages(files); // 이미지 파일 저장
+    setImages((prev) => [...prev, ...files]);
 
     const previews = files.map((file) => URL.createObjectURL(file));
-    setPreviewImages(previews); // 미리보기 URL 저장
+    setPreviewImages((prev) => [...prev, ...previews]);
   }
 
   return (
