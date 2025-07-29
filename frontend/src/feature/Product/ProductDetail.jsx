@@ -440,8 +440,10 @@ export function ProductDetail() {
             </div>
           </div>
           <hr />
-          {/* 상세 이미지 목록 */}
+          {/* 본문영역 */}
           <div style={{ marginTop: "35px" }}>
+            <h2>이거진짜좋음 이걸안사?</h2>
+            {/* 본문영역이미지 */}
             <div
               style={{ display: "flex", flexDirection: "column", gap: "15px" }}
             >
