@@ -273,7 +273,12 @@ export function MemberEdit() {
             <FormLabel>주소</FormLabel>
             <FormControl value={member.zipCode || ""} readOnly />
             <FormControl value={member.address || ""} readOnly />
-            <FormControl value={member.addressDetail || ""} readOnly />
+            <FormControl
+              value={member.addressDetail || ""}
+              onChange={(e) =>
+                setMember({ ...member, addressDetail: e.target.value })
+              }
+            />
             <Button onClick={handleSearchAddress}>주소 검색</Button>
           </FormGroup>
         </div>
