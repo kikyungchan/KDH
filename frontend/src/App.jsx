@@ -3,7 +3,7 @@ import { BrowserRouter, Route, Routes } from "react-router";
 import { ProductRegist } from "./feature/Product/ProductRegist.jsx";
 import MainLayout from "./feature/common/MainLayout.jsx";
 import { ProductList } from "./feature/Product/ProductList.jsx";
-import { ProductDetail } from "./feature/Product/ProductDetail.jsx";
+import { ProductDetail } from "./feature/Product/ProductDetail/ProductDetail.jsx";
 import { ProductEdit } from "./feature/Product/ProductEdit.jsx";
 import { MemberList } from "./feature/Member/MemberList.jsx";
 import { MemberAdd } from "./feature/Member/MemberAdd.jsx";
