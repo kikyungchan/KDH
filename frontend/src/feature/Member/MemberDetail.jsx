@@ -18,9 +18,12 @@ export function MemberDetail() {
   const [member, setMember] = useState(null);
   const [withdrawModalShow, setWithdrawModalShow] = useState(false);
   const [password, setPassword] = useState("");
+
   const [memberParams] = useSearchParams();
+
   const navigate = useNavigate();
-  const { logout } = useContext(AuthenticationContext);
+
+  const { logout, hasAccess } = useContext(AuthenticationContext);
 
   // 회원 정보 조회
   useEffect(() => {
@@ -106,15 +109,17 @@ export function MemberDetail() {
             <FormControl readOnly value={member.address} />
           </FormGroup>
         </div>
-        <div>
-          <Button
-            className="me-2"
-            onClick={() => navigate(`/member/edit?id=${member.id}`)}
-          >
-            수정
-          </Button>
-          <Button onClick={() => setWithdrawModalShow(true)}>탈퇴</Button>
-        </div>
+        {hasAccess(member.loginId) && (
+          <div>
+            <Button
+              className="me-2"
+              onClick={() => navigate(`/member/edit?id=${member.id}`)}
+            >
+              수정
+            </Button>
+            <Button onClick={() => setWithdrawModalShow(true)}>탈퇴</Button>
+          </div>
+        )}
       </Col>
       <Modal
         show={withdrawModalShow}
