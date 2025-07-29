@@ -49,8 +49,9 @@ public class CartController {
     }
 
     @GetMapping("/cart")
-    public ResponseEntity<List<CartResponseDto>> cartList() {
-        List<CartResponseDto> list = cartService.getCartList();
+    public ResponseEntity<List<CartResponseDto>> cartList(@AuthenticationPrincipal Jwt jwt) {
+        Long memberId = Long.parseLong(jwt.getSubject());
+        List<CartResponseDto> list = cartService.getCartList(memberId);
         return ResponseEntity.ok(list);
     }
 

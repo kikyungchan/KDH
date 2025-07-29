@@ -62,13 +62,11 @@ public class CartService {
         }
     }
 
-    public List<CartResponseDto> getCartList() {
-        Long memberId = loginUtill.getLoginMemberId();
+    public List<CartResponseDto> getCartList(Long memberId) {
         List<Cart> carts = cartRepository.findByMemberId(memberId);
         List<CartResponseDto> result = new ArrayList<>();
         for (Cart cart : carts) {
-            CartResponseDto dto = new CartResponseDto(cart);
-            result.add(dto);
+            result.add(new CartResponseDto(cart));
         }
         return result;
     }
