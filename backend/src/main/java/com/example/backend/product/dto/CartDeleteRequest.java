@@ -4,5 +4,5 @@ import lombok.Data;
 
 @Data
 public class CartDeleteRequest {
-    private Long cartId;
+    private Integer cartId;
 }

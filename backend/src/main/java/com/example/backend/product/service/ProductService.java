@@ -226,7 +226,7 @@ public class ProductService {
             order.setTotalPrice(req.getPrice() * req.getQuantity());
 
             if (req.getOptionId() != null) {
-                ProductOption option = productOptionRepository.findById(Long.valueOf(req.getOptionId())).get();
+                ProductOption option = productOptionRepository.findById(req.getOptionId()).get();
                 order.setOptionName(option.getOptionName());
             }
 
@@ -239,7 +239,7 @@ public class ProductService {
             item.setPrice(req.getPrice());
 
             if (req.getOptionId() != null) {
-                ProductOption option = productOptionRepository.findById(Long.valueOf(req.getOptionId())).get();
+                ProductOption option = productOptionRepository.findById(req.getOptionId()).get();
                 item.setOption(option);
             }
 

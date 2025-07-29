@@ -96,6 +96,7 @@ export function ProductRegist() {
   return (
     <form onSubmit={handleSubmit} className="product-regist-container">
       <div className="product-regist-field">
+        <h2>상품 등록</h2>
         <label className="product-regist-label">상품명</label>
         <input
           className="product-regist-input"

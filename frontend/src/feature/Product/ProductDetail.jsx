@@ -59,7 +59,7 @@ export function ProductDetail() {
     }
 
     if (quantity > product.quantity) {
-      alert(`재고가 ${product.quantity}개 남아있습니다.`);
+      alert(`재고가 부족합니다.`);
       return;
     }
 
@@ -115,7 +115,7 @@ export function ProductDetail() {
     }
 
     if (quantity > product.quantity) {
-      alert(`재고가 ${product.quantity}개 남아있습니다.`);
+      alert(`재고가 부족합니다.`);
       return;
     }
 
@@ -454,7 +454,6 @@ export function ProductDetail() {
                   문의하기
                 </Button>
               </div>
-
             </div>
           </div>
           <hr />

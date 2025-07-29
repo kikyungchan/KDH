@@ -34,9 +34,8 @@ public class CartController {
     @DeleteMapping("/cart/delete")
     public ResponseEntity<?> deleteCartItem(@RequestBody List<CartDeleteRequest> deleteList,
                                             @AuthenticationPrincipal Jwt jwt) {
-
-        log.info("삭제요청 들어옴:{}", deleteList);
-        Long memberId = Long.parseLong(jwt.getSubject());
+        
+        Integer memberId = Integer.parseInt(jwt.getSubject());
         cartService.deleteCartItem(memberId, deleteList);
         return ResponseEntity.ok().build();
     }
@@ -50,7 +49,7 @@ public class CartController {
 
     @GetMapping("/cart")
     public ResponseEntity<List<CartResponseDto>> cartList(@AuthenticationPrincipal Jwt jwt) {
-        Long memberId = Long.parseLong(jwt.getSubject());
+        Integer memberId = Integer.parseInt(jwt.getSubject());
         List<CartResponseDto> list = cartService.getCartList(memberId);
         return ResponseEntity.ok(list);
     }
@@ -58,7 +57,7 @@ public class CartController {
     @PutMapping("/cart/update")
     public ResponseEntity<?> updateCartItem(@RequestBody CartUpdateRequest req,
                                             @AuthenticationPrincipal Jwt jwt) {
-        Long memberId = Long.parseLong(jwt.getSubject());
+        Integer memberId = Integer.parseInt(jwt.getSubject());
         cartService.updateCartItem(memberId, req);
         return ResponseEntity.ok().build();
     }

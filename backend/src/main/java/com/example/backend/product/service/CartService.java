@@ -1,9 +1,7 @@
 package com.example.backend.product.service;
 
-import com.example.backend.member.entity.Member;
 import com.example.backend.member.repository.MemberRepository;
 import com.example.backend.product.dto.CartDeleteRequest;
-import com.example.backend.product.dto.CartItemDto;
 import com.example.backend.product.dto.CartResponseDto;
 import com.example.backend.product.dto.CartUpdateRequest;
 import com.example.backend.product.entity.Cart;
@@ -62,7 +60,7 @@ public class CartService {
         }
     }*/
 
-    public List<CartResponseDto> getCartList(Long memberId) {
+    public List<CartResponseDto> getCartList(Integer memberId) {
         List<Cart> carts = cartRepository.findByMemberId(memberId);
         List<CartResponseDto> result = new ArrayList<>();
         for (Cart cart : carts) {
@@ -72,14 +70,14 @@ public class CartService {
     }
 
 
-    public void deleteCartItem(Long memberId, List<CartDeleteRequest> deleteList) {
+    public void deleteCartItem(Integer memberId, List<CartDeleteRequest> deleteList) {
         for (CartDeleteRequest req : deleteList) {
             cartRepository.deleteById(req.getCartId());
         }
 
     }
 
-    public void updateCartItem(Long memberId, CartUpdateRequest req) {
+    public void updateCartItem(Integer memberId, CartUpdateRequest req) {
         Cart cart = cartRepository.findById(req.getCartId()).get();
         ProductOption option = productOptionRepository.findById(req.getOptionId()).get();
         ProductOption newOption = productOptionRepository.findById(req.getOptionId()).get();
@@ -106,7 +104,7 @@ public class CartService {
     public void deleteAllCart(String auth) {
         String token = auth.replace("Bearer ", "");
         Jwt jwt = jwtDecoder.decode(token);
-        Long memberId = Long.parseLong(jwt.getSubject());
+        Integer memberId = Integer.parseInt(jwt.getSubject());
         cartRepository.deleteByMemberId(memberId);
     }
 }
