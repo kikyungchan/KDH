@@ -31,7 +31,9 @@ export function MemberEdit() {
     birthday: "",
     phone: "",
     email: "",
+    zipCode: "",
     address: "",
+    addressDetail: "",
   });
   const navigate = useNavigate();
   const [memberParams] = useSearchParams();
@@ -146,8 +148,8 @@ export function MemberEdit() {
         setMember((prevMember) => ({
           ...prevMember,
           address: data.address, // 도로명 주소 할당
+          zipCode: data.zonecode, // 우편번호 할당
         }));
-        // setZipCode(data.zonecode); // 우편번호 필요하면 이것도
       },
     }).open();
   };
@@ -269,7 +271,9 @@ export function MemberEdit() {
         <div>
           <FormGroup controlId="address1">
             <FormLabel>주소</FormLabel>
+            <FormControl value={member.zipCode || ""} readOnly />
             <FormControl value={member.address || ""} readOnly />
+            <FormControl value={member.addressDetail || ""} readOnly />
             <Button onClick={handleSearchAddress}>주소 검색</Button>
           </FormGroup>
         </div>

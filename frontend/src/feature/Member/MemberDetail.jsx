@@ -106,7 +106,9 @@ export function MemberDetail() {
         <div>
           <FormGroup controlId="address1">
             <FormLabel>주소</FormLabel>
+            <FormControl readOnly value={member.zipCode} />
             <FormControl readOnly value={member.address} />
+            <FormControl readOnly value={member.addressDetail} />
           </FormGroup>
         </div>
         {hasAccess(member.loginId) && (
