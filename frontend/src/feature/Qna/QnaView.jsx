@@ -6,6 +6,7 @@ import {
   FormGroup,
   FormLabel,
   Image,
+  Modal,
   Row,
   ToggleButton,
 } from "react-bootstrap";
@@ -13,6 +14,7 @@ import Form from "react-bootstrap/Form";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { useParams, useSearchParams } from "react-router";
+import { toast } from "react-toastify";
 
 export function QnaView() {
   const [searchParams, setSearchParams] = useSearchParams("");
@@ -23,28 +25,29 @@ export function QnaView() {
   const [content, setContent] = useState();
   const [price, setPrice] = useState();
   const [image, setImage] = useState();
-  /*enum categoryList = {
-    1 = "기능 관련",
-  }
-    { name: "기능 관련", value: "1" },
-    { name: "크기·무게 관련", value: "2" },
-    { name: "배송 관련", value: "3" },
-    { name: "설정 관련", value: "4" },
-    { name: "반품·교환 관련", value: "5" },
-    { name: "기타 문의", value: "6" },
-  ];*/
+  const [modalShow, setModalShow] = useState();
+  const [id, setId] = useState();
+  const categoryList = {
+    1: { value: "기능 관련" },
+    2: { value: "크기·무게 관련" },
+    3: { value: "배송 관련" },
+    4: { value: "설정 관련" },
+    5: { value: "반품·교환 관련" },
+    6: { value: "기타 문의" },
+  };
 
   useEffect(() => {
     axios
       .get(`/api/qna/view?${searchParams}`)
       .then((res) => {
         console.log(res);
-        setCategory(res.data.category);
         setProductNm(res.data.product);
         setTitle(res.data.title);
         setContent(res.data.content);
         setPrice(res.data.price);
         setImage(res.data.imagePath);
+        setCategory(res.data.category);
+        setId(res.data.id);
       })
       .catch((err) => {
         console.log(err);
@@ -53,6 +56,28 @@ export function QnaView() {
         console.log("always");
       });
   }, []);
+
+  function handleDeleteButtonClick() {
+    axios
+      .delete(`/api/qna/${id}`)
+      .then((res) => {
+        console.log("잘됨");
+
+        const message = res.data.message;
+        if (message) {
+          toast(message.text, { type: message.type });
+        }
+      })
+      .catch((err) => {
+        console.log("안된");
+        toast("게시물이 삭제되지 않았습니다.", { type: "warning" });
+      })
+      .finally(() => {
+        console.log("항상");
+      });
+    return null;
+  }
+
   return (
     <Row className="justify-content-center">
       <Col md={8} lg={6} className="mt-5">
@@ -66,11 +91,11 @@ export function QnaView() {
                 <FormLabel>상담유형</FormLabel>
                 <FormControl
                   disabled={true}
-                  className="form-select"
+                  // className="form-select"
                   aria-label="Default select example"
+                  value={category === "" ? "" : categoryList[category].value}
                   // value={categoryList.find((item) => item.value === category)}
                 ></FormControl>
-                {/*  todo : select -> input로 categoryList 에 있는 value 에 따라 name 값으로 불러오기*/}
               </FormGroup>
             </div>
             <br />
@@ -123,18 +148,27 @@ export function QnaView() {
             <br />
 
             <div className="mb-3">
-              <Button
-              // onClick={handleSaveButtonClick}
-              // disabled={isProcessing || !validate}
-              // disabled={isProcessing}
-              >
-                수정
+              <Button className="ms-2 btn-danger" onClick={setModalShow}>
+                삭제
               </Button>
-              <Button className="ms-2 btn-danger">삭제</Button>
             </div>
           </div>
         </div>
       </Col>
+      <Modal show={modalShow} onHide={() => setModalShow(false)}>
+        <Modal.Header closeButton>
+          <Modal.Title>게시물 삭제 확인</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>이 문의 내역을 삭제하시겠습니까?</Modal.Body>
+        <Modal.Footer>
+          <Button variant="outline-dark" onClick={() => setModalShow(false)}>
+            취소
+          </Button>
+          <Button variant="danger" onClick={handleDeleteButtonClick}>
+            삭제
+          </Button>
+        </Modal.Footer>
+      </Modal>
     </Row>
   );
 }

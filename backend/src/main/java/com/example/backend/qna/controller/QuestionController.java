@@ -50,10 +50,21 @@ public class QuestionController {
         // 로그인 여부 확인
         questionService.hasPermission(authentication);
 
-        
+
         return questionService.viewQuestion(id, authentication);
     }
 
+    @DeleteMapping("{id}")
+    @PreAuthorize("isAuthenticated()")
+    public ResponseEntity<?> delete(@PathVariable int id, Authentication authentication) {
+
+        // 로그인 여부 확인
+        questionService.hasPermission(authentication);
+
+        questionService.deleteById(id);
+        return ResponseEntity.ok().body(Map.of("message",
+                Map.of("type", "success", "text", id + "문의 내역 삭제가 완료되었습니다.")));
+    }
 
     @PostMapping("add")
     @PreAuthorize("isAuthenticated()")

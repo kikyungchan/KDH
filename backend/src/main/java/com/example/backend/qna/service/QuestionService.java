@@ -9,7 +9,9 @@ import com.example.backend.product.service.S3Uploader;
 import com.example.backend.qna.dto.QuestionAddForm;
 import com.example.backend.qna.dto.QuestionDto;
 import com.example.backend.qna.dto.QuestionListDto;
+import com.example.backend.qna.entity.Answer;
 import com.example.backend.qna.entity.Question;
+import com.example.backend.qna.repository.AnswerRepository;
 import com.example.backend.qna.repository.QuestionRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -31,6 +33,7 @@ public class QuestionService {
     private final MemberRepository memberRepository;
     private final ProductRepository productRepository;
     private final QuestionRepository questionRepository;
+    private final AnswerRepository answerRepository;
     private final ProductImageRepository productImageRepository;
 
     public Map<String, ?> addquestion(Integer id, Authentication authentication) {
@@ -119,5 +122,19 @@ public class QuestionService {
         // 하나만 필요할 것 같아서 하나만 추가
         questionById.setImagePath(image.getFirst());
         return questionById;
+    }
+
+    public void deleteById(int id) {
+
+        Question db = questionRepository.findById(id).get();
+        System.out.println("db : " + db);
+
+        // todo : answer 데이터도 지워야 함
+        Answer ans = answerRepository.findByQuestionId(db.getId());
+        System.out.println("ans = " + ans);
+        // delete
+//        questionRepository.deleteById(id);
+//        answerRepository.deleteByQuestion(db);
+
     }
 }
