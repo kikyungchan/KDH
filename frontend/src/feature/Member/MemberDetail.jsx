@@ -9,9 +9,10 @@ import {
   Row,
   Spinner,
 } from "react-bootstrap";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router";
 import axios from "axios";
+import { AuthenticationContext } from "../common/AuthenticationContextProvider.jsx";
 
 export function MemberDetail() {
   const [member, setMember] = useState(null);
@@ -19,6 +20,7 @@ export function MemberDetail() {
   const [password, setPassword] = useState("");
   const [memberParams] = useSearchParams();
   const navigate = useNavigate();
+  const { logout } = useContext(AuthenticationContext);
 
   // 회원 정보 조회
   useEffect(() => {
@@ -53,7 +55,8 @@ export function MemberDetail() {
       })
       .then((res) => {
         console.log("good");
-        navigate("/member/list");
+        navigate("/");
+        logout();
       })
       .catch((err) => {
         console.log("bad");
