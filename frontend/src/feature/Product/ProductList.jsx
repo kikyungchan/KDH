@@ -41,23 +41,24 @@ export function ProductList() {
                   key={product.id}
                 >
                   {product.imagePath && (
-                    <div
-                      className="product-image-wrapper mb-4"
-                      style={{ position: "relative" }}
-                    >
+                    <div className="product-image-wrapper mb-2">
                       <img
                         src={product.imagePath[0]}
                         alt={product.productName}
                         className="product-image"
                       />
-                      {product.quantity === 0 && (
-                        <div className="sold-out-badge">SOLD OUT</div>
-                      )}
                     </div>
                   )}
-                  <div className="product-name mb-3">{product.productName}</div>
-                  <div className="product-price mb-3">
-                    {product.price.toLocaleString()}원
+
+                  {/* 상품명 + 가격 + SOLD OUT */}
+                  <div className="product-info-wrapper">
+                    <div className="product-name">{product.productName}</div>
+                    <div className="product-price">
+                      {product.price.toLocaleString()}원
+                    </div>
+                    {product.quantity === 0 && (
+                      <div className="sold-out-badge">SOLD OUT</div>
+                    )}
                   </div>
                 </Link>
               );

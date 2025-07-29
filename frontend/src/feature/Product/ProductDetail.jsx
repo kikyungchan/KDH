@@ -294,8 +294,8 @@ export function ProductDetail() {
             <div style={{ flex: 1 }}>
               <h2>{product.productName}!!!</h2>
               <p>{product.price.toLocaleString()}원</p>
-              <hr />
               <p>{product.info}</p>
+              <hr />
 
               {/*옵션선택 드롭다운*/}
               <div style={{ margin: "10px 0" }}>
