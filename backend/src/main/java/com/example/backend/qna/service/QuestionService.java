@@ -33,8 +33,8 @@ public class QuestionService {
     private final QuestionRepository questionRepository;
     private final ProductImageRepository productImageRepository;
 
-    public Map<String, ?> addquestion(int id, Authentication authentication) {
-        Product product = productRepository.findById(Long.valueOf(String.valueOf(id))).get();
+    public Map<String, ?> addquestion(Integer id, Authentication authentication) {
+        Product product = productRepository.findById(id).get();
         List<String> imagePaths = product.getImages().stream().map(ProductImage::getStoredPath).toList();
 
         var qnainfo = Map.of("id", product.getId(),
@@ -57,7 +57,7 @@ public class QuestionService {
         question.setContent(dto.getContent());
         question.setCategory(dto.getCategory());
 //        System.out.println("product : " + productRepository.findById(Long.valueOf(String.valueOf(dto.getProductId()))).get());
-        Product product = productRepository.findById(Long.valueOf(String.valueOf(dto.getProductId()))).get();
+        Product product = productRepository.findById(dto.getProductId()).get();
         question.setProduct(product);
 
         Member user = memberRepository.findById(Integer.valueOf(authentication.getName())).get();

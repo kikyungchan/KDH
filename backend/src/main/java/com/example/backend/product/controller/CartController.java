@@ -44,7 +44,7 @@ public class CartController {
     @PostMapping("/cart")
     public ResponseEntity<?> addToCart(@RequestBody CartItemDto dto) {
         System.out.println("dto = " + dto);
-        cartService.add(dto);
+//        cartService.add(dto);
         return ResponseEntity.ok().build();
     }
 

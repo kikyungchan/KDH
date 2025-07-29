@@ -122,7 +122,7 @@ public class ProductService {
         );
     }
 
-    public ProductDto view(Long id) {
+    public ProductDto view(Integer id) {
         Product product = productRepository.findById(id).get();
         ProductDto dto = new ProductDto();
         dto.setId(product.getId());
@@ -149,7 +149,7 @@ public class ProductService {
         return dto;
     }
 
-    public void delete(Long id) {
+    public void delete(Integer id) {
         Product product = productRepository.findById(id).orElseThrow();
 
         // 상품에 연결된 이미지 전체 삭제 (S3 + DB)
@@ -164,7 +164,7 @@ public class ProductService {
     }
 
 
-    public void edit(Long id, ProductEditDto dto) {
+    public void edit(Integer id, ProductEditDto dto) {
         Product product = productRepository.findById(id).get();
         product.setProductName(dto.getProductName());
         product.setPrice(dto.getPrice());
@@ -205,12 +205,14 @@ public class ProductService {
         Jwt decoded = jwtDecoder.decode(token);
         String memberIdStr = decoded.getSubject();
         Integer memberId = Integer.parseInt(memberIdStr);
-        Member member = memberRepository.findById(Long.valueOf(memberId)).get();
+        Member member = memberRepository.findById(memberId).get();
 
 
         for (OrderRequest req : reqList) {
-            Product product = productRepository.findById(Long.valueOf(req.getProductId())).get();
+            Product product = productRepository.findById(Integer.valueOf(req.getProductId())).get();
             // 재고 차감
+
+
             product.setQuantity(product.getQuantity() - req.getQuantity());
 
             Order order = new Order();
@@ -248,7 +250,7 @@ public class ProductService {
     public MemberDto getmemberinfo(String auth) {
         String token = auth.replace("Bearer ", "");
         Jwt decoded = jwtDecoder.decode(token);
-        Long memberId = Long.valueOf(decoded.getSubject());
+        Integer memberId = Integer.valueOf(decoded.getSubject());
         Member member = memberRepository.findById(memberId).get();
 
         MemberDto dto = new MemberDto();

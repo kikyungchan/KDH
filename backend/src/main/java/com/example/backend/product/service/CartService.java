@@ -33,7 +33,7 @@ public class CartService {
     private final JwtDecoder jwtDecoder;
 
 
-    public void add(CartItemDto dto) {
+    /*public void add(CartItemDto dto) {
         Long memberId = loginUtill.getLoginMemberId();
         Member member = memberRepository.findById(memberId).get();
         Product product = productRepository.findById(dto.getProductId()).get();
@@ -60,7 +60,7 @@ public class CartService {
             cart.setMember(member);
             cartRepository.save(cart);
         }
-    }
+    }*/
 
     public List<CartResponseDto> getCartList(Long memberId) {
         List<Cart> carts = cartRepository.findByMemberId(memberId);

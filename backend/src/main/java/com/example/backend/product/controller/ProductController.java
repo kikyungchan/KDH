@@ -11,6 +11,7 @@ import com.example.backend.product.service.ProductService;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
+import org.eclipse.angus.mail.imap.protocol.INTERNALDATE;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.oauth2.jwt.Jwt;
@@ -53,7 +54,8 @@ public class ProductController {
         List<GuestOrder> result = new ArrayList<>();
         // 비회원 주문 시
         for (GuestOrderRequestDto dtoList : dto) {
-            Product product = productRepository.findById(Long.valueOf(dtoList.getProductId())).get();
+            // todo : 나중에
+            Product product = productRepository.findById((dtoList.getProductId())).get();
             if (product.getQuantity() < dtoList.getQuantity()) {
                 throw new RuntimeException("재고가 부족합니다.");
             }
@@ -105,7 +107,7 @@ public class ProductController {
     }
 
     @PutMapping(value = "/edit", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public void editProduct(@RequestParam Long id,
+    public void editProduct(@RequestParam Integer id,
                             @RequestParam String productName,
                             @RequestParam Integer price,
                             @RequestParam String category,
@@ -127,12 +129,12 @@ public class ProductController {
     }
 
     @DeleteMapping("/delete")
-    public void delete(@RequestParam Long id) {
+    public void delete(@RequestParam Integer id) {
         productService.delete(id);
     }
 
     @GetMapping("/view")
-    public ProductDto view(@RequestParam(defaultValue = "") Long id) {
+    public ProductDto view(@RequestParam(defaultValue = "") Integer id) {
 
         return productService.view(id);
     }
