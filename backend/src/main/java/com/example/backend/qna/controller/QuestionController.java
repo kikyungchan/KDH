@@ -1,6 +1,7 @@
 package com.example.backend.qna.controller;
 
 import com.example.backend.qna.dto.QuestionAddForm;
+import com.example.backend.qna.dto.QuestionDto;
 import com.example.backend.qna.service.QuestionService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -44,9 +45,13 @@ public class QuestionController {
 
     @GetMapping("view")
     @PreAuthorize("isAuthenticated()")
-    public void view(@RequestParam int id, Authentication authentication) {
-        // todo : view list 추가
-        return;
+    public QuestionDto view(@RequestParam int id, Authentication authentication) {
+
+        // 로그인 여부 확인
+        questionService.hasPermission(authentication);
+
+        
+        return questionService.viewQuestion(id, authentication);
     }
 
 
@@ -54,7 +59,6 @@ public class QuestionController {
     @PreAuthorize("isAuthenticated()")
     public ResponseEntity<?> add(@RequestBody QuestionAddForm dto,
                                  Authentication authentication) {
-        //    todo : 로그인 안했으면 추가 못하게
         // 유효성 검사
         boolean result = questionService.validateForAdd(dto);
 

@@ -3,8 +3,11 @@ package com.example.backend.qna.service;
 import com.example.backend.member.entity.Member;
 import com.example.backend.product.entity.Product;
 import com.example.backend.product.entity.ProductImage;
+import com.example.backend.product.repository.ProductImageRepository;
 import com.example.backend.product.repository.ProductRepository;
+import com.example.backend.product.service.S3Uploader;
 import com.example.backend.qna.dto.QuestionAddForm;
+import com.example.backend.qna.dto.QuestionDto;
 import com.example.backend.qna.dto.QuestionListDto;
 import com.example.backend.qna.entity.Question;
 import com.example.backend.qna.repository.QuestionRepository;
@@ -18,6 +21,7 @@ import com.example.backend.member.repository.MemberRepository;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 @Service
 @Transactional
@@ -27,6 +31,7 @@ public class QuestionService {
     private final MemberRepository memberRepository;
     private final ProductRepository productRepository;
     private final QuestionRepository questionRepository;
+    private final ProductImageRepository productImageRepository;
 
     public Map<String, ?> addquestion(int id, Authentication authentication) {
         Product product = productRepository.findById(Long.valueOf(String.valueOf(id))).get();
@@ -104,5 +109,15 @@ public class QuestionService {
         if (authentication == null) {
             throw new RuntimeException("권한이 없습니다.");
         }
+    }
+
+    public QuestionDto viewQuestion(int id, Authentication authentication) {
+        QuestionDto questionById = questionRepository.findQuestionById(id);
+        // TODO : 이미지 추가
+        Integer productId = questionById.getProductId();
+        List<String> image = productImageRepository.findByProductid(productId);
+        // 하나만 필요할 것 같아서 하나만 추가
+        questionById.setImagePath(image.getFirst());
+        return questionById;
     }
 }

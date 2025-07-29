@@ -46,7 +46,7 @@ export function QnaList() {
 
   function handleTableRowClick(id) {
     // 게시물 보기로 이동
-    navigate(`/qna/view?${id}`);
+    navigate(`/qna/view?id=${id}`);
   }
 
   const pageNumbers = [];

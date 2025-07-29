@@ -12,12 +12,36 @@ import {
 import Form from "react-bootstrap/Form";
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { useSearchParams } from "react-router";
+import { useParams, useSearchParams } from "react-router";
 
 export function QnaView() {
-  const [searchParams, setSearchParams] = useSearchParams("1");
+  const [searchParams, setSearchParams] = useSearchParams("");
+  let params = useParams();
+  const [category, setCategory] = useState();
+  const [productNm, setProductNm] = useState();
+  const [title, setTitle] = useState();
+  const [content, setContent] = useState();
+  const [price, setPrice] = useState();
+  const [image, setImage] = useState();
+
   useEffect(() => {
-    axios.get(`/api/qna/view?${searchParams}`);
+    axios
+      .get(`/api/qna/view?${searchParams}`)
+      .then((res) => {
+        console.log(res);
+        setCategory(res.data.category);
+        setProductNm(res.data.product);
+        setTitle(res.data.title);
+        setContent(res.data.content);
+        setPrice(res.data.price);
+        setImage(res.data.imagePath);
+      })
+      .catch((err) => {
+        console.log(err);
+      })
+      .finally(() => {
+        console.log("always");
+      });
   }, []);
   return (
     <Row className="justify-content-center">
@@ -34,6 +58,7 @@ export function QnaView() {
                   disabled={true}
                   className="form-select"
                   aria-label="Default select example"
+                  value={category}
                 >
                   <option selected disabled hidden>
                     유형을 선택하세요
@@ -54,7 +79,7 @@ export function QnaView() {
                 <div>
                   {/*상품 이미지*/}
                   <Image
-                    // src={image}
+                    src={image}
                     fluid
                     style={{
                       width: "100%",
@@ -65,10 +90,10 @@ export function QnaView() {
                   <br />
                   <br />
                   {/*상품명*/}
-                  <FormControl disabled={true} />
+                  <FormControl disabled={true} placeholder={productNm} />
                   <h5 className="text-end fw-bold text-danger">
                     {/* toLocaleString() : 세자리수마다 쉼표로 보기 쉽게 표현*/}
-                    {/*{productPrice && productPrice.toLocaleString()}원*/}
+                    {price && price.toLocaleString()}원
                   </h5>
                 </div>
               </FormGroup>
@@ -79,8 +104,9 @@ export function QnaView() {
               <FormGroup>
                 <FormLabel>제목</FormLabel>
                 <FormControl
-                  // value={title}
-                  placeholder="제목을 입력해 주세요"
+                  value={title}
+                  // placeholder="제목을 입력해 주세요"
+                  disabled={true}
                 />
               </FormGroup>
             </div>
@@ -90,11 +116,7 @@ export function QnaView() {
             <div>
               <FormGroup className="mb-3" controlId="content1">
                 <FormLabel>문의 내용</FormLabel>
-                <FormControl
-                  as="textarea"
-                  rows={6}
-                  // value={content}
-                />
+                <FormControl as="textarea" rows={6} value={content} />
               </FormGroup>
             </div>
             <br />
