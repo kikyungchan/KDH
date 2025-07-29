@@ -1,0 +1,103 @@
+.product-regist-container {
+    max-width: 700px;
+    margin: 40px auto;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+}
+
+.product-regist-field {
+    margin-bottom: 16px;
+}
+
+.product-regist-label {
+    display: block;
+    margin-bottom: 6px;
+    font-weight: bold;
+}
+
+.product-regist-input,
+.product-regist-textarea {
+    width: 100%;
+    padding: 8px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.product-regist-options {
+    margin-bottom: 16px;
+}
+
+.product-regist-option-row {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 6px;
+}
+
+.product-regist-image-preview {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.product-regist-preview-box {
+    position: relative;
+}
+
+.product-regist-preview-img {
+    width: 150px;
+    height: 100px;
+    object-fit: cover;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.product-regist-option-remove-btn {
+    background-color: #ccc;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    padding: 4px 10px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    height: 34px;
+    line-height: 1;
+}
+
+.product-regist-image-delete-btn {
+    background-color: #ccc;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    padding: 4px 10px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    height: 34px;
+    line-height: 1;
+}
+
+.product-regist-submit-btns {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 30px;
+}
+
+.product-regist-btn {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+}
+
+.product-regist-btn.confirm {
+    background: black;
+    color: white;
+}
+
+.product-regist-btn.cancel {
+    background: #ccc;
+}

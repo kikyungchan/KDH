@@ -20,7 +20,8 @@
     border-radius: 4px;
 }
 
-.product-edit-button-delete {
+.product-edit-button-delete,
+.product-edit-button-cancel {
     position: absolute;
     top: 5px;
     right: 5px;
@@ -45,19 +46,6 @@
     height: 100px;
     border: 1px solid #aaa;
     border-radius: 4px;
-}
-
-.product-edit-button-cancel {
-    position: absolute;
-    top: 5px;
-    right: 5px;
-    padding: 2px 6px;
-    font-size: 12px;
-    color: white;
-    background-color: #dc3545;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
 }
 
 .product-edit-file-list {

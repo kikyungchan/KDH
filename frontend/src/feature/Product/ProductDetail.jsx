@@ -407,12 +407,6 @@ export function ProductDetail() {
                 </div>
               )}
               {/*Todo: 수정삭제버튼 관리자만 보이게 수정*/}
-              <Button className="btn-secondary" onClick={handleEditButton}>
-                수정
-              </Button>
-              <Button className="btn-danger" onClick={handleDeleteButton}>
-                삭제
-              </Button>
             </div>
           </div>
           <hr />

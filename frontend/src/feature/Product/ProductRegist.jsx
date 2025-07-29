@@ -1,6 +1,7 @@
 import { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router";
+import "./css/ProductRegist.css";
 
 export function ProductRegist() {
   const [previewImages, setPreviewImages] = useState([]); // 미리보기 URL
@@ -93,160 +94,148 @@ export function ProductRegist() {
   }
 
   return (
-    <form onSubmit={handleSubmit}>
-      <div>
-        <div>
-          상품명
-          <input
-            type="text"
-            value={productName}
-            onChange={(e) => setProductName(e.target.value)}
-          />
-        </div>
-        <div>
-          가격
-          <input
-            type="text"
-            value={price}
-            onChange={(e) => setPrice(e.target.value)}
-          />
-        </div>
-        <div>
-          수량
-          <input
-            type="text"
-            value={quantity}
-            onChange={(e) => setQuantity(e.target.value)}
-          />
-        </div>
-        <div>
-          카테고리
-          <input
-            type="text"
-            value={category}
-            onChange={(e) => setCategory(e.target.value)}
-          />
-        </div>
-        <div>
-          상품설명
-          <textarea
-            rows={5}
-            value={info}
-            onChange={(e) => setInfo(e.target.value)}
-          />
-        </div>
-        <div style={{ marginTop: "20px" }}>
-          <label>옵션 목록 (메뉴이름 / 가격)</label>
-          {options.map((opt, index) => (
-            <div
-              key={index}
-              style={{ display: "flex", gap: "10px", marginBottom: "5px" }}
-            >
-              <input
-                type="text"
-                placeholder="메뉴이름"
-                value={opt.optionName}
-                onChange={(e) => {
-                  const newOptions = [...options];
-                  newOptions[index].optionName = e.target.value;
-                  setOptions(newOptions);
-                }}
-              />
-              <input
-                type="number"
-                placeholder="가격"
-                value={opt.price}
-                onChange={(e) => {
-                  const newOptions = [...options];
-                  newOptions[index].price = e.target.value;
-                  setOptions(newOptions);
-                }}
-              />
-              <button
-                type="button"
-                onClick={() => {
-                  const newOptions = [...options];
-                  newOptions.splice(index, 1);
-                  setOptions(newOptions);
-                }}
-                style={{ color: "red" }}
-              >
-                삭제
-              </button>
-            </div>
-          ))}
-          <button
-            type="button"
-            onClick={() =>
-              setOptions([...options, { optionName: "", price: "" }])
-            }
-          >
-            옵션 추가
-          </button>
-        </div>
-        <div>
-          상품 이미지
-          <input
-            type="file"
-            multiple
-            accept="image/*"
-            onChange={handleImageChange}
-          />
-          {/* 파일 이름 리스트 출력 */}
-          {images.length > 0 && (
-            <ul style={{ marginTop: "10px", fontSize: "14px" }}>
-              {images.map((file, idx) => (
-                <li key={idx}>{file.name}</li>
-              ))}
-            </ul>
-          )}
-          {/*파일 미리보기*/}
-          {previewImages.length > 0 && (
-            <div
-              style={{
-                display: "flex",
-                flexWrap: "wrap",
-                gap: "10px",
-                marginTop: "10px",
+    <form onSubmit={handleSubmit} className="product-regist-container">
+      <div className="product-regist-field">
+        <label className="product-regist-label">상품명</label>
+        <input
+          className="product-regist-input"
+          type="text"
+          value={productName}
+          onChange={(e) => setProductName(e.target.value)}
+        />
+      </div>
+
+      <div className="product-regist-field">
+        <label className="product-regist-label">가격</label>
+        <input
+          className="product-regist-input"
+          type="text"
+          value={price}
+          onChange={(e) => setPrice(e.target.value)}
+        />
+      </div>
+
+      <div className="product-regist-field">
+        <label className="product-regist-label">수량</label>
+        <input
+          className="product-regist-input"
+          type="text"
+          value={quantity}
+          onChange={(e) => setQuantity(e.target.value)}
+        />
+      </div>
+
+      <div className="product-regist-field">
+        <label className="product-regist-label">카테고리</label>
+        <input
+          className="product-regist-input"
+          type="text"
+          value={category}
+          onChange={(e) => setCategory(e.target.value)}
+        />
+      </div>
+
+      <div className="product-regist-field">
+        <label className="product-regist-label">상품 설명</label>
+        <textarea
+          rows={5}
+          className="product-regist-textarea"
+          value={info}
+          onChange={(e) => setInfo(e.target.value)}
+        />
+      </div>
+
+      <div className="product-regist-options">
+        <label className="product-regist-label">옵션 목록</label>
+        {options.map((opt, index) => (
+          <div className="product-regist-option-row" key={index}>
+            <input
+              type="text"
+              placeholder="메뉴이름"
+              className="product-regist-input"
+              value={opt.optionName}
+              onChange={(e) => {
+                const newOptions = [...options];
+                newOptions[index].optionName = e.target.value;
+                setOptions(newOptions);
               }}
+            />
+            <input
+              type="number"
+              placeholder="가격"
+              className="product-regist-input"
+              value={opt.price}
+              onChange={(e) => {
+                const newOptions = [...options];
+                newOptions[index].price = e.target.value;
+                setOptions(newOptions);
+              }}
+            />
+            <button
+              type="button"
+              onClick={() => {
+                const newOptions = [...options];
+                newOptions.splice(index, 1);
+                setOptions(newOptions);
+              }}
+              className="product-regist-option-remove-btn"
             >
-              {previewImages.map((url, idx) => (
-                <div key={idx} style={{ position: "relative" }}>
-                  <img
-                    src={url}
-                    alt={`미리보기 ${idx + 1}`}
-                    style={{
-                      width: "150px",
-                      height: "100px",
-                      objectFit: "cover",
-                      border: "1px solid #ccc",
-                      borderRadius: "4px",
-                    }}
-                  />
-                  <button
-                    type="button"
-                    onClick={() => handleRemoveImage(idx)}
-                    style={{
-                      position: "absolute",
-                      top: 5,
-                      right: 5,
-                      padding: "2px 6px",
-                      fontSize: "12px",
-                      color: "white",
-                      backgroundColor: "#dc3545", // 부트스트랩 danger 색
-                      border: "none",
-                      borderRadius: "4px", //
-                      cursor: "pointer",
-                    }}
-                  >
-                    취소
-                  </button>
-                </div>
-              ))}
-            </div>
-          )}
-          <button>등록</button>
-        </div>
+              ×
+            </button>
+          </div>
+        ))}
+        <button
+          type="button"
+          onClick={() =>
+            setOptions([...options, { optionName: "", price: "" }])
+          }
+        >
+          옵션 추가
+        </button>
+      </div>
+
+      {/*상품 파일선택*/}
+      <div className="product-regist-field">
+        <label className="product-regist-label">상품 이미지</label>
+        <input
+          type="file"
+          multiple
+          accept="image/*"
+          onChange={handleImageChange}
+        />
+        {previewImages.length > 0 && (
+          <div className="product-regist-image-preview">
+            {previewImages.map((url, idx) => (
+              <div key={idx} className="product-regist-preview-box">
+                <img
+                  src={url}
+                  className="product-regist-preview-img"
+                  alt={`미리보기 ${idx + 1}`}
+                />
+                <button
+                  type="button"
+                  className="product-regist-image-remove-btn"
+                  onClick={() => handleRemoveImage(idx)}
+                >
+                  ×
+                </button>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+
+      <div className="product-regist-submit-btns">
+        <button type="submit" className="product-regist-btn confirm">
+          등록
+        </button>
+        <button
+          type="button"
+          className="product-regist-btn cancel"
+          onClick={() => navigate(-1)}
+        >
+          취소
+        </button>
       </div>
     </form>
   );
