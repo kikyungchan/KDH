@@ -3,6 +3,7 @@ import axios from "axios";
 import { Button, Col, Container, Modal, Row, Spinner } from "react-bootstrap";
 import { useNavigate, useSearchParams } from "react-router";
 import "./css/ProductDetail.css";
+import NoticeSection from "./NoticeSection.jsx";
 
 export function ProductDetail() {
   const [showCartConfirmModal, setShowCartConfirmModal] = useState(false);
@@ -459,8 +460,6 @@ export function ProductDetail() {
           <hr />
           {/* 본문영역 */}
           <div style={{ marginTop: "35px" }}>
-            <h2>{product.detailText}</h2>
-
             <div
               style={{ display: "flex", flexDirection: "column", gap: "15px" }}
             >
@@ -479,6 +478,7 @@ export function ProductDetail() {
                 />
               ))}
             </div>
+            <NoticeSection />
             {/*
     todo : faq 페이지, 추천해주는 질문 몇개를 골라서 3개 이상 답하도록
 
