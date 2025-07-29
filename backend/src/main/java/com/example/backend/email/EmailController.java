@@ -1,8 +1,7 @@
 package com.example.backend.email;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
@@ -10,5 +9,16 @@ import org.springframework.web.bind.annotation.RestController;
 public class EmailController {
     private final EmailService emailService;
 
+    // 인증번호 전송
+    @GetMapping("/auth")
+    public EmailAuthResponseDto sendAuthCode(@RequestParam String address) {
+        return emailService.sendEmail(address);
+    }
 
+    // 인증번호 검증
+    @PostMapping("/auth")
+    public EmailAuthResponseDto checkAuthCode(@RequestParam String address,
+                                              @RequestParam String authCode) {
+        return emailService.validateAuthCode(address, authCode);
+    }
 }
