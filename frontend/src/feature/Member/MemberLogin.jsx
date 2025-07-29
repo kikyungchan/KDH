@@ -39,6 +39,16 @@ export function MemberLogin() {
       });
   }
 
+  function handleKeyDown(event) {
+    // 눌린 키가 Enter면
+    if (event.key === "Enter") {
+      // 폼 제출 방지 (기본 동작)
+      event.preventDefault();
+      // axios 함수 실행
+      handleLogInButtonClick();
+    }
+  }
+
   return (
     <Row className="justify-content-center">
       <Col>
@@ -56,6 +66,8 @@ export function MemberLogin() {
             type="password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
+            // 아무키나 눌리면 실행
+            onKeyDown={handleKeyDown}
           />
         </FormGroup>
         <Button onClick={handleLogInButtonClick}>로그인</Button>
