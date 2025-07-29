@@ -34,7 +34,7 @@ public class CartController {
     @DeleteMapping("/cart/delete")
     public ResponseEntity<?> deleteCartItem(@RequestBody List<CartDeleteRequest> deleteList,
                                             @AuthenticationPrincipal Jwt jwt) {
-        
+
         Integer memberId = Integer.parseInt(jwt.getSubject());
         cartService.deleteCartItem(memberId, deleteList);
         return ResponseEntity.ok().build();
@@ -43,7 +43,7 @@ public class CartController {
     @PostMapping("/cart")
     public ResponseEntity<?> addToCart(@RequestBody CartItemDto dto) {
         System.out.println("dto = " + dto);
-//        cartService.add(dto);
+        cartService.add(dto);
         return ResponseEntity.ok().build();
     }
 

@@ -1,7 +1,9 @@
 package com.example.backend.product.service;
 
+import com.example.backend.member.entity.Member;
 import com.example.backend.member.repository.MemberRepository;
 import com.example.backend.product.dto.CartDeleteRequest;
+import com.example.backend.product.dto.CartItemDto;
 import com.example.backend.product.dto.CartResponseDto;
 import com.example.backend.product.dto.CartUpdateRequest;
 import com.example.backend.product.entity.Cart;
@@ -31,8 +33,8 @@ public class CartService {
     private final JwtDecoder jwtDecoder;
 
 
-    /*public void add(CartItemDto dto) {
-        Long memberId = loginUtill.getLoginMemberId();
+    public void add(CartItemDto dto) {
+        Integer memberId = loginUtill.getLoginMemberId();
         Member member = memberRepository.findById(memberId).get();
         Product product = productRepository.findById(dto.getProductId()).get();
         ProductOption option = productOptionRepository.findByProductAndOptionName(product, dto.getOptionName());
@@ -58,7 +60,7 @@ public class CartService {
             cart.setMember(member);
             cartRepository.save(cart);
         }
-    }*/
+    }
 
     public List<CartResponseDto> getCartList(Integer memberId) {
         List<Cart> carts = cartRepository.findByMemberId(memberId);
