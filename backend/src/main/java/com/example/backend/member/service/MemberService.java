@@ -100,6 +100,8 @@ public class MemberService {
             return false;
         }
 
+        memberRoleRepository.deleteByMember(db);
+
         memberRepository.delete(db);
         return true;
     }
