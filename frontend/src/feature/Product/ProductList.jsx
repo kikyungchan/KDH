@@ -26,12 +26,17 @@ export function ProductList() {
     setSearchParams({ page });
   };
 
+  // 새상품 뱃지
   function isNewProduct(insertedAt) {
     if (!insertedAt) return false;
+
     const createdDate = new Date(insertedAt);
     const now = new Date();
-    const diffInDays = (now - createdDate) / (1000 * 60 * 60 * 24);
-    return diffInDays <= 30;
+
+    const diffInSeconds = (now.getTime() - createdDate.getTime()) / 1000;
+    const secondsIn7Days = 60 * 60 * 24 * 7; // 일주일
+
+    return diffInSeconds <= secondsIn7Days;
   }
 
   return (
@@ -41,8 +46,8 @@ export function ProductList() {
           <h2>상품 목록</h2>
           <div className="product-grid mb-4">
             {products.map((product) => {
-              console.log(product); // 확인용
               return (
+                // 상품목록리스트
                 <Link
                   to={`/product/view?id=${product.id}`}
                   className="product-card"
@@ -59,7 +64,6 @@ export function ProductList() {
                   )}
 
                   {/* 상품명 + 가격 + SOLD OUT/NEW 배지 */}
-
                   <div className="product-info-wrapper">
                     <div className="product-name">{product.productName}</div>
                     <div className="product-price">
