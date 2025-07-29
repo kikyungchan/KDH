@@ -1,15 +1,13 @@
 package com.example.backend.member.controller;
 
-import com.example.backend.member.dto.ChangePasswordForm;
-import com.example.backend.member.dto.MemberForm;
-import com.example.backend.member.dto.MemberListInfo;
-import com.example.backend.member.dto.MemberLoginForm;
+import com.example.backend.member.dto.*;
 import com.example.backend.member.service.MemberService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
@@ -48,6 +46,7 @@ public class MemberController {
 
     // 회원 리스트 조회
     @GetMapping("/list")
+    @PreAuthorize("hasAuthority('admin')")
     public Map<String, Object> memberList(@RequestParam(value = "page", defaultValue = "1") Integer pageNumber) {
         System.out.println("success");
         return memberService.list(pageNumber);
@@ -55,9 +54,10 @@ public class MemberController {
 
     // 회원 정보 조회
     @GetMapping(params = "id")
-    @PreAuthorize("isAuthenticated()")
-    public ResponseEntity<?> getMember(@RequestParam Long id, Authentication authentication) {
-        if (authentication.getName().equals(id.toString())) {
+    @PreAuthorize("isAuthenticated() or hasAuthority('admin')")
+    public ResponseEntity<?> getMember(@RequestParam Integer id, Authentication authentication) {
+        if (authentication.getName().equals(id.toString()) ||
+            authentication.getAuthorities().contains(new SimpleGrantedAuthority("admin"))) {
             return ResponseEntity.ok().body(memberService.get(id));
         } else {
             return ResponseEntity.status(403).build();
@@ -67,13 +67,13 @@ public class MemberController {
     // 회원 탈퇴
     @DeleteMapping
     @PreAuthorize("isAuthenticated()")
-    public ResponseEntity<?> deleteMember(@RequestBody MemberForm memberForm,
+    public ResponseEntity<?> deleteMember(@RequestBody @Valid MemberDeleteForm memberDeleteForm,
                                           Authentication authentication) {
         // 로그인한 회원 본인만 탈퇴 가능
-        if (!authentication.getName().equals(memberForm.getId().toString())) {
+        if (!authentication.getName().equals(memberDeleteForm.getId().toString())) {
             return ResponseEntity.status(403).build();
         }
-        boolean deleted = memberService.delete(memberForm);
+        boolean deleted = memberService.delete(memberDeleteForm);
         if (deleted) {
             return ResponseEntity.ok().build();
         } else {
@@ -84,13 +84,14 @@ public class MemberController {
     // 회원 정보 수정
     @PutMapping("{id}")
     @PreAuthorize("isAuthenticated()")
-    public ResponseEntity<?> updateMember(@PathVariable long id,
-                                          @RequestBody @Valid MemberForm memberForm,
+    public ResponseEntity<?> updateMember(@PathVariable Integer id,
+                                          @RequestBody @Valid MemberUpdateForm memberUpdateForm,
                                           Authentication authentication,
                                           BindingResult bindingResult) {
 
+        System.out.println("asdasdasd");
         // 로그인한 회원 본인만 수정 가능
-        if (!authentication.getName().equals(memberForm.getId().toString())) {
+        if (!authentication.getName().equals(memberUpdateForm.getId().toString())) {
             return ResponseEntity.status(403).build();
         }
 
@@ -104,7 +105,7 @@ public class MemberController {
         }
 
         try {
-            memberService.update(id, memberForm);
+            memberService.update(id, memberUpdateForm);
         } catch (Exception e) {
             e.printStackTrace();
             String message = e.getMessage();
@@ -125,7 +126,7 @@ public class MemberController {
     public ResponseEntity<?> changePassword(@RequestBody @Valid ChangePasswordForm data,
                                             Authentication authentication) {
         // 로그인한 본인 아이디
-        Long memberId = Long.valueOf(authentication.getName()); // JWT sub에서 추출
+        Integer memberId = Integer.valueOf(authentication.getName()); // JWT sub에서 추출
 
         try {
             memberService.changePassword(memberId, data);

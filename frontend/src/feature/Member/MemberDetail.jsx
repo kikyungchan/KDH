@@ -9,16 +9,21 @@ import {
   Row,
   Spinner,
 } from "react-bootstrap";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router";
 import axios from "axios";
+import { AuthenticationContext } from "../common/AuthenticationContextProvider.jsx";
 
 export function MemberDetail() {
   const [member, setMember] = useState(null);
   const [withdrawModalShow, setWithdrawModalShow] = useState(false);
-  const [password, setPassword] = useState("");
+  const [oldPassword, setOldPassword] = useState("");
+
   const [memberParams] = useSearchParams();
+
   const navigate = useNavigate();
+
+  const { logout, hasAccess } = useContext(AuthenticationContext);
 
   // 회원 정보 조회
   useEffect(() => {
@@ -49,11 +54,12 @@ export function MemberDetail() {
     console.log(member);
     axios
       .delete(`/api/member`, {
-        data: { id: member.id, password: password },
+        data: { id: member.id, oldPassword: oldPassword },
       })
       .then((res) => {
         console.log("good");
-        navigate("/member/list");
+        navigate("/");
+        logout();
       })
       .catch((err) => {
         console.log("bad");
@@ -103,15 +109,17 @@ export function MemberDetail() {
             <FormControl readOnly value={member.address} />
           </FormGroup>
         </div>
-        <div>
-          <Button
-            className="me-2"
-            onClick={() => navigate(`/member/edit?id=${member.id}`)}
-          >
-            수정
-          </Button>
-          <Button onClick={() => setWithdrawModalShow(true)}>탈퇴</Button>
-        </div>
+        {hasAccess(member.loginId) && (
+          <div>
+            <Button
+              className="me-2"
+              onClick={() => navigate(`/member/edit?id=${member.id}`)}
+            >
+              수정
+            </Button>
+            <Button onClick={() => setWithdrawModalShow(true)}>탈퇴</Button>
+          </div>
+        )}
       </Col>
       <Modal
         show={withdrawModalShow}
@@ -129,8 +137,8 @@ export function MemberDetail() {
             <FormControl
               id="withdraw-password"
               type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
+              value={oldPassword}
+              onChange={(e) => setOldPassword(e.target.value)}
               autoFocus
             />
             <FormText className="text-danger">
@@ -140,7 +148,7 @@ export function MemberDetail() {
         </Modal.Body>
         <Modal.Footer>
           <Button onClick={() => setWithdrawModalShow(false)}>취소</Button>
-          <Button onClick={handleWithdrawButtonClick} disabled={!password}>
+          <Button onClick={handleWithdrawButtonClick} disabled={!oldPassword}>
             탈퇴
           </Button>
         </Modal.Footer>

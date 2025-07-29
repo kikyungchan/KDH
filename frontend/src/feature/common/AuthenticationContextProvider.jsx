@@ -38,6 +38,7 @@ export function AuthenticationContextProvider({ children }) {
             id: res.data.id,
             loginId: res.data.loginId,
             name: res.data.name,
+            roles: payload.roles,
           });
         })
         .catch((err) => {})
@@ -65,11 +66,25 @@ export function AuthenticationContextProvider({ children }) {
   }
 
   // hasAccess
+  function hasAccess(loginId) {
+    return user && user.loginId === loginId;
+  }
 
   // isAdmin
+  function isAdmin() {
+    return Array.isArray(user?.roles) && user.roles.includes("admin");
+  }
 
   return (
-    <AuthenticationContext value={{ user: user, login: login, logout: logout }}>
+    <AuthenticationContext
+      value={{
+        user: user,
+        login: login,
+        logout: logout,
+        hasAccess: hasAccess,
+        isAdmin: isAdmin,
+      }}
+    >
       {children}
     </AuthenticationContext>
   );

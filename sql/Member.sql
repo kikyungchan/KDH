@@ -1,6 +1,6 @@
 CREATE TABLE member
 (
-    id       BIGINT AUTO_INCREMENT PRIMARY KEY,
+    id       INT AUTO_INCREMENT PRIMARY KEY,
     login_id VARCHAR(30) UNIQUE NOT NULL,
     password VARCHAR(200)       NOT NULL,
     name     VARCHAR(50)        NOT NULL,
@@ -12,5 +12,28 @@ CREATE TABLE member
 
 DROP TABLE member;
 
-SELECT id, login_id, password FROM member WHERE login_id = 'choi1563';  -- 로그인 기준
-SELECT id, login_id, password FROM member WHERE id = 128;
+
+ALTER TABLE member
+    MODIFY COLUMN id INT AUTO_INCREMENT;
+
+# 권한 테이블
+CREATE TABLE role
+(
+    name VARCHAR(30) PRIMARY KEY
+);
+
+
+CREATE TABLE member_role
+(
+    member_id INT         NOT NULL,
+    role_name VARCHAR(30) NOT NULL,
+    PRIMARY KEY (member_id, role_name),
+    FOREIGN KEY (member_id) REFERENCES member (id),
+    FOREIGN KEY (role_name) REFERENCES role (name)
+);
+
+INSERT INTO member_role
+    (member_id, role_name)
+VALUES (139, 'admin');
+
+

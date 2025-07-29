@@ -123,7 +123,7 @@ export function MemberAdd() {
       })
       .then((res) => {
         console.log("잘됨");
-        navigate("/member/list");
+        navigate("/");
       })
       .catch((err) => {
         console.log("에러응답", err.response?.data);

@@ -2,7 +2,9 @@ package com.example.backend.member.service;
 
 import com.example.backend.member.dto.*;
 import com.example.backend.member.entity.Member;
+import com.example.backend.member.entity.MemberRole;
 import com.example.backend.member.repository.MemberRepository;
+import com.example.backend.member.repository.MemberRoleRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -14,8 +16,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Instant;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -24,6 +28,7 @@ public class MemberService {
     private final MemberRepository memberRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtEncoder jwtEncoder;
+    private final MemberRoleRepository memberRoleRepository;
 
     // 회원 등록
     public void signup(MemberForm memberForm) {
@@ -41,7 +46,6 @@ public class MemberService {
     // 회원 리스트 불러오기
     public Map<String, Object> list(Integer pageNumber) {
 
-        System.out.println("asdasda");
         Page<MemberListDto> memberListDtoPage
                 = memberRepository.findAllBy(PageRequest.of(pageNumber - 1, 10));
 
@@ -69,7 +73,7 @@ public class MemberService {
     }
 
     // 회원 상세 정보 불러오기
-    public MemberDto get(Long id) {
+    public MemberDto get(Integer id) {
         Member member = memberRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("존재하지 않는 회원입니다."));
 
@@ -85,29 +89,31 @@ public class MemberService {
         return memberDto;
     }
 
-    public boolean delete(MemberForm memberForm) {
-        Member db = memberRepository.findById(memberForm.getId())
+    public boolean delete(MemberDeleteForm memberDeleteForm) {
+        Member db = memberRepository.findById(memberDeleteForm.getId())
                 .orElseThrow(() -> new RuntimeException("존재하지 않는 회원입니다."));
 
-        String oldPassword = memberForm.getOldPassword(); // 기존 password
+        String oldPassword = memberDeleteForm.getOldPassword(); // 기존 password
 
         // 비밀번호 불일치 시
-        if (!passwordEncoder.matches(oldPassword, db.getPassword())) {
+        if (oldPassword == null || !passwordEncoder.matches(oldPassword, db.getPassword())) {
             return false;
         }
+
+        memberRoleRepository.deleteByMember(db);
 
         memberRepository.delete(db);
         return true;
     }
 
-    public void update(long id, MemberForm memberForm) {
+    public void update(Integer id, MemberUpdateForm memberUpdateForm) {
 
         // 1. 회원 조회
         Member member = memberRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("해당 회원이 존재하지 않습니다"));
 
-        String oldPassword = memberForm.getOldPassword(); // 기존 password
-        String newPassword = memberForm.getNewPassword(); // 새 password
+        String oldPassword = memberUpdateForm.getOldPassword(); // 기존 password
+        String newPassword = memberUpdateForm.getNewPassword(); // 새 password
 
 
         // 2. 기존 비밀번호 일치 여부 확인
@@ -116,11 +122,11 @@ public class MemberService {
         }
 
         // 3. 수정
-        member.setName(memberForm.getName());
-        member.setBirthday(memberForm.getBirthday());
-        member.setPhone(memberForm.getPhone());
-        member.setEmail(memberForm.getEmail());
-        member.setAddress(memberForm.getAddress());
+        member.setName(memberUpdateForm.getName());
+        member.setBirthday(memberUpdateForm.getBirthday());
+        member.setPhone(memberUpdateForm.getPhone());
+        member.setEmail(memberUpdateForm.getEmail());
+        member.setAddress(memberUpdateForm.getAddress());
 
         // 새 비밀번호가 입력된 경우에만 변경
         if (newPassword != null && !newPassword.isBlank()) {
@@ -139,7 +145,7 @@ public class MemberService {
         return memberRepository.existsByLoginId(loginId);
     }
 
-    public void changePassword(Long memberId, ChangePasswordForm data) {
+    public void changePassword(Integer memberId, ChangePasswordForm data) {
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new RuntimeException("존재하지 않는 회원입니다."));
 
@@ -175,22 +181,31 @@ public class MemberService {
     // 로그인 토큰 생성
     public String getToken(MemberLoginForm loginForm) {
         // 아이디가 맞는지
-        Member member = memberRepository.findByLoginId(loginForm.getLoginId())
+        Member db = memberRepository.findByLoginId(loginForm.getLoginId())
                 .orElseThrow(() -> new RuntimeException("아이디 또는 비밀번호가 일치하지 않습니다"));
 
         // 비밀번호가 맞지 않았을때
-        if (!passwordEncoder.matches(loginForm.getPassword(), member.getPassword())) {
+        if (!passwordEncoder.matches(loginForm.getPassword(), db.getPassword())) {
             throw new RuntimeException("아이디 또는 비밀번호가 일치하지 않습니다");
         }
 
+        List<MemberRole> memberRoleList = memberRoleRepository.findByMember(db);
+        // stream 사용
+        List<String> roles = memberRoleList.stream()
+                .map(memberRole -> memberRole.getId().getRoleName())
+                .collect(Collectors.toList());
+
+
         // 토큰 생성
         JwtClaimsSet claims = JwtClaimsSet.builder()
-                .subject(String.valueOf(member.getId()))       // primaryKey 인 id
-                .claim("loginId", member.getLoginId())         // 필요한 claim(loginId)
+                .subject(String.valueOf(db.getId()))       // primaryKey 인 id
+                .claim("loginId", db.getLoginId())         // 필요한 claim(loginId)
+                .claim("roles", roles)
                 .issuer("self")
                 .issuedAt(Instant.now())
                 .expiresAt(Instant.now().plusSeconds(60 * 60 * 24)) // 1일 유효
                 .build();
+
 
         return jwtEncoder.encode(JwtEncoderParameters.from(claims)).getTokenValue();
     }
