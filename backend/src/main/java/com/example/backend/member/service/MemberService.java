@@ -100,14 +100,14 @@ public class MemberService {
         return true;
     }
 
-    public void update(Integer id, MemberForm memberForm) {
+    public void update(Integer id, MemberUpdateForm memberUpdateForm) {
 
         // 1. 회원 조회
         Member member = memberRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("해당 회원이 존재하지 않습니다"));
 
-        String oldPassword = memberForm.getOldPassword(); // 기존 password
-        String newPassword = memberForm.getNewPassword(); // 새 password
+        String oldPassword = memberUpdateForm.getOldPassword(); // 기존 password
+        String newPassword = memberUpdateForm.getNewPassword(); // 새 password
 
 
         // 2. 기존 비밀번호 일치 여부 확인
@@ -116,11 +116,11 @@ public class MemberService {
         }
 
         // 3. 수정
-        member.setName(memberForm.getName());
-        member.setBirthday(memberForm.getBirthday());
-        member.setPhone(memberForm.getPhone());
-        member.setEmail(memberForm.getEmail());
-        member.setAddress(memberForm.getAddress());
+        member.setName(memberUpdateForm.getName());
+        member.setBirthday(memberUpdateForm.getBirthday());
+        member.setPhone(memberUpdateForm.getPhone());
+        member.setEmail(memberUpdateForm.getEmail());
+        member.setAddress(memberUpdateForm.getAddress());
 
         // 새 비밀번호가 입력된 경우에만 변경
         if (newPassword != null && !newPassword.isBlank()) {

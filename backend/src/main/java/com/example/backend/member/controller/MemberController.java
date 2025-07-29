@@ -1,9 +1,6 @@
 package com.example.backend.member.controller;
 
-import com.example.backend.member.dto.ChangePasswordForm;
-import com.example.backend.member.dto.MemberForm;
-import com.example.backend.member.dto.MemberListInfo;
-import com.example.backend.member.dto.MemberLoginForm;
+import com.example.backend.member.dto.*;
 import com.example.backend.member.service.MemberService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -85,12 +82,13 @@ public class MemberController {
     @PutMapping("{id}")
     @PreAuthorize("isAuthenticated()")
     public ResponseEntity<?> updateMember(@PathVariable Integer id,
-                                          @RequestBody @Valid MemberForm memberForm,
+                                          @RequestBody @Valid MemberUpdateForm memberUpdateForm,
                                           Authentication authentication,
                                           BindingResult bindingResult) {
 
+        System.out.println("asdasdasd");
         // 로그인한 회원 본인만 수정 가능
-        if (!authentication.getName().equals(memberForm.getId().toString())) {
+        if (!authentication.getName().equals(memberUpdateForm.getId().toString())) {
             return ResponseEntity.status(403).build();
         }
 
@@ -104,7 +102,7 @@ public class MemberController {
         }
 
         try {
-            memberService.update(id, memberForm);
+            memberService.update(id, memberUpdateForm);
         } catch (Exception e) {
             e.printStackTrace();
             String message = e.getMessage();
