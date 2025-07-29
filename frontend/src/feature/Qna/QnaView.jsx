@@ -129,6 +129,7 @@ export function QnaView() {
               >
                 수정
               </Button>
+              <Button className="ms-2 btn-danger">삭제</Button>
             </div>
           </div>
         </div>
