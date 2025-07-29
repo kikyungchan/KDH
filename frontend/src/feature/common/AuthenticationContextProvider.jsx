@@ -1,6 +1,7 @@
 import { createContext, useEffect, useState } from "react";
 import { jwtDecode } from "jwt-decode";
 import axios from "axios";
+import { useNavigate } from "react-router";
 
 // 유효기간을 넘긴 토큰 삭제
 const token = localStorage.getItem("token");
@@ -27,6 +28,8 @@ const AuthenticationContext = createContext(null);
 
 export function AuthenticationContextProvider({ children }) {
   const [user, setUser] = useState(null);
+  const navigate = useNavigate();
+
   useEffect(() => {
     const token = localStorage.getItem("token");
     if (token) {
@@ -55,6 +58,7 @@ export function AuthenticationContextProvider({ children }) {
         id: res.data.id,
         loginId: res.data.loginId,
         name: res.data.name,
+        roles: payload.roles,
       });
     });
   }
@@ -63,6 +67,7 @@ export function AuthenticationContextProvider({ children }) {
   function logout() {
     localStorage.removeItem("token");
     setUser(null);
+    navigate("/");
   }
 
   // hasAccess
