@@ -11,12 +11,14 @@ import {
   ToggleButton,
 } from "react-bootstrap";
 import Form from "react-bootstrap/Form";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import axios from "axios";
 import { useParams, useSearchParams } from "react-router";
 import { toast } from "react-toastify";
+import { AuthenticationContext } from "../common/AuthenticationContextProvider.jsx";
 
 export function QnaView() {
+  const { user, isAdmin } = useContext(AuthenticationContext);
   const [searchParams, setSearchParams] = useSearchParams("");
   let params = useParams();
   const [category, setCategory] = useState("");
@@ -151,6 +153,13 @@ export function QnaView() {
               <Button className="ms-2 btn-danger" onClick={setModalShow}>
                 삭제
               </Button>
+              {/* todo : is Admin 여부에 따라 보임 관련 코드 수정될 시 즉시 수정할 것*/}
+              {/* todo : 링크 연결 및 답변하기 페이지 만들어야 함*/}
+              {user !== null && isAdmin && (
+                <Button className="ms-2 btn-primary" href="/qna/list">
+                  답변하기
+                </Button>
+              )}
             </div>
           </div>
         </div>
