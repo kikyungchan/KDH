@@ -67,7 +67,7 @@ public class MemberController {
     // 회원 탈퇴
     @DeleteMapping
     @PreAuthorize("isAuthenticated()")
-    public ResponseEntity<?> deleteMember(@RequestBody MemberDeleteForm memberDeleteForm,
+    public ResponseEntity<?> deleteMember(@RequestBody @Valid MemberDeleteForm memberDeleteForm,
                                           Authentication authentication) {
         // 로그인한 회원 본인만 탈퇴 가능
         if (!authentication.getName().equals(memberDeleteForm.getId().toString())) {

@@ -17,7 +17,7 @@ import { AuthenticationContext } from "../common/AuthenticationContextProvider.j
 export function MemberDetail() {
   const [member, setMember] = useState(null);
   const [withdrawModalShow, setWithdrawModalShow] = useState(false);
-  const [password, setPassword] = useState("");
+  const [oldPassword, setOldPassword] = useState("");
 
   const [memberParams] = useSearchParams();
 
@@ -54,7 +54,7 @@ export function MemberDetail() {
     console.log(member);
     axios
       .delete(`/api/member`, {
-        data: { id: member.id, password: password },
+        data: { id: member.id, oldPassword: oldPassword },
       })
       .then((res) => {
         console.log("good");
@@ -137,8 +137,8 @@ export function MemberDetail() {
             <FormControl
               id="withdraw-password"
               type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
+              value={oldPassword}
+              onChange={(e) => setOldPassword(e.target.value)}
               autoFocus
             />
             <FormText className="text-danger">
@@ -148,7 +148,7 @@ export function MemberDetail() {
         </Modal.Body>
         <Modal.Footer>
           <Button onClick={() => setWithdrawModalShow(false)}>취소</Button>
-          <Button onClick={handleWithdrawButtonClick} disabled={!password}>
+          <Button onClick={handleWithdrawButtonClick} disabled={!oldPassword}>
             탈퇴
           </Button>
         </Modal.Footer>

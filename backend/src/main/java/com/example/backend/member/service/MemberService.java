@@ -96,7 +96,7 @@ public class MemberService {
         String oldPassword = memberDeleteForm.getOldPassword(); // 기존 password
 
         // 비밀번호 불일치 시
-        if (!passwordEncoder.matches(oldPassword, db.getPassword())) {
+        if (oldPassword == null || !passwordEncoder.matches(oldPassword, db.getPassword())) {
             return false;
         }
 
