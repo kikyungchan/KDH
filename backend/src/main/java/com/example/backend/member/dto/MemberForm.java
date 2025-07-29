@@ -49,7 +49,7 @@ public class MemberForm {
     private String address;
 
     @NotBlank(message = "우편번호는 필수입니다.")
-    private String zipcode;
+    private String zipCode;
 
     private String addressDetail;
 

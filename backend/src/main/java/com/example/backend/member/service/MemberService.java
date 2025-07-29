@@ -40,6 +40,8 @@ public class MemberService {
         member.setPhone(memberForm.getPhone());
         member.setEmail(memberForm.getEmail());
         member.setAddress(memberForm.getAddress());
+        member.setZipcode(memberForm.getZipCode());
+        member.setAddressDetail(memberForm.getAddressDetail());
         memberRepository.save(member);
     }
 
@@ -84,7 +86,9 @@ public class MemberService {
         memberDto.setBirthday(member.getBirthday());
         memberDto.setPhone(member.getPhone());
         memberDto.setEmail(member.getEmail());
+        memberDto.setZipCode(member.getZipcode());
         memberDto.setAddress(member.getAddress());
+        memberDto.setAddressDetail(member.getAddressDetail());
 
         return memberDto;
     }
@@ -126,7 +130,9 @@ public class MemberService {
         member.setBirthday(memberUpdateForm.getBirthday());
         member.setPhone(memberUpdateForm.getPhone());
         member.setEmail(memberUpdateForm.getEmail());
+        member.setZipcode(memberUpdateForm.getZipCode());
         member.setAddress(memberUpdateForm.getAddress());
+        member.setAddressDetail(memberUpdateForm.getAddressDetail());
 
         // 새 비밀번호가 입력된 경우에만 변경
         if (newPassword != null && !newPassword.isBlank()) {

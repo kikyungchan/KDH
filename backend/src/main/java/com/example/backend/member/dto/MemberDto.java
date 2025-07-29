@@ -12,5 +12,7 @@ public class MemberDto {
     private LocalDate birthday;
     private String email;
     private String phone;
+    private String zipCode;
     private String address;
+    private String addressDetail;
 }
