@@ -116,7 +116,6 @@ public class QuestionService {
 
     public QuestionDto viewQuestion(int id, Authentication authentication) {
         QuestionDto questionById = questionRepository.findQuestionById(id);
-        // TODO : 이미지 추가
         Integer productId = questionById.getProductId();
         List<String> image = productImageRepository.findByProductid(productId);
         // 하나만 필요할 것 같아서 하나만 추가
