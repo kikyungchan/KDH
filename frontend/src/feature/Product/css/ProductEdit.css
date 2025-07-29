@@ -1,21 +1,48 @@
 .product-edit-container {
-    max-width: 800px;
-    margin: 0 auto;
+    max-width: 700px;
+    margin: 40px auto;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    background-color: #fff;
 }
 
-.product-edit-image-box {
+.product-edit-field {
+    margin-bottom: 16px;
+}
+
+.product-edit-label {
+    display: block;
+    margin-bottom: 6px;
+    font-weight: bold;
+}
+
+.product-edit-input,
+.product-edit-textarea {
+    width: 100%;
+    padding: 8px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.product-edit-image-box,
+.product-edit-preview-box {
     display: flex;
     flex-wrap: wrap;
     gap: 10px;
+    margin-top: 10px;
 }
 
 .product-edit-image-wrapper {
     position: relative;
 }
 
-.product-edit-image {
+.product-edit-image,
+.product-edit-preview {
     width: 150px;
     height: 100px;
+    object-fit: cover;
     border: 1px solid #ccc;
     border-radius: 4px;
 }
@@ -25,33 +52,70 @@
     position: absolute;
     top: 5px;
     right: 5px;
-    padding: 2px 6px;
-    font-size: 12px;
-    color: white;
-    background-color: #dc3545;
+    width: 24px;
+    height: 24px;
+    padding: 0;
+    font-size: 16px;
+    font-weight: bold;
+    line-height: 24px;
+    text-align: center;
     border: none;
     border-radius: 4px;
+    background-color: rgba(0, 0, 0, 0.6);
+    color: white;
     cursor: pointer;
-}
-
-.product-edit-preview-box {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-    margin-top: 10px;
-}
-
-.product-edit-preview {
-    width: 150px;
-    height: 100px;
-    border: 1px solid #aaa;
-    border-radius: 4px;
 }
 
 .product-edit-file-list {
     margin-top: 10px;
-}
-
-.product-edit-file-item {
     font-size: 14px;
 }
+
+.product-edit-submit-btns {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 30px;
+}
+
+.product-edit-btn {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+}
+
+.product-edit-btn.confirm {
+    background: black;
+    color: white;
+}
+
+.product-edit-btn.cancel {
+    background: #ccc;
+}
+
+.product-edit-file-upload {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 10px;
+}
+
+.product-edit-file-label {
+    display: inline-block;
+    padding: 6px 12px;
+    background-color: #eee;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+.product-edit-file-input {
+    display: none; /* 기본 input 숨김 */
+}
+
+.product-edit-file-count {
+    font-size: 14px;
+    color: #333;
+}
+

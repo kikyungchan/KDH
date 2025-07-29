@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate, useSearchParams } from "react-router";
-import { Button, Col, Container, Row } from "react-bootstrap";
+import { Col, Container, Row } from "react-bootstrap";
 import "./css/ProductEdit.css";
 
 export function ProductEdit() {
@@ -153,11 +153,10 @@ export function ProductEdit() {
                       className="product-edit-image"
                     />
                     <button
-                      size="sm"
-                      className="product-edit-button-delete"
+                      className="product-edit-button-cancel"
                       onClick={() => handleImageDelete(idx)}
                     >
-                      삭제
+                      ×
                     </button>
                   </div>
                 ))}
@@ -165,23 +164,21 @@ export function ProductEdit() {
             </div>
 
             {/* 새 이미지 추가 */}
-            <div>
-              <h4 className="mb-3">새 이미지 추가</h4>
+            <div className="product-edit-file-upload">
+              <label htmlFor="fileInput" className="product-edit-file-label">
+                파일 선택
+              </label>
+              <span className="product-edit-file-count">
+                파일 {newImages.length}개
+              </span>
               <input
+                id="fileInput"
                 type="file"
                 accept="image/*"
                 multiple
                 onChange={handleAddImages}
+                className="product-edit-file-input"
               />
-              {newImages.length > 0 && (
-                <ul className="product-edit-file-list">
-                  {newImages.map((file, idx) => (
-                    <li key={idx} className="product-edit-file-item">
-                      {file.name}
-                    </li>
-                  ))}
-                </ul>
-              )}
             </div>
 
             {/* 미리보기 */}
@@ -194,64 +191,75 @@ export function ProductEdit() {
                     className="product-edit-preview"
                   />
                   <button
-                    size="sm"
                     className="product-edit-button-cancel"
                     onClick={() => handleRemoveNewImage(idx)}
                   >
-                    취소
+                    ×
                   </button>
                 </div>
               ))}
             </div>
 
             {/* 입력폼 */}
-            <div className="mt-2 mb-2">
-              상품명
+            <div className="product-edit-field">
+              <label className="product-edit-label">상품명</label>
               <input
                 name="productName"
                 onChange={handleChange}
                 value={form.productName}
                 type="text"
+                className="product-edit-input"
               />
             </div>
-            <div className="mb-2">
-              가격
+            <div className="product-edit-field">
+              <label className="product-edit-label">가격</label>
               <input
                 name="price"
                 onChange={handleChange}
                 value={form.price}
                 type="text"
+                className="product-edit-input"
               />
             </div>
-            <div className="mb-2">
-              카테고리
+            <div className="product-edit-field">
+              <label className="product-edit-label">카테고리</label>
               <input
                 name="category"
                 onChange={handleChange}
                 value={form.category}
                 type="text"
+                className="product-edit-input"
               />
             </div>
-            <div className="mb-2">
-              수량
+            <div className="product-edit-field">
+              <label className="product-edit-label">수량</label>
               <input
                 name="quantity"
                 onChange={handleChange}
                 value={form.quantity}
                 type="text"
+                className="product-edit-input"
               />
             </div>
-            <div className="mb-2">
-              상품설명
+            <div className="product-edit-field">
+              <label className="product-edit-label">상품설명</label>
               <textarea
                 value={form.info}
                 onChange={handleChange}
                 name="info"
+                className="product-edit-input"
               ></textarea>
             </div>
-            <div className="mb-2">
-              <button onClick={handleSave}>저장</button>
-              <button onClick={() => navigate(-1)}>취소</button>
+            <div className="product-edit-submit-btns">
+              <button className="product-edit-btn confirm" onClick={handleSave}>
+                저장
+              </button>
+              <button
+                className="product-edit-btn cancel"
+                onClick={() => navigate(-1)}
+              >
+                취소
+              </button>
             </div>
           </div>
         </Col>
