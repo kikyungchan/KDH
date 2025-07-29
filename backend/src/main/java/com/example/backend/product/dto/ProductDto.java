@@ -14,6 +14,7 @@ public class ProductDto {
     private String info;
     private Integer quantity;
     private LocalDateTime insertedAt;
+    private String detailText;
 
 
     private List<ProductOptionDto> options;
