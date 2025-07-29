@@ -24,8 +24,9 @@ public class Cart {
     @ManyToOne
     @JoinColumn(name = "product_id")
     private Product product;
+
     @ManyToOne
-    @JoinColumn(name = "option_id")
+    @JoinColumn(name = "option_id", nullable = true)
     private ProductOption option;
 
     private Integer quantity;

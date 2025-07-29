@@ -58,6 +58,9 @@ CREATE TABLE cart
     inserted_at datetime           NOT NULL DEFAULT NOW(),
     CONSTRAINT pk_cart PRIMARY KEY (id)
 );
+ALTER TABLE cart
+    MODIFY COLUMN option_id INT NULL;
+
 # 외래키
 ALTER TABLE cart
     ADD CONSTRAINT FK_CART_ON_OPTION FOREIGN KEY (option_id) REFERENCES product_option (id);
