@@ -359,32 +359,60 @@ export function ProductDetail() {
               </div>
 
               {/*버튼*/}
-              <div style={{ marginTop: "2px", display: "flex", gap: "10px" }}>
-                <button
-                  onClick={handleBuyButton}
-                  style={{
-                    border: "3",
-                    width: "150px",
-                    backgroundColor: "black",
-                    color: "white",
-                  }}
-                >
-                  구매하기
-                </button>
-                <button
-                  onClick={handleCartButton}
-                  style={{ border: "3", width: "150px" }}
-                >
-                  장바구니
-                </button>
-                {/*Todo: 수정삭제버튼 관리자만 보이게 수정*/}
-                <Button className="btn-secondary" onClick={handleEditButton}>
-                  수정
-                </Button>
-                <Button className="btn-danger" onClick={handleDeleteButton}>
-                  삭제
-                </Button>
-              </div>
+              {product.quantity === 0 ? (
+                // 품절 상태일 경우
+                <div style={{ marginTop: "2px" }}>
+                  <button
+                    disabled
+                    style={{
+                      width: "50%",
+                      backgroundColor: "#ccc",
+                      color: "#fff",
+                      padding: "12px",
+                      fontWeight: "bold",
+                      border: "none",
+                      cursor: "not-allowed",
+                    }}
+                  >
+                    품절된 상품입니다
+                  </button>
+                </div>
+              ) : (
+                // 재고 있는 경우 기존 버튼들
+                <div style={{ marginTop: "2px", display: "flex", gap: "10px" }}>
+                  <button
+                    onClick={handleBuyButton}
+                    style={{
+                      border: "3",
+                      width: "150px",
+                      backgroundColor: "black",
+                      color: "white",
+                    }}
+                  >
+                    구매하기
+                  </button>
+                  <button
+                    onClick={handleCartButton}
+                    style={{ border: "3", width: "150px" }}
+                  >
+                    장바구니
+                  </button>
+                  {/* 관리자용 수정/삭제 버튼 */}
+                  <Button className="btn-secondary" onClick={handleEditButton}>
+                    수정
+                  </Button>
+                  <Button className="btn-danger" onClick={handleDeleteButton}>
+                    삭제
+                  </Button>
+                </div>
+              )}
+              {/*Todo: 수정삭제버튼 관리자만 보이게 수정*/}
+              <Button className="btn-secondary" onClick={handleEditButton}>
+                수정
+              </Button>
+              <Button className="btn-danger" onClick={handleDeleteButton}>
+                삭제
+              </Button>
             </div>
           </div>
           <hr />
