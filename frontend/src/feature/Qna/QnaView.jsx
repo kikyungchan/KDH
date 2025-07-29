@@ -17,12 +17,22 @@ import { useParams, useSearchParams } from "react-router";
 export function QnaView() {
   const [searchParams, setSearchParams] = useSearchParams("");
   let params = useParams();
-  const [category, setCategory] = useState();
+  const [category, setCategory] = useState("");
   const [productNm, setProductNm] = useState();
   const [title, setTitle] = useState();
   const [content, setContent] = useState();
   const [price, setPrice] = useState();
   const [image, setImage] = useState();
+  /*enum categoryList = {
+    1 = "기능 관련",
+  }
+    { name: "기능 관련", value: "1" },
+    { name: "크기·무게 관련", value: "2" },
+    { name: "배송 관련", value: "3" },
+    { name: "설정 관련", value: "4" },
+    { name: "반품·교환 관련", value: "5" },
+    { name: "기타 문의", value: "6" },
+  ];*/
 
   useEffect(() => {
     axios
@@ -54,22 +64,13 @@ export function QnaView() {
 
               <FormGroup className="mb-3" controlId="category1">
                 <FormLabel>상담유형</FormLabel>
-                <Form.Select
+                <FormControl
                   disabled={true}
                   className="form-select"
                   aria-label="Default select example"
-                  value={category}
-                >
-                  <option selected disabled hidden>
-                    유형을 선택하세요
-                  </option>
-                  <option value="1">기능 관련</option>
-                  <option value="2">크기·무게 관련</option>
-                  <option value="3">배송 관련</option>
-                  <option value="4">설정 관련</option>
-                  <option value="5">반품·교환 관련</option>
-                  <option value="6">기타 문의</option>
-                </Form.Select>
+                  // value={categoryList.find((item) => item.value === category)}
+                ></FormControl>
+                {/*  todo : select -> input로 categoryList 에 있는 value 에 따라 name 값으로 불러오기*/}
               </FormGroup>
             </div>
             <br />
