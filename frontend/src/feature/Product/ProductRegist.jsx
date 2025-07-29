@@ -6,6 +6,7 @@ import "./css/ProductRegist.css";
 export function ProductRegist() {
   const [previewImages, setPreviewImages] = useState([]); // 미리보기 URL
   const navigate = useNavigate();
+  const [detailText, setDetailText] = useState("");
   const [productName, setProductName] = useState("");
   const [price, setPrice] = useState("");
   const [quantity, setQuantity] = useState("");
@@ -47,6 +48,7 @@ export function ProductRegist() {
     formData.append("category", category);
     formData.append("info", info);
     formData.append("options", JSON.stringify(options));
+    formData.append("detailText", detailText);
     images.forEach((file) => {
       formData.append("images", file);
     });
@@ -64,6 +66,7 @@ export function ProductRegist() {
         setInfo("");
         setImages([]);
         setPreviewImages([]);
+        setDetailText("");
         navigate("/product/list");
       })
       .catch((err) => {
@@ -146,6 +149,16 @@ export function ProductRegist() {
         />
       </div>
 
+      <div className="product-regist-field">
+        <label className="product-regist-label">본문영역</label>
+        <textarea
+          rows={5}
+          className="product-regist-textarea"
+          value={detailText}
+          onChange={(e) => setDetailText(e.target.value)}
+        />
+      </div>
+
       <div className="product-regist-options">
         <label className="product-regist-label">옵션 목록</label>
         {options.map((opt, index) => (
@@ -162,7 +175,7 @@ export function ProductRegist() {
               }}
             />
             <input
-              type="number"
+              type="text"
               placeholder="가격"
               className="product-regist-input"
               value={opt.price}

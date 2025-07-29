@@ -459,8 +459,8 @@ export function ProductDetail() {
           <hr />
           {/* 본문영역 */}
           <div style={{ marginTop: "35px" }}>
-            <h2>이거진짜좋음 이걸안사?</h2>
-            {/* 본문영역이미지 */}
+            <h2>{product.detailText}</h2>
+
             <div
               style={{ display: "flex", flexDirection: "column", gap: "15px" }}
             >

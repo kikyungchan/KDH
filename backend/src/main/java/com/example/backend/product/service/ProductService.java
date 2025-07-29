@@ -50,6 +50,7 @@ public class ProductService {
         product.setCategory(productForm.getCategory());
         product.setInfo(productForm.getInfo());
         product.setQuantity(productForm.getQuantity());
+        product.setDetailText(productForm.getDetailText());
         productRepository.save(product);
 
         //옵션 저장

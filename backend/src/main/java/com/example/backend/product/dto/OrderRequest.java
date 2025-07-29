@@ -12,6 +12,8 @@ public class OrderRequest {
     private String memo;
     private String productName;
     private String optionName;
+    private String zipcode;
+    private String addressDetail;
 
 
 }

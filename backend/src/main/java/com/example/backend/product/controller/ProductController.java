@@ -11,10 +11,8 @@ import com.example.backend.product.service.ProductService;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
-import org.eclipse.angus.mail.imap.protocol.INTERNALDATE;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -23,7 +21,6 @@ import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 
 @RestController
 @RequiredArgsConstructor
@@ -151,8 +148,8 @@ public class ProductController {
                                     @RequestParam String category,
                                     @RequestParam String info,
                                     @RequestParam String options,
+                                    @RequestParam String detailText,
                                     @RequestParam("images") List<MultipartFile> images) {
-//        System.out.println("productForm = " + productForm);
         ObjectMapper objectMapper = new ObjectMapper();
         List<ProductOptionDto> optionList;
         try {
@@ -169,6 +166,7 @@ public class ProductController {
         form.setInfo(info);
         form.setOptions(optionList);
         form.setImages(images);
+        form.setDetailText(detailText);
 
         productService.add(form);
 

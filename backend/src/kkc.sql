@@ -143,3 +143,8 @@ CREATE TABLE order_item
 );
 ALTER TABLE order_item
     MODIFY option_id INT NULL;
+
+ALTER TABLE product
+    ADD detail_text VARCHAR(5000) NULL;
+
+
