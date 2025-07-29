@@ -26,6 +26,14 @@ export function ProductList() {
     setSearchParams({ page });
   };
 
+  function isNewProduct(insertedAt) {
+    if (!insertedAt) return false;
+    const createdDate = new Date(insertedAt);
+    const now = new Date();
+    const diffInDays = (now - createdDate) / (1000 * 60 * 60 * 24);
+    return diffInDays <= 30;
+  }
+
   return (
     <Row className="justify-content-center">
       <Col>
@@ -50,15 +58,21 @@ export function ProductList() {
                     </div>
                   )}
 
-                  {/* 상품명 + 가격 + SOLD OUT */}
+                  {/* 상품명 + 가격 + SOLD OUT/NEW 배지 */}
+
                   <div className="product-info-wrapper">
                     <div className="product-name">{product.productName}</div>
                     <div className="product-price">
                       {product.price.toLocaleString()}원
                     </div>
-                    {product.quantity === 0 && (
-                      <div className="sold-out-badge">SOLD OUT</div>
-                    )}
+                    <div className="product-badges">
+                      {isNewProduct(product.insertedAt) && (
+                        <span className="new-badge">NEW</span>
+                      )}
+                      {product.quantity === 0 && (
+                        <span className="sold-out-badge">SOLD OUT</span>
+                      )}
+                    </div>
                   </div>
                 </Link>
               );

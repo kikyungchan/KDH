@@ -96,6 +96,7 @@ public class ProductService {
             dto.setProductName(product.getProductName());
             dto.setPrice(product.getPrice());
             dto.setQuantity(product.getQuantity());
+            dto.setInsertedAt(product.getInsertedAt());
             if (!product.getImages().isEmpty()) {
                 dto.setImagePath(List.of(product.getImages().get(0).getStoredPath()));
             }

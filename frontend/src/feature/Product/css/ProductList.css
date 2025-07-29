@@ -76,3 +76,20 @@
     display: inline-block;
 }
 
+.product-badges {
+    display: flex;
+    justify-content: center;
+    gap: 6px;
+    margin-top: 4px;
+}
+
+.new-badge {
+    font-size: 11px;
+    background-color: #a7f3d0; /* 스카이그린 */
+    color: #065f46;
+    padding: 3px 6px;
+    border-radius: 4px;
+    font-weight: bold;
+    display: inline-block;
+}
+
