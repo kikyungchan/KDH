@@ -14,6 +14,8 @@ export function ProductDetail() {
   const [searchParams] = useSearchParams();
   const id = searchParams.get("id");
   const navigate = useNavigate();
+  const [isProcessing, setIsProcessing] = useState(false);
+
   useEffect(() => {
     axios
       .get(`/api/product/view?id=${id}`)
@@ -296,6 +298,11 @@ export function ProductDetail() {
     });
   }
 
+  function handleQuestionButton() {
+    setIsProcessing(true);
+    navigate(`/qna/add/${product.id}`);
+  }
+
   return (
     <Container>
       <Row className="justify-content-center">
@@ -437,6 +444,17 @@ export function ProductDetail() {
                   </Button>
                 </div>
               )}
+              <br />
+              <div>
+                <Button
+                  className="btn-primary"
+                  onClick={handleQuestionButton}
+                  disabled={isProcessing}
+                >
+                  문의하기
+                </Button>
+              </div>
+
             </div>
           </div>
           <hr />

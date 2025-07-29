@@ -89,7 +89,6 @@ public class MemberController {
                                           Authentication authentication,
                                           BindingResult bindingResult) {
 
-        System.out.println("asdasdasd");
         // 로그인한 회원 본인만 수정 가능
         if (!authentication.getName().equals(memberUpdateForm.getId().toString())) {
             return ResponseEntity.status(403).build();

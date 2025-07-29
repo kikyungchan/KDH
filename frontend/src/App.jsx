@@ -12,12 +12,13 @@ import { MemberDetail } from "./feature/Member/MemberDetail.jsx";
 import { MemberEdit } from "./feature/Member/MemberEdit.jsx";
 import { MemberLogin } from "./feature/Member/MemberLogin.jsx";
 import { MemberLogout } from "./feature/Member/MemberLogout.jsx";
-import { createContext } from "react";
 import { AuthenticationContextProvider } from "./feature/common/AuthenticationContextProvider.jsx";
 import ProductOrder from "./feature/Product/ProductOrder.jsx";
 import ProductCart from "./feature/Product/ProductCart.jsx";
 import { Chat } from "./feature/Chat/Chat.jsx";
 import { QnaAdd } from "./feature/Qna/QnaAdd.jsx";
+import { QnaList } from "./feature/Qna/QnaList.jsx";
+import { QnaView } from "./feature/Qna/QnaView.jsx";
 
 function App() {
   // const username = prompt("닉네임을 입력해 주세요");
@@ -39,7 +40,9 @@ function App() {
             <Route path="/signup" element={<MemberAdd />} />
             <Route path="/login" element={<MemberLogin />} />
             <Route path="/logout" element={<MemberLogout />} />
-            <Route path="/qna/view" element={<QnaAdd />} />
+            <Route path="/qna/add/:id" element={<QnaAdd />} />
+            <Route path="/qna/list/" element={<QnaList />} />
+            <Route path="/qna/view/" element={<QnaView />} />
             {/*<Route path="chat/chatting" element={<Chat username={username} />} />*/}
             <Route path="chat/chatting" element={<Chat />} />
           </Route>
