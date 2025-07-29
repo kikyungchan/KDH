@@ -40,6 +40,7 @@ public class QuestionService {
         return qnainfo;
     }
 
+
     public void add(QuestionAddForm dto, Authentication authentication) {
         if (authentication == null) {
             throw new RuntimeException("권한이 없습니다.");
@@ -95,5 +96,13 @@ public class QuestionService {
 
         return Map.of("pageInfo", pageInfo,
                 "questionList", questionListDtoPage.getContent());
+    }
+
+    public void hasPermission(Authentication authentication) {
+        System.out.println("로그인 여부 확인");
+        // 로그인 여부 확인해주는 메서드
+        if (authentication == null) {
+            throw new RuntimeException("권한이 없습니다.");
+        }
     }
 }

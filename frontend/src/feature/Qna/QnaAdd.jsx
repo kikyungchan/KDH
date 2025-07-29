@@ -143,7 +143,6 @@ export function QnaAdd() {
                   name="radio"
                   value={radio.value}
                   checked={radioValue === radio.value}
-                  sele
                   onChange={(e) => setRadioValue(e.currentTarget.value)}
                   onClick={
                     radio.value === "2" ? handleQnalistButtonClick : null

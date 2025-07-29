@@ -19,17 +19,23 @@ public class QuestionController {
 
     @GetMapping("add")
     @PreAuthorize("isAuthenticated()")
-//    todo : 로그인 안했으면 추가 못하게
     public Map<String, ?> addQuestion(@RequestParam int id, Authentication authentication) {
+
+        // 로그인 여부 확인
+        questionService.hasPermission(authentication);
+
         return questionService.addquestion(id, authentication);
     }
 
     @GetMapping("list")
     @PreAuthorize("isAuthenticated()")
-    //    todo : 로그인 안했으면 안보이게
     public Map<String, Object> getAllBoards(
             @RequestParam(value = "q", defaultValue = "") String keyword,
-            @RequestParam(value = "p", defaultValue = "1") Integer pageNumber) {
+            @RequestParam(value = "p", defaultValue = "1") Integer pageNumber,
+            Authentication authentication) {
+
+        // 로그인 여부 확인
+        questionService.hasPermission(authentication);
 
         System.out.println("keyword : " + keyword);
         System.out.println("pageNumber : " + pageNumber);

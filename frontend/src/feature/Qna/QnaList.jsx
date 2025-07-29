@@ -24,7 +24,7 @@ export function QnaList() {
     closed: "종료",
   };
   const radios = [
-    { name: "상품문의", value: "1", checked: true },
+    { name: "상품목록", value: "1", checked: true },
     { name: "문의내역", value: "2" },
   ];
 
@@ -67,6 +67,10 @@ export function QnaList() {
     return <Spinner />;
   }
 
+  function handleQnaAddButtonClick() {
+    navigate("/product/list");
+  }
+
   return (
     <>
       <Row className="justify-content-center">
@@ -86,9 +90,9 @@ export function QnaList() {
                     value={radio.value}
                     checked={idx % 2 ? true : false}
                     // onChange={(e) => setRadioValue(e.currentTarget.value)}
-                    // onClick={
-                    // radio.value === "2" ? handleQnalistButtonClick : null
-                    //}
+                    onClick={
+                      radio.value === "1" ? handleQnaAddButtonClick : null
+                    }
                   >
                     {radio.name}
                   </ToggleButton>
@@ -111,13 +115,13 @@ export function QnaList() {
                     </th>
                     <th
                       className="d-none d-lg-table-cell"
-                      style={{ width: "100px" }}
+                      style={{ width: "140px" }}
                     >
                       작성일시
                     </th>
                     <th
                       className="d-none d-lg-table-cell"
-                      style={{ width: "100px" }}
+                      style={{ width: "140px" }}
                     >
                       수정일시
                     </th>
