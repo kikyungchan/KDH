@@ -166,6 +166,16 @@ function Order(props) {
     }
   }
 
+  function handleSearchAddress() {
+    new window.daum.Postcode({
+      oncomplete: function (data) {
+        setReceiverAddress(data.address); // 도로명 주소
+        setPostalCode(data.zonecode); // 우편번호 필요하면 이것도
+        console.log("작동");
+      },
+    }).open();
+  }
+
   return (
     <div className="order-container">
       <h2>결제하기</h2>
@@ -290,7 +300,9 @@ function Order(props) {
             value={postalCode}
             onChange={(e) => setPostalCode(e.target.value)}
           />
-          <button className="order-input-full">주소찾기</button>
+          <button onClick={handleSearchAddress} className="order-input-full">
+            주소찾기
+          </button>
         </div>
         <input
           placeholder="주소"
