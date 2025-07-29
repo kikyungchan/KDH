@@ -24,19 +24,6 @@ public class MemberForm {
     )
     private String password;
 
-    //    @NotBlank(message = "비밀번호는 필수입니다.")
-    @Pattern(
-            regexp = "^[A-Za-z0-9]{8,20}$",
-            message = "비밀번호는 영문자와 숫자 조합의 8~20자여야 합니다."
-    )
-    private String oldPassword;
-
-    @Pattern(
-            regexp = "^$|^[A-Za-z0-9]{8,20}$",
-            message = "비밀번호는 영문자와 숫자 조합의 8~20자여야 합니다."
-    )
-    private String newPassword;
-
     @NotBlank(message = "이름은 필수입니다.")
     @Pattern(
             regexp = "^[가-힣a-zA-Z\\s]{2,20}$",

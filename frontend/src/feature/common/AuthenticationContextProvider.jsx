@@ -65,11 +65,16 @@ export function AuthenticationContextProvider({ children }) {
   }
 
   // hasAccess
+  function hasAccess(loginId) {
+    return user.loginId === loginId;
+  }
 
   // isAdmin
 
   return (
-    <AuthenticationContext value={{ user: user, login: login, logout: logout }}>
+    <AuthenticationContext
+      value={{ user: user, login: login, logout: logout, hasAccess: hasAccess }}
+    >
       {children}
     </AuthenticationContext>
   );

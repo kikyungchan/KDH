@@ -64,13 +64,13 @@ public class MemberController {
     // 회원 탈퇴
     @DeleteMapping
     @PreAuthorize("isAuthenticated()")
-    public ResponseEntity<?> deleteMember(@RequestBody MemberForm memberForm,
+    public ResponseEntity<?> deleteMember(@RequestBody MemberDeleteForm memberDeleteForm,
                                           Authentication authentication) {
         // 로그인한 회원 본인만 탈퇴 가능
-        if (!authentication.getName().equals(memberForm.getId().toString())) {
+        if (!authentication.getName().equals(memberDeleteForm.getId().toString())) {
             return ResponseEntity.status(403).build();
         }
-        boolean deleted = memberService.delete(memberForm);
+        boolean deleted = memberService.delete(memberDeleteForm);
         if (deleted) {
             return ResponseEntity.ok().build();
         } else {

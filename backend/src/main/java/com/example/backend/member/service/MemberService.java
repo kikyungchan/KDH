@@ -85,11 +85,11 @@ public class MemberService {
         return memberDto;
     }
 
-    public boolean delete(MemberForm memberForm) {
-        Member db = memberRepository.findById(memberForm.getId())
+    public boolean delete(MemberDeleteForm memberDeleteForm) {
+        Member db = memberRepository.findById(memberDeleteForm.getId())
                 .orElseThrow(() -> new RuntimeException("존재하지 않는 회원입니다."));
 
-        String oldPassword = memberForm.getOldPassword(); // 기존 password
+        String oldPassword = memberDeleteForm.getOldPassword(); // 기존 password
 
         // 비밀번호 불일치 시
         if (!passwordEncoder.matches(oldPassword, db.getPassword())) {
