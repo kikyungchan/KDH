@@ -137,42 +137,70 @@ export function ProductDetail() {
         .catch((err) => {})
         .finally(() => {});
     } else {
-      // 옵션에 id 없으면 index를 임시 id로 할당
-      // 비로그인유저
-      const enrichedOptions = (product.options || []).map((opt, idx) => ({
-        ...opt,
-        id: idx + 1,
-      }));
+      //
+      if (product.options?.length > 0) {
+        // 옵션 있는 상품
+        const enrichedOptions = (product.options || []).map((opt, idx) => ({
+          ...opt,
+          id: idx + 1,
+        }));
 
-      const selectedId = enrichedOptions.find(
-        (opt) => opt.optionName === selectedOption.optionName,
-      )?.id;
+        const selectedId = enrichedOptions.find(
+          (opt) => opt.optionName === selectedOption.optionName,
+        )?.id;
 
-      const cartItem = {
-        productId: product.id,
-        optionId: selectedId,
-        productName: product.productName,
-        optionName: selectedOption.optionName,
-        price: selectedOption.price,
-        quantity: quantity,
-        imagePath: thumbnail,
-        options: enrichedOptions,
-      };
-      const existingCart = JSON.parse(
-        localStorage.getItem("guestCart") || "[]",
-      );
-      const existingIndex = existingCart.findIndex(
-        (item) =>
-          item.productId === cartItem.productId &&
-          item.optionName === cartItem.optionName,
-      );
-      if (existingIndex > -1) {
-        existingCart[existingIndex].quantity += cartItem.quantity;
+        const cartItem = {
+          productId: product.id,
+          optionId: selectedId,
+          productName: product.productName,
+          optionName: selectedOption.optionName,
+          price: selectedOption.price,
+          quantity: quantity,
+          imagePath: thumbnail,
+          options: enrichedOptions,
+        };
+
+        const existingCart = JSON.parse(
+          localStorage.getItem("guestCart") || "[]",
+        );
+        const existingIndex = existingCart.findIndex(
+          (item) =>
+            item.productId === cartItem.productId &&
+            item.optionName === cartItem.optionName,
+        );
+        if (existingIndex > -1) {
+          existingCart[existingIndex].quantity += cartItem.quantity;
+        } else {
+          existingCart.push(cartItem);
+        }
+        localStorage.setItem("guestCart", JSON.stringify(existingCart));
       } else {
-        existingCart.push(cartItem);
+        // 옵션 없는 상품
+        const cartItem = {
+          productId: product.id,
+          productName: product.productName,
+          price: product.price,
+          quantity: quantity,
+          imagePath: thumbnail,
+          optionName: null,
+          optionId: null,
+          options: [],
+        };
+
+        const existingCart = JSON.parse(
+          localStorage.getItem("guestCart") || "[]",
+        );
+        const existingIndex = existingCart.findIndex(
+          (item) => item.productId === cartItem.productId,
+        );
+        if (existingIndex > -1) {
+          existingCart[existingIndex].quantity += cartItem.quantity;
+        } else {
+          existingCart.push(cartItem);
+        }
+        localStorage.setItem("guestCart", JSON.stringify(existingCart));
       }
 
-      localStorage.setItem("guestCart", JSON.stringify(existingCart));
       setShowModal(true);
     }
   }
