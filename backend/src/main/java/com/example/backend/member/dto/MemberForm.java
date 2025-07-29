@@ -48,7 +48,14 @@ public class MemberForm {
     @NotBlank(message = "주소는 필수입니다.")
     private String address;
 
+    @NotBlank(message = "우편번호는 필수입니다.")
+    private String zipcode;
+
+    private String addressDetail;
+
     @NotNull(message = "생년월일은 필수입니다.")
     @Past(message = "생년월일은 과거 날짜여야 합니다.")
     private LocalDate birthday;
+
+
 }

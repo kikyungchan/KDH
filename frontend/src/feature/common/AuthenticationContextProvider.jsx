@@ -28,7 +28,6 @@ const AuthenticationContext = createContext(null);
 
 export function AuthenticationContextProvider({ children }) {
   const [user, setUser] = useState(null);
-  const navigate = useNavigate();
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -67,7 +66,7 @@ export function AuthenticationContextProvider({ children }) {
   function logout() {
     localStorage.removeItem("token");
     setUser(null);
-    navigate("/");
+    window.location.href = "/"; // ✅ 안전하게 사용 가능
   }
 
   // hasAccess

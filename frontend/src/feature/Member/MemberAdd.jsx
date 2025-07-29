@@ -39,6 +39,8 @@ export function MemberAdd() {
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
   const [email, setEmail] = useState("");
+  const [zipCode, setZipCode] = useState("");
+  const [addressDetail, setAddressDetail] = useState("");
   // 주소 입력 api
   const [address, setAddress] = useState("");
   const [birthday, setBirthday] = useState(getToday()); // 초기값은 오늘 날짜
@@ -119,7 +121,9 @@ export function MemberAdd() {
         birthday: birthday,
         phone: phone,
         email: email,
+        zipCode: zipCode,
         address: address,
+        addressDetail: addressDetail,
       })
       .then((res) => {
         console.log("잘됨");
@@ -164,7 +168,7 @@ export function MemberAdd() {
     new window.daum.Postcode({
       oncomplete: function (data) {
         setAddress(data.address); // 도로명 주소
-        // setZipCode(data.zonecode); // 우편번호 필요하면 이것도
+        setZipCode(data.zonecode); // 우편번호 필요하면 이것도
         console.log("작동");
       },
     }).open();
@@ -331,10 +335,22 @@ export function MemberAdd() {
             <FormLabel>주소</FormLabel>
             <FormControl
               type="text"
+              value={zipCode}
+              placeholder="우편번호"
+              readOnly
+            />
+            <FormControl
+              type="text"
               value={address}
               placeholder="주소를 입력하세요"
               autoComplete="address-line1"
               readOnly
+            />
+            <FormControl
+              type="text"
+              value={addressDetail}
+              placeholder="상세주소를 입력하세요"
+              onChange={(e) => setAddressDetail(e.target.value)}
             />
             <Button onClick={handleSearchAddress}>주소 검색</Button>
           </FormGroup>

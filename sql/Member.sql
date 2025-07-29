@@ -12,6 +12,13 @@ CREATE TABLE member
 
 DROP TABLE member;
 
+ALTER TABLE member
+    ADD zipcode VARCHAR(10) NOT NULL;
+
+ALTER TABLE member
+    ADD address_detail VARCHAR(255) NULL;
+
+
 
 ALTER TABLE member
     MODIFY COLUMN id INT AUTO_INCREMENT;
