@@ -18,9 +18,9 @@ public class OrderItem {
     @Column(name = "id", nullable = false)
     private Integer id;
 
-    @ManyToOne(optional = false)
+    @ManyToOne(optional = true)
     @OnDelete(action = OnDeleteAction.CASCADE)
-    @JoinColumn(name = "order_id", nullable = false)
+    @JoinColumn(name = "order_id", nullable = true)
     private Order order;
 
     @ManyToOne(optional = false)
@@ -28,9 +28,9 @@ public class OrderItem {
     @JoinColumn(name = "product_id", nullable = false)
     private Product product;
 
-    @ManyToOne(optional = false)
+    @ManyToOne(optional = true)
     @OnDelete(action = OnDeleteAction.CASCADE)
-    @JoinColumn(name = "option_id", nullable = false)
+    @JoinColumn(name = "option_id", nullable = true)
     private ProductOption option;
 
     @Column(name = "quantity", nullable = false)

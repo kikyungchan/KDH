@@ -210,27 +210,37 @@ public class ProductService {
 
         for (OrderRequest req : reqList) {
             Product product = productRepository.findById(Long.valueOf(req.getProductId())).get();
-            ProductOption option = productOptionRepository.findById(Long.valueOf(req.getOptionId())).get();
             // 재고 차감
             product.setQuantity(product.getQuantity() - req.getQuantity());
+
             Order order = new Order();
             order.setMember(member);
             order.setMemo(req.getMemo());
             order.setProductName(product.getProductName());
-            order.setOptionName(option.getOptionName());
             order.setLoginId(member.getLoginId());
             order.setPhone(member.getPhone());
             order.setMemberName(member.getName());
             order.setShippingAddress(req.getShippingAddress());
             order.setTotalPrice(req.getPrice() * req.getQuantity());
+
+            if (req.getOptionId() != null) {
+                ProductOption option = productOptionRepository.findById(Long.valueOf(req.getOptionId())).get();
+                order.setOptionName(option.getOptionName());
+            }
+
             orderRepository.save(order);
 
             OrderItem item = new OrderItem();
             item.setOrder(order);
             item.setProduct(product);
-            item.setOption(option);
             item.setQuantity(req.getQuantity());
             item.setPrice(req.getPrice());
+
+            if (req.getOptionId() != null) {
+                ProductOption option = productOptionRepository.findById(Long.valueOf(req.getOptionId())).get();
+                item.setOption(option);
+            }
+
             orderItemRepository.save(item);
         }
     }

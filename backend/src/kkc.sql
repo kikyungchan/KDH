@@ -138,3 +138,5 @@ CREATE TABLE order_item
         FOREIGN KEY (option_id) REFERENCES product_option (id)
             ON DELETE CASCADE
 );
+ALTER TABLE order_item
+    MODIFY option_id INT NULL;

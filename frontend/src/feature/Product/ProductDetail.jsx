@@ -51,7 +51,7 @@ export function ProductDetail() {
   const detailImages = product.imagePath?.slice(1);
 
   function handleBuyButton() {
-    if (!selectedOption) {
+    if (product.options?.length > 0 && !selectedOption) {
       alert("옵션을 선택해주세요.");
       return;
     }
@@ -107,7 +107,7 @@ export function ProductDetail() {
   }
 
   function handleCartButton() {
-    if (!selectedOption) {
+    if (product.options?.length > 0 && !selectedOption) {
       alert("옵션을 선택해주세요.");
       return;
     }
@@ -180,7 +180,7 @@ export function ProductDetail() {
   function handleGoToCartWithCurrenProduct() {
     const token = localStorage.getItem("token");
 
-    if (!selectedOption) {
+    if (product.options?.length > 0 && !selectedOption) {
       alert("옵션을 선택해주세요.");
       return;
     }
@@ -248,7 +248,7 @@ export function ProductDetail() {
   }
 
   function handleBuyCurrentProductOnly() {
-    if (!selectedOption) {
+    if (product.options?.length > 0 && !selectedOption) {
       alert("옵션을 선택해주세요.");
       return;
     }
@@ -298,25 +298,27 @@ export function ProductDetail() {
               <hr />
 
               {/*옵션선택 드롭다운*/}
-              <div style={{ margin: "10px 0" }}>
-                <label>선택:</label>
-                <select
-                  onChange={(e) => {
-                    const selected = product.options?.find(
-                      (opt) => opt.optionName === e.target.value,
-                    );
-                    setSelectedOption(selected);
-                  }}
-                  style={{ padding: "5px", marginLeft: "10px" }}
-                >
-                  <option value="">옵션을 선택하세요</option>
-                  {product.options?.map((opt, idx) => (
-                    <option key={idx} value={opt.optionName}>
-                      {opt.optionName} - {opt.price.toLocaleString()}원
-                    </option>
-                  ))}
-                </select>
-              </div>
+              {product.options?.length > 0 && (
+                <div style={{ margin: "10px 0" }}>
+                  <label>선택:</label>
+                  <select
+                    onChange={(e) => {
+                      const selected = product.options?.find(
+                        (opt) => opt.optionName === e.target.value,
+                      );
+                      setSelectedOption(selected);
+                    }}
+                    style={{ padding: "5px", marginLeft: "10px" }}
+                  >
+                    <option value="">옵션을 선택하세요</option>
+                    {product.options?.map((opt, idx) => (
+                      <option key={idx} value={opt.optionName}>
+                        {opt.optionName} - {opt.price.toLocaleString()}원
+                      </option>
+                    ))}
+                  </select>
+                </div>
+              )}
               {/* 수량 선택*/}
               <div style={{ marginTop: "10px" }}>
                 <div
@@ -398,6 +400,7 @@ export function ProductDetail() {
                     장바구니
                   </button>
                   {/* 관리자용 수정/삭제 버튼 */}
+                  {/*Todo: 수정삭제버튼 관리자만 보이게 수정*/}
                   <Button className="btn-secondary" onClick={handleEditButton}>
                     수정
                   </Button>
@@ -406,7 +409,6 @@ export function ProductDetail() {
                   </Button>
                 </div>
               )}
-              {/*Todo: 수정삭제버튼 관리자만 보이게 수정*/}
             </div>
           </div>
           <hr />
