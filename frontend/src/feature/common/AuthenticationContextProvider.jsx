@@ -66,7 +66,7 @@ export function AuthenticationContextProvider({ children }) {
 
   // hasAccess
   function hasAccess(loginId) {
-    return user.loginId === loginId;
+    return user && user.loginId === loginId;
   }
 
   // isAdmin
