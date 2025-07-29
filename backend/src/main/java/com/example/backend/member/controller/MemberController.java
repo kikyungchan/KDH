@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
@@ -53,9 +54,10 @@ public class MemberController {
 
     // 회원 정보 조회
     @GetMapping(params = "id")
-    @PreAuthorize("isAuthenticated()")
+    @PreAuthorize("isAuthenticated() or hasAuthority('admin')")
     public ResponseEntity<?> getMember(@RequestParam Integer id, Authentication authentication) {
-        if (authentication.getName().equals(id.toString())) {
+        if (authentication.getName().equals(id.toString()) ||
+            authentication.getAuthorities().contains(new SimpleGrantedAuthority("admin"))) {
             return ResponseEntity.ok().body(memberService.get(id));
         } else {
             return ResponseEntity.status(403).build();
