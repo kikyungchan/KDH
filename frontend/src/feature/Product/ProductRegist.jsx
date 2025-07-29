@@ -13,7 +13,7 @@ export function ProductRegist() {
   const [category, setCategory] = useState("");
   const [info, setInfo] = useState("");
   const [images, setImages] = useState([]);
-  const [options, setOptions] = useState([{ optionName: "", price: "" }]);
+  const [options, setOptions] = useState([]);
 
   function handleSubmit(e) {
     e.preventDefault();
