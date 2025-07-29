@@ -197,12 +197,25 @@ export function ProductRegist() {
       {/*상품 파일선택*/}
       <div className="product-regist-field">
         <label className="product-regist-label">상품 이미지</label>
-        <input
-          type="file"
-          multiple
-          accept="image/*"
-          onChange={handleImageChange}
-        />
+        <div className="product-regist-file-upload">
+          <label
+            htmlFor="registFileInput"
+            className="product-regist-file-label"
+          >
+            파일 선택
+          </label>
+          <span className="product-regist-file-count">
+            파일 {images.length}개
+          </span>
+          <input
+            id="registFileInput"
+            type="file"
+            multiple
+            accept="image/*"
+            onChange={handleImageChange}
+            className="product-regist-file-input"
+          />
+        </div>
         {previewImages.length > 0 && (
           <div className="product-regist-image-preview">
             {previewImages.map((url, idx) => (
@@ -224,7 +237,6 @@ export function ProductRegist() {
           </div>
         )}
       </div>
-
       <div className="product-regist-submit-btns">
         <button type="submit" className="product-regist-btn confirm">
           등록
