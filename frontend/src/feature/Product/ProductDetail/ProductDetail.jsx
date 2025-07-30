@@ -12,9 +12,11 @@ import {
   handleCartButton,
   handleGoToCartWithCurrenProduct,
 } from "./ProductDetailUtilButton.jsx";
+import ProductComment from "./ProductComment.jsx";
 
 export function ProductDetail() {
   const { setCartCount } = useCart();
+
   const [showCartConfirmModal, setShowCartConfirmModal] = useState(false);
   const [cartItems, setCartItems] = useState([]);
   const [showModal, setShowModal] = useState(false);
@@ -277,7 +279,10 @@ export function ProductDetail() {
               ))}
             </div>
             <NoticeSection />
-            {/*
+            <hr style={{ marginTop: "75px" }} />
+            <ProductComment productId={product.id} />
+          </div>
+          {/*
     todo : faq 페이지, 추천해주는 질문 몇개를 골라서 3개 이상 답하도록
 
       <div>
@@ -319,7 +324,6 @@ export function ProductDetail() {
           </div>
         </div>
       </div>*/}
-          </div>
         </Col>
       </Row>
 
