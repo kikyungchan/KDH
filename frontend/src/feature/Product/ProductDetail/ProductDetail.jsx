@@ -217,6 +217,7 @@ export function ProductDetail() {
     }
   }
 
+  // 구매하기 // 장바구니상품함께구매
   function handleGoToCartWithCurrenProduct() {
     const token = localStorage.getItem("token");
 
@@ -259,8 +260,10 @@ export function ProductDetail() {
         productId: product.id,
         optionId: selectedId,
         productName: product.productName,
-        optionName: selectedOption.optionName,
-        price: selectedOption.price,
+        optionName:
+          product.options?.length > 0 ? selectedOption.optionName : null,
+        price:
+          product.options?.length > 0 ? selectedOption.price : product.price,
         quantity: quantity,
         imagePath: thumbnail,
         options: enrichedOptions,
@@ -287,6 +290,7 @@ export function ProductDetail() {
     }
   }
 
+  // 구매하기 // 단일상품구매
   function handleBuyCurrentProductOnly() {
     if (product.options?.length > 0 && !selectedOption) {
       alert("옵션을 선택해주세요.");
