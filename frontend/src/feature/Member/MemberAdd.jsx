@@ -50,6 +50,9 @@ export function MemberAdd() {
   const [authCode, setAuthCode] = useState("");
   const [authCodeValid, setAuthCodeValid] = useState(false);
 
+  // email 인증 완료
+  const [authCompleted, setAuthCompleted] = useState(false);
+
   // 정규식과 일치하는지
   const [loginIdValid, setLoginIdValid] = useState(true);
   const [passwordValid, setPasswordValid] = useState(true);
@@ -223,6 +226,7 @@ export function MemberAdd() {
         if (res.data.success) {
           alert("이메일 인증이 완료되었습니다.");
           setAuthCodeValid(true);
+          setAuthCompleted(true); // 이메일 인증 완료 처
         } else {
           alert("인증번호가 일치하지 않습니다.");
           setAuthCodeValid(false);
@@ -406,13 +410,16 @@ export function MemberAdd() {
                 placeholder="이메일로 전송된 인증번호를 입력하세요."
                 onChange={(e) => setAuthCode(e.target.value)}
                 isInvalid={isSubmitted && !authCodeValid}
+                readOnly={authCompleted}
               />
               {isSubmitted && !authCodeValid && (
                 <FormText className="text-danger">
                   인증번호를 올바르게 입력하세요.
                 </FormText>
               )}
-              <Button onClick={handleAuthCodeVerify}>인증번호 확인</Button>
+              <Button onClick={handleAuthCodeVerify} disabled={authCompleted}>
+                인증번호 확인
+              </Button>
             </FormGroup>
           )}
         </div>
