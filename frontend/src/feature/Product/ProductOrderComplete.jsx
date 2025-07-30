@@ -54,7 +54,9 @@ export function ProductOrderComplete() {
           !items.some(
             (ordered) =>
               cartItem.productId === ordered.productId &&
-              cartItem.optionId === ordered.optionId,
+              cartItem.optionId === ordered.optionId &&
+              cartItem.quantity === ordered.quantity &&
+              cartItem.productName === ordered.productName,
           ),
       );
 

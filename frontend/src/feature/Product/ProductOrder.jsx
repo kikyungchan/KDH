@@ -161,33 +161,26 @@ function Order(props) {
         postalCode: postalCode,
         detailedAddress: detailedAddress,
       }));
-      axios
-        .post("/api/product/order/guest", payloadList)
-        .then((res) => {
-          const token = res.data.guestOrderToken;
-          alert("주문이 완료되었습니다.");
+      axios.post("/api/product/order/guest", payloadList).then((res) => {
+        const token = res.data.guestOrderToken;
+        alert("주문이 완료되었습니다.");
 
-          localStorage.removeItem("guestCart");
-          navigate("/product/order/complete", {
-            state: {
-              items,
-              orderToken: token,
-              orderer: { name, phone, address },
-              receiver: {
-                name: receiverName,
-                phone: receiverPhone,
-                address: receiverAddress,
-                postalCode,
-                detailedAddress,
-              },
-              memo: memo === "직접 작성" ? customMemo : memo,
+        navigate("/product/order/complete", {
+          state: {
+            items,
+            orderToken: token,
+            orderer: { name, phone, address },
+            receiver: {
+              name: receiverName,
+              phone: receiverPhone,
+              address: receiverAddress,
+              postalCode,
+              detailedAddress,
             },
-          });
-        })
-        .catch((err) => {
-          console.log(err);
-          alert("주문 실패");
+            memo: memo === "직접 작성" ? customMemo : memo,
+          },
         });
+      });
     }
   }
 
