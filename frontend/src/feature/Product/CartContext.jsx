@@ -1,7 +1,7 @@
-import React, { createContext, useContext, useEffect, useState } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 import axios from "axios";
 
-export const CartContext = createContext();
+const CartContext = createContext();
 
 export function CartProvider({ children }) {
   const [cartCount, setCartCount] = useState(0);
@@ -10,15 +10,18 @@ export function CartProvider({ children }) {
     const token = localStorage.getItem("token");
     if (token) {
       axios
-        .get("api/product/cart", {
+        .get("/api/product/cart", {
           headers: {
             Authorization: `Bearer ${token}`,
           },
         })
-        .then((res) => setCartCount(res.data.length))
-        .catch(() => setCartCount(0));
+        .then((res) => {
+          // const total = res.data.reduce((sum, item) => sum + item.quantity, 0);
+          setCartCount(res.data.length);
+        });
     } else {
       const guestCart = JSON.parse(localStorage.getItem("guestCart") || "[]");
+      // const total = guestCart.reduce((sum, item) => sum + item.quantity, 0);
       setCartCount(guestCart.length);
     }
   }, []);

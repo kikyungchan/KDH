@@ -6,8 +6,10 @@ import BuyButton from "./BuyButton.jsx";
 import CartAdded from "./CartAdded.jsx";
 import "../css/ProductDetail.css";
 import axios from "axios";
+import { useCart } from "../CartContext.jsx";
 
 export function ProductDetail() {
+  const { setCartCount } = useCart();
   const [showCartConfirmModal, setShowCartConfirmModal] = useState(false);
   const [cartItems, setCartItems] = useState([]);
   const [showModal, setShowModal] = useState(false);
@@ -145,11 +147,23 @@ export function ProductDetail() {
         })
         .then((res) => {
           setShowModal(true);
+          return axios
+            .get("/api/product/cart", {
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
+            })
+            .then((res) => {
+              setCartCount(res.data.length);
+            });
         })
-        .catch((err) => {})
-        .finally(() => {});
+        .catch((err) => {});
     } else {
-      //
+      //비 로그인 유저
+      const existingCart = JSON.parse(
+        localStorage.getItem("guestCart") || "[]",
+      );
+      let isNewItem = false;
       if (product.options?.length > 0) {
         // 옵션 있는 상품
         const enrichedOptions = (product.options || []).map((opt, idx) => ({
@@ -172,9 +186,6 @@ export function ProductDetail() {
           options: enrichedOptions,
         };
 
-        const existingCart = JSON.parse(
-          localStorage.getItem("guestCart") || "[]",
-        );
         const existingIndex = existingCart.findIndex(
           (item) =>
             item.productId === cartItem.productId &&
@@ -184,8 +195,8 @@ export function ProductDetail() {
           existingCart[existingIndex].quantity += cartItem.quantity;
         } else {
           existingCart.push(cartItem);
+          isNewItem = true;
         }
-        localStorage.setItem("guestCart", JSON.stringify(existingCart));
       } else {
         // 옵션 없는 상품
         const cartItem = {
@@ -199,9 +210,6 @@ export function ProductDetail() {
           options: [],
         };
 
-        const existingCart = JSON.parse(
-          localStorage.getItem("guestCart") || "[]",
-        );
         const existingIndex = existingCart.findIndex(
           (item) => item.productId === cartItem.productId,
         );
@@ -210,10 +218,11 @@ export function ProductDetail() {
         } else {
           existingCart.push(cartItem);
         }
-        localStorage.setItem("guestCart", JSON.stringify(existingCart));
       }
 
+      localStorage.setItem("guestCart", JSON.stringify(existingCart));
       setShowModal(true);
+      setCartCount(existingCart.length);
     }
   }
 

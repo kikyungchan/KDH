@@ -8,8 +8,10 @@ import {
   FiUser,
 } from "react-icons/fi";
 import "./Navbar.css";
+import { useCart } from "../Product/CartContext.jsx";
 
 function NavBar(props) {
+  const { cartCount } = useCart();
   const { user, isAdmin } = useContext(AuthenticationContext);
   const [showSearch, setShowSearch] = useState(false);
   const searchRef = useRef(null);
@@ -72,6 +74,7 @@ function NavBar(props) {
           </Link>
           <Link to="/product/cart" className="cart-icon-wrapper">
             <FiShoppingCart className="navbar-icon" />
+            {cartCount > 0 && <span className="cart-badge">{cartCount}</span>}
           </Link>
         </div>
       </nav>

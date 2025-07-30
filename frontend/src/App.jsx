@@ -18,38 +18,41 @@ import { QnaList } from "./feature/Qna/QnaList.jsx";
 import { QnaView } from "./feature/Qna/QnaView.jsx";
 import Main from "./feature/common/Main.jsx";
 import { ProductOrderComplete } from "./feature/Product/ProductOrderComplete.jsx";
+import { CartProvider } from "./feature/Product/CartContext.jsx";
 
 function App() {
   // const username = prompt("닉네임을 입력해 주세요");
   return (
     <AuthenticationContextProvider>
       <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Main />}>
-            {/*<Route path="/" */}
-            <Route path="product/regist" element={<ProductRegist />} />
-            <Route path="product/list" element={<ProductList />} />
-            <Route path="product/view" element={<ProductDetail />} />
-            <Route path="product/edit" element={<ProductEdit />} />
-            <Route path="product/order" element={<ProductOrder />} />
-            <Route path="product/cart" element={<ProductCart />} />
-            <Route
-              path="product/order/complete"
-              element={<ProductOrderComplete />}
-            />
-            <Route path="/member/edit" element={<MemberEdit />} />
-            <Route path="/member/list" element={<MemberList />} />
-            <Route path="/member" element={<MemberDetail />} />
-            <Route path="/signup" element={<MemberAdd />} />
-            <Route path="/login" element={<MemberLogin />} />
-            <Route path="/logout" element={<MemberLogout />} />
-            <Route path="/qna/add/:id" element={<QnaAdd />} />
-            <Route path="/qna/list/" element={<QnaList />} />
-            <Route path="/qna/view/" element={<QnaView />} />
-            {/*<Route path="chat/chatting" element={<Chat username={username} />} />*/}
-            <Route path="chat/chatting" element={<Chat />} />
-          </Route>
-        </Routes>
+        <CartProvider>
+          <Routes>
+            <Route path="/" element={<Main />}>
+              {/*<Route path="/" */}
+              <Route path="product/regist" element={<ProductRegist />} />
+              <Route path="product/list" element={<ProductList />} />
+              <Route path="product/view" element={<ProductDetail />} />
+              <Route path="product/edit" element={<ProductEdit />} />
+              <Route path="product/order" element={<ProductOrder />} />
+              <Route path="product/cart" element={<ProductCart />} />
+              <Route
+                path="product/order/complete"
+                element={<ProductOrderComplete />}
+              />
+              <Route path="/member/edit" element={<MemberEdit />} />
+              <Route path="/member/list" element={<MemberList />} />
+              <Route path="/member" element={<MemberDetail />} />
+              <Route path="/signup" element={<MemberAdd />} />
+              <Route path="/login" element={<MemberLogin />} />
+              <Route path="/logout" element={<MemberLogout />} />
+              <Route path="/qna/add/:id" element={<QnaAdd />} />
+              <Route path="/qna/list/" element={<QnaList />} />
+              <Route path="/qna/view/" element={<QnaView />} />
+              {/*<Route path="chat/chatting" element={<Chat username={username} />} />*/}
+              <Route path="chat/chatting" element={<Chat />} />
+            </Route>
+          </Routes>
+        </CartProvider>
       </BrowserRouter>
     </AuthenticationContextProvider>
   );

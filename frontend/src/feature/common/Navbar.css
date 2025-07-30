@@ -67,3 +67,19 @@
     margin-right: 0.5rem;
     cursor: pointer;
 }
+
+.cart-icon-wrapper {
+    position: relative;
+}
+
+.cart-badge {
+    position: absolute;
+    top: -6px;
+    right: -6px;
+    background-color: red;
+    color: white;
+    border-radius: 50%;
+    font-size: 12px;
+    padding: 2px 6px;
+    font-weight: bold;
+}

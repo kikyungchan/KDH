@@ -2,8 +2,10 @@ import { Col, Container, Row } from "react-bootstrap";
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 import axios from "axios";
+import { useCart } from "./CartContext.jsx";
 
 function ProductCart(props) {
+  const { setCartCount } = useCart();
   const navigate = useNavigate();
   const [showModal, setShowModal] = useState(false);
   const [selectedItem, setSelectedItem] = useState(null);
@@ -94,6 +96,7 @@ function ProductCart(props) {
         .then((res) => {
           setCartItems(res.data); //
           setCheckedIds([]);
+          setCartCount(res.data.length);
         })
         .catch((err) => {
           console.error("삭제 실패:", err);
@@ -106,6 +109,7 @@ function ProductCart(props) {
       setCartItems(newCartItems);
       setCheckedIds([]);
       localStorage.setItem("guestCart", JSON.stringify(newCartItems));
+      setCartCount(newCartItems.length);
     }
   }
 
