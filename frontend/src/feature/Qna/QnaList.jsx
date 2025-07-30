@@ -105,7 +105,7 @@ export function QnaList() {
                 <thead>
                   <tr>
                     <th style={{ width: "70px" }}>#</th>
-                    <th style={{ width: "100px" }}>답변여부</th>
+                    <th style={{ width: "120px" }}>답변여부</th>
                     <th style={{ width: "270px" }}>제목</th>
                     <th
                       className="d-none d-md-table-cell"

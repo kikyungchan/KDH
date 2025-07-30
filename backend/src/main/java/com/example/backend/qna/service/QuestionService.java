@@ -6,6 +6,7 @@ import com.example.backend.product.entity.ProductImage;
 import com.example.backend.product.repository.ProductImageRepository;
 import com.example.backend.product.repository.ProductRepository;
 import com.example.backend.product.service.S3Uploader;
+import com.example.backend.qna.dto.AnswerAddForm;
 import com.example.backend.qna.dto.QuestionAddForm;
 import com.example.backend.qna.dto.QuestionDto;
 import com.example.backend.qna.dto.QuestionListDto;
@@ -84,6 +85,18 @@ public class QuestionService {
         return true;
     }
 
+    public boolean validateForAddAns(AnswerAddForm dto) {
+        if (dto.getAnswer() == null || dto.getAnswer().trim().isBlank()) {
+            return false;
+        }
+
+        if (dto.getQuestionId() == null || dto.getQuestionId().describeConstable().isEmpty()) {
+            return false;
+        }
+
+        return true;
+    }
+
     public Map<String, Object> list(String keyword, Integer pageNumber) {
 
         Page<QuestionListDto> questionListDtoPage
@@ -135,6 +148,26 @@ public class QuestionService {
         // delete
 //        questionRepository.deleteById(id);
 //        answerRepository.deleteByQuestion(db);
+
+    }
+
+    public void addAns(AnswerAddForm dto, Authentication authentication) {
+
+
+        Answer ans = new Answer();
+        ans.setContent(dto.getAnswer());
+        Member user = memberRepository.findById(Integer.valueOf(authentication.getName())).get();
+        ans.setSeller(user);
+        Question question = questionRepository.findById(dto.getQuestionId()).get();
+        ans.setQuestion(question);
+        question.setStatus("answered");
+
+        // todo : sout 지우고 관리자 권환 확인해서 실행하기
+        System.out.println("question = " + question);
+        System.out.println("ans = " + ans);
+
+        questionRepository.save(question);
+        answerRepository.save(ans);
 
     }
 }

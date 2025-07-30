@@ -1,5 +1,6 @@
 package com.example.backend.qna.controller;
 
+import com.example.backend.qna.dto.AnswerAddForm;
 import com.example.backend.qna.dto.QuestionAddForm;
 import com.example.backend.qna.dto.QuestionDto;
 import com.example.backend.qna.service.QuestionService;
@@ -80,6 +81,32 @@ public class QuestionController {
                     "message", Map.of(
                             "type", "success",
                             "text", "문의가 등록되었습니다.")));
+        } else {
+            return ResponseEntity.badRequest().body(Map.of(
+                    "message", Map.of(
+                            "type", "error",
+                            "text", "입력한 내용이 유효하지 않습니다.")));
+        }
+    }
+
+    @PostMapping("addAns")
+    @PreAuthorize("isAuthenticated()")
+    public ResponseEntity<?> addAns(@RequestBody AnswerAddForm dto,
+                                    Authentication authentication) {
+
+        // 로그인 여부 검사
+        questionService.hasPermission(authentication);
+
+        // 유효성 검사
+        boolean result = questionService.validateForAddAns(dto);
+
+        if (result) {
+            questionService.addAns(dto, authentication);
+
+            return ResponseEntity.ok().body(Map.of(
+                    "message", Map.of(
+                            "type", "success",
+                            "text", "답변이 등록되었습니다.")));
         } else {
             return ResponseEntity.badRequest().body(Map.of(
                     "message", Map.of(
