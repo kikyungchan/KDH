@@ -119,6 +119,7 @@ export function MemberAdd() {
       email,
       address,
     });
+
     // 모든 입력값 유효성 검사 실행
     const isLoginIdOk = loginIdRegEx.test(loginId);
     const isPasswordOk = passwordRegEx.test(password);
@@ -157,7 +158,6 @@ export function MemberAdd() {
         addressDetail: addressDetail,
       })
       .then((res) => {
-        console.log("잘됨");
         navigate("/");
       })
       .catch((err) => {
@@ -200,7 +200,6 @@ export function MemberAdd() {
       oncomplete: function (data) {
         setAddress(data.address); // 도로명 주소
         setZipCode(data.zonecode); // 우편번호 필요하면 이것도
-        console.log("작동");
       },
     }).open();
   };
@@ -217,7 +216,6 @@ export function MemberAdd() {
       })
       .then((res) => {
         if (res.data.success) {
-          console.log(res.data);
           console.log("인증번호 전송 성공", res.data.message);
           alert(res.data.message);
           setEmailSent(true);
