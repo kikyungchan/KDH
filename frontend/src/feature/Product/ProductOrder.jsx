@@ -108,10 +108,13 @@ function Order(props) {
           });
         })
         .then((res) => {
+          console.log(res.data);
+          const orderToken = res.data.orderToken;
           alert("주문이 완료되었습니다.");
           navigate("/product/order/complete", {
             state: {
               items,
+              orderToken,
               orderer: { name, phone, address },
               receiver: {
                 name: receiverName,

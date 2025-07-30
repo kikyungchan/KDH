@@ -99,8 +99,9 @@ public class ProductController {
     @PostMapping("/order")
     public ResponseEntity<?> createOrder(@RequestBody List<OrderRequest> reqList,
                                          @RequestHeader("Authorization") String auth) {
-        productService.order(reqList, auth);
-        return ResponseEntity.ok().build();
+
+        String orderToken = productService.order(reqList, auth);
+        return ResponseEntity.ok(Map.of("orderToken", orderToken));
     }
 
     @PutMapping(value = "/edit", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)

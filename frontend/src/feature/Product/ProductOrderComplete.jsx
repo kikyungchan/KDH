@@ -4,7 +4,7 @@ import "./css/Order.css";
 export function ProductOrderComplete() {
   const { state } = useLocation();
   const navigate = useNavigate();
-  const { items, orderer, receiver, memo } = state;
+  const { orderToken, items, orderer, receiver, memo } = state;
   const totalItemPrice = items.reduce(
     (sum, item) => sum + item.price * item.quantity,
     0,
@@ -13,7 +13,10 @@ export function ProductOrderComplete() {
   return (
     <div className="order-container">
       <h2>주문 완료</h2>
-
+      <p>
+        <strong>주문번호:</strong>
+        {orderToken}
+      </p>
       <div className="order-box">
         <h4>주문 상품 정보</h4>
         {items.map((item, idx) => (

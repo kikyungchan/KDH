@@ -36,8 +36,8 @@ public class ProductService {
     private final MemberRepository memberRepository;
     private final OrderRepository orderRepository;
     private final OrderItemRepository orderItemRepository;
-    String orderToken = ProductController.OrderTokenGenerator.generateToken();
-    
+
+
     // url에서 key만 따오는 메소드
     private String extractS3Key(String url) {
         // 예: https://bucket.s3.region.amazonaws.com/123/abc.jpg -> 123/abc.jpg
@@ -227,7 +227,8 @@ public class ProductService {
         }
     }
 
-    public void order(List<OrderRequest> reqList, String auth) {
+    public String order(List<OrderRequest> reqList, String auth) {
+        String orderToken = ProductController.OrderTokenGenerator.generateToken();
         String token = auth.replace("Bearer ", "");
         Jwt decoded = jwtDecoder.decode(token);
         String memberIdStr = decoded.getSubject();
@@ -250,6 +251,7 @@ public class ProductService {
             order.setPhone(member.getPhone());
             order.setMemberName(member.getName());
             order.setShippingAddress(req.getShippingAddress());
+            order.setOrderToken(orderToken);
             order.setTotalPrice(req.getPrice() * req.getQuantity());
 
             if (req.getOptionId() != null) {
@@ -272,6 +274,7 @@ public class ProductService {
 
             orderItemRepository.save(item);
         }
+        return orderToken;
     }
 
     public MemberDto getmemberinfo(String auth) {
