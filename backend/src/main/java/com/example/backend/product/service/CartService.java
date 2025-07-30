@@ -81,23 +81,30 @@ public class CartService {
 
     public void updateCartItem(Integer memberId, CartUpdateRequest req) {
         Cart cart = cartRepository.findById(req.getCartId()).get();
-        ProductOption option = productOptionRepository.findById(req.getOptionId()).get();
-        ProductOption newOption = productOptionRepository.findById(req.getOptionId()).get();
         Product product = cart.getProduct();
-        List<Cart> existingList = cartRepository.findByMemberAndProductAndOption(cart.getMember(), product, newOption);
-        Cart duplicate = existingList.stream()
-                .filter(c -> !c.getId().equals(cart.getId()))
-                .findFirst()
-                .orElse(null);
+//        ProductOption option = productOptionRepository.findById(req.getOptionId()).get();
+        if (req.getOptionId() != null) {
+            ProductOption newOption = productOptionRepository.findById(req.getOptionId()).get();
 
-        if (duplicate != null) {
-            // 병합: 기존 항목에 수량 추가, 현재 항목 삭제
-            duplicate.setQuantity(duplicate.getQuantity() + req.getQuantity());
-            cartRepository.save(duplicate);
-            cartRepository.delete(cart);
+            List<Cart> existingList = cartRepository.findByMemberAndProductAndOption(cart.getMember(), product, newOption);
+            Cart duplicate = existingList.stream()
+                    .filter(c -> !c.getId().equals(cart.getId()))
+                    .findFirst()
+                    .orElse(null);
+
+            if (duplicate != null) {
+                // 병합: 기존 항목에 수량 추가, 현재 항목 삭제
+                duplicate.setQuantity(duplicate.getQuantity() + req.getQuantity());
+                cartRepository.save(duplicate);
+                cartRepository.delete(cart);
+            } else {
+                // 중복 항목 없음 → 그냥 수정
+                cart.setOption(newOption);
+                cart.setQuantity(req.getQuantity());
+                cartRepository.save(cart);
+            }
         } else {
-            // 중복 항목 없음 → 그냥 수정
-            cart.setOption(newOption);
+            // 옵션 없는 상품
             cart.setQuantity(req.getQuantity());
             cartRepository.save(cart);
         }

@@ -7,6 +7,11 @@ import CartAdded from "./CartAdded.jsx";
 import "../css/ProductDetail.css";
 import axios from "axios";
 import { useCart } from "../CartContext.jsx";
+import {
+  handleBuyButton,
+  handleCartButton,
+  handleGoToCartWithCurrenProduct,
+} from "./ProductDetailUtilButton.jsx";
 
 export function ProductDetail() {
   const { setCartCount } = useCart();
@@ -56,249 +61,6 @@ export function ProductDetail() {
 
   const thumbnail = product.imagePath?.[0];
   const detailImages = product.imagePath?.slice(1);
-
-  function handleBuyButton() {
-    if (product.options?.length > 0 && !selectedOption) {
-      alert("옵션을 선택해주세요.");
-      return;
-    }
-
-    if (quantity > product.quantity) {
-      alert(`재고가 부족합니다.`);
-      return;
-    }
-
-    const token = localStorage.getItem("token");
-
-    if (token) {
-      axios
-        .get("/api/product/cart", {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        })
-        .then((res) => {
-          if (res.data.length > 0) {
-            setCartItems(res.data);
-            setShowCartConfirmModal(true);
-          } else {
-            navigate("/product/order", {
-              state: {
-                productId: product.id,
-                productName: product.productName,
-                price: selectedOption ? selectedOption.price : product.price,
-                quantity: quantity,
-                imagePath: thumbnail,
-                option: selectedOption?.optionName || null,
-                optionId: selectedOption?.id || null,
-              },
-            });
-          }
-        })
-        .catch((err) => {
-          console.error(err);
-        });
-    } else {
-      const guestCart = JSON.parse(localStorage.getItem("guestCart") || "[]");
-
-      if (guestCart.length > 0) {
-        setCartItems(guestCart);
-        setShowCartConfirmModal(true);
-      } else {
-        navigate("/product/order", {
-          state: {
-            productId: product.id,
-            productName: product.productName,
-            price: selectedOption ? selectedOption.price : product.price,
-            quantity: quantity,
-            imagePath: thumbnail,
-            option: selectedOption?.optionName || null,
-            optionId: selectedOption?.id || null,
-          },
-        });
-      }
-    }
-  }
-
-  function handleCartButton() {
-    if (product.options?.length > 0 && !selectedOption) {
-      alert("옵션을 선택해주세요.");
-      return;
-    }
-
-    if (quantity > product.quantity) {
-      alert(`재고가 부족합니다.`);
-      return;
-    }
-
-    const token = localStorage.getItem("token");
-    // 로그인유저
-    if (token) {
-      const cartItem = {
-        productId: product.id,
-        optionName: selectedOption ? selectedOption.optionName : null,
-        quantity: quantity,
-      };
-      axios
-        .post("/api/product/cart", cartItem, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        })
-        .then((res) => {
-          setShowModal(true);
-          return axios
-            .get("/api/product/cart", {
-              headers: {
-                Authorization: `Bearer ${token}`,
-              },
-            })
-            .then((res) => {
-              setCartCount(res.data.length);
-            });
-        })
-        .catch((err) => {});
-    } else {
-      //비 로그인 유저
-      const existingCart = JSON.parse(
-        localStorage.getItem("guestCart") || "[]",
-      );
-      let isNewItem = false;
-      if (product.options?.length > 0) {
-        // 옵션 있는 상품
-        const enrichedOptions = (product.options || []).map((opt, idx) => ({
-          ...opt,
-          id: idx + 1,
-        }));
-
-        const selectedId = enrichedOptions.find(
-          (opt) => opt.optionName === selectedOption.optionName,
-        )?.id;
-
-        const cartItem = {
-          productId: product.id,
-          optionId: selectedId,
-          productName: product.productName,
-          optionName: selectedOption.optionName,
-          price: selectedOption.price,
-          quantity: quantity,
-          imagePath: thumbnail,
-          options: enrichedOptions,
-        };
-
-        const existingIndex = existingCart.findIndex(
-          (item) =>
-            item.productId === cartItem.productId &&
-            item.optionName === cartItem.optionName,
-        );
-        if (existingIndex > -1) {
-          existingCart[existingIndex].quantity += cartItem.quantity;
-        } else {
-          existingCart.push(cartItem);
-          isNewItem = true;
-        }
-      } else {
-        // 옵션 없는 상품
-        const cartItem = {
-          productId: product.id,
-          productName: product.productName,
-          price: product.price,
-          quantity: quantity,
-          imagePath: thumbnail,
-          optionName: null,
-          optionId: null,
-          options: [],
-        };
-
-        const existingIndex = existingCart.findIndex(
-          (item) => item.productId === cartItem.productId,
-        );
-        if (existingIndex > -1) {
-          existingCart[existingIndex].quantity += cartItem.quantity;
-        } else {
-          existingCart.push(cartItem);
-        }
-      }
-
-      localStorage.setItem("guestCart", JSON.stringify(existingCart));
-      setShowModal(true);
-      setCartCount(existingCart.length);
-    }
-  }
-
-  // 구매하기 // 장바구니상품함께구매
-  function handleGoToCartWithCurrenProduct() {
-    const token = localStorage.getItem("token");
-
-    if (product.options?.length > 0 && !selectedOption) {
-      alert("옵션을 선택해주세요.");
-      return;
-    }
-
-    if (token) {
-      const cartItem = {
-        productId: product.id,
-        optionName:
-          product.options?.length > 0 ? selectedOption.optionName : null,
-        quantity: quantity,
-      };
-      axios
-        .post("/api/product/cart", cartItem, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        })
-        .then(() => {
-          setShowCartConfirmModal(false);
-          navigate("/product/cart");
-        })
-        .catch((err) => {
-          console.error("장바구니 추가 실패", err);
-          alert("장바구니 추가에 실패했습니다.");
-        });
-    } else {
-      const enrichedOptions = (product.options || []).map((opt, idx) => ({
-        ...opt,
-        id: idx + 1,
-      }));
-
-      const selectedId = enrichedOptions.find(
-        (opt) => opt.optionName === selectedOption.optionName,
-      )?.id;
-
-      const cartItem = {
-        productId: product.id,
-        optionId: selectedId,
-        productName: product.productName,
-        optionName:
-          product.options?.length > 0 ? selectedOption.optionName : null,
-        price:
-          product.options?.length > 0 ? selectedOption.price : product.price,
-        quantity: quantity,
-        imagePath: thumbnail,
-        options: enrichedOptions,
-      };
-
-      const existingCart = JSON.parse(
-        localStorage.getItem("guestCart") || "[]",
-      );
-      const existingIndex = existingCart.findIndex(
-        (item) =>
-          item.productId === cartItem.productId &&
-          item.optionName === cartItem.optionName,
-      );
-
-      if (existingIndex > -1) {
-        existingCart[existingIndex].quantity += cartItem.quantity;
-      } else {
-        existingCart.push(cartItem);
-      }
-
-      localStorage.setItem("guestCart", JSON.stringify(existingCart));
-      setShowCartConfirmModal(false);
-      navigate("/product/cart");
-    }
-  }
 
   // 구매하기 // 단일상품구매
   function handleBuyCurrentProductOnly() {
@@ -442,7 +204,17 @@ export function ProductDetail() {
                 // 재고 있는 경우 기존 버튼들
                 <div style={{ marginTop: "2px", display: "flex", gap: "10px" }}>
                   <button
-                    onClick={handleBuyButton}
+                    onClick={() =>
+                      handleBuyButton({
+                        product,
+                        selectedOption,
+                        quantity,
+                        thumbnail,
+                        setCartItems,
+                        setShowCartConfirmModal,
+                        navigate,
+                      })
+                    }
                     style={{
                       border: "3",
                       width: "150px",
@@ -453,7 +225,16 @@ export function ProductDetail() {
                     구매하기
                   </button>
                   <button
-                    onClick={handleCartButton}
+                    onClick={() =>
+                      handleCartButton({
+                        product,
+                        selectedOption,
+                        quantity,
+                        thumbnail,
+                        setShowModal,
+                        setCartCount,
+                      })
+                    }
                     style={{ border: "3", width: "150px" }}
                   >
                     장바구니
@@ -550,7 +331,16 @@ export function ProductDetail() {
         show={showCartConfirmModal}
         onHide={() => setShowCartConfirmModal(false)}
         onOnlyBuy={handleBuyCurrentProductOnly}
-        onMoveToCart={handleGoToCartWithCurrenProduct}
+        onMoveToCart={() =>
+          handleGoToCartWithCurrenProduct({
+            product,
+            selectedOption,
+            quantity,
+            thumbnail,
+            navigate,
+            setShowCartConfirmModal,
+          })
+        }
       />
     </Container>
   );
