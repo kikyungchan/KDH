@@ -3,6 +3,7 @@ import {
   Card,
   Col,
   Container,
+  Form,
   FormControl,
   FormGroup,
   FormLabel,
@@ -19,7 +20,9 @@ export function MemberLogin() {
   const { login } = useContext(AuthenticationContext);
   const navigate = useNavigate();
 
-  function handleLogInButtonClick() {
+  function handleLogInButtonClick(e) {
+    e.preventDefault(); // form submit 기본 동작 방지(리로드 X)
+
     axios
       .post("/api/member/login", {
         loginId: loginId,
@@ -37,9 +40,7 @@ export function MemberLogin() {
         alert(err.response.data.message.text);
         console.log(err.response.data.message);
       })
-      .finally(() => {
-        console.log("always");
-      });
+      .finally(() => {});
   }
 
   return (
@@ -56,24 +57,26 @@ export function MemberLogin() {
             <Row className="justify-content-center">
               <Col>
                 <h3 className="text-center mb-4">로그인</h3>
-                <FormGroup controlId="loginId1" className="mb-3">
-                  <FormLabel>아이디</FormLabel>
-                  <FormControl
-                    value={loginId}
-                    onChange={(e) => setLoginId(e.target.value)}
-                  />
-                </FormGroup>
-                <FormGroup controlId="password1" className="mb-3">
-                  <FormLabel>비밀번호</FormLabel>
-                  <FormControl
-                    type="password"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                  />
-                </FormGroup>
-                <div className="text-end">
-                  <Button onClick={handleLogInButtonClick}>로그인</Button>
-                </div>
+                <Form onSubmit={handleLogInButtonClick}>
+                  <FormGroup controlId="loginId1" className="mb-3">
+                    <FormLabel>아이디</FormLabel>
+                    <FormControl
+                      value={loginId}
+                      onChange={(e) => setLoginId(e.target.value)}
+                    />
+                  </FormGroup>
+                  <FormGroup controlId="password1" className="mb-3">
+                    <FormLabel>비밀번호</FormLabel>
+                    <FormControl
+                      type="password"
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
+                    />
+                  </FormGroup>
+                  <div className="text-end">
+                    <Button type="submit">로그인</Button>
+                  </div>
+                </Form>
               </Col>
             </Row>
           </Card.Body>
