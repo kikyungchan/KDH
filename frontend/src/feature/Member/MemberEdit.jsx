@@ -316,10 +316,7 @@ export function MemberEdit() {
                 >
                   저장
                 </Button>
-                <Button
-                  onClick={() => setCancelSaveModalShow(true)}
-                  // onClick={() => navigate(`/member?id=${member.id}`)}
-                >
+                <Button onClick={() => setCancelSaveModalShow(true)}>
                   취소
                 </Button>
               </div>
@@ -364,14 +361,24 @@ export function MemberEdit() {
             onHide={() => setCancelSaveModalShow(false)}
           >
             <Modal.Header closeButton>
-              <ModalTitle>저장 확인</ModalTitle>
+              <ModalTitle className="fs-5">
+                변경 내용이 저장되지 않았습니다.
+              </ModalTitle>
             </Modal.Header>
             <Modal.Body>
-              <p>저장하지 않고 되돌아가시겠습니까?</p>
+              <p className="mt-2">변경 사항을 저장하지 않고 나가시겠습니까?</p>
             </Modal.Body>
             <Modal.Footer>
-              <Button onClick={() => {}}>돌아가기</Button>
-              <Button onClick={() => {}}>취소</Button>
+              <Button onClick={() => navigate(`/member?id=${member.id}`)}>
+                나가기
+              </Button>
+              <Button
+                onClick={() => {
+                  setCancelSaveModalShow(false);
+                }}
+              >
+                취소
+              </Button>
             </Modal.Footer>
           </Modal>
           {/*  비밀 번호 변경 모달 */}
