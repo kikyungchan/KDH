@@ -220,6 +220,7 @@ function ProductCart(props) {
           ...item,
           productId: item.productId,
           optionId: item.optionId,
+          cartId: item.cartId,
         })),
       },
     });

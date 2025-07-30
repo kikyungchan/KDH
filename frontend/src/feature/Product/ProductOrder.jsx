@@ -103,13 +103,20 @@ function Order(props) {
           },
         })
         .then((res) => {
-          //주문 성공후 장바구니 비우기
-          console.log(payloadList);
           orderToken = res.data.orderToken;
-          return axios.delete("/api/product/cart/deleteAll", {
+
+          // 구매한 상품들의 cartId 목록
+          const cartIdsToDelete = items
+            .map((item) => ({ cartId: item.cartId }))
+            .filter((id) => id.cartId != null);
+
+          if (cartIdsToDelete.length > 0) return;
+
+          return axios.delete("/api/product/cart/delete", {
             headers: {
               Authorization: `Bearer ${token}`,
             },
+            data: cartIdsToDelete,
           });
         })
         .then((res) => {
