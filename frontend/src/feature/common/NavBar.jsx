@@ -94,6 +94,7 @@ function NavBar(props) {
             if (e.key === "Enter") {
               if (keyword.trim() !== "") {
                 navigate(`/product/list?keyword=${keyword.trim()}`);
+                setKeyword("");
               }
             }
           }}

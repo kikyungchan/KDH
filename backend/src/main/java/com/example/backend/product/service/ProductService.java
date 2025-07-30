@@ -85,13 +85,32 @@ public class ProductService {
         productImageRepository.saveAll(imageList);
     }
 
-    public Map<String, Object> list(Integer pageNumber, String keyword) {
+    public Map<String, Object> list(Integer pageNumber, String keyword, String sort) {
         Pageable pageable = PageRequest.of(pageNumber - 1, 15);
         Page<Product> page;
+
+        // 정렬 조건
+        // 키워드확인
         if (keyword != null && !keyword.trim().isEmpty()) {
             page = productRepository.searchByKeyword(keyword, pageable);
         } else {
-            page = productRepository.findAllByOrderByIdDesc(pageable);
+            switch (sort) {
+                // 가격 낮은순
+                case "price_asc":
+                    page = productRepository.findAllByOrderByPriceAsc(pageable);
+                    break;
+                // 가격 높은순
+                case "price_desc":
+                    page = productRepository.findAllByOrderByPriceDesc(pageable);
+                    break;
+                // 카테고리 순
+                case "category":
+                    page = productRepository.findAllByOrderByCategoryAsc(pageable);
+                    break;
+                //(최신순)
+                default:
+                    page = productRepository.findAllByOrderByIdDesc(pageable);
+            }
         }
 
 

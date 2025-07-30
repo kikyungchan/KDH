@@ -1,5 +1,6 @@
 import { Link, useSearchParams } from "react-router";
 import { useEffect, useState } from "react";
+import { Form } from "react-bootstrap";
 import { Col, Row } from "react-bootstrap";
 import "./css/ProductList.css";
 import axios from "axios";
@@ -10,11 +11,12 @@ export function ProductList() {
   const keyword = searchParams.get("keyword") || "";
   const [products, setProducts] = useState([]);
   const [pageInfo, setPageInfo] = useState({});
+  const [sort, setSort] = useState("recent");
 
   useEffect(() => {
     axios
       .get(
-        `/api/product/list?page=${pageParam}${keyword ? `&keyword=${keyword}` : ""}`,
+        `/api/product/list?page=${pageParam}${keyword ? `&keyword=${keyword}` : ""}${sort ? `&sort=${sort}` : ""}`,
       )
       .then((res) => {
         setProducts(res.data.productList);
@@ -23,13 +25,14 @@ export function ProductList() {
       .catch((err) => {
         console.log(err.message);
       });
-  }, [pageParam, keyword]);
+  }, [pageParam, keyword, sort]);
 
   const handlePageClick = (page) => {
     const newParams = {};
     if (keyword) newParams.keyword = keyword;
+    if (sort) newParams.sort = sort;
     newParams.page = page;
-    setSearchParams({ page });
+    setSearchParams(newParams);
   };
 
   // 새상품 뱃지
@@ -45,11 +48,34 @@ export function ProductList() {
     return diffInSeconds <= secondsIn7Days;
   }
 
+  const handleSortChange = (e) => {
+    const newSort = e.target.value;
+    setSort(newSort);
+    const newParams = {};
+    if (keyword) newParams.keyword = keyword;
+    newParams.page = 1;
+    newParams.sort = newSort;
+    setSearchParams(newParams);
+  };
+
   return (
     <Row className="justify-content-center">
       <Col>
         <div className="product-list-container mb-4">
-          <h2>상품 목록</h2>
+          <div className="d-flex justify-content-between align-items-center mb-3">
+            <h2>상품 목록</h2>
+            <Form.Select
+              size="sm"
+              style={{ maxWidth: "200px", marginBottom: "16px" }}
+              value={sort}
+              onChange={handleSortChange}
+            >
+              <option value="recent">기본순</option>
+              <option value="price_asc">가격 낮은순</option>
+              <option value="price_desc">가격 높은순</option>
+              <option value="category">카테고리순</option>
+            </Form.Select>
+          </div>
           {products.length === 0 ? (
             <div className="text-center mt-5">검색 결과가 없습니다.</div>
           ) : (
