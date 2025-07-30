@@ -49,6 +49,7 @@ export function MemberAdd() {
   const [emailSent, setEmailSent] = useState(false);
   const [authCode, setAuthCode] = useState("");
   const [authCodeValid, setAuthCodeValid] = useState(false);
+  const [remainTime, setRemainTime] = useState(0);
 
   // email 인증 완료
   const [authCompleted, setAuthCompleted] = useState(false);
@@ -90,6 +91,19 @@ export function MemberAdd() {
   useEffect(() => {
     setEmailValid(emailRegEx.test(email));
   }, [email]);
+
+  // email 인증시 남은시간
+  useEffect(() => {
+    let timer;
+    if (remainTime > 0) {
+      timer = setInterval(() => {
+        setRemainTime((prev) => prev - 1);
+      }, 1000);
+    }
+    return () => {
+      clearInterval(timer);
+    };
+  }, [remainTime]);
 
   // 회원가입 버튼
   function handleSignUpClick() {
@@ -201,8 +215,10 @@ export function MemberAdd() {
           console.log("인증번호 전송 성공", res.data.message);
           alert(res.data.message);
           setEmailSent(true);
+          setRemainTime(res.data.remainTimeSec);
         } else {
           alert(res.data.message);
+          setRemainTime(res.data.remainTimeSec);
         }
       })
       .catch((err) => {
@@ -416,6 +432,11 @@ export function MemberAdd() {
                 isInvalid={isSubmitted && !authCodeValid}
                 readOnly={authCompleted}
               />
+              {remainTime > 0 && (
+                <FormText className="text-muted">
+                  인증번호 재전송까지 {remainTime}초 남음
+                </FormText>
+              )}
               {isSubmitted && !authCodeValid && (
                 <FormText className="text-danger">
                   인증번호를 올바르게 입력하세요.
