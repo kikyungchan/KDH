@@ -229,7 +229,8 @@ export function ProductDetail() {
     if (token) {
       const cartItem = {
         productId: product.id,
-        optionName: selectedOption.optionName,
+        optionName:
+          product.options?.length > 0 ? selectedOption.optionName : null,
         quantity: quantity,
       };
       axios
