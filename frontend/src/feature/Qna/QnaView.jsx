@@ -37,11 +37,8 @@ export function QnaView() {
     axios
       .get(`/api/qna/view?${searchParams}`)
       .then((res) => {
-        console.log(res.data);
-        console.log(res.data.userid);
         // user 값이 없음
-        console.log(user);
-        console.log(res.data.userid === user);
+        // console.log("user : ", user);
         setQuestion(res.data);
       })
       .catch((err) => {
