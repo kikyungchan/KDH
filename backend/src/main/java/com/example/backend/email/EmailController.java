@@ -17,8 +17,7 @@ public class EmailController {
 
     // 인증번호 검증
     @PostMapping("/auth")
-    public EmailAuthResponseDto checkAuthCode(@RequestParam String address,
-                                              @RequestParam String authCode) {
-        return emailService.validateAuthCode(address, authCode);
+    public EmailAuthResponseDto checkAuthCode(@RequestBody EmailAuthVerifyRequestDto dto) {
+        return emailService.validateAuthCode(dto.getAddress(), dto.getAuthCode());
     }
 }

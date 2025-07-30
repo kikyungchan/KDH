@@ -9,7 +9,7 @@ import {
   Spinner,
   Form,
 } from "react-bootstrap";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router";
 
@@ -47,10 +47,8 @@ export function MemberAdd() {
 
   // email 인증
   const [emailSent, setEmailSent] = useState(false);
-  const [emailSendValid, setEmailSendValid] = useState(false);
   const [authCode, setAuthCode] = useState("");
   const [authCodeValid, setAuthCodeValid] = useState(false);
-  const [isEmailSubmitted, setIsEmailSubmitted] = useState(false);
 
   // 정규식과 일치하는지
   const [loginIdValid, setLoginIdValid] = useState(true);
@@ -82,7 +80,13 @@ export function MemberAdd() {
 
   // password 와 password2(비밀번호 확인)이 일치하지 않으면 가입버튼 비활성화
   const passwordConfirm = password === password2;
-  const disabled = !allFieldsFilled || !passwordConfirm || !loginIdChecked;
+  const disabled =
+    !allFieldsFilled || !passwordConfirm || !loginIdChecked || !authCodeValid;
+
+  // 이메일 입력 실시간 검사
+  useEffect(() => {
+    setEmailValid(emailRegEx.test(email));
+  }, [email]);
 
   // 회원가입 버튼
   function handleSignUpClick() {
@@ -183,6 +187,8 @@ export function MemberAdd() {
 
   // 이메일 인증번호 발송 버튼
   const handleEmailSendButton = () => {
+    if (!emailValid || email.trim() === "") return;
+
     axios
       .get("/api/email/auth", {
         params: { address: email },
@@ -200,27 +206,34 @@ export function MemberAdd() {
   };
 
   // 인증번호 인증 확인 버튼
-  const handleAuthCodeVerify = () => {};
+  const handleAuthCodeVerify = () => {
+    setIsSubmitted(true);
 
-  // const handleEmailSendButton = async () => {
-  //   setIsSubmitted(true);
-  //   if (!emailValid) return;
-  //
-  //   // 이메일 전송 API 호출
-  //   await sendAuthEmail(email); // <- axios 등으로 API 호출
-  //   setEmailSent(true);
-  // };
-  //
-  // const handleAuthCodeVerify = async () => {
-  //   setIsSubmitted(true);
-  //   if (!authCode) {
-  //     setAuthCodeValid(false);
-  //     return;
-  //   }
-  //
-  //   const result = await verifyAuthCode(email, authCode); // API 호출
-  //   setAuthCodeValid(result.success);
-  // };
+    if (!authCode.trim()) {
+      setAuthCodeValid(false);
+      return;
+    }
+
+    axios
+      .post("/api/email/auth", {
+        address: email,
+        authCode: authCode,
+      })
+      .then((res) => {
+        if (res.data.success) {
+          alert("이메일 인증이 완료되었습니다.");
+          setAuthCodeValid(true);
+        } else {
+          alert("인증번호가 일치하지 않습니다.");
+          setAuthCodeValid(false);
+        }
+      })
+      .catch((err) => {
+        console.error("인증번호 검증 실패", err.response?.data || err.message);
+        alert("서버 오류로 인증번호 확인에 실패했습니다.");
+        setAuthCodeValid(false);
+      });
+  };
 
   return (
     <Row>
@@ -371,13 +384,15 @@ export function MemberAdd() {
               }}
               isInvalid={isSubmitted && !emailValid}
             />
-            {isSubmitted && !emailSendValid && (
+            {isSubmitted && !emailValid && (
               <FormText className="text-danger">
                 유효한 이메일 형식이 아닙니다.
               </FormText>
             )}
-            {/* 인증번호 입력 칸 */}
-            <Button onClick={handleEmailSendButton} disabled={!emailSendValid}>
+            <Button
+              onClick={handleEmailSendButton}
+              disabled={email.trim() === "" || !emailValid}
+            >
               인증번호 전송
             </Button>
           </FormGroup>
@@ -390,9 +405,9 @@ export function MemberAdd() {
                 value={authCode}
                 placeholder="이메일로 전송된 인증번호를 입력하세요."
                 onChange={(e) => setAuthCode(e.target.value)}
-                isInvalid={isEmailSubmitted && !authCodeValid}
+                isInvalid={isSubmitted && !authCodeValid}
               />
-              {isEmailSubmitted && !authCodeValid && (
+              {isSubmitted && !authCodeValid && (
                 <FormText className="text-danger">
                   인증번호를 올바르게 입력하세요.
                 </FormText>
