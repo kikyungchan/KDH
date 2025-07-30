@@ -34,7 +34,7 @@
 
 .search-bar-wrapper {
     position: absolute;
-    top: 50%;
+    top: 10%;
     right: 2rem;
     display: flex;
     align-items: center;

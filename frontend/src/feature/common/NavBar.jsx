@@ -13,11 +13,16 @@ function NavBar(props) {
   const { user, isAdmin } = useContext(AuthenticationContext);
   const [showSearch, setShowSearch] = useState(false);
   const searchRef = useRef(null);
-
+  const iconRef = useRef(null);
   // 검색창 아이콘 한번더 누르거나 바깥영역누르면 검색창닫히도록
   useEffect(() => {
     function handleClickOutside(e) {
-      if (searchRef.current && !searchRef.current.contains(e.target)) {
+      if (
+        searchRef.current &&
+        !searchRef.current.contains(e.target) &&
+        iconRef.current &&
+        !iconRef.current.contains(e.target)
+      ) {
         setShowSearch(false);
       }
     }
@@ -54,6 +59,7 @@ function NavBar(props) {
         {/* 오른쪽 아이콘 */}
         <div className="navbar-icons">
           <FiSearch
+            ref={iconRef}
             className="navbar-icon"
             onClick={() => setShowSearch((prev) => !prev)}
             style={{ cursor: "pointer" }}
