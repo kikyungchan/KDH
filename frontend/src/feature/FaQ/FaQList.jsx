@@ -1,6 +1,8 @@
 import {
+  Button,
   ButtonGroup,
   Col,
+  Modal,
   Pagination,
   Row,
   Spinner,
@@ -15,6 +17,7 @@ export function FaQList() {
   const navigate = useNavigate();
   const [pageInfo, setPageInfo] = useState(null);
   const [faqList, setFaQList] = useState(null);
+  const [modalShow, setModalShow] = useState();
   const [searchParams, setSearchParams] = useSearchParams("1");
   const radios = [
     { name: "상품목록", value: "1", fnc: handleQnaAddButtonClick },
@@ -153,7 +156,19 @@ export function FaQList() {
               </p>
             )}
           </div>
+          <div>
+            <Button className="btn-primary" onClick={setModalShow}>
+              등록하기
+            </Button>
+          </div>
         </Col>
+        {/*  todo : admin 확인되면 modal 띄워서 자주 묻는 질문 CUD 할 수 있게 기능 추가*/}
+
+        <Modal show={modalShow}>
+          <Modal.Header>
+            <Modal.Title>문의 등록</Modal.Title>
+          </Modal.Header>
+        </Modal>
       </Row>
       <Row className="my-3">
         <Col>
