@@ -17,6 +17,7 @@ import { QnaAdd } from "./feature/Qna/QnaAdd.jsx";
 import { QnaList } from "./feature/Qna/QnaList.jsx";
 import { QnaView } from "./feature/Qna/QnaView.jsx";
 import Main from "./feature/common/Main.jsx";
+import { ProductOrderComplete } from "./feature/Product/ProductOrderComplete.jsx";
 
 function App() {
   // const username = prompt("닉네임을 입력해 주세요");
@@ -32,6 +33,10 @@ function App() {
             <Route path="product/edit" element={<ProductEdit />} />
             <Route path="product/order" element={<ProductOrder />} />
             <Route path="product/cart" element={<ProductCart />} />
+            <Route
+              path="product/order/complete"
+              element={<ProductOrderComplete />}
+            />
             <Route path="/member/edit" element={<MemberEdit />} />
             <Route path="/member/list" element={<MemberList />} />
             <Route path="/member" element={<MemberDetail />} />

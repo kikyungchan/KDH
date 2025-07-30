@@ -473,7 +473,7 @@ export function ProductDetail() {
           </div>
           <hr />
           {/* 본문영역 */}
-          <div style={{ marginTop: "" }}>
+          <div style={{ marginTop: "50px" }}>
             <div
               style={{ display: "flex", flexDirection: "column", gap: "15px" }}
             >

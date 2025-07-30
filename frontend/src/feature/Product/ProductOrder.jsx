@@ -109,6 +109,20 @@ function Order(props) {
         })
         .then((res) => {
           alert("주문이 완료되었습니다.");
+          navigate("/product/order/complete", {
+            state: {
+              items,
+              orderer: { name, phone, address },
+              receiver: {
+                name: receiverName,
+                phone: receiverPhone,
+                address: receiverAddress,
+                postalCode,
+                detailedAddress,
+              },
+              memo: memo === "직접 작성" ? customMemo : memo,
+            },
+          });
         })
         .catch((err) => {
           console.log(err);
@@ -138,7 +152,7 @@ function Order(props) {
         .post("/api/product/order/guest", payloadList)
         .then((res) => {
           const token = res.data.guestOrderToken;
-          alert("비회원 주문 완료\n주문번호: " + token);
+          alert("주문이 완료되었습니다.\n주문번호: " + token);
           localStorage.setItem("guestOrderToken", token);
 
           localStorage.removeItem("guestCart");
