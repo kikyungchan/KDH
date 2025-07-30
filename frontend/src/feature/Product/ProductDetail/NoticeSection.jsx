@@ -1,5 +1,5 @@
 import { Col, Row } from "react-bootstrap";
-import noticeData from "./notice.json"; // JSON 따로 만들었을 경우
+import noticeData from "./notice.json";
 
 function NoticeSection() {
   return (

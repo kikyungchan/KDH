@@ -1,11 +1,11 @@
-import { Button, Col, Container, Modal, Row, Spinner } from "react-bootstrap";
+import { Button, Col, Container, Row, Spinner } from "react-bootstrap";
 import { useNavigate, useSearchParams } from "react-router";
-import NoticeSection from "../NoticeSection.jsx";
+import NoticeSection from "./NoticeSection.jsx";
 import { useEffect, useState } from "react";
-import "../css/ProductDetail.css";
-import axios from "axios";
 import BuyButton from "./BuyButton.jsx";
 import CartAdded from "./CartAdded.jsx";
+import "../css/ProductDetail.css";
+import axios from "axios";
 
 export function ProductDetail() {
   const [showCartConfirmModal, setShowCartConfirmModal] = useState(false);
@@ -314,13 +314,13 @@ export function ProductDetail() {
   }
 
   return (
-    <Container>
+    <Container className="product-detail">
       <Row className="justify-content-center">
         <Col>
           <div
             style={{
               display: "flex",
-              gap: "150px",
+              gap: "100px",
               alignItems: "flex-start",
             }}
           >
@@ -468,7 +468,7 @@ export function ProductDetail() {
           </div>
           <hr />
           {/* 본문영역 */}
-          <div style={{ marginTop: "35px" }}>
+          <div style={{ marginTop: "" }}>
             <div
               style={{ display: "flex", flexDirection: "column", gap: "15px" }}
             >
@@ -477,13 +477,7 @@ export function ProductDetail() {
                   key={index}
                   src={path}
                   alt={`상세 이미지 ${index + 1}`}
-                  style={{
-                    width: "100%",
-                    height: "600px",
-                    objectFit: "cover",
-                    border: "1px solid #ccc",
-                    borderRadius: "6px",
-                  }}
+                  className="product-detail-image"
                 />
               ))}
             </div>
@@ -536,55 +530,6 @@ export function ProductDetail() {
 
       {/*장바구니 버튼 모달*/}
       <CartAdded show={showModal} onHide={() => setShowModal(false)} />
-      {/*<Modal show={showModal} onHide={() => setShowModal(false)} centered>*/}
-      {/*  <Modal.Body*/}
-      {/*    className="text-center d-flex justify-content-center align-items-center"*/}
-      {/*    style={{*/}
-      {/*      height: "130px",*/}
-      {/*      fontSize: "14px",*/}
-      {/*      padding: "0",*/}
-      {/*    }}*/}
-      {/*  >*/}
-      {/*    <p style={{ marginBottom: "0", fontSize: "16px" }}>*/}
-      {/*      선택하신 상품을 장바구니에 담았습니다*/}
-      {/*    </p>*/}
-      {/*  </Modal.Body>*/}
-      {/*  <div*/}
-      {/*    style={{*/}
-      {/*      display: "flex",*/}
-      {/*      borderTop: "1px solid #ddd",*/}
-      {/*      borderBottomLeftRadius: "10px",*/}
-      {/*      borderBottomRightRadius: "10px",*/}
-      {/*      overflow: "hidden",*/}
-      {/*    }}*/}
-      {/*  >*/}
-      {/*    <button*/}
-      {/*      onClick={() => setShowModal(false)}*/}
-      {/*      style={{*/}
-      {/*        flex: 1,*/}
-      {/*        padding: "12px 0",*/}
-      {/*        border: "none",*/}
-      {/*        background: "white",*/}
-      {/*        fontWeight: "bold",*/}
-      {/*        borderRight: "1px solid #ddd",*/}
-      {/*      }}*/}
-      {/*    >*/}
-      {/*      계속쇼핑*/}
-      {/*    </button>*/}
-      {/*    <button*/}
-      {/*      onClick={() => navigate("/product/cart")}*/}
-      {/*      style={{*/}
-      {/*        flex: 1,*/}
-      {/*        padding: "12px 0",*/}
-      {/*        border: "none",*/}
-      {/*        background: "white",*/}
-      {/*        fontWeight: "bold",*/}
-      {/*      }}*/}
-      {/*    >*/}
-      {/*      장바구니*/}
-      {/*    </button>*/}
-      {/*  </div>*/}
-      {/*</Modal>*/}
 
       {/*  구매하기 버튼 눌렀을때 장바구니에 보관한 물품이 있을시 띄우는 모달*/}
       <BuyButton
@@ -593,59 +538,6 @@ export function ProductDetail() {
         onOnlyBuy={handleBuyCurrentProductOnly}
         onMoveToCart={handleGoToCartWithCurrenProduct}
       />
-      {/*<Modal*/}
-      {/*  show={showCartConfirmModal}*/}
-      {/*  onHide={() => setShowCartConfirmModal(false)}*/}
-      {/*  centered*/}
-      {/*>*/}
-      {/*  <Modal.Body*/}
-      {/*    className="text-center d-flex justify-content-center align-items-center"*/}
-      {/*    style={{*/}
-      {/*      height: "130px",*/}
-      {/*      fontSize: "14px",*/}
-      {/*      padding: "0",*/}
-      {/*    }}*/}
-      {/*  >*/}
-      {/*    <p style={{ marginBottom: "0", fontSize: "16px" }}>*/}
-      {/*      장바구니에 담긴 상품도 함께 구매하시겠습니까?*/}
-      {/*    </p>*/}
-      {/*  </Modal.Body>*/}
-      {/*  <div*/}
-      {/*    style={{*/}
-      {/*      display: "flex",*/}
-      {/*      borderTop: "1px solid #ddd",*/}
-      {/*      borderBottomLeftRadius: "10px",*/}
-      {/*      borderBottomRightRadius: "10px",*/}
-      {/*      overflow: "hidden",*/}
-      {/*    }}*/}
-      {/*  >*/}
-      {/*    <button*/}
-      {/*      onClick={handleBuyCurrentProductOnly}*/}
-      {/*      style={{*/}
-      {/*        flex: 1,*/}
-      {/*        padding: "12px 0",*/}
-      {/*        border: "none",*/}
-      {/*        background: "white",*/}
-      {/*        fontWeight: "bold",*/}
-      {/*        borderRight: "1px solid #ddd",*/}
-      {/*      }}*/}
-      {/*    >*/}
-      {/*      아니요*/}
-      {/*    </button>*/}
-      {/*    <button*/}
-      {/*      onClick={handleGoToCartWithCurrenProduct}*/}
-      {/*      style={{*/}
-      {/*        flex: 1,*/}
-      {/*        padding: "12px 0",*/}
-      {/*        border: "none",*/}
-      {/*        background: "white",*/}
-      {/*        fontWeight: "bold",*/}
-      {/*      }}*/}
-      {/*    >*/}
-      {/*      장바구니로 이동*/}
-      {/*    </button>*/}
-      {/*  </div>*/}
-      {/*</Modal>*/}
     </Container>
   );
 }
