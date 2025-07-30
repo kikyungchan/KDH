@@ -54,6 +54,9 @@ export function MemberAdd() {
   // email 인증 완료
   const [authCompleted, setAuthCompleted] = useState(false);
 
+  // email 전송중 버튼 비활성화
+  const [isSending, setIsSending] = useState(false);
+
   // 정규식과 일치하는지
   const [loginIdValid, setLoginIdValid] = useState(true);
   const [passwordValid, setPasswordValid] = useState(true);
@@ -206,6 +209,8 @@ export function MemberAdd() {
   const handleEmailSendButton = () => {
     if (!emailValid || email.trim() === "") return;
 
+    setIsSending(true);
+
     axios
       .get("/api/email/auth", {
         params: { address: email },
@@ -226,7 +231,9 @@ export function MemberAdd() {
         console.log("인증번호 전송 실패", err.response?.data);
         alert(err.response?.data || err.message);
       })
-      .finally(() => {});
+      .finally(() => {
+        setIsSending(false);
+      });
   };
 
   // 인증번호 인증 확인 버튼
@@ -416,7 +423,12 @@ export function MemberAdd() {
             )}
             <Button
               onClick={handleEmailSendButton}
-              disabled={email.trim() === "" || !emailValid || remainTime > 0}
+              disabled={
+                email.trim() === "" ||
+                !emailValid ||
+                remainTime > 0 ||
+                isSending
+              }
             >
               인증번호 전송
             </Button>
