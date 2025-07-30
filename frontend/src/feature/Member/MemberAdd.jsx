@@ -45,6 +45,13 @@ export function MemberAdd() {
   const [address, setAddress] = useState("");
   const [birthday, setBirthday] = useState(getToday()); // 초기값은 오늘 날짜
 
+  // email 인증
+  const [emailSent, setEmailSent] = useState(false);
+  const [emailSendValid, setEmailSendValid] = useState(false);
+  const [authCode, setAuthCode] = useState("");
+  const [authCodeValid, setAuthCodeValid] = useState(false);
+  const [isEmailSubmitted, setIsEmailSubmitted] = useState(false);
+
   // 정규식과 일치하는지
   const [loginIdValid, setLoginIdValid] = useState(true);
   const [passwordValid, setPasswordValid] = useState(true);
@@ -173,6 +180,47 @@ export function MemberAdd() {
       },
     }).open();
   };
+
+  // 이메일 인증번호 발송 버튼
+  const handleEmailSendButton = () => {
+    axios
+      .get("/api/email/auth", {
+        params: { address: email },
+      })
+      .then((res) => {
+        console.log("인증번호 전송 성공", res.data.message);
+        alert(res.data.message);
+        setEmailSent(true);
+      })
+      .catch((err) => {
+        console.log("인증번호 전송 실패", err.response?.data);
+        alert(err.response?.data || err.message);
+      })
+      .finally(() => {});
+  };
+
+  // 인증번호 인증 확인 버튼
+  const handleAuthCodeVerify = () => {};
+
+  // const handleEmailSendButton = async () => {
+  //   setIsSubmitted(true);
+  //   if (!emailValid) return;
+  //
+  //   // 이메일 전송 API 호출
+  //   await sendAuthEmail(email); // <- axios 등으로 API 호출
+  //   setEmailSent(true);
+  // };
+  //
+  // const handleAuthCodeVerify = async () => {
+  //   setIsSubmitted(true);
+  //   if (!authCode) {
+  //     setAuthCodeValid(false);
+  //     return;
+  //   }
+  //
+  //   const result = await verifyAuthCode(email, authCode); // API 호출
+  //   setAuthCodeValid(result.success);
+  // };
 
   return (
     <Row>
@@ -323,12 +371,35 @@ export function MemberAdd() {
               }}
               isInvalid={isSubmitted && !emailValid}
             />
-            {isSubmitted && !emailValid && (
+            {isSubmitted && !emailSendValid && (
               <FormText className="text-danger">
                 유효한 이메일 형식이 아닙니다.
               </FormText>
             )}
+            {/* 인증번호 입력 칸 */}
+            <Button onClick={handleEmailSendButton} disabled={!emailSendValid}>
+              인증번호 전송
+            </Button>
           </FormGroup>
+          {/* 인증번호 입력칸 (이메일 전송 후 보여주기) */}
+          {emailSent && (
+            <FormGroup className="mt-3">
+              <FormLabel>인증번호</FormLabel>
+              <FormControl
+                type="text"
+                value={authCode}
+                placeholder="이메일로 전송된 인증번호를 입력하세요."
+                onChange={(e) => setAuthCode(e.target.value)}
+                isInvalid={isEmailSubmitted && !authCodeValid}
+              />
+              {isEmailSubmitted && !authCodeValid && (
+                <FormText className="text-danger">
+                  인증번호를 올바르게 입력하세요.
+                </FormText>
+              )}
+              <Button onClick={handleAuthCodeVerify}>인증번호 확인</Button>
+            </FormGroup>
+          )}
         </div>
         <div>
           <FormGroup>
