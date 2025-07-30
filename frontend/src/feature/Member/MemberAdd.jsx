@@ -302,7 +302,7 @@ export function MemberAdd() {
                   <Button
                     onClick={() => handleCheckLoginId()}
                     size="sm"
-                    variant="outline-danger"
+                    variant="outline-info"
                     className="mt-1 me-2"
                   >
                     아이디 중복 확인
@@ -434,13 +434,15 @@ export function MemberAdd() {
                     </FormText>
                   )}
                   <Button
-                    className="mt-1"
+                    className="mt-1 me-2"
                     onClick={handleEmailSendButton}
+                    variant="outline-info"
                     disabled={
                       email.trim() === "" ||
                       !emailValid ||
-                      remainTime > 0 ||
-                      isSending
+                      remainTime > 0 || // 이메일 보내고 시간이 남아있으면
+                      isSending || // 보내는 도중
+                      authCompleted // 인증 완료되면
                     }
                   >
                     {isSending ? (
@@ -519,13 +521,21 @@ export function MemberAdd() {
                     placeholder="상세주소를 입력하세요"
                     onChange={(e) => setAddressDetail(e.target.value)}
                   />
-                  <Button className="mt-1" onClick={handleSearchAddress}>
+                  <Button
+                    className="mt-1"
+                    variant="outline-info"
+                    onClick={handleSearchAddress}
+                  >
                     주소 검색
                   </Button>
                 </FormGroup>
               </div>
               <div className="text-end mt-2">
-                <Button onClick={handleSignUpClick} disabled={disabled}>
+                <Button
+                  onClick={handleSignUpClick}
+                  variant="outline-primary"
+                  disabled={disabled}
+                >
                   가입
                 </Button>
               </div>
