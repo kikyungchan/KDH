@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useRef, useState } from "react";
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
 import { AuthenticationContext } from "./AuthenticationContextProvider.jsx";
 import {
   FiChevronLeft,
@@ -14,6 +14,9 @@ function NavBar(props) {
   const [showSearch, setShowSearch] = useState(false);
   const searchRef = useRef(null);
   const iconRef = useRef(null);
+  const navigate = useNavigate();
+  const [keyword, setKeyword] = useState("");
+
   // 검색창 아이콘 한번더 누르거나 바깥영역누르면 검색창닫히도록
   useEffect(() => {
     function handleClickOutside(e) {
@@ -85,6 +88,15 @@ function NavBar(props) {
           type="text"
           placeholder="키워드로 검색"
           className="search-input"
+          value={keyword}
+          onChange={(e) => setKeyword(e.target.value)}
+          onKeyDown={(e) => {
+            if (e.key === "Enter") {
+              if (keyword.trim() !== "") {
+                navigate(`/product/list?keyword=${keyword.trim()}`);
+              }
+            }
+          }}
         />
       </div>
     </>

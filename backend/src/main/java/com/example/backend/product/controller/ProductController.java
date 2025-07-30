@@ -137,8 +137,9 @@ public class ProductController {
     }
 
     @GetMapping("/list")
-    public ResponseEntity<?> list(@RequestParam(defaultValue = "1") Integer page) {
-        return ResponseEntity.ok(productService.list(page));
+    public ResponseEntity<?> list(@RequestParam(defaultValue = "1") Integer page,
+                                  @RequestParam(required = false) String keyword) {
+        return ResponseEntity.ok(productService.list(page, keyword));
     }
 
     @PostMapping(value = "/regist", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)

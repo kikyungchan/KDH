@@ -85,9 +85,14 @@ public class ProductService {
         productImageRepository.saveAll(imageList);
     }
 
-    public Map<String, Object> list(Integer pageNumber) {
+    public Map<String, Object> list(Integer pageNumber, String keyword) {
         Pageable pageable = PageRequest.of(pageNumber - 1, 15);
-        Page<Product> page = productRepository.findAllByOrderByIdDesc(pageable);
+        Page<Product> page;
+        if (keyword != null && !keyword.trim().isEmpty()) {
+            page = productRepository.searchByKeyword(keyword, pageable);
+        } else {
+            page = productRepository.findAllByOrderByIdDesc(pageable);
+        }
 
 
         List<ProductDto> content = page.getContent().stream().map(product -> {
