@@ -32,8 +32,9 @@ export function QnaAdd() {
   const [productName, setProductName] = useState(null);
   const [image, setImage] = useState();
   const radios = [
-    { name: "상품문의", value: "1", checked: true },
-    { name: "문의내역", value: "2" },
+    { name: "상품목록", value: "1", fnc: handleQnaAddButtonClick },
+    { name: "문의내역", value: "2", fnc: handleQnaListButtonClick },
+    { name: "자주 묻는 질문", value: "3", fnc: handleFaQListButtonClick },
   ];
   let params = useParams();
   const navigate = useNavigate();
@@ -120,8 +121,16 @@ export function QnaAdd() {
     return <Spinner />;
   }*/
 
-  function handleQnalistButtonClick() {
+  function handleQnaAddButtonClick() {
+    navigate("/product/list");
+  }
+
+  function handleQnaListButtonClick() {
     navigate("/qna/list");
+  }
+
+  function handleFaQListButtonClick() {
+    navigate("/faq/list");
   }
 
   return (
@@ -144,7 +153,8 @@ export function QnaAdd() {
                   checked={radioValue === radio.value}
                   onChange={(e) => setRadioValue(e.currentTarget.value)}
                   onClick={
-                    radio.value === "2" ? handleQnalistButtonClick : null
+                    // radio.value === "2" ? handleQnalistButtonClick : null
+                    radio.fnc
                   }
                 >
                   {radio.name}

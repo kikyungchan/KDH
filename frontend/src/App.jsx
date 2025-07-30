@@ -20,6 +20,7 @@ import { QnaAdd } from "./feature/Qna/QnaAdd.jsx";
 import { QnaList } from "./feature/Qna/QnaList.jsx";
 import { QnaView } from "./feature/Qna/QnaView.jsx";
 import { AnsAdd } from "./feature/Qna/AnsAdd.jsx";
+import { FaQList } from "./feature/FaQ/FaQList.jsx";
 
 function App() {
   // const username = prompt("닉네임을 입력해 주세요");
@@ -44,6 +45,7 @@ function App() {
             <Route path="/qna/add/:id" element={<QnaAdd />} />
             <Route path="/qna/list" element={<QnaList />} />
             <Route path="/qna/view" element={<QnaView />} />
+            <Route path="/faq/list" element={<FaQList />} />
             <Route path="chat/chatting" element={<Chat />} />
           </Route>
         </Routes>

@@ -1,5 +1,4 @@
 import {
-  Badge,
   ButtonGroup,
   Col,
   Pagination,
@@ -8,22 +7,15 @@ import {
   Table,
   ToggleButton,
 } from "react-bootstrap";
+import { useNavigate, useSearchParams } from "react-router";
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { useNavigate, useSearchParams } from "react-router";
-import { FaRegComments, FaRegImages } from "react-icons/fa";
 
-export function QnaList() {
-  const [questionList, setQuestionList] = useState(null);
-  const [pageInfo, setPageInfo] = useState(null);
-  const [searchParams, setSearchParams] = useSearchParams("1");
+export function FaQList() {
   const navigate = useNavigate();
-  const STATUS_TEXT = {
-    open: "대기중",
-    answered: "답변완료",
-    closed: "종료",
-  };
-
+  const [pageInfo, setPageInfo] = useState(null);
+  const [faqList, setFaQList] = useState(null);
+  const [searchParams, setSearchParams] = useSearchParams("1");
   const radios = [
     { name: "상품목록", value: "1", fnc: handleQnaAddButtonClick },
     { name: "문의내역", value: "2", fnc: handleQnaListButtonClick },
@@ -32,24 +24,17 @@ export function QnaList() {
 
   useEffect(() => {
     axios
-      .get(`/api/qna/list?${searchParams}`)
+      .get(`/api/faq/list`)
       .then((res) => {
-        console.log("잘 될 때 코드");
-        setQuestionList(res.data.questionList);
+        setFaQList(res.data);
         setPageInfo(res.data.pageInfo);
+        console.log("res.data : ", res.data);
+        console.log("pageInfo : ", pageInfo);
+        console.log("faqList : ", faqList);
       })
-      .catch((err) => {
-        console.log("잘 안될 때 코드");
-      })
-      .finally(() => {
-        console.log("항상 실행 코드");
-      });
-  }, [searchParams]);
-
-  function handleTableRowClick(id) {
-    // 게시물 보기로 이동
-    navigate(`/qna/view?id=${id}`);
-  }
+      .catch((err) => {})
+      .finally(() => {});
+  }, []);
 
   const pageNumbers = [];
   if (pageInfo) {
@@ -64,11 +49,6 @@ export function QnaList() {
     setSearchParams(nextSearchParams);
   }
 
-  // useState 안전장치
-  if (!questionList) {
-    return <Spinner />;
-  }
-
   function handleQnaAddButtonClick() {
     navigate("/product/list");
   }
@@ -81,12 +61,17 @@ export function QnaList() {
     navigate("/faq/list");
   }
 
+  // useState 안전장치
+  if (!faqList) {
+    return <Spinner />;
+  }
+
   return (
     <>
       <Row className="justify-content-center">
         <Col md={8} lg={6} className="mt-5">
           <div className="container">
-            <h2 className="mb-4">문의 내역</h2>
+            <h2 className="mb-4">자주 묻는 질문</h2>
             <div>
               {/* todo : onclick 시 상품 질문 페이지로 넘어가게 */}
               <ButtonGroup>
@@ -95,10 +80,10 @@ export function QnaList() {
                     key={idx}
                     id={`radio-${idx}`}
                     type="radio"
-                    variant={idx % 2 ? "outline-primary" : "outline-primary"}
+                    variant="outline-primary"
                     name="radio"
                     value={radio.value}
-                    checked={idx % 2 ? true : false}
+                    checked={(idx = 3)}
                     // onChange={(e) => setRadioValue(e.currentTarget.value)}
                     onClick={radio.fnc}
                   >
@@ -108,12 +93,12 @@ export function QnaList() {
               </ButtonGroup>
             </div>
             <br />
-            {questionList.length > 0 ? (
+            {faqList.length > 0 ? (
               <Table striped={true} hover={true}>
                 <thead>
                   <tr>
                     <th style={{ width: "70px" }}>#</th>
-                    <th style={{ width: "120px" }}>답변여부</th>
+                    {/*<th style={{ width: "120px" }}>답변여부</th>*/}
                     <th style={{ width: "270px" }}>제목</th>
                     <th
                       className="d-none d-md-table-cell"
@@ -136,14 +121,14 @@ export function QnaList() {
                   </tr>
                 </thead>
                 <tbody>
-                  {questionList.map((question) => (
+                  {faqList.map((question) => (
                     <tr
                       key={question.id}
                       style={{ cursor: "pointer" }}
-                      onClick={() => handleTableRowClick(question.id)}
+                      // onClick={() => handleTableRowClick(question.id)}
                     >
                       <td>{question.id}</td>
-                      <td>{STATUS_TEXT[question.status] || ""}</td>
+                      {/*<td>{STATUS_TEXT[question.status] || ""}</td>*/}
                       <td>
                         <div className="d-flex gap-2">
                           <span>{question.title}</span>

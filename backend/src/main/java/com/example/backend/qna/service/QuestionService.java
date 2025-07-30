@@ -145,7 +145,7 @@ public class QuestionService {
         Question db = questionRepository.findById(id).get();
         System.out.println("db : " + db);
 
-        // todo : answer 데이터도 지워야 함
+        // todo : answer 데이터도 지워야 함, 나중에 테스트 후 기능 제대로 완설할 것
         Answer ans = answerRepository.findByQuestionId(db.getId());
         System.out.println("ans = " + ans);
         // delete
