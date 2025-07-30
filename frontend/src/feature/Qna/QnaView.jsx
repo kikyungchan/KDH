@@ -143,8 +143,24 @@ export function QnaView() {
                 />
               </FormGroup>
             </div>
+            {question.answer !== null ? (
+              <div>
+                <FormGroup className="mb-3" controlId="content1">
+                  <FormLabel>답변 내용</FormLabel>
+                  <FormControl
+                    as="textarea"
+                    rows={6}
+                    value={question.answer}
+                    readOnly={true}
+                  />
+                </FormGroup>
+              </div>
+            ) : (
+              <h6 className="text-center">
+                빠른 시일 내에 답변드리도록 하겠습니다
+              </h6>
+            )}
             <br />
-
             <div className="mb-3">
               {/*  todo : 로그인 시에도 user 값이 현재 없는 것으로 나오는데 이후 처리*/}
               {user === null && question.loginId === user && (

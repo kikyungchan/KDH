@@ -34,6 +34,7 @@ public class QuestionDto implements Serializable {
     private Integer category;
 
     private String imagePath;
+    private String answer;
 
     public QuestionDto(Integer id,
                        String product,
