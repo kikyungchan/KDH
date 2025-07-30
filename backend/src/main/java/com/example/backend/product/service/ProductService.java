@@ -3,6 +3,7 @@ package com.example.backend.product.service;
 import com.example.backend.member.dto.MemberDto;
 import com.example.backend.member.entity.Member;
 import com.example.backend.member.repository.MemberRepository;
+import com.example.backend.product.controller.ProductController;
 import com.example.backend.product.dto.*;
 import com.example.backend.product.entity.*;
 import com.example.backend.product.repository.*;
@@ -35,7 +36,8 @@ public class ProductService {
     private final MemberRepository memberRepository;
     private final OrderRepository orderRepository;
     private final OrderItemRepository orderItemRepository;
-
+    String orderToken = ProductController.OrderTokenGenerator.generateToken();
+    
     // url에서 key만 따오는 메소드
     private String extractS3Key(String url) {
         // 예: https://bucket.s3.region.amazonaws.com/123/abc.jpg -> 123/abc.jpg

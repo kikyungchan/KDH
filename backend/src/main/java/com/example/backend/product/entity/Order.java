@@ -60,6 +60,8 @@ public class Order {
 
     private String optionName;
 
+    private String orderToken;
+
     //    private String detailedAddress;
     //    private String postalCode;
 }

@@ -38,7 +38,7 @@ public class ProductController {
 
         public static String generateToken() {
             StringBuilder sb = new StringBuilder();
-            for (int i = 0; i < 12; i++) {
+            for (int i = 0; i < 16; i++) {
                 sb.append(random.nextInt(10));
             }
             return sb.toString();

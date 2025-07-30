@@ -81,11 +81,15 @@ CREATE TABLE orders
         FOREIGN KEY (member_id) REFERENCES member (id)
             ON DELETE CASCADE
 );
-
+ALTER TABLE orders
+    ADD COLUMN order_token VARCHAR(20);
+ALTER TABLE orders
+    ADD COLUMN zipcode VARCHAR(20);
+ALTER TABLE orders
+    ADD COLUMN address_detail VARCHAR(255);
 ALTER TABLE orders
     ADD COLUMN login_id    VARCHAR(30) NOT NULL,
     ADD COLUMN member_name VARCHAR(50) NOT NULL;
-
 ALTER TABLE orders
     ADD COLUMN product_name VARCHAR(255),
     ADD COLUMN option_name  VARCHAR(255);
