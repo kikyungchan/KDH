@@ -17,11 +17,10 @@ import org.springframework.data.redis.serializer.StringRedisSerializer;
 @EnableRedisRepositories
 public class RedisConfig {
 
-    @Value("${spring.data.redis.host}")
+    @Value("${spring.redis.host}")
     private String host;
-
-    @Value("${spring.data.redis.port}")
-    private int port;
+    @Value("${spring.redis.port}")
+    private Integer port;
 
     // 내장 / 외부 Redis 연결
     @Bean
