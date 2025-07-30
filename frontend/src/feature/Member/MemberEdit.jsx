@@ -1,6 +1,7 @@
 import {
   Button,
   Col,
+  Container,
   FormControl,
   FormGroup,
   FormLabel,
@@ -189,208 +190,229 @@ export function MemberEdit() {
       })
       .then((res) => {
         console.log("비밀번호 변경 성공");
-      })
-      .catch((err) => {
-        console.log("비밀번호 변경 실패");
-      })
-      .finally(() => {
-        console.log("비밀번호 항상 보이는 코드");
-        console.log("보내는 oldPassword:", oldPassword);
-        console.log("보내는 newPassword:", newPassword1);
         setOldPassword("");
         setNewPassword1("");
         setNewPassword2("");
         setChangePasswordModalShow(false);
-      });
+      })
+      .catch((err) => {
+        alert("비밀번호가 일치하지 않습니다.");
+      })
+      .finally(() => {});
   }
 
   return (
-    <Row>
-      <Col>
-        <h2>회원 정보 수정</h2>
-        <div>
-          <FormGroup controlId="loginId1">
-            <FormLabel>아이디</FormLabel>
-            <FormControl disabled value={member.loginId || ""} />
-          </FormGroup>
-        </div>
-        <div>
-          <FormGroup controlId="name1">
-            <FormLabel>이름</FormLabel>
-            <FormControl
-              value={member.name || ""}
-              onChange={(e) => setMember({ ...member, name: e.target.value })}
-            />
-            {isSubmitted && !nameValid && (
-              <FormText className="text-danger">
-                이름 형식이 올바르지 않습니다.
-              </FormText>
-            )}
-          </FormGroup>
-        </div>
-        <div>
-          <FormGroup controlId="birthday1">
-            <FormLabel>생년월일</FormLabel>
-            <FormControl
-              value={member.birthday || ""}
-              type="date"
-              onChange={(e) =>
-                setMember({ ...member, birthday: e.target.value })
-              }
-            />
-          </FormGroup>
-        </div>
-        <div>
-          <FormGroup controlId="phone1">
-            <FormLabel>전화번호</FormLabel>
-            <FormControl
-              value={member.phone || ""}
-              onChange={(e) => setMember({ ...member, phone: e.target.value })}
-            />
-            {isSubmitted && !phoneValid && (
-              <FormText className="text-danger">
-                전화번호 형식이 올바르지 않습니다.
-              </FormText>
-            )}
-          </FormGroup>
-        </div>
-        <div>
-          <FormGroup controlId="email1">
-            <FormLabel>이메일</FormLabel>
-            <FormControl
-              value={member.email || ""}
-              onChange={(e) => setMember({ ...member, email: e.target.value })}
-            />
-            {isSubmitted && !emailValid && (
-              <FormText className="text-danger">
-                이메일 형식이 올바르지 않습니다.
-              </FormText>
-            )}
-          </FormGroup>
-        </div>
-        <div>
-          <FormGroup controlId="address1">
-            <FormLabel>주소</FormLabel>
-            <FormControl value={member.zipCode || ""} readOnly />
-            <FormControl value={member.address || ""} readOnly />
-            <FormControl
-              value={member.addressDetail || ""}
-              onChange={(e) =>
-                setMember({ ...member, addressDetail: e.target.value })
-              }
-            />
-            <Button onClick={handleSearchAddress}>주소 검색</Button>
-          </FormGroup>
-        </div>
-        <div className="d-flex justify-content-between">
-          <div>
-            <Button onClick={() => setChangePasswordModalShow(true)}>
-              암호 변경
-            </Button>
-          </div>
-          <div>
-            <Button
-              onClick={() => setSaveModalShow(true)}
-              // onClick={handleMemberInfoChangeButton}
-              disabled={
-                !member?.name?.trim() ||
-                !member?.birthday?.trim() ||
-                !member?.phone?.trim() ||
-                !member?.email?.trim() ||
-                !member?.address?.trim()
-                // ||
-                // !password.trim()
-              }
-            >
-              저장
-            </Button>
-            <Button onClick={() => navigate(`/member?id=${member.id}`)}>
-              취소
-            </Button>
-          </div>
-        </div>
-      </Col>
-      {/* 회원 정보 수정 모달*/}
-      <Modal show={saveModalShow} onHide={() => setSaveModalShow(false)}>
-        <Modal.Header closeButton>
-          <Modal.Title>회원 정보 수정 확인</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <FormGroup>
-            <FormLabel>암호 입력</FormLabel>
-            <FormControl
-              type="password"
-              value={oldPassword}
-              onChange={(e) => setOldPassword(e.target.value)}
-            />
-            {isSubmitted && oldPassword.trim() === "" && (
-              <FormText className="text-danger">암호를 입력해주세요.</FormText>
-            )}
-          </FormGroup>
-        </Modal.Body>
-        <Modal.Footer>
-          <Button onClick={handleMemberInfoChangeButton}>저장</Button>
-          <Button onClick={() => setSaveModalShow(false)}>취소</Button>
-        </Modal.Footer>
-      </Modal>
-      {/*  비밀 번호 변경 모달 */}
-      <Modal
-        show={changePasswordModalShow}
-        onHide={() => setChangePasswordModalShow(false)}
-      >
-        <Modal.Header closeButton>
-          <Modal.Title>비밀번호 변경</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <p className="mb-3" style={{ fontSize: "13px" }}>
-            비밀번호는 영문+숫자 조합, 8~20자 사이로 입력하세요.
-          </p>
-          <FormGroup>
-            <FormLabel>현재 비밀번호</FormLabel>
-            <FormControl
-              id="withdraw-password"
-              type="password"
-              value={oldPassword}
-              onChange={(e) => setOldPassword(e.target.value)}
-              autoFocus
-            />
-          </FormGroup>
-          <FormGroup>
-            <FormLabel>변경할 비밀번호</FormLabel>
-            <FormControl
-              id="withdraw-password"
-              type="password"
-              value={newPassword1}
-              onChange={(e) => setNewPassword1(e.target.value)}
-            />
-          </FormGroup>
-          <FormGroup>
-            <FormLabel>변경할 비밀번호 확인</FormLabel>
-            <FormControl
-              id="withdraw-password"
-              type="password"
-              value={newPassword2}
-              onChange={(e) => setNewPassword2(e.target.value)}
-            />
-            {passwordConfirm || (
-              <FormText className="text-danger">
-                비밀번호가 일치하지 않습니다.
-              </FormText>
-            )}
-          </FormGroup>
-        </Modal.Body>
-        <Modal.Footer>
-          <Button onClick={() => setChangePasswordModalShow(false)}>
-            취소
-          </Button>
-          <Button
-            onClick={handleChangePasswordClick}
-            disabled={changePasswordButtonDisabled}
+    <Container
+      className="d-flex justify-content-center align-items-center"
+      style={{ backgroundColor: "#f8f9fa", paddingTop: "40px" }}
+    >
+      <div style={{ width: "100%", maxWidth: "600px" }}>
+        <Row>
+          <Col>
+            <h2 className="mb-4 text-center">회원 정보 수정</h2>
+            <div>
+              <FormGroup controlId="loginId1" className="mb-2">
+                <FormLabel className="fw-semibold">아이디</FormLabel>
+                <FormControl disabled value={member.loginId || ""} />
+              </FormGroup>
+            </div>
+            <div>
+              <FormGroup controlId="name1" className="mb-2">
+                <FormLabel className="fw-semibold">이름</FormLabel>
+                <FormControl
+                  value={member.name || ""}
+                  onChange={(e) =>
+                    setMember({ ...member, name: e.target.value })
+                  }
+                />
+                {isSubmitted && !nameValid && (
+                  <FormText className="text-danger">
+                    이름 형식이 올바르지 않습니다.
+                  </FormText>
+                )}
+              </FormGroup>
+            </div>
+            <div>
+              <FormGroup controlId="birthday1" className="mb-2">
+                <FormLabel className="fw-semibold">생년월일</FormLabel>
+                <FormControl
+                  value={member.birthday || ""}
+                  type="date"
+                  onChange={(e) =>
+                    setMember({ ...member, birthday: e.target.value })
+                  }
+                />
+              </FormGroup>
+            </div>
+            <div>
+              <FormGroup controlId="phone1" className="mb-2">
+                <FormLabel className="fw-semibold">전화번호</FormLabel>
+                <FormControl
+                  value={member.phone || ""}
+                  onChange={(e) =>
+                    setMember({ ...member, phone: e.target.value })
+                  }
+                />
+                {isSubmitted && !phoneValid && (
+                  <FormText className="text-danger">
+                    전화번호 형식이 올바르지 않습니다.
+                  </FormText>
+                )}
+              </FormGroup>
+            </div>
+            <div>
+              <FormGroup controlId="email1" className="mb-2">
+                <FormLabel className="fw-semibold">이메일</FormLabel>
+                <FormControl
+                  value={member.email || ""}
+                  onChange={(e) =>
+                    setMember({ ...member, email: e.target.value })
+                  }
+                />
+                {isSubmitted && !emailValid && (
+                  <FormText className="text-danger">
+                    이메일 형식이 올바르지 않습니다.
+                  </FormText>
+                )}
+              </FormGroup>
+            </div>
+            <div>
+              <FormGroup controlId="address1" className="mb-2">
+                <FormLabel className="fw-semibold">주소</FormLabel>
+                <FormControl value={member.zipCode || ""} readOnly />
+                <FormControl value={member.address || ""} readOnly />
+                <FormControl
+                  value={member.addressDetail || ""}
+                  onChange={(e) =>
+                    setMember({ ...member, addressDetail: e.target.value })
+                  }
+                />
+                <Button className="mt-1" onClick={handleSearchAddress}>
+                  주소 검색
+                </Button>
+              </FormGroup>
+            </div>
+            <div className="d-flex justify-content-between">
+              <div>
+                <Button onClick={() => setChangePasswordModalShow(true)}>
+                  암호 변경
+                </Button>
+              </div>
+              <div>
+                <Button
+                  onClick={() => setSaveModalShow(true)}
+                  className="me-1"
+                  // onClick={handleMemberInfoChangeButton}
+                  disabled={
+                    !member?.name?.trim() ||
+                    !member?.birthday?.trim() ||
+                    !member?.phone?.trim() ||
+                    !member?.email?.trim() ||
+                    !member?.address?.trim()
+                    // ||
+                    // !password.trim()
+                  }
+                >
+                  저장
+                </Button>
+                <Button onClick={() => navigate(`/member?id=${member.id}`)}>
+                  취소
+                </Button>
+              </div>
+            </div>
+          </Col>
+          {/* 회원 정보 수정 모달*/}
+          <Modal show={saveModalShow} onHide={() => setSaveModalShow(false)}>
+            <Modal.Header closeButton>
+              <Modal.Title>회원 정보 수정 확인</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+              <FormGroup>
+                <FormLabel>암호 입력</FormLabel>
+                <FormControl
+                  type="password"
+                  value={oldPassword}
+                  onChange={(e) => setOldPassword(e.target.value)}
+                />
+                {isSubmitted && oldPassword.trim() === "" && (
+                  <FormText className="text-danger">
+                    암호를 입력해주세요.
+                  </FormText>
+                )}
+              </FormGroup>
+            </Modal.Body>
+            <Modal.Footer>
+              <Button onClick={handleMemberInfoChangeButton}>저장</Button>
+              <Button onClick={() => setSaveModalShow(false)}>취소</Button>
+            </Modal.Footer>
+          </Modal>
+          {/*  비밀 번호 변경 모달 */}
+          <Modal
+            show={changePasswordModalShow}
+            onHide={() => setChangePasswordModalShow(false)}
           >
-            변경
-          </Button>
-        </Modal.Footer>
-      </Modal>
-    </Row>
+            <Modal.Header closeButton>
+              <Modal.Title>비밀번호 변경</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+              <p className="mb-3" style={{ fontSize: "13px" }}>
+                비밀번호는 영문+숫자 조합, 8~20자 사이로 입력하세요.
+              </p>
+              <FormGroup>
+                <FormLabel className="mb-2">현재 비밀번호</FormLabel>
+                <FormControl
+                  id="withdraw-password"
+                  type="password"
+                  value={oldPassword}
+                  onChange={(e) => setOldPassword(e.target.value)}
+                  autoFocus
+                />
+              </FormGroup>
+              <FormGroup className="mb-2 mt-2">
+                <FormLabel>변경할 비밀번호</FormLabel>
+                <FormControl
+                  id="withdraw-password"
+                  type="password"
+                  value={newPassword1}
+                  onChange={(e) => setNewPassword1(e.target.value)}
+                />
+              </FormGroup>
+              <FormGroup className="mb-2">
+                <FormLabel>변경할 비밀번호 확인</FormLabel>
+                <FormControl
+                  id="withdraw-password"
+                  type="password"
+                  value={newPassword2}
+                  onChange={(e) => setNewPassword2(e.target.value)}
+                />
+                {passwordConfirm || (
+                  <FormText className="text-danger">
+                    비밀번호가 일치하지 않습니다.
+                  </FormText>
+                )}
+              </FormGroup>
+            </Modal.Body>
+            <Modal.Footer>
+              <Button
+                onClick={() => {
+                  setChangePasswordModalShow(false);
+                  setOldPassword("");
+                  setNewPassword1("");
+                  setNewPassword2("");
+                }}
+              >
+                취소
+              </Button>
+              <Button
+                onClick={handleChangePasswordClick}
+                disabled={changePasswordButtonDisabled}
+              >
+                변경
+              </Button>
+            </Modal.Footer>
+          </Modal>
+        </Row>
+      </div>
+    </Container>
   );
 }

@@ -84,37 +84,37 @@ export function MemberDetail() {
             <h2 className="mb-4 text-center">회원 정보</h2>
             <div>
               <FormGroup controlId="loginId1" className="mb-2">
-                <FormLabel>아이디</FormLabel>
+                <FormLabel className="fw-semibold">아이디</FormLabel>
                 <FormControl readOnly value={member.loginId} />
               </FormGroup>
             </div>
             <div>
               <FormGroup controlId="name1" className="mb-2">
-                <FormLabel>이름</FormLabel>
+                <FormLabel className="fw-semibold">이름</FormLabel>
                 <FormControl readOnly value={member.name} />
               </FormGroup>
             </div>
             <div>
               <FormGroup controlId="birthday1" className="mb-2">
-                <FormLabel>생년월일</FormLabel>
+                <FormLabel className="fw-semibold">생년월일</FormLabel>
                 <FormControl readOnly value={member.birthday} />
               </FormGroup>
             </div>
             <div>
               <FormGroup controlId="phone1" className="mb-2">
-                <FormLabel>전화번호</FormLabel>
+                <FormLabel className="fw-semibold">전화번호</FormLabel>
                 <FormControl readOnly value={member.phone} />
               </FormGroup>
             </div>
             <div>
               <FormGroup controlId="email1" className="mb-2">
-                <FormLabel>이메일</FormLabel>
+                <FormLabel className="fw-semibold">이메일</FormLabel>
                 <FormControl readOnly value={member.email} />
               </FormGroup>
             </div>
             <div>
               <FormGroup controlId="address1" className="mb-2">
-                <FormLabel>주소</FormLabel>
+                <FormLabel className="fw-semibold">주소</FormLabel>
                 <FormControl readOnly value={member.zipCode} />
                 <FormControl readOnly value={member.address} />
                 <FormControl readOnly value={member.addressDetail} />
