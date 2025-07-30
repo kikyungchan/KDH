@@ -126,7 +126,7 @@ export function MemberEdit() {
         console.log("success");
       })
       .catch((err) => {
-        console.log("error");
+        alert("비밀번호가 일치하지 않습니다.");
       })
       .finally(() => {
         console.log("always");
@@ -343,7 +343,15 @@ export function MemberEdit() {
             </Modal.Body>
             <Modal.Footer>
               <Button onClick={handleMemberInfoChangeButton}>저장</Button>
-              <Button onClick={() => setSaveModalShow(false)}>취소</Button>
+              <Button
+                onClick={() => {
+                  setSaveModalShow(false);
+                  setOldPassword("");
+                  setIsSubmitted(false);
+                }}
+              >
+                취소
+              </Button>
             </Modal.Footer>
           </Modal>
           {/*  비밀 번호 변경 모달 */}
