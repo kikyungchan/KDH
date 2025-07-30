@@ -323,7 +323,13 @@ export function MemberEdit() {
             </div>
           </Col>
           {/* 회원 정보 수정 모달*/}
-          <Modal show={saveModalShow} onHide={() => setSaveModalShow(false)}>
+          <Modal
+            show={saveModalShow}
+            onHide={() => {
+              setSaveModalShow(false);
+              setOldPassword("");
+            }}
+          >
             <Modal.Header closeButton>
               <Modal.Title>회원 정보 수정 확인</Modal.Title>
             </Modal.Header>
@@ -384,7 +390,12 @@ export function MemberEdit() {
           {/*  비밀 번호 변경 모달 */}
           <Modal
             show={changePasswordModalShow}
-            onHide={() => setChangePasswordModalShow(false)}
+            onHide={() => {
+              setChangePasswordModalShow(false);
+              setOldPassword("");
+              setNewPassword1("");
+              setNewPassword2("");
+            }}
           >
             <Modal.Header closeButton>
               <Modal.Title>비밀번호 변경</Modal.Title>

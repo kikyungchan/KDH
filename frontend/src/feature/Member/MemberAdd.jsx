@@ -11,9 +11,10 @@ import {
   Container,
   Card,
 } from "react-bootstrap";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router";
+import { AuthenticationContext } from "../common/AuthenticationContextProvider.jsx";
 
 export function MemberAdd() {
   // 입력 항목 정규식
@@ -73,6 +74,9 @@ export function MemberAdd() {
   const [loginIdChecked, setLoginIdChecked] = useState(false);
   const [loginIdCheckMessage, setLoginIdCheckMessage] = useState("");
 
+  // 로그인 여부
+  const { user } = useContext(AuthenticationContext);
+
   const navigate = useNavigate();
 
   // 각 항목을 입력하지 않으면 가입 버튼 비활성화
@@ -91,6 +95,14 @@ export function MemberAdd() {
   const passwordConfirm = password === password2;
   const disabled =
     !allFieldsFilled || !passwordConfirm || !loginIdChecked || !authCodeValid;
+
+  // 로그인 되어 있을때 회원가입 접속 차단
+  useEffect(() => {
+    if (user) {
+      alert("이미 로그인되어 있습니다.");
+      navigate("/");
+    }
+  }, [user]);
 
   // 이메일 입력 실시간 검사
   useEffect(() => {

@@ -4,10 +4,12 @@ import com.example.backend.member.dto.*;
 import com.example.backend.member.service.MemberService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
@@ -26,6 +28,13 @@ public class MemberController {
     @PostMapping("/signup")
     public ResponseEntity<?> signup(@RequestBody @Valid MemberForm memberForm,
                                     BindingResult bindingResult) {
+
+        // 로그인 된 상태에서 회원가입 방어
+        if (SecurityContextHolder.getContext().getAuthentication().isAuthenticated()) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(
+                    Map.of("message", Map.of("type", "error", "text", "이미 로그인되어 있습니다.")));
+        }
+
         // 오류 메세지 보여주기
         // 입력값의 오류가 있을때(정규식과 일치하지않을때)
         if (bindingResult.hasErrors()) {
