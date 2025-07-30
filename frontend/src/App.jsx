@@ -27,7 +27,6 @@ function App() {
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<MainLayout />}>
-            {/*<Route path="/" */}
             <Route path="product/regist" element={<ProductRegist />} />
             <Route path="product/list" element={<ProductList />} />
             <Route path="product/view" element={<ProductDetail />} />
@@ -43,7 +42,6 @@ function App() {
             <Route path="/qna/add/:id" element={<QnaAdd />} />
             <Route path="/qna/list/" element={<QnaList />} />
             <Route path="/qna/view/" element={<QnaView />} />
-            {/*<Route path="chat/chatting" element={<Chat username={username} />} />*/}
             <Route path="chat/chatting" element={<Chat />} />
           </Route>
         </Routes>
