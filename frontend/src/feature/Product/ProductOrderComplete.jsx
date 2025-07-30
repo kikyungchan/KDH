@@ -14,8 +14,10 @@ export function ProductOrderComplete() {
     <div className="order-container">
       <h2>주문 완료</h2>
       <p>
-        <strong>주문번호:</strong>
-        {orderToken}
+        <strong>
+          주문번호:
+          {orderToken}
+        </strong>
       </p>
       <div className="order-box">
         <h4>주문 상품 정보</h4>

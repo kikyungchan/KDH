@@ -93,6 +93,7 @@ function Order(props) {
 
     if (token) {
       // 회원 주문
+      let orderToken = "";
       axios
         .post("/api/product/order", payloadList, {
           headers: {
@@ -101,6 +102,7 @@ function Order(props) {
         })
         .then((res) => {
           //주문 성공후 장바구니 비우기
+          orderToken = res.data.orderToken;
           return axios.delete("/api/product/cart/deleteAll", {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -108,8 +110,6 @@ function Order(props) {
           });
         })
         .then((res) => {
-          console.log(res.data);
-          const orderToken = res.data.orderToken;
           alert("주문이 완료되었습니다.");
           navigate("/product/order/complete", {
             state: {

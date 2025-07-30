@@ -14,6 +14,7 @@ public class OrderRequest {
     private String optionName;
     private String zipcode;
     private String addressDetail;
+    private String orderToken;
 
 
 }
