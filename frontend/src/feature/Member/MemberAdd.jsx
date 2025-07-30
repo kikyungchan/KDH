@@ -212,13 +212,14 @@ export function MemberAdd() {
       })
       .then((res) => {
         if (res.data.success) {
+          console.log(res.data);
           console.log("인증번호 전송 성공", res.data.message);
           alert(res.data.message);
           setEmailSent(true);
-          setRemainTime(res.data.remainTimeSec);
+          setRemainTime(res.data.remainTimeInSec);
         } else {
           alert(res.data.message);
-          setRemainTime(res.data.remainTimeSec);
+          setRemainTime(res.data.remainTimeInSec);
         }
       })
       .catch((err) => {
@@ -415,10 +416,15 @@ export function MemberAdd() {
             )}
             <Button
               onClick={handleEmailSendButton}
-              disabled={email.trim() === "" || !emailValid}
+              disabled={email.trim() === "" || !emailValid || remainTime > 0}
             >
               인증번호 전송
             </Button>
+            {remainTime > 0 && (
+              <FormText className="text-muted">
+                인증번호 재전송까지 {remainTime}초 남음
+              </FormText>
+            )}
           </FormGroup>
           {/* 인증번호 입력칸 (이메일 전송 후 보여주기) */}
           {emailSent && (
@@ -432,11 +438,7 @@ export function MemberAdd() {
                 isInvalid={isSubmitted && !authCodeValid}
                 readOnly={authCompleted}
               />
-              {remainTime > 0 && (
-                <FormText className="text-muted">
-                  인증번호 재전송까지 {remainTime}초 남음
-                </FormText>
-              )}
+
               {isSubmitted && !authCodeValid && (
                 <FormText className="text-danger">
                   인증번호를 올바르게 입력하세요.
