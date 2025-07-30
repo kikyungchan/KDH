@@ -8,6 +8,7 @@ import {
   Image,
   Modal,
   Row,
+  Spinner,
   ToggleButton,
 } from "react-bootstrap";
 import Form from "react-bootstrap/Form";
@@ -20,17 +21,9 @@ import { AuthenticationContext } from "../common/AuthenticationContextProvider.j
 export function QnaView() {
   const { user, isAdmin } = useContext(AuthenticationContext);
   const [searchParams, setSearchParams] = useSearchParams("");
-  let params = useParams();
-  const [category, setCategory] = useState("");
-  const [productNm, setProductNm] = useState();
-  const [title, setTitle] = useState();
-  const [content, setContent] = useState();
-  const [price, setPrice] = useState();
-  const [image, setImage] = useState();
+  const [question, setQuestion] = useState(null);
   const [modalShow, setModalShow] = useState();
   // searchParams 사용으로 인해 id 굳이 필요할지 의문
-  const [id, setId] = useState();
-  const [loginId, setLoginId] = useState();
   const categoryList = {
     1: { value: "기능 관련" },
     2: { value: "크기·무게 관련" },
@@ -49,14 +42,7 @@ export function QnaView() {
         // user 값이 없음
         console.log(user);
         console.log(res.data.userid === user);
-        setProductNm(res.data.product);
-        setTitle(res.data.title);
-        setContent(res.data.content);
-        setPrice(res.data.price);
-        setImage(res.data.imagePath);
-        setCategory(res.data.category);
-        setId(res.data.id);
-        setLoginId(res.data.userid);
+        setQuestion(res.data);
       })
       .catch((err) => {
         console.log(err);
@@ -88,6 +74,10 @@ export function QnaView() {
     return null;
   }
 
+  if (!question) {
+    return <Spinner />;
+  }
+
   return (
     <Row className="justify-content-center">
       <Col md={8} lg={6} className="mt-5">
@@ -100,7 +90,7 @@ export function QnaView() {
                 <FormControl
                   disabled={true}
                   aria-label="Default select example"
-                  value={category === "" ? "" : categoryList[category].value}
+                  value={categoryList[question.category].value}
                 ></FormControl>
               </FormGroup>
             </div>
@@ -111,7 +101,7 @@ export function QnaView() {
                 <div>
                   {/*상품 이미지*/}
                   <Image
-                    src={image}
+                    src={question.imagePath}
                     fluid
                     style={{
                       width: "100%",
@@ -122,10 +112,10 @@ export function QnaView() {
                   <br />
                   <br />
                   {/*상품명*/}
-                  <FormControl disabled={true} placeholder={productNm} />
+                  <FormControl disabled={true} placeholder={question.product} />
                   <h5 className="text-end fw-bold text-danger">
                     {/* toLocaleString() : 세자리수마다 쉼표로 보기 쉽게 표현*/}
-                    {price && price.toLocaleString()}원
+                    {question.price.toLocaleString()}원
                   </h5>
                 </div>
               </FormGroup>
@@ -135,7 +125,11 @@ export function QnaView() {
             <div>
               <FormGroup>
                 <FormLabel>제목</FormLabel>
-                <FormControl value={title} disabled={true} />
+                <FormControl
+                  value={question.title}
+                  disabled={true}
+                  readOnly={true}
+                />
               </FormGroup>
             </div>
             <div>
@@ -144,14 +138,14 @@ export function QnaView() {
             <div>
               <FormGroup className="mb-3" controlId="content1">
                 <FormLabel>문의 내용</FormLabel>
-                <FormControl as="textarea" rows={6} value={content} />
+                <FormControl as="textarea" rows={6} value={question.content} />
               </FormGroup>
             </div>
             <br />
 
             <div className="mb-3">
               {/*  todo : 로그인 시에도 user 값이 현재 없는 것으로 나오는데 이후 처리*/}
-              {user === null && loginId === user && (
+              {user === null && question.loginId === user && (
                 <Button className="ms-2 btn-danger" onClick={setModalShow}>
                   삭제
                 </Button>
