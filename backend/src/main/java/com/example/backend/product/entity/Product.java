@@ -1,5 +1,7 @@
 package com.example.backend.product.entity;
 
+import com.example.backend.product.dto.ProductImage;
+import com.example.backend.product.dto.ProductOption;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;

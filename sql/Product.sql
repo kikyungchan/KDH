@@ -151,4 +151,19 @@ ALTER TABLE order_item
 ALTER TABLE product
     ADD detail_text VARCHAR(5000) NULL;
 
+# 리뷰 테이블
+CREATE TABLE product_comment
+(
+    id         INT AUTO_INCREMENT NOT NULL,
+    product_id INT                NULL,
+    member_id  INT                NULL,
+    content    TEXT               NOT NULL,
+    created_at datetime           NULL,
+    CONSTRAINT pk_product_comment PRIMARY KEY (id)
+);
+
+ALTER TABLE product_comment
+    MODIFY created_at datetime null default now();
+
+
 

@@ -1,18 +1,12 @@
 package com.example.backend.qna.dto;
 
-import com.example.backend.product.dto.ProductDto;
-import com.example.backend.member.dto.MemberDto;
-import com.example.backend.product.entity.ProductImage;
 import com.example.backend.qna.entity.Question;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Value;
 
 import java.io.Serializable;
-import java.time.Instant;
 import java.time.LocalDateTime;
-import java.util.List;
 
 /**
  * DTO for {@link Question}
