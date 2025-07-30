@@ -252,6 +252,8 @@ public class ProductService {
             order.setMemberName(member.getName());
             order.setShippingAddress(req.getShippingAddress());
             order.setOrderToken(orderToken);
+            order.setAddressDetail(req.getAddressDetail());
+            order.setZipcode(req.getZipcode());
             order.setTotalPrice(req.getPrice() * req.getQuantity());
 
             if (req.getOptionId() != null) {

@@ -88,6 +88,8 @@ function Order(props) {
       shippingAddress: address,
       memo: memo === "직접 작성" ? customMemo : memo,
       totalPrice: item.price * item.quantity,
+      zipcode: postalCode,
+      addressDetail: detailedAddress,
     }));
     console.log(payloadList);
 
@@ -102,6 +104,7 @@ function Order(props) {
         })
         .then((res) => {
           //주문 성공후 장바구니 비우기
+          console.log(payloadList);
           orderToken = res.data.orderToken;
           return axios.delete("/api/product/cart/deleteAll", {
             headers: {
@@ -156,7 +159,7 @@ function Order(props) {
         .then((res) => {
           const token = res.data.guestOrderToken;
           alert("주문이 완료되었습니다.");
-       
+
           localStorage.removeItem("guestCart");
           navigate("/product/order/complete", {
             state: {

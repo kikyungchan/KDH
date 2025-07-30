@@ -60,6 +60,9 @@ public class Order {
 
     private String optionName;
 
+    private String zipcode;
+    private String addressDetail;
+
     @Column(name = "order_token")
     private String orderToken;
 
