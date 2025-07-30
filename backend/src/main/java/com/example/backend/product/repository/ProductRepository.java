@@ -1,6 +1,5 @@
 package com.example.backend.product.repository;
 
-import com.example.backend.member.service.MemberService;
 import com.example.backend.product.entity.Product;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -30,4 +29,6 @@ public interface ProductRepository extends JpaRepository<Product, Integer> {
     Page<Product> findAllByOrderByPriceDesc(Pageable pageable);
 
     Page<Product> findAllByOrderByCategoryAsc(Pageable pageable);
+
+    Page<Product> findByProductNameContaining(String productName, Pageable pageable);
 }

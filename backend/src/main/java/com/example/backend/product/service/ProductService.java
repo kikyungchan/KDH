@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.stereotype.Service;
@@ -86,31 +87,30 @@ public class ProductService {
     }
 
     public Map<String, Object> list(Integer pageNumber, String keyword, String sort) {
-        Pageable pageable = PageRequest.of(pageNumber - 1, 15);
         Page<Product> page;
+        Sort sortOption;
+        switch (sort) {
+            case "price_asc":
+                sortOption = Sort.by(Sort.Direction.ASC, "price");
+                break;
+            case "price_desc":
+                sortOption = Sort.by(Sort.Direction.DESC, "price");
+                break;
+            case "category":
+                sortOption = Sort.by(Sort.Direction.ASC, "category");
+                break;
+            default:
+                sortOption = Sort.by(Sort.Direction.DESC, "id"); // 최신순
 
+        }
+
+        Pageable pageable = PageRequest.of(pageNumber - 1, 15, sortOption);
         // 정렬 조건
         // 키워드확인
         if (keyword != null && !keyword.trim().isEmpty()) {
-            page = productRepository.searchByKeyword(keyword, pageable);
+            page = productRepository.findByProductNameContaining(keyword, pageable);
         } else {
-            switch (sort) {
-                // 가격 낮은순
-                case "price_asc":
-                    page = productRepository.findAllByOrderByPriceAsc(pageable);
-                    break;
-                // 가격 높은순
-                case "price_desc":
-                    page = productRepository.findAllByOrderByPriceDesc(pageable);
-                    break;
-                // 카테고리 순
-                case "category":
-                    page = productRepository.findAllByOrderByCategoryAsc(pageable);
-                    break;
-                //(최신순)
-                default:
-                    page = productRepository.findAllByOrderByIdDesc(pageable);
-            }
+            page = productRepository.findAll(pageable);
         }
 
 
