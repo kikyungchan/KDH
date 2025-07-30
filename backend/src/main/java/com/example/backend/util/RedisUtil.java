@@ -6,6 +6,7 @@ import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.stereotype.Service;
 
 import java.time.Duration;
+import java.util.concurrent.TimeUnit;
 
 @Service
 @RequiredArgsConstructor
@@ -30,6 +31,11 @@ public class RedisUtil {
 
     public void deleteData(String key) {
         redisTemplate.delete(key);
+    }
+
+    // Redis에 저장된 key의 남은 TTL (초 단위)
+    public long getExpire(String key) {
+        return redisTemplate.getExpire(key, TimeUnit.SECONDS);
     }
 
 }

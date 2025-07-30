@@ -21,8 +21,11 @@ public class EmailService {
     private final RedisUtil redisUtil;
 
     public EmailAuthResponseDto sendEmail(String toEmail) {
+        // 이미 인증번호가 Redis 에 있다면 재전송 제한
         if (redisUtil.existData(toEmail)) {
-            redisUtil.deleteData(toEmail);
+            long ttl = redisUtil.getExpire(toEmail); // 남은 유효 시간 (초 단위)
+            return new EmailAuthResponseDto(false,
+                    "이미 인증번호가 전송되었습니다." + ttl + "초 후 다시 시도하세요.");
         }
 
         try {
@@ -63,6 +66,7 @@ public class EmailService {
         }
 
         if (findAuthCode.equals(authCode)) {
+            redisUtil.deleteData(email);
             return new EmailAuthResponseDto(true, "인증 성공에 성공했습니다.");
 
         } else {
