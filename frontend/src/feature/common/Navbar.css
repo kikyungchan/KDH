@@ -1,0 +1,69 @@
+.navbar-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 4rem 2rem 2rem;
+}
+
+.navbar-left {
+    display: flex;
+    gap: 1rem;
+}
+
+.navbar-icons {
+    display: flex;
+    gap: 1rem;
+    font-size: 1.5rem;
+    color: white;
+    padding: 1rem 2rem;
+    align-items: center;
+}
+
+.navbar-icon {
+    display: flex;
+    align-items: center;
+    color: black;
+    cursor: pointer;
+    position: relative;
+}
+
+/* 필요 시 장바구니 뱃지용 wrapper 예시 */
+.cart-icon-wrapper {
+    position: relative;
+}
+
+.search-bar-wrapper {
+    position: absolute;
+    top: 50%;
+    right: 2rem;
+    display: flex;
+    align-items: center;
+    background: white;
+    border: 1px solid #ccc;
+    border-radius: 30px;
+    padding: 0.5rem 1rem;
+    z-index: 999;
+    transform: translateX(150%);
+    opacity: 0;
+    transition: all 0.3s ease;
+    pointer-events: none;
+}
+
+.search-bar-wrapper.active {
+    transform: translateX(0);
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.search-input {
+    border: none;
+    outline: none;
+    padding: 0.3rem 1rem;
+    font-size: 14px;
+    width: 200px;
+}
+
+.search-close-icon {
+    margin-right: 0.5rem;
+    cursor: pointer;
+}
