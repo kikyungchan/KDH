@@ -74,112 +74,116 @@ export function MemberDetail() {
   }
 
   return (
-    <Container
-      className="d-flex justify-content-center align-items-center"
-      style={{ backgroundColor: "#f8f9fa", paddingTop: "40px" }}
-    >
-      <div style={{ width: "100%", maxWidth: "600px" }}>
-        <Row>
-          <Col>
-            <h2 className="mb-4 text-center">회원 정보</h2>
-            <div>
-              <FormGroup controlId="loginId1" className="mb-2">
-                <FormLabel className="fw-semibold">아이디</FormLabel>
-                <FormControl readOnly value={member.loginId} />
-              </FormGroup>
-            </div>
-            <div>
-              <FormGroup controlId="name1" className="mb-2">
-                <FormLabel className="fw-semibold">이름</FormLabel>
-                <FormControl readOnly value={member.name} />
-              </FormGroup>
-            </div>
-            <div>
-              <FormGroup controlId="birthday1" className="mb-2">
-                <FormLabel className="fw-semibold">생년월일</FormLabel>
-                <FormControl readOnly value={member.birthday} />
-              </FormGroup>
-            </div>
-            <div>
-              <FormGroup controlId="phone1" className="mb-2">
-                <FormLabel className="fw-semibold">전화번호</FormLabel>
-                <FormControl readOnly value={member.phone} />
-              </FormGroup>
-            </div>
-            <div>
-              <FormGroup controlId="email1" className="mb-2">
-                <FormLabel className="fw-semibold">이메일</FormLabel>
-                <FormControl readOnly value={member.email} />
-              </FormGroup>
-            </div>
-            <div>
-              <FormGroup controlId="address1" className="mb-2">
-                <FormLabel className="fw-semibold">주소</FormLabel>
-                <FormControl readOnly value={member.zipCode} />
-                <FormControl readOnly value={member.address} />
-                <FormControl readOnly value={member.addressDetail} />
-              </FormGroup>
-            </div>
-            {hasAccess(member.loginId) && (
-              <div className="text-end">
-                <Button
-                  className="me-2"
-                  variant="primary"
-                  onClick={() => navigate(`/member/edit?id=${member.id}`)}
-                >
-                  수정
+    <div style={{ backgroundColor: "#f8f9fa", minHeight: "100vh" }}>
+      <Container
+        className="d-flex justify-content-center align-items-center"
+        style={{ paddingTop: "40px" }}
+      >
+        <div style={{ width: "100%", maxWidth: "600px" }}>
+          <Row>
+            <Col>
+              <h2 className="mb-4 text-center">회원 정보</h2>
+              <div>
+                <FormGroup controlId="loginId1" className="mb-2">
+                  <FormLabel className="fw-semibold">아이디</FormLabel>
+                  <FormControl readOnly value={member.loginId} />
+                </FormGroup>
+              </div>
+              <div>
+                <FormGroup controlId="name1" className="mb-2">
+                  <FormLabel className="fw-semibold">이름</FormLabel>
+                  <FormControl readOnly value={member.name} />
+                </FormGroup>
+              </div>
+              <div>
+                <FormGroup controlId="birthday1" className="mb-2">
+                  <FormLabel className="fw-semibold">생년월일</FormLabel>
+                  <FormControl readOnly value={member.birthday} />
+                </FormGroup>
+              </div>
+              <div>
+                <FormGroup controlId="phone1" className="mb-2">
+                  <FormLabel className="fw-semibold">전화번호</FormLabel>
+                  <FormControl readOnly value={member.phone} />
+                </FormGroup>
+              </div>
+              <div>
+                <FormGroup controlId="email1" className="mb-2">
+                  <FormLabel className="fw-semibold">이메일</FormLabel>
+                  <FormControl readOnly value={member.email} />
+                </FormGroup>
+              </div>
+              <div>
+                <FormGroup controlId="address1" className="mb-2">
+                  <FormLabel className="fw-semibold">주소</FormLabel>
+                  <FormControl readOnly value={member.zipCode} />
+                  <FormControl readOnly value={member.address} />
+                  <FormControl readOnly value={member.addressDetail} />
+                </FormGroup>
+              </div>
+              {hasAccess(member.loginId) && (
+                <div className="text-end">
+                  <Button
+                    className="me-2"
+                    variant="primary"
+                    onClick={() => navigate(`/member/edit?id=${member.id}`)}
+                  >
+                    수정
+                  </Button>
+                  <Button
+                    variant="danger"
+                    onClick={() => setWithdrawModalShow(true)}
+                  >
+                    탈퇴
+                  </Button>
+                </div>
+              )}
+            </Col>
+            <Modal
+              show={withdrawModalShow}
+              onHide={() => setWithdrawModalShow(false)}
+            >
+              <Modal.Header closeButton>
+                <Modal.Title>회원 탈퇴 확인</Modal.Title>
+              </Modal.Header>
+              <Modal.Body>
+                <p className="mb-3" style={{ fontSize: "13px" }}>
+                  정말 탈퇴하시겠습니까? 탈퇴를 위해 비밀번호를 입력해주세요.
+                </p>
+                <FormGroup>
+                  <FormLabel>비밀번호</FormLabel>
+                  <FormControl
+                    id="withdraw-password"
+                    type="password"
+                    value={oldPassword}
+                    onChange={(e) => {
+                      setOldPassword(e.target.value);
+                      setPasswordError("");
+                    }}
+                    autoFocus
+                    isInvalid={!!passwordError}
+                  />
+                  {passwordError && (
+                    <FormText className="text-danger">{passwordError}</FormText>
+                  )}
+                </FormGroup>
+              </Modal.Body>
+              <Modal.Footer>
+                <Button onClick={() => setWithdrawModalShow(false)}>
+                  취소
                 </Button>
                 <Button
+                  onClick={handleWithdrawButtonClick}
                   variant="danger"
-                  onClick={() => setWithdrawModalShow(true)}
+                  disabled={!oldPassword}
                 >
                   탈퇴
                 </Button>
-              </div>
-            )}
-          </Col>
-          <Modal
-            show={withdrawModalShow}
-            onHide={() => setWithdrawModalShow(false)}
-          >
-            <Modal.Header closeButton>
-              <Modal.Title>회원 탈퇴 확인</Modal.Title>
-            </Modal.Header>
-            <Modal.Body>
-              <p className="mb-3" style={{ fontSize: "13px" }}>
-                정말 탈퇴하시겠습니까? 탈퇴를 위해 비밀번호를 입력해주세요.
-              </p>
-              <FormGroup>
-                <FormLabel>비밀번호</FormLabel>
-                <FormControl
-                  id="withdraw-password"
-                  type="password"
-                  value={oldPassword}
-                  onChange={(e) => {
-                    setOldPassword(e.target.value);
-                    setPasswordError("");
-                  }}
-                  autoFocus
-                  isInvalid={!!passwordError}
-                />
-                {passwordError && (
-                  <FormText className="text-danger">{passwordError}</FormText>
-                )}
-              </FormGroup>
-            </Modal.Body>
-            <Modal.Footer>
-              <Button onClick={() => setWithdrawModalShow(false)}>취소</Button>
-              <Button
-                onClick={handleWithdrawButtonClick}
-                variant="danger"
-                disabled={!oldPassword}
-              >
-                탈퇴
-              </Button>
-            </Modal.Footer>
-          </Modal>
-        </Row>
-      </div>
-    </Container>
+              </Modal.Footer>
+            </Modal>
+          </Row>
+        </div>
+      </Container>
+    </div>
   );
 }
