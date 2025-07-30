@@ -95,16 +95,12 @@ export function QnaView() {
           <h2 className="mb-4">문의 내역 상세</h2>
           <div className="row">
             <div>
-              {/*<div>*/}
-
               <FormGroup className="mb-3" controlId="category1">
                 <FormLabel>상담유형</FormLabel>
                 <FormControl
                   disabled={true}
-                  // className="form-select"
                   aria-label="Default select example"
                   value={category === "" ? "" : categoryList[category].value}
-                  // value={categoryList.find((item) => item.value === category)}
                 ></FormControl>
               </FormGroup>
             </div>
@@ -139,11 +135,7 @@ export function QnaView() {
             <div>
               <FormGroup>
                 <FormLabel>제목</FormLabel>
-                <FormControl
-                  value={title}
-                  // placeholder="제목을 입력해 주세요"
-                  disabled={true}
-                />
+                <FormControl value={title} disabled={true} />
               </FormGroup>
             </div>
             <div>
