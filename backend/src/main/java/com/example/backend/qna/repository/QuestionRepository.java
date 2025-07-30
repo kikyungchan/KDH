@@ -34,7 +34,7 @@ public interface QuestionRepository extends JpaRepository<Question, Integer> {
                          q.id,
                          p.productName,
                          p.id,
-                         m.name,
+                         m.loginId,
                          q.title,
                          p.price,
                          q.content,

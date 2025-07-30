@@ -28,7 +28,9 @@ export function QnaView() {
   const [price, setPrice] = useState();
   const [image, setImage] = useState();
   const [modalShow, setModalShow] = useState();
+  // searchParams 사용으로 인해 id 굳이 필요할지 의문
   const [id, setId] = useState();
+  const [loginId, setLoginId] = useState();
   const categoryList = {
     1: { value: "기능 관련" },
     2: { value: "크기·무게 관련" },
@@ -42,7 +44,11 @@ export function QnaView() {
     axios
       .get(`/api/qna/view?${searchParams}`)
       .then((res) => {
-        console.log(res);
+        console.log(res.data);
+        console.log(res.data.userid);
+        // user 값이 없음
+        console.log(user);
+        console.log(res.data.userid === user);
         setProductNm(res.data.product);
         setTitle(res.data.title);
         setContent(res.data.content);
@@ -50,6 +56,7 @@ export function QnaView() {
         setImage(res.data.imagePath);
         setCategory(res.data.category);
         setId(res.data.id);
+        setLoginId(res.data.userid);
       })
       .catch((err) => {
         console.log(err);
@@ -59,9 +66,10 @@ export function QnaView() {
       });
   }, []);
 
+  // todo : userid 와 user를 대조후 맞을 경우만 작동하게
   function handleDeleteButtonClick() {
     axios
-      .delete(`/api/qna/${id}`)
+      .delete(`/api/qna/${searchParams}`)
       .then((res) => {
         console.log("잘됨");
 
@@ -150,13 +158,19 @@ export function QnaView() {
             <br />
 
             <div className="mb-3">
-              <Button className="ms-2 btn-danger" onClick={setModalShow}>
-                삭제
-              </Button>
+              {/*  todo : 로그인 시에도 user 값이 현재 없는 것으로 나오는데 이후 처리*/}
+              {user === null && loginId === user && (
+                <Button className="ms-2 btn-danger" onClick={setModalShow}>
+                  삭제
+                </Button>
+              )}
               {/* todo : is Admin 여부에 따라 보임 관련 코드 수정될 시 즉시 수정할 것*/}
               {/* todo : 링크 연결 및 답변하기 페이지 만들어야 함*/}
               {user !== null && isAdmin && (
-                <Button className="ms-2 btn-primary" href="/qna/list">
+                <Button
+                  className="ms-2 btn-primary"
+                  href={`/qna/AnsAdd?id=${searchParams}`}
+                >
                   답변하기
                 </Button>
               )}

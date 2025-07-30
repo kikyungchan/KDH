@@ -24,7 +24,7 @@ public class QuestionDto implements Serializable {
     private Integer id;
     private String product;
     private Integer productId;
-    private String user;
+    private String userid;
     private String title;
     private Integer price;
     private String content;
@@ -38,7 +38,7 @@ public class QuestionDto implements Serializable {
     public QuestionDto(Integer id,
                        String product,
                        Integer productId,
-                       String user,
+                       String userid,
                        String title,
                        Integer price,
                        String content,
@@ -49,7 +49,7 @@ public class QuestionDto implements Serializable {
         this.id = id;
         this.product = product;
         this.productId = productId;
-        this.user = user;
+        this.userid = userid;
         this.title = title;
         this.price = price;
         this.content = content;
