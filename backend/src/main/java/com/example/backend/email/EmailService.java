@@ -47,7 +47,7 @@ public class EmailService {
         message.setSubject("인증코드입니다.");
         message.setText(setContext(authCode), "utf-8", "html");
 
-        redisUtil.setDataExpire(email, authCode, 10 * 60L); // 10분
+        redisUtil.setDataExpire(email, authCode, 3 * 60L); // 3분
 
         return message;
     }

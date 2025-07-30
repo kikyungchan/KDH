@@ -197,9 +197,13 @@ export function MemberAdd() {
         params: { address: email },
       })
       .then((res) => {
-        console.log("인증번호 전송 성공", res.data.message);
-        alert(res.data.message);
-        setEmailSent(true);
+        if (res.data.success) {
+          console.log("인증번호 전송 성공", res.data.message);
+          alert(res.data.message);
+          setEmailSent(true);
+        } else {
+          alert(res.data.message);
+        }
       })
       .catch((err) => {
         console.log("인증번호 전송 실패", err.response?.data);

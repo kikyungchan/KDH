@@ -5,10 +5,10 @@ import lombok.Getter;
 @Getter
 public class EmailAuthResponseDto {
     private boolean success;
-    private String responseMessage;
+    private String message;
 
-    public EmailAuthResponseDto(boolean success, String responseMessage) {
+    public EmailAuthResponseDto(boolean success, String message) {
         this.success = success;
-        this.responseMessage = responseMessage;
+        this.message = message;
     }
 }
