@@ -430,7 +430,20 @@ export function MemberAdd() {
                 isSending
               }
             >
-              인증번호 전송
+              {isSending ? (
+                <>
+                  <Spinner
+                    animation="border"
+                    size="sm"
+                    role="status"
+                    aria-hidden="true"
+                    className="me-2"
+                  />
+                  전송 중...
+                </>
+              ) : (
+                "인증번호 전송"
+              )}
             </Button>
             {remainTime > 0 && (
               <FormText className="text-muted">
