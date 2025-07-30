@@ -319,7 +319,7 @@ export function ProductDetail() {
   }
 
   return (
-    <Container className="product-detail">
+    <Container>
       <Row className="justify-content-center">
         <Col>
           <div
