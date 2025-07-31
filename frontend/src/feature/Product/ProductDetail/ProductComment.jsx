@@ -2,15 +2,16 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { jwtDecode } from "jwt-decode";
 import { useNavigate } from "react-router";
+import StarRating from "../StarRating.jsx";
 
 function ReviewSection({ productId }) {
   const [editTargetId, setEditTargetId] = useState(null);
+  const [editHoverRating, setEditHoverRating] = useState(0);
   const [editContent, setEditContent] = useState("");
   const [editRating, setEditRating] = useState(5);
   const [showInput, setShowInput] = useState(false);
   const [content, setContent] = useState("");
   const [comments, setComments] = useState([]);
-  const [hoverRating, setHoverRating] = useState(5);
   const [rating, setRating] = useState(5);
   const navigate = useNavigate();
 
@@ -134,20 +135,12 @@ function ReviewSection({ productId }) {
             <>
               {/* 별점 수정 */}
               <div style={{ margin: "4px 0" }}>
-                {[1, 2, 3, 4, 5].map((num) => (
-                  <span
-                    key={num}
-                    style={{
-                      fontSize: "24px",
-                      cursor: "pointer",
-                      color: num <= editRating ? "gold" : "#ccc",
-                      marginRight: "4px",
-                    }}
-                    onClick={() => setEditRating(num)}
-                  >
-                    ★
-                  </span>
-                ))}
+                <StarRating
+                  rating={editRating}
+                  hoverRating={editHoverRating}
+                  setRating={setEditRating}
+                  setHoverRating={setEditHoverRating}
+                />
               </div>
 
               {/* 텍스트 수정 */}
@@ -218,35 +211,12 @@ function ReviewSection({ productId }) {
       {showInput && (
         <>
           <div style={{ marginTop: "10px" }}>
-            {[1, 2, 3, 4, 5].map((num) => {
-              const isFilled = num <= (hoverRating || rating);
-              const canHover = num > rating;
-
-              return (
-                <span
-                  key={num}
-                  style={{
-                    fontSize: "24px",
-                    cursor: "pointer",
-                    color: isFilled ? "gold" : "#ccc",
-                    marginRight: "4px",
-                    transition: "color 0.2s",
-                  }}
-                  onMouseEnter={() => {
-                    if (canHover) setHoverRating(num);
-                  }}
-                  onMouseLeave={() => {
-                    if (canHover) setHoverRating(0);
-                  }}
-                  onClick={() => {
-                    setRating(num);
-                    setHoverRating(0); // 클릭하면 호버 초기화
-                  }}
-                >
-                  ★
-                </span>
-              );
-            })}
+            <StarRating
+              rating={rating}
+              hoverRating={editHoverRating}
+              setRating={setRating}
+              setHoverRating={setEditHoverRating}
+            />
           </div>
           <textarea
             style={{

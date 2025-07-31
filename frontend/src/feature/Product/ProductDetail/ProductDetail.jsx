@@ -1,9 +1,9 @@
 import { Button, Col, Container, Row, Spinner } from "react-bootstrap";
 import { useNavigate, useSearchParams } from "react-router";
-import NoticeSection from "./NoticeSection.jsx";
+import NoticeSection from "./util/NoticeSection.jsx";
 import { useEffect, useState } from "react";
-import BuyButton from "./BuyButton.jsx";
-import CartAdded from "./CartAdded.jsx";
+import BuyButton from "./util/BuyButton.jsx";
+import CartAdded from "./util/CartAdded.jsx";
 import "../css/ProductDetail.css";
 import axios from "axios";
 import { useCart } from "../CartContext.jsx";
@@ -11,7 +11,7 @@ import {
   handleBuyButton,
   handleCartButton,
   handleGoToCartWithCurrenProduct,
-} from "./ProductDetailUtilButton.jsx";
+} from "./util/ProductDetailUtilButton.jsx";
 import ProductComment from "./ProductComment.jsx";
 
 export function ProductDetail() {

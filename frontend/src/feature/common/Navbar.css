@@ -36,7 +36,6 @@
     position: absolute;
     top: 10%;
     right: 2rem;
-    display: flex;
     align-items: center;
     background: white;
     border: 1px solid #ccc;

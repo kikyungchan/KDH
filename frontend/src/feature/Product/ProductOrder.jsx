@@ -1,7 +1,7 @@
 import { useLocation, useNavigate } from "react-router";
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import "./css/Order.css";
+import "./css/ProductOrder.css";
 
 function Order(props) {
   const [postalCode, setPostalCode] = useState("");
@@ -25,7 +25,6 @@ function Order(props) {
   const shippingFee = totalItemPrice >= 100000 ? 0 : 3000;
   const navigate = useNavigate();
 
-  // TODO: 우편번호 상세주소 회원가입시 주소입력하면서 받으면 좋을듯
   useEffect(() => {
     const token = localStorage.getItem("token");
     if (token) {
