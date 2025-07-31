@@ -7,6 +7,7 @@ import {
   FormControl,
   FormGroup,
   FormLabel,
+  FormText,
   Row,
 } from "react-bootstrap";
 import { useContext, useState } from "react";
@@ -83,12 +84,27 @@ export function MemberLogin() {
                     </Button>
                   </div>
                 </Form>
-                <div className="text-end mt-3">
+                <div className="text-end mt-3" style={{ fontSize: "0.85rem" }}>
                   <Link
                     to="/signup"
                     className="text-decoration-none text-dark me-2"
                   >
                     회원가입
+                  </Link>
+                </div>
+                <div className="text-end mt-2" style={{ fontSize: "0.85rem" }}>
+                  <Link
+                    to="/find/id"
+                    className="text-decoration-none text-dark"
+                  >
+                    아이디 찾기
+                  </Link>
+                  <span className="mx-2 text-muted">/</span>
+                  <Link
+                    to="/find/id"
+                    className="text-decoration-none text-dark me-2"
+                  >
+                    비밀번호 찾기
                   </Link>
                 </div>
               </Col>
