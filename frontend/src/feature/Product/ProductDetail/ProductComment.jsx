@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { jwtDecode } from "jwt-decode";
+import { useNavigate } from "react-router";
 
 function ReviewSection({ productId }) {
   const [editTargetId, setEditTargetId] = useState(null);
@@ -11,6 +12,7 @@ function ReviewSection({ productId }) {
   const [comments, setComments] = useState([]);
   const [hoverRating, setHoverRating] = useState(5);
   const [rating, setRating] = useState(5);
+  const navigate = useNavigate();
 
   const token = localStorage.getItem("token");
   let currentUserId = null;
@@ -59,6 +61,7 @@ function ReviewSection({ productId }) {
     const token = localStorage.getItem("token");
     if (!token) {
       alert("로그인이 필요합니다.");
+      navigate("/login");
       return;
     }
     setShowInput(true);
