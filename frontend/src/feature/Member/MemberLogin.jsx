@@ -28,7 +28,8 @@ export function MemberLogin() {
       .then((res) => {
         const token = res.data.token;
         login(token);
-        // 로그인시 장바구니 새로고침.
+
+        // 로그인시 회원장바구니 새로고침.
         axios
           .get("/api/product/cart", {
             headers: {
@@ -38,6 +39,7 @@ export function MemberLogin() {
           .then((res) => {
             setCartCount(res.data.length);
           });
+
         const message = res.data.message;
         console.log(message.text);
         navigate("/");
