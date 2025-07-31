@@ -32,4 +32,10 @@ public class CommentController {
         commentService.deleteComment(id, auth);
         return ResponseEntity.ok().build();
     }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<?> updateComment(@PathVariable Integer id, @RequestBody ProductCommentDto dto, @RequestHeader("Authorization") String auth) {
+        commentService.updateComment(id, dto, auth);
+        return ResponseEntity.ok().build();
+    }
 }

@@ -66,4 +66,15 @@ public class CommentService {
         ProductComment comment = productCommentRepository.findById(id).get();
         productCommentRepository.delete(comment);
     }
+
+    public void updateComment(Integer id, ProductCommentDto dto, String auth) {
+        Jwt jwt = jwtDecoder.decode(auth.replace("Bearer ", ""));
+        Integer memberId = Integer.parseInt(jwt.getSubject());
+
+        ProductComment comment = productCommentRepository.findById(id).get();
+
+        comment.setContent(dto.getContent());
+        comment.setRating(dto.getRating());
+        productCommentRepository.save(comment);
+    }
 }

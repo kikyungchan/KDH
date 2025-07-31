@@ -3,6 +3,9 @@ import axios from "axios";
 import { jwtDecode } from "jwt-decode";
 
 function ReviewSection({ productId }) {
+  const [editTargetId, setEditTargetId] = useState(null);
+  const [editContent, setEditContent] = useState("");
+  const [editRating, setEditRating] = useState(5);
   const [showInput, setShowInput] = useState(false);
   const [content, setContent] = useState("");
   const [comments, setComments] = useState([]);
@@ -61,7 +64,11 @@ function ReviewSection({ productId }) {
     setShowInput(true);
   }
 
-  function handleEdit(c) {}
+  function handleEdit(c) {
+    setEditTargetId(c.id);
+    setEditContent(c.content);
+    setEditRating(c.rating);
+  }
 
   function handleDelete(commentId) {
     const token = localStorage.getItem("token");
@@ -75,6 +82,27 @@ function ReviewSection({ productId }) {
       })
       .then(() => {
         alert("리뷰가 삭제되었습니다.");
+        return axios.get(`/api/product/comment/${productId}`);
+      })
+      .then((res) => setComments(res.data))
+      .catch((err) => console.log(err));
+  }
+
+  function submitEdit(commentId) {
+    const token = localStorage.getItem("token");
+    const payload = {
+      content: editContent,
+      rating: editRating,
+    };
+    axios
+      .put(`/api/product/comment/${commentId}`, payload, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      .then(() => {
+        alert("리뷰가 수정되었습니다.");
+        setEditTargetId(null);
         return axios.get(`/api/product/comment/${productId}`);
       })
       .then((res) => setComments(res.data))
@@ -98,25 +126,73 @@ function ReviewSection({ productId }) {
             {c.memberLoginId ? `${c.memberLoginId.slice(0, -4)}****` : "회원"}
           </strong>
 
-          <div style={{ margin: "4px 0" }}>
-            {[...Array(5)].map((_, i) => (
-              <span key={i} style={{ color: i < c.rating ? "gold" : "#ccc" }}>
-                ★
-              </span>
-            ))}
-          </div>
+          {/* 별점 표시 (수정 중일 때만 별점 수정 UI로 대체) */}
+          {editTargetId === c.id ? (
+            <>
+              {/* 별점 수정 */}
+              <div style={{ margin: "4px 0" }}>
+                {[1, 2, 3, 4, 5].map((num) => (
+                  <span
+                    key={num}
+                    style={{
+                      fontSize: "24px",
+                      cursor: "pointer",
+                      color: num <= editRating ? "gold" : "#ccc",
+                      marginRight: "4px",
+                    }}
+                    onClick={() => setEditRating(num)}
+                  >
+                    ★
+                  </span>
+                ))}
+              </div>
 
-          <p style={{ margin: "4px 0" }}>{c.content}</p>
-          <small style={{ color: "#666" }}>
-            {c.createdAt?.replace("T", " ").slice(0, 16)}
-          </small>
+              {/* 텍스트 수정 */}
+              <textarea
+                style={{
+                  width: "100%",
+                  height: "80px",
+                  resize: "none",
+                  padding: "10px",
+                  borderRadius: "6px",
+                  border: "1px solid #ccc",
+                  marginTop: "6px",
+                }}
+                value={editContent}
+                onChange={(e) => setEditContent(e.target.value)}
+              ></textarea>
 
-          {/* 내 댓글이면 수정/삭제 버튼 */}
-          {c.memberId === currentUserId && (
-            <div style={{ marginTop: "5px" }}>
-              <button onClick={() => handleEdit(c)}>수정</button>
-              <button onClick={() => handleDelete(c.id)}>삭제</button>
-            </div>
+              <div style={{ marginTop: "8px" }}>
+                <button onClick={() => submitEdit(c.id)}>저장</button>
+                <button onClick={() => setEditTargetId(null)}>취소</button>
+              </div>
+            </>
+          ) : (
+            <>
+              {/* 별점 보기 */}
+              <div style={{ margin: "4px 0" }}>
+                {[...Array(5)].map((_, i) => (
+                  <span
+                    key={i}
+                    style={{ color: i < c.rating ? "gold" : "#ccc" }}
+                  >
+                    ★
+                  </span>
+                ))}
+              </div>
+
+              <p style={{ margin: "4px 0" }}>{c.content}</p>
+              <small style={{ color: "#666" }}>
+                {c.createdAt?.replace("T", " ").slice(0, 16)}
+              </small>
+
+              {c.memberId === currentUserId && (
+                <div style={{ marginTop: "5px" }}>
+                  <button onClick={() => handleEdit(c)}>수정</button>
+                  <button onClick={() => handleDelete(c.id)}>삭제</button>
+                </div>
+              )}
+            </>
           )}
         </div>
       ))}
