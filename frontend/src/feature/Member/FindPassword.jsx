@@ -227,7 +227,7 @@ export function FindPassword() {
                 }}
                 className="mt-3"
                 placeholder="아이디"
-                // disabled={authCompleted}
+                disabled={authCompleted}
               />
               <div className="text-end mt-2">
                 <Button
