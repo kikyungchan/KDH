@@ -21,6 +21,9 @@ import { QnaList } from "./feature/Qna/QnaList.jsx";
 import { QnaView } from "./feature/Qna/QnaView.jsx";
 import { AnsAdd } from "./feature/Qna/AnsAdd.jsx";
 import { FaQList } from "./feature/FaQ/FaQList.jsx";
+import { CheckoutPage } from "./feature/tossPayments/Checkout.jsx";
+import { FailPage } from "./feature/tossPayments/Fail.jsx";
+import { SuccessPage } from "./feature/tossPayments/Success.jsx";
 
 function App() {
   // const username = prompt("닉네임을 입력해 주세요");
@@ -47,6 +50,9 @@ function App() {
             <Route path="/qna/view" element={<QnaView />} />
             <Route path="/faq/list" element={<FaQList />} />
             <Route path="chat/chatting" element={<Chat />} />
+            <Route path="pay/Checkout" element={<CheckoutPage />} />
+            <Route path="pay/success" element={<SuccessPage />} />
+            <Route path="pay/fail" element={<FailPage />} />
           </Route>
         </Routes>
       </BrowserRouter>
