@@ -269,7 +269,14 @@ export function FindLoginId() {
                       className="mt-2 me-2"
                       variant="dark"
                       size="sm"
-                      onClick={() => navigate("/api/find/password")}
+                      onClick={() =>
+                        navigate("/find/password", {
+                          state: {
+                            loginId: foundLoginId,
+                            email: email,
+                          },
+                        })
+                      }
                     >
                       비밀번호 찾기
                     </Button>

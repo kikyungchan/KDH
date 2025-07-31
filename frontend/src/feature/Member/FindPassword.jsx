@@ -358,7 +358,7 @@ export function FindPassword() {
                       variant="dark"
                       size="sm"
                       onClick={() =>
-                        navigate("/api/reset-password", {
+                        navigate("/reset-password", {
                           state: {
                             loginId: loginId,
                             email: email,
