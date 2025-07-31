@@ -11,6 +11,7 @@ import {
   handleBuyButton,
   handleCartButton,
   handleGoToCartWithCurrenProduct,
+  handleBuyCurrentProductOnly,
 } from "./util/ProductDetailUtilButton.jsx";
 import ProductComment from "./ProductComment.jsx";
 
@@ -63,28 +64,6 @@ export function ProductDetail() {
 
   const thumbnail = product.imagePath?.[0];
   const detailImages = product.imagePath?.slice(1);
-
-  // 구매하기 // 단일상품구매
-  function handleBuyCurrentProductOnly() {
-    if (product.options?.length > 0 && !selectedOption) {
-      alert("옵션을 선택해주세요.");
-      return;
-    }
-
-    setShowCartConfirmModal(false);
-
-    navigate("/product/order", {
-      state: {
-        productId: product.id,
-        productName: product.productName,
-        price: selectedOption ? selectedOption.price : product.price,
-        quantity: quantity,
-        imagePath: thumbnail,
-        option: selectedOption?.optionName || null,
-        optionId: selectedOption?.id || null,
-      },
-    });
-  }
 
   function handleQuestionButton() {
     setIsProcessing(true);
@@ -359,7 +338,16 @@ export function ProductDetail() {
       <BuyButton
         show={showCartConfirmModal}
         onHide={() => setShowCartConfirmModal(false)}
-        onOnlyBuy={handleBuyCurrentProductOnly}
+        onOnlyBuy={() =>
+          handleBuyCurrentProductOnly({
+            product,
+            selectedOption,
+            quantity,
+            thumbnail,
+            setShowCartConfirmModal,
+            navigate,
+          })
+        }
         onMoveToCart={() =>
           handleGoToCartWithCurrenProduct({
             product,

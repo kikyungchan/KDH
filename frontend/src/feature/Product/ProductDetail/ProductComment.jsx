@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { jwtDecode } from "jwt-decode";
 import { useNavigate } from "react-router";
-import StarRating from "../StarRating.jsx";
+import StarRating from "./util/StarRating.jsx";
 
 function ReviewSection({ productId }) {
   const [isPurchasable, setIsPurchasable] = useState(false);

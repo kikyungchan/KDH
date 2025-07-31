@@ -16,7 +16,6 @@ export function ProductOrderComplete() {
   const shippingFee = totalItemPrice >= 100000 ? 0 : 3000;
 
   useEffect(() => {
-    console.log("useEffect 실행됨");
     const token = localStorage.getItem("token");
 
     if (token) {
