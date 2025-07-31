@@ -10,25 +10,33 @@ import org.springframework.data.repository.query.Param;
 import java.util.List;
 
 public interface ProductRepository extends JpaRepository<Product, Integer> {
-    Page<Product> findAllByOrderByIdDesc(Pageable pageable);
-
-//    Product findById(Integer id);
-
-//    MemberService findById(Integer id);
 
     List<Product> id(Integer id);
 
+    // 검색
     @Query("SELECT p FROM Product p WHERE " +
            "LOWER(p.productName) LIKE LOWER(CONCAT('%', :keyword, '%')) OR " +
            "LOWER(p.info) LIKE LOWER(CONCAT('%', :keyword, '%')) OR " +
            "LOWER(p.detailText) LIKE LOWER(CONCAT('%', :keyword, '%'))")
-    Page<Product> searchByKeyword(@Param("keyword") String keyword, Pageable pageable);
-
-    Page<Product> findAllByOrderByPriceAsc(Pageable pageable);
-
-    Page<Product> findAllByOrderByPriceDesc(Pageable pageable);
-
-    Page<Product> findAllByOrderByCategoryAsc(Pageable pageable);
-
     Page<Product> findByProductNameContaining(String productName, Pageable pageable);
+
+
+    // 검색어있을떄인기순정렬
+    @Query("""
+            SELECT p FROM Product p 
+            LEFT JOIN OrderItem oi ON oi.product = p
+            WHERE p.productName LIKE %:keyword%
+            GROUP BY p
+            ORDER BY COUNT (oi.id) DESC
+            """)
+    Page<Product> findByProductNameContainingOrderByPopularity(@Param("keyword") String keyword, Pageable pageable);
+
+    // 전체상품인기순
+    @Query("""
+            SELECT p FROM Product p
+            LEFT JOIN OrderItem oi ON oi.product = p
+            GROUP BY p
+            ORDER BY COUNT(oi.id) DESC
+            """)
+    Page<Product> findAllOrderByPopularity(Pageable pageable);
 }

@@ -1,6 +1,6 @@
 import { Link, useSearchParams } from "react-router";
-import { useEffect, useState } from "react";
 import { Container, Form } from "react-bootstrap";
+import { useEffect, useState } from "react";
 import { Col, Row } from "react-bootstrap";
 import "./css/ProductList.css";
 import axios from "axios";
@@ -65,6 +65,7 @@ export function ProductList() {
           <div className="product-list-container mb-4">
             <div className="d-flex justify-content-between align-items-center mb-3">
               <h2>상품 목록</h2>
+              {/*상품 정렬*/}
               <Form.Select
                 size="sm"
                 style={{ maxWidth: "200px", marginBottom: "16px" }}
@@ -72,6 +73,7 @@ export function ProductList() {
                 onChange={handleSortChange}
               >
                 <option value="recent">기본순</option>
+                <option value="popular">인기순</option>
                 <option value="price_asc">가격 낮은순</option>
                 <option value="price_desc">가격 높은순</option>
                 <option value="category">카테고리순</option>

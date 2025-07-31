@@ -90,29 +90,39 @@ public class ProductService {
 
     public Map<String, Object> list(Integer pageNumber, String keyword, String sort) {
         Page<Product> page;
-        Sort sortOption;
-        switch (sort) {
-            case "price_asc":
-                sortOption = Sort.by(Sort.Direction.ASC, "price");
-                break;
-            case "price_desc":
-                sortOption = Sort.by(Sort.Direction.DESC, "price");
-                break;
-            case "category":
-                sortOption = Sort.by(Sort.Direction.ASC, "category");
-                break;
-            default:
-                sortOption = Sort.by(Sort.Direction.DESC, "id"); // 최신순
 
-        }
-
-        Pageable pageable = PageRequest.of(pageNumber - 1, 15, sortOption);
-        // 정렬 조건
-        // 키워드확인
-        if (keyword != null && !keyword.trim().isEmpty()) {
-            page = productRepository.findByProductNameContaining(keyword, pageable);
+        Pageable pageable = PageRequest.of(pageNumber - 1, 15);
+        if ("popular".equals(sort)) {
+            if (keyword != null && !keyword.trim().isEmpty()) {
+                page = productRepository.findByProductNameContainingOrderByPopularity(keyword, pageable);
+            } else {
+                page = productRepository.findAllOrderByPopularity(pageable);
+            }
         } else {
-            page = productRepository.findAll(pageable);
+
+            Sort sortOption;
+            switch (sort) {
+                case "price_asc":
+                    sortOption = Sort.by(Sort.Direction.ASC, "price");
+                    break;
+                case "price_desc":
+                    sortOption = Sort.by(Sort.Direction.DESC, "price");
+                    break;
+                case "category":
+                    sortOption = Sort.by(Sort.Direction.ASC, "category");
+                    break;
+                default:
+                    sortOption = Sort.by(Sort.Direction.DESC, "id"); // 최신순
+
+            }
+            pageable = PageRequest.of(pageNumber - 1, 15, sortOption);
+            // 정렬 조건
+            // 키워드확인
+            if (keyword != null && !keyword.trim().isEmpty()) {
+                page = productRepository.findByProductNameContaining(keyword, pageable);
+            } else {
+                page = productRepository.findAll(pageable);
+            }
         }
 
 
