@@ -1,14 +1,13 @@
 package com.example.backend.faq.controller;
 
+import com.example.backend.faq.dto.faqAddForm;
 import com.example.backend.faq.service.FaqService;
 import com.example.backend.qna.service.QuestionService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
 
@@ -30,5 +29,30 @@ public class FaqController {
         faqService.hasPermission(authentication);
 
         return faqService.list(keyword, pageNumber);
+    }
+
+    @PostMapping("add")
+    @PreAuthorize("isAuthenticated()")
+    public ResponseEntity<?> addFaq(@RequestBody faqAddForm dto, Authentication authentication) {
+
+        // 로그인 여부 검사
+        faqService.hasPermission(authentication);
+
+        // 유효성 검사
+        boolean result = faqService.validateForAdd(dto);
+
+        if (result) {
+            faqService.add(dto, authentication);
+
+            return ResponseEntity.ok().body(Map.of(
+                    "message", Map.of(
+                            "type", "success",
+                            "text", "FAQ가 등록되었습니다.")));
+        } else {
+            return ResponseEntity.badRequest().body(Map.of(
+                    "message", Map.of(
+                            "type", "error",
+                            "text", "입력한 내용이 유효하지 않습니다.")));
+        }
     }
 }

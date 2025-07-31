@@ -2,6 +2,9 @@ import {
   Button,
   ButtonGroup,
   Col,
+  FormControl,
+  FormGroup,
+  FormLabel,
   Modal,
   Pagination,
   Row,
@@ -10,14 +13,19 @@ import {
   ToggleButton,
 } from "react-bootstrap";
 import { useNavigate, useSearchParams } from "react-router";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import axios from "axios";
+import { toast } from "react-toastify";
+import { AuthenticationContext } from "../common/AuthenticationContextProvider.jsx";
 
 export function FaQList() {
+  const { user, isAdmin } = useContext(AuthenticationContext);
   const navigate = useNavigate();
   const [pageInfo, setPageInfo] = useState(null);
   const [faqList, setFaQList] = useState(null);
   const [modalShow, setModalShow] = useState();
+  const [title, setTitle] = useState();
+  const [content, setContent] = useState();
   const [searchParams, setSearchParams] = useSearchParams("1");
   const radios = [
     { name: "상품목록", value: "1", fnc: handleQnaAddButtonClick },
@@ -29,14 +37,19 @@ export function FaQList() {
     axios
       .get(`/api/faq/list`)
       .then((res) => {
-        setFaQList(res.data);
+        setFaQList(res.data.faqList);
         setPageInfo(res.data.pageInfo);
-        console.log("res.data : ", res.data);
-        console.log("pageInfo : ", pageInfo);
-        console.log("faqList : ", faqList);
+        console.log("data", res.data);
+        console.log("faqList", faqList);
       })
-      .catch((err) => {})
+      .catch((err) => {
+        console.log(err.data);
+      })
       .finally(() => {});
+    console.log("user : ", user);
+    console.log("user is null : ", user == null);
+    console.log("isAdmin1 : ", isAdmin && true);
+    console.log("isAdmin2 : ", user !== null && isAdmin);
   }, []);
 
   const pageNumbers = [];
@@ -69,6 +82,31 @@ export function FaQList() {
     return <Spinner />;
   }
 
+  function handleSaveButtonClick() {
+    axios
+      .post("/api/faq/add", {
+        question: title,
+        answer: content,
+      })
+      .then((res) => {
+        console.log("success");
+        const message = res.data.message;
+        if (message) {
+          toast(message.text, { type: message.type });
+        }
+      })
+      .catch((err) => {
+        console.log("err");
+        const message = err.response.data.message;
+        if (message) {
+          toast(message.text, { type: message.type });
+        }
+      })
+      .finally(() => {
+        console.log("always");
+      });
+  }
+
   return (
     <>
       <Row className="justify-content-center">
@@ -76,7 +114,6 @@ export function FaQList() {
           <div className="container">
             <h2 className="mb-4">자주 묻는 질문</h2>
             <div>
-              {/* todo : onclick 시 상품 질문 페이지로 넘어가게 */}
               <ButtonGroup>
                 {radios.map((radio, idx) => (
                   <ToggleButton
@@ -86,8 +123,7 @@ export function FaQList() {
                     variant="outline-primary"
                     name="radio"
                     value={radio.value}
-                    checked={(idx = 3)}
-                    // onChange={(e) => setRadioValue(e.currentTarget.value)}
+                    checked={idx === 2}
                     onClick={radio.fnc}
                   >
                     {radio.name}
@@ -102,12 +138,12 @@ export function FaQList() {
                   <tr>
                     <th style={{ width: "70px" }}>#</th>
                     {/*<th style={{ width: "120px" }}>답변여부</th>*/}
-                    <th style={{ width: "270px" }}>제목</th>
+                    <th style={{ width: "270px" }}>질문</th>
                     <th
                       className="d-none d-md-table-cell"
                       style={{ width: "100px" }}
                     >
-                      작성자
+                      답변
                     </th>
                     <th
                       className="d-none d-lg-table-cell"
@@ -124,27 +160,23 @@ export function FaQList() {
                   </tr>
                 </thead>
                 <tbody>
-                  {faqList.map((question) => (
+                  {faqList.map((faq) => (
                     <tr
-                      key={question.id}
+                      key={faq.id}
                       style={{ cursor: "pointer" }}
                       // onClick={() => handleTableRowClick(question.id)}
                     >
-                      <td>{question.id}</td>
+                      <td>{faq.id}</td>
                       {/*<td>{STATUS_TEXT[question.status] || ""}</td>*/}
                       <td>
                         <div className="d-flex gap-2">
-                          <span>{question.title}</span>
+                          <span>{faq.question}</span>
                         </div>
                       </td>
-                      <td className="d-none d-md-table-cell">
-                        {question.name}
-                      </td>
+                      <td className="d-none d-md-table-cell">{faq.answer}</td>
+                      <td className="d-none d-lg-table-cell">{faq.timesAgo}</td>
                       <td className="d-none d-lg-table-cell">
-                        {question.timesAgo}
-                      </td>
-                      <td className="d-none d-lg-table-cell">
-                        {question.timesAgo2}
+                        {faq.timesAgo2}
                       </td>
                     </tr>
                   ))}
@@ -157,17 +189,45 @@ export function FaQList() {
             )}
           </div>
           <div>
-            <Button className="btn-primary" onClick={setModalShow}>
-              등록하기
-            </Button>
+            {/*todo : 관리자인지 여부 확인*/}
+            {isAdmin && (
+              <Button className="btn-primary" onClick={setModalShow}>
+                등록하기
+              </Button>
+            )}
           </div>
         </Col>
         {/*  todo : admin 확인되면 modal 띄워서 자주 묻는 질문 CUD 할 수 있게 기능 추가*/}
 
         <Modal show={modalShow}>
           <Modal.Header>
-            <Modal.Title>문의 등록</Modal.Title>
+            <Modal.Title>FaQ 등록</Modal.Title>
           </Modal.Header>
+          <Modal.Body>
+            <FormGroup controlId="title">
+              <FormLabel>faq 질문</FormLabel>
+              <FormControl
+                value={title}
+                onChange={(e) => setTitle(e.target.value)}
+              ></FormControl>
+            </FormGroup>
+            <FormGroup controlId="content">
+              <FormLabel>faq 답변</FormLabel>
+              <FormControl
+                as="textarea"
+                value={content}
+                onChange={(e) => setContent(e.target.value)}
+              ></FormControl>
+            </FormGroup>
+          </Modal.Body>
+          <Modal.Footer>
+            <Button variant="outline-dark" onClick={() => setModalShow(false)}>
+              취소
+            </Button>
+            <Button variant="primary" onClick={handleSaveButtonClick}>
+              등록
+            </Button>
+          </Modal.Footer>
         </Modal>
       </Row>
       <Row className="my-3">

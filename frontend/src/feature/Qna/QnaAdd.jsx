@@ -147,7 +147,7 @@ export function QnaAdd() {
                   key={idx}
                   id={`radio-${idx}`}
                   type="radio"
-                  variant={idx % 2 ? "outline-primary" : "outline-primary"}
+                  variant={"outline-primary"}
                   name="radio"
                   value={radio.value}
                   checked={radioValue === radio.value}

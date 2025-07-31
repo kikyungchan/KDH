@@ -95,10 +95,10 @@ export function QnaList() {
                     key={idx}
                     id={`radio-${idx}`}
                     type="radio"
-                    variant={idx % 2 ? "outline-primary" : "outline-primary"}
+                    variant={"outline-primary"}
                     name="radio"
                     value={radio.value}
-                    checked={idx % 2 ? true : false}
+                    checked={idx === 1}
                     // onChange={(e) => setRadioValue(e.currentTarget.value)}
                     onClick={radio.fnc}
                   >

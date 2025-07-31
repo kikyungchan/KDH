@@ -1,5 +1,6 @@
 package com.example.backend.faq.entity;
 
+import com.example.backend.member.entity.Member;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -35,5 +36,9 @@ public class Faq {
     @ColumnDefault("current_timestamp()")
     @Column(name = "updated_at", insertable = false)
     private LocalDateTime updatedAt;
+
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "user_id", nullable = false, referencedColumnName = "login_id")
+    private Member user;
 
 }

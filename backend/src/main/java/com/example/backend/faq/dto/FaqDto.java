@@ -19,6 +19,7 @@ public class FaqDto implements Serializable {
     Integer id;
     String question;
     String answer;
+    String username;
     Integer category;
     LocalDateTime createdAt;
     LocalDateTime updatedAt;
