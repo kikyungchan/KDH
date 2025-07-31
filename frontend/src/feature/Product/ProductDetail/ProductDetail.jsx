@@ -16,6 +16,7 @@ import ReviewStats from "./ReviewStats.jsx";
 import "../css/ProductDetail.css";
 import axios from "axios";
 import ScrollToTopButton from "./ScrollToTopButton.jsx";
+import "../css/ProductList.css";
 
 export function ProductDetail() {
   const { setCartCount } = useCart();
@@ -96,7 +97,29 @@ export function ProductDetail() {
               />
             )}
             <div style={{ flex: 1 }}>
-              <h2>{product.productName}</h2>
+              <h2>
+                {product.productName}
+                {/* NEW 뱃지: 일주일 이내 등록된 상품 */}
+                {(() => {
+                  const insertedAt = new Date(product.insertedAt);
+                  const now = new Date();
+                  const diffInSeconds = (now - insertedAt) / 1000;
+                  const isNew = diffInSeconds <= 60 * 60 * 24 * 7;
+                  return isNew ? <span className="new-badge">NEW</span> : null;
+                })()}
+
+                {/* 품절 뱃지 */}
+                {product.quantity === 0 && (
+                  <span className="sold-out-badge">SOLD OUT</span>
+                )}
+
+                {/* 재고 부족 뱃지 */}
+                {product.quantity > 0 && product.quantity < 5 && (
+                  <span className="low-stock-badge">
+                    🔥 {product.quantity}개 남음
+                  </span>
+                )}
+              </h2>
               <p>{product.price.toLocaleString()}원</p>
               <p>{product.info}</p>
               <hr />

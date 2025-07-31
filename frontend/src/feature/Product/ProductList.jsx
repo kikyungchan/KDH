@@ -113,6 +113,10 @@ export function ProductList() {
                           {isNewProduct(product.insertedAt) && (
                             <span className="new-badge">NEW</span>
                           )}
+                          {product.hot && (
+                            <span className="hot-badge">HOT</span>
+                          )}
+
                           {product.quantity === 0 && (
                             <span className="sold-out-badge">SOLD OUT</span>
                           )}

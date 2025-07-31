@@ -40,9 +40,11 @@ public class Order {
     @Column(name = "shipping_address", nullable = false)
     private String shippingAddress;
 
-//    @ManyToOne
-//    @JoinColumn(name = "product_id")
-//    private Product product;
+    @ManyToOne
+    @JoinColumn(name = "product_id")
+    private Product product;
+
+    private Integer quantity;
 
     @Column(name = "login_id", nullable = false)
     private String loginId;
