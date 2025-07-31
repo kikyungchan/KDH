@@ -227,6 +227,7 @@ public class MemberController {
         }
     }
 
+    // 아이디 찾기
     @GetMapping("find-id")
     public ResponseEntity<?> findLoginId(@RequestParam String email) {
         try {
@@ -242,6 +243,19 @@ public class MemberController {
             ));
         }
     }
+
+    // 아이디와 이메일이 같은 계정의 것인지
+    @GetMapping("check-id-email")
+    public ResponseEntity<?> checkIdEmailMatch(@RequestParam String loginId,
+                                               @RequestParam String email) {
+        boolean matched = memberService.existByLoginIdAndEmail(loginId, email);
+        if (matched) {
+            return ResponseEntity.ok().body(Map.of("matched", true));
+        } else {
+            return ResponseEntity.ok().body(Map.of("matched", false));
+        }
+    }
+
 
 }
 

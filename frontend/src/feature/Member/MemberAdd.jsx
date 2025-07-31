@@ -696,7 +696,7 @@ export function MemberAdd() {
                         전송 중...
                       </>
                     ) : (
-                      "가입"
+                      "회원 등록"
                     )}
                   </Button>
                 </div>

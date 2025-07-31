@@ -243,5 +243,9 @@ public class MemberService {
         String maskedPart = "*".repeat(length - visible);
         return visiblePart + maskedPart;
     }
+
+    public boolean existByLoginIdAndEmail(String loginId, String email) {
+        return memberRepository.existsByLoginIdAndEmail(loginId, email);
+    }
 }
 
