@@ -169,5 +169,6 @@ ALTER TABLE product_comment
 ALTER TABLE product_comment
     ADD COLUMN rating INT NOT NULL;
 
-
+ALTER TABLE orders
+    ADD COLUMN product_id INT;
 
