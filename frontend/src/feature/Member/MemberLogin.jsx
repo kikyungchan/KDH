@@ -10,7 +10,7 @@ import {
   Row,
 } from "react-bootstrap";
 import { useContext, useState } from "react";
-import { useNavigate } from "react-router";
+import { useNavigate, Link } from "react-router";
 import axios from "axios";
 import { AuthenticationContext } from "../common/AuthenticationContextProvider.jsx";
 
@@ -73,12 +73,24 @@ export function MemberLogin() {
                       onChange={(e) => setPassword(e.target.value)}
                     />
                   </FormGroup>
-                  <div className="text-end">
-                    <Button variant="dark" type="submit">
+                  <div className="text-center mt-3">
+                    <Button
+                      variant="dark"
+                      type="submit"
+                      className="w-100 py-2 fw-bold"
+                    >
                       로그인
                     </Button>
                   </div>
                 </Form>
+                <div className="text-end mt-3">
+                  <Link
+                    to="/signup"
+                    className="text-decoration-none text-dark me-2"
+                  >
+                    회원가입
+                  </Link>
+                </div>
               </Col>
             </Row>
           </Card.Body>

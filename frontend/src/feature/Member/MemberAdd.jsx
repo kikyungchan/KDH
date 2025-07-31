@@ -304,11 +304,21 @@ export function MemberAdd() {
                 <h2 className="text-center mb-4">회원 등록</h2>
                 <div>
                   <FormGroup>
-                    <FormLabel className="fw-semibold">아이디</FormLabel>
+                    <FormLabel className="fw-semibold fs-6 mb-1">
+                      아이디
+                    </FormLabel>
+                    <div className="mb-1 mt-0">
+                      <FormText className="fs-7">
+                        <FormText className="text-muted fs-7">
+                          아이디는 영문으로 시작하며 4~20자, 영문+숫자 조합만
+                          가능합니다.
+                        </FormText>
+                      </FormText>
+                    </div>
                     <FormControl
                       type="text"
                       value={loginId}
-                      placeholder="아이디는 영문으로 시작하며 4~20자, 영문+숫자 조합만 가능합니다."
+                      placeholder="아이디"
                       autoComplete="username"
                       onChange={(e) => {
                         setLoginId(e.target.value);
@@ -327,7 +337,7 @@ export function MemberAdd() {
                       onClick={() => handleCheckLoginId()}
                       size="sm"
                       variant="outline-dark"
-                      className="mt-1 me-2"
+                      className="mt-2 me-2"
                     >
                       아이디 중복 확인
                     </Button>
@@ -346,13 +356,21 @@ export function MemberAdd() {
                 <div>
                   <form>
                     <FormGroup>
-                      <FormLabel className="fw-semibold mt-2">
+                      <FormLabel className="fw-semibold fs-6 mt-2 mb-1">
                         비밀번호
                       </FormLabel>
+                      <div className="mb-1 mt-0">
+                        <FormText className="fs-7">
+                          <FormText className="text-muted fs-7">
+                            비밀번호는 영문+숫자 조합, 8~20자 사이로
+                            입력해주세요.
+                          </FormText>
+                        </FormText>
+                      </div>
                       <FormControl
                         type="password"
                         value={password}
-                        placeholder="비밀번호는 영문+숫자 조합, 8~20자 사이로 입력하세요."
+                        placeholder="비밀번호"
                         onChange={(e) => {
                           setPassword(e.target.value);
                         }}
@@ -375,7 +393,7 @@ export function MemberAdd() {
                       <FormControl
                         type="password"
                         value={password2}
-                        placeholder="비밀번호를 한 번 더 입력해주세요"
+                        placeholder="비밀번호 확인"
                         onChange={(e) => {
                           setPassword2(e.target.value);
                         }}
@@ -390,11 +408,20 @@ export function MemberAdd() {
                 </div>
                 <div>
                   <FormGroup>
-                    <FormLabel className="fw-semibold mt-2">성명</FormLabel>
+                    <FormLabel className="fw-semibold fs-6 mt-2 mb-1">
+                      이름
+                    </FormLabel>
+                    <div className="mb-1 mt-0">
+                      <FormText className="fs-7">
+                        <FormText className="text-muted fs-7">
+                          이름은 한글 또는 영문 2~20자까지 입력 가능합니다.
+                        </FormText>
+                      </FormText>
+                    </div>
                     <FormControl
                       type="text"
                       value={name}
-                      placeholder="이름은 한글 또는 영문 2~20자까지 입력 가능합니다."
+                      placeholder="이름"
                       autoComplete="name"
                       onChange={(e) => {
                         setName(e.target.value);
@@ -423,11 +450,20 @@ export function MemberAdd() {
                 </div>
                 <div>
                   <FormGroup>
-                    <FormLabel className="fw-semibold mt-2">전화번호</FormLabel>
+                    <FormLabel className="fw-semibold fs-6 mt-2 mb-1">
+                      전화번호
+                    </FormLabel>
+                    <div className="mb-1 mt-0">
+                      <FormText className="fs-7">
+                        <FormText className="text-muted fs-7">
+                          하이픈(-)없이 숫자만 입력해주세요. (예: 01012345678)
+                        </FormText>
+                      </FormText>
+                    </div>
                     <FormControl
                       type="text"
                       value={phone}
-                      placeholder="숫자만 입력 (예: 01012345678)"
+                      placeholder="전화번호"
                       autoComplete="tel"
                       onChange={(e) => {
                         setPhone(e.target.value);
@@ -443,11 +479,20 @@ export function MemberAdd() {
                 </div>
                 <div>
                   <FormGroup>
-                    <FormLabel className="fw-semibold mt-2">이메일</FormLabel>
+                    <FormLabel className="fw-semibold fs-6 mt-2 mb-1">
+                      이메일
+                    </FormLabel>
+                    <div className="mb-1 mt-0">
+                      <FormText className="fs-7">
+                        <FormText className="text-muted fs-7">
+                          예: example@domain.com 형식의 이메일을 입력하세요.
+                        </FormText>
+                      </FormText>
+                    </div>
                     <FormControl
                       type="text"
                       value={email}
-                      placeholder="예: example@domain.com 형식의 이메일을 입력하세요."
+                      placeholder="이메일"
                       autoComplete="email"
                       onChange={(e) => {
                         setEmail(e.target.value);
@@ -460,7 +505,7 @@ export function MemberAdd() {
                       </FormText>
                     )}
                     <Button
-                      className="mt-1 me-2"
+                      className="mt-2 me-2"
                       onClick={handleEmailSendButton}
                       variant="outline-dark"
                       disabled={
@@ -511,7 +556,7 @@ export function MemberAdd() {
                       />
 
                       <Button
-                        className="mt-1 me-2"
+                        className="mt-2 me-2"
                         variant="dark"
                         onClick={handleAuthCodeVerify}
                         disabled={authCompleted}
@@ -538,7 +583,7 @@ export function MemberAdd() {
                     <FormControl
                       type="text"
                       value={address}
-                      placeholder="주소를 입력하세요"
+                      placeholder="주소"
                       autoComplete="address-line1"
                       readOnly
                     />
@@ -549,7 +594,7 @@ export function MemberAdd() {
                       onChange={(e) => setAddressDetail(e.target.value)}
                     />
                     <Button
-                      className="mt-1"
+                      className="mt-2"
                       variant="outline-dark"
                       onClick={handleSearchAddress}
                     >
