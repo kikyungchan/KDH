@@ -12,6 +12,7 @@ import {
 } from "react-bootstrap";
 import { useEffect, useState } from "react";
 import axios from "axios";
+import { useNavigate } from "react-router";
 
 export function FindLoginId() {
   // 이메일 정규식
@@ -38,6 +39,8 @@ export function FindLoginId() {
 
   //정규식과 일치하는지
   const [emailValid, setEmailValid] = useState(true);
+
+  const navigate = useNavigate();
 
   // 이메일 입력 실시간 검사
   useEffect(() => {
@@ -259,6 +262,28 @@ export function FindLoginId() {
                     <span className="text-dark">{foundLoginId}</span>
                     입니다.
                   </FormText>
+                </div>
+                <div className="text-end mt-2">
+                  <div>
+                    <Button
+                      className="mt-2 me-2"
+                      variant="dark"
+                      size="sm"
+                      onClick={() => navigate("/api/find/password")}
+                    >
+                      비밀번호 찾기
+                    </Button>
+                  </div>
+                  <div>
+                    <Button
+                      className="mt-2 me-2"
+                      variant="dark"
+                      size="sm"
+                      onClick={() => navigate("/")}
+                    >
+                      돌아가기
+                    </Button>
+                  </div>
                 </div>
               </>
             )}
