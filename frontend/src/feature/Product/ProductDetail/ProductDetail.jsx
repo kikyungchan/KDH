@@ -135,90 +135,102 @@ export function ProductDetail() {
               <hr />
 
               {/*옵션선택 드롭다운*/}
-              {product.options?.length > 0 && (
-                <div style={{ margin: "10px 0" }}>
-                  <label>선택:</label>
-                  <select
-                    onChange={(e) => {
-                      const selected = product.options?.find(
-                        (opt) => opt.optionName === e.target.value,
-                      );
-                      setSelectedOption(selected);
-                    }}
-                    style={{ padding: "5px", marginLeft: "10px" }}
-                  >
-                    <option value="">옵션을 선택하세요</option>
-                    {product.options?.map((opt, idx) => (
-                      <option key={idx} value={opt.optionName}>
-                        {opt.optionName} - {opt.price.toLocaleString()}원
-                      </option>
-                    ))}
-                  </select>
-                </div>
-              )}
-              {/* 수량 선택*/}
-              <div style={{ marginTop: "10px" }}>
-                <div
-                  style={{ display: "flex", alignItems: "center", gap: "10px" }}
-                >
-                  <span style={{ fontWeight: "bold" }}>수량</span>
-                  <button
-                    type="button"
-                    onClick={() => setQuantity((prev) => Math.max(1, prev - 1))}
-                    style={{ width: "30px" }}
-                  >
-                    -
-                  </button>
-
-                  <input
-                    type="text"
-                    value={quantity}
-                    onChange={(e) => {
-                      const val = parseInt(e.target.value, 10);
-                      if (!isNaN(val)) {
-                        if (val > product.quantity) {
-                          alert(
-                            `현재 재고 부족으로 ${product.quantity}개 이상 구매할 수 없습니다.`,
+              {product.quantity > 0 && (
+                <>
+                  {/* 옵션 선택 */}
+                  {product.options?.length > 0 && (
+                    <div style={{ margin: "10px 0" }}>
+                      <label>선택:</label>
+                      <select
+                        onChange={(e) => {
+                          const selected = product.options?.find(
+                            (opt) => opt.optionName === e.target.value,
                           );
+                          setSelectedOption(selected);
+                        }}
+                        style={{ padding: "5px", marginLeft: "10px" }}
+                      >
+                        <option value="">옵션을 선택하세요</option>
+                        {product.options?.map((opt, idx) => (
+                          <option key={idx} value={opt.optionName}>
+                            {opt.optionName} - {opt.price.toLocaleString()}원
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+                  )}
+
+                  {/* 수량 선택 */}
+                  <div style={{ marginTop: "10px" }}>
+                    <div
+                      style={{
+                        display: "flex",
+                        alignItems: "center",
+                        gap: "10px",
+                      }}
+                    >
+                      <span style={{ fontWeight: "bold" }}>수량</span>
+                      <button
+                        type="button"
+                        onClick={() =>
+                          setQuantity((prev) => Math.max(1, prev - 1))
                         }
-                        setQuantity(
-                          Math.max(1, Math.min(product.quantity, val)),
-                        );
-                      } else {
-                        setQuantity(1);
-                      }
-                    }}
-                    style={{ width: "60px", textAlign: "center" }}
-                  />
+                        style={{ width: "30px" }}
+                      >
+                        -
+                      </button>
 
-                  <button
-                    type="button"
-                    onClick={() =>
-                      setQuantity((prev) =>
-                        Math.min(product.quantity, prev + 1),
-                      )
-                    }
-                    style={{ width: "30px" }}
-                  >
-                    +
-                  </button>
-                </div>
+                      <input
+                        type="text"
+                        value={quantity}
+                        onChange={(e) => {
+                          const val = parseInt(e.target.value, 10);
+                          if (!isNaN(val)) {
+                            if (val > product.quantity) {
+                              alert(
+                                `현재 재고 부족으로 ${product.quantity}개 이상 구매할 수 없습니다.`,
+                              );
+                            }
+                            setQuantity(
+                              Math.max(1, Math.min(product.quantity, val)),
+                            );
+                          } else {
+                            setQuantity(1);
+                          }
+                        }}
+                        style={{ width: "60px", textAlign: "center" }}
+                      />
 
-                <div
-                  style={{
-                    marginTop: "15px",
-                    fontSize: "22px",
-                    fontWeight: "bold",
-                  }}
-                >
-                  총 가격:{" "}
-                  {(
-                    quantity *
-                    (selectedOption ? selectedOption.price : product.price)
-                  ).toLocaleString()}
-                  원
-                </div>
-              </div>
+                      <button
+                        type="button"
+                        onClick={() =>
+                          setQuantity((prev) =>
+                            Math.min(product.quantity, prev + 1),
+                          )
+                        }
+                        style={{ width: "30px" }}
+                      >
+                        +
+                      </button>
+                    </div>
+
+                    <div
+                      style={{
+                        marginTop: "15px",
+                        fontSize: "22px",
+                        fontWeight: "bold",
+                      }}
+                    >
+                      총 가격:{" "}
+                      {(
+                        quantity *
+                        (selectedOption ? selectedOption.price : product.price)
+                      ).toLocaleString()}
+                      원
+                    </div>
+                  </div>
+                </>
+              )}
 
               {/*버튼*/}
               {product.quantity === 0 ? (
@@ -278,18 +290,18 @@ export function ProductDetail() {
                   >
                     장바구니
                   </button>
-                  {/* 관리자용 수정/삭제 버튼 */}
-                  {/*Todo: 수정삭제버튼 관리자만 보이게 수정*/}
-                  <Button className="btn-secondary" onClick={handleEditButton}>
-                    수정
-                  </Button>
-                  <Button className="btn-danger" onClick={handleDeleteButton}>
-                    삭제
-                  </Button>
                 </div>
               )}
               <br />
               <div>
+                {/* 관리자용 수정/삭제 버튼 */}
+                {/*Todo: 수정삭제버튼 관리자만 보이게 수정*/}
+                <Button className="btn-secondary" onClick={handleEditButton}>
+                  수정
+                </Button>
+                <Button className="btn-danger" onClick={handleDeleteButton}>
+                  삭제
+                </Button>
                 <Button
                   className="btn-primary"
                   onClick={handleQuestionButton}
