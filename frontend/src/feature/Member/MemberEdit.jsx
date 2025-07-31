@@ -19,9 +19,9 @@ import { jwtDecode } from "jwt-decode";
 
 export function MemberEdit() {
   // 입력 항목 정규식
-  const emailRegEx =
-    /^[A-Za-z0-9]([-_.]?[A-Za-z0-9])*@[A-Za-z0-9]([-_.]?[A-Za-z0-9])*\.[A-Za-z]{2,3}$/;
-  const passwordRegEx = /^[A-Za-z0-9]{8,20}$/;
+  // const emailRegEx =
+  //   /^[A-Za-z0-9]([-_.]?[A-Za-z0-9])*@[A-Za-z0-9]([-_.]?[A-Za-z0-9])*\.[A-Za-z]{2,3}$/;
+  // const passwordRegEx = /^[A-Za-z0-9]{8,20}$/;
   // const nameRegEx = /^[가-힣]{2,5}$/; // 한글 이름만
   const nameRegEx = /^[가-힣a-zA-Z\s]{2,20}$/; // 한글 + 영문 이름 허용 시
   const phoneRegEx = /^01[016789][0-9]{7,8}$/;
@@ -33,7 +33,6 @@ export function MemberEdit() {
     password: "",
     birthday: "",
     phone: "",
-    email: "",
     zipCode: "",
     address: "",
     addressDetail: "",
@@ -54,10 +53,13 @@ export function MemberEdit() {
   const [passwordValid, setPasswordValid] = useState(true);
   const [nameValid, setNameValid] = useState(true);
   const [phoneValid, setPhoneValid] = useState(true);
-  const [emailValid, setEmailValid] = useState(true);
 
   // 수정 버튼 클릭 여부
   const [isSubmitted, setIsSubmitted] = useState(false);
+
+  // 수정 버튼 클릭시 추가 동작 방어
+  const [isPasswordProcessing, setIsPasswordProcessing] = useState(false);
+  const [isEditProcessing, setIsEditProcessing] = useState(false);
 
   // 회원 정보 조회
   useEffect(() => {
@@ -86,7 +88,10 @@ export function MemberEdit() {
     const isPasswordOk = oldPassword.trim() !== "";
     const isNameOk = nameRegEx.test(member.name);
     const isPhoneOk = phoneRegEx.test(member.phone);
-    const isEmailOk = emailRegEx.test(member.email);
+
+    // 중복 클릭 방어
+    if (isEditProcessing) return;
+    setIsEditProcessing(true);
 
     // 각 항목을 입력하지 않으면 수정 버튼 비활성화
     const requiredFields = [
@@ -94,7 +99,6 @@ export function MemberEdit() {
       member?.name,
       member?.birthday,
       member?.phone,
-      member?.email,
       member?.address,
     ];
 
@@ -105,16 +109,10 @@ export function MemberEdit() {
     setPasswordValid(isPasswordOk);
     setNameValid(isNameOk);
     setPhoneValid(isPhoneOk);
-    setEmailValid(isEmailOk);
     setIsSubmitted(true);
 
-    if (
-      !isPasswordOk ||
-      !isNameOk ||
-      !isPhoneOk ||
-      !isEmailOk ||
-      !allFieldsFilled
-    ) {
+    if (!isPasswordOk || !isNameOk || !isPhoneOk || !allFieldsFilled) {
+      setIsEditProcessing(false);
       return; // 유효하지 않으면 요청 중단
     }
     axios
@@ -125,13 +123,12 @@ export function MemberEdit() {
       })
       .then((res) => {
         navigate(`/member?id=${member.id}`);
-        console.log("success");
       })
       .catch((err) => {
         alert("비밀번호가 일치하지 않습니다.");
       })
       .finally(() => {
-        console.log("always");
+        setIsEditProcessing(false);
       });
   }
 
@@ -176,14 +173,10 @@ export function MemberEdit() {
 
   // 비밀번호 수정
   function handleChangePasswordClick() {
-    // JWT Token 디코드
-    const token = localStorage.getItem("token");
-    if (token) {
-      const payload = jwtDecode(token);
-      console.log("🔐 JWT payload:", payload);
-      console.log("→ sub:", payload.sub); // ← 이게 백엔드에서 받는 memberId임
-      console.log("→ loginId:", payload.loginId); // ← 클레임 확인
-    }
+    // 중복 클릭 방지
+    if (isPasswordProcessing) return;
+    setIsPasswordProcessing(true);
+
     axios
       .put(`/api/member/changePassword`, {
         id: member.id,
@@ -200,7 +193,9 @@ export function MemberEdit() {
       .catch((err) => {
         alert("비밀번호가 일치하지 않습니다.");
       })
-      .finally(() => {});
+      .finally(() => {
+        setIsPasswordProcessing(false);
+      });
   }
 
   return (
@@ -346,7 +341,25 @@ export function MemberEdit() {
                     </FormGroup>
                   </Modal.Body>
                   <Modal.Footer>
-                    <Button onClick={handleMemberInfoChangeButton}>저장</Button>
+                    <Button
+                      onClick={handleMemberInfoChangeButton}
+                      disabled={isEditProcessing}
+                    >
+                      {isEditProcessing ? (
+                        <>
+                          <Spinner
+                            animation="border"
+                            size="sm"
+                            role="status"
+                            aria-hidden="true"
+                            className="me-2"
+                          />
+                          저장 중...
+                        </>
+                      ) : (
+                        "저장"
+                      )}
+                    </Button>
                     <Button
                       onClick={() => {
                         setSaveModalShow(false);
@@ -450,9 +463,24 @@ export function MemberEdit() {
                     </Button>
                     <Button
                       onClick={handleChangePasswordClick}
-                      disabled={changePasswordButtonDisabled}
+                      disabled={
+                        changePasswordButtonDisabled || isPasswordProcessing
+                      }
                     >
-                      변경
+                      {isPasswordProcessing ? (
+                        <>
+                          <Spinner
+                            animation="border"
+                            size="sm"
+                            role="status"
+                            aria-hidden="true"
+                            className="me-2"
+                          />
+                          저장 중...
+                        </>
+                      ) : (
+                        "저장"
+                      )}
                     </Button>
                   </Modal.Footer>
                 </Modal>

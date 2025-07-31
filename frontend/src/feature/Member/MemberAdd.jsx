@@ -60,6 +60,9 @@ export function MemberAdd() {
   // email 전송중 버튼 비활성화
   const [isSending, setIsSending] = useState(false);
 
+  // 회원가입 버튼 클릭시 비활성화
+  const [isProcessing, setIsProcessing] = useState(false);
+
   // 정규식과 일치하는지
   const [loginIdValid, setLoginIdValid] = useState(true);
   const [passwordValid, setPasswordValid] = useState(true);
@@ -158,6 +161,8 @@ export function MemberAdd() {
     ) {
       return;
     }
+    if (isProcessing) return; // 중복 클릭 방지
+    setIsProcessing(true);
 
     axios
       .post("/api/member/signup", {
@@ -177,7 +182,9 @@ export function MemberAdd() {
       .catch((err) => {
         console.log("에러응답", err.response?.data);
       })
-      .finally(() => {});
+      .finally(() => {
+        setIsProcessing(false);
+      });
   }
 
   // 아이디 중복 확인 버튼
@@ -222,6 +229,7 @@ export function MemberAdd() {
   const handleEmailSendButton = () => {
     if (!emailValid || email.trim() === "") return;
 
+    if (setIsSending) return; // 중복 클릭 방지
     setIsSending(true);
 
     axios
@@ -549,9 +557,22 @@ export function MemberAdd() {
                   <Button
                     onClick={handleSignUpClick}
                     variant="outline-primary"
-                    disabled={disabled}
+                    disabled={disabled || isProcessing}
                   >
-                    가입
+                    {isProcessing ? (
+                      <>
+                        <Spinner
+                          animation="border"
+                          size="sm"
+                          role="status"
+                          aria-hidden="true"
+                          className="me-2"
+                        />
+                        전송 중...
+                      </>
+                    ) : (
+                      "가입"
+                    )}
                   </Button>
                 </div>
               </Card.Body>
