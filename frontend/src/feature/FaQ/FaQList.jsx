@@ -1,4 +1,5 @@
 import {
+  Accordion,
   Button,
   ButtonGroup,
   Col,
@@ -133,61 +134,25 @@ export function FaQList() {
             </div>
             <br />
             {faqList.length > 0 ? (
-              <Table striped={true} hover={true}>
-                <thead>
-                  <tr>
-                    <th style={{ width: "70px" }}>#</th>
-                    {/*<th style={{ width: "120px" }}>답변여부</th>*/}
-                    <th style={{ width: "270px" }}>질문</th>
-                    <th
-                      className="d-none d-md-table-cell"
-                      style={{ width: "100px" }}
-                    >
-                      답변
-                    </th>
-                    <th
-                      className="d-none d-lg-table-cell"
-                      style={{ width: "140px" }}
-                    >
-                      작성일시
-                    </th>
-                    <th
-                      className="d-none d-lg-table-cell"
-                      style={{ width: "140px" }}
-                    >
-                      수정일시
-                    </th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {faqList.map((faq) => (
-                    <tr
-                      key={faq.id}
-                      style={{ cursor: "pointer" }}
-                      // onClick={() => handleTableRowClick(question.id)}
-                    >
-                      <td>{faq.id}</td>
-                      {/*<td>{STATUS_TEXT[question.status] || ""}</td>*/}
-                      <td>
-                        <div className="d-flex gap-2">
-                          <span>{faq.question}</span>
-                        </div>
-                      </td>
-                      <td className="d-none d-md-table-cell">{faq.answer}</td>
-                      <td className="d-none d-lg-table-cell">{faq.timesAgo}</td>
-                      <td className="d-none d-lg-table-cell">
-                        {faq.timesAgo2}
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </Table>
+              <Accordion>
+                {faqList.map((faq) => (
+                  <Accordion.Item eventKey="0" flush>
+                    <Accordion.Header>
+                      <h6>{faq.question}</h6>
+                    </Accordion.Header>
+                    <Accordion.Body>
+                      <p>{faq.answer}</p>
+                    </Accordion.Body>
+                  </Accordion.Item>
+                ))}
+              </Accordion>
             ) : (
               <p>
                 작성된 글이 없습니다. <br />새 글을 작성해 보세요.
               </p>
             )}
           </div>
+          <br />
           <div>
             {/*todo : 관리자인지 여부 확인*/}
             {isAdmin && (
