@@ -32,11 +32,10 @@ public class CartController {
 
 
     @DeleteMapping("/cart/delete")
-    public ResponseEntity<?> deleteCartItem(@RequestBody List<CartDeleteRequest> deleteList,
-                                            @AuthenticationPrincipal Jwt jwt) {
+    public ResponseEntity<?> deleteCartItem(@RequestBody List<CartDeleteRequest> deleteList) {
+        cartService.deleteCartItem(deleteList);
 
-        Integer memberId = Integer.parseInt(jwt.getSubject());
-        cartService.deleteCartItem(memberId, deleteList);
+
         return ResponseEntity.ok().build();
     }
 

@@ -35,8 +35,8 @@ function ReviewSection({ productId }) {
           headers: { Authorization: `Bearer ${token}` },
         })
         .then((res) => {
-          setIsPurchasable(res.data);
-          setAlreadyReviewed(res.data);
+          setIsPurchasable(res.data.hasPurchased);
+          setAlreadyReviewed(res.data.alreadyReviewed);
         })
         .catch((err) => console.log(err));
     }
