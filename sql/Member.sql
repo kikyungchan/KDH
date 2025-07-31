@@ -18,6 +18,13 @@ ALTER TABLE member
 ALTER TABLE member
     ADD address_detail VARCHAR(255) NULL;
 
+ALTER TABLE member
+    ADD CONSTRAINT uq_member_email UNIQUE (email);
+
+SELECT email, COUNT(*)
+FROM member
+GROUP BY email
+HAVING COUNT(*) > 1;
 
 
 ALTER TABLE member

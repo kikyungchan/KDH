@@ -508,6 +508,7 @@ export function MemberAdd() {
                           setEmailId(e.target.value);
                         }}
                         isInvalid={isSubmitted && !emailValid}
+                        style={{ flex: "0 0 40%" }}
                       />
                       <InputGroup.Text
                         style={{
@@ -521,23 +522,23 @@ export function MemberAdd() {
                       </InputGroup.Text>
                       {customDomain ? (
                         <>
-                          <FormControl
-                            type="text"
-                            className="w-75"
-                            placeholder="직접 입력"
-                            value={emailDomain}
-                            onChange={(e) => setEmailDomain(e.target.value)}
-                            style={{ minWidth: 0 }} // 내부 콘텐츠에 맞춰 크기 증가 방지
-                          />
-                          <Button
-                            variant="outline-secondary"
-                            onClick={() => {
-                              setCustomDomain(false);
-                              setEmailDomain(""); // 초기화 또는 이전 값 유지할 수도 있음
-                            }}
-                          >
-                            x
-                          </Button>
+                          <div style={{ display: "flex", flex: "1 1 55%" }}>
+                            <FormControl
+                              type="text"
+                              placeholder="직접 입력"
+                              value={emailDomain}
+                              onChange={(e) => setEmailDomain(e.target.value)}
+                            />
+                            <Button
+                              variant="outline-secondary"
+                              onClick={() => {
+                                setCustomDomain(false);
+                                setEmailDomain(""); // 초기화 또는 이전 값 유지할 수도 있음
+                              }}
+                            >
+                              x
+                            </Button>
+                          </div>
                         </>
                       ) : (
                         <Form.Select
@@ -551,7 +552,7 @@ export function MemberAdd() {
                               setEmailDomain(value);
                             }
                           }}
-                          style={{ width: "100%" }}
+                          style={{ flex: "1 1 55%" }}
                         >
                           <option value="">선택해주세요</option>
                           <option value="naver.com">naver.com</option>
@@ -565,12 +566,12 @@ export function MemberAdd() {
                           <option value="custom">직접입력</option>
                         </Form.Select>
                       )}
-                      {isSubmitted && !emailValid && (
-                        <FormText className="text-danger">
-                          유효한 이메일 형식이 아닙니다.
-                        </FormText>
-                      )}
                     </InputGroup>
+                    {isSubmitted && !emailValid && (
+                      <FormText className="text-danger">
+                        유효한 이메일 형식이 아닙니다.
+                      </FormText>
+                    )}
                     <Button
                       className="mt-2 me-2"
                       onClick={handleEmailSendButton}

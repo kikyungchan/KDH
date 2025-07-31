@@ -31,6 +31,16 @@ public class MemberService {
     private final JwtEncoder jwtEncoder;
     private final MemberRoleRepository memberRoleRepository;
 
+    // 이메일 중복확인
+    public boolean existByEmail(String email) {
+        return memberRepository.existsByEmail(email);
+    }
+
+    // 아이디 중복확인
+    public boolean existByLoginId(String loginId) {
+        return memberRepository.existsByLoginId(loginId);
+    }
+
     // 회원 등록
     public void signup(MemberForm memberForm) {
         Member member = new Member();
@@ -148,9 +158,6 @@ public class MemberService {
         memberRepository.save(member);
     }
 
-    public boolean existByLoginId(String loginId) {
-        return memberRepository.existsByLoginId(loginId);
-    }
 
     public void changePassword(Integer memberId, ChangePasswordForm data) {
         Member member = memberRepository.findById(memberId)
@@ -216,4 +223,6 @@ public class MemberService {
 
         return jwtEncoder.encode(JwtEncoderParameters.from(claims)).getTokenValue();
     }
+
+
 }

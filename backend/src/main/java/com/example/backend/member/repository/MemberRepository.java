@@ -16,6 +16,8 @@ public interface MemberRepository extends JpaRepository<Member, Integer> {
 
     boolean existsByLoginId(String loginId);
 
+    boolean existsByEmail(String email);
+
     @Query("""
             SELECT new com.example.backend.member.dto.MemberListDto(
                 m.id, m.loginId, m.name, m.phone, m.email

@@ -44,6 +44,27 @@ public class MemberController {
                             Map.of("type", "error",
                                     "text", message)));
         }
+
+        // 아이디 중복 검사
+        if (memberService.existByLoginId(memberForm.getLoginId())) {
+            return ResponseEntity.status(400).body(
+                    Map.of("message", Map.of(
+                            "type", "error",
+                            "text", "이미 사용중인 아이디입니다."
+                    ))
+            );
+        }
+
+        // 이메일 중복 검사
+        if (memberService.existByEmail(memberForm.getEmail())) {
+            return ResponseEntity.status(400).body(
+                    Map.of("message", Map.of(
+                            "type", "error",
+                            "text", "이미 사용중인 이메일입니다."
+                    ))
+            );
+        }
+
         // 유효성 검사를 통과했을 때 실행
         memberService.signup(memberForm);
         return ResponseEntity.ok().body(
@@ -51,6 +72,24 @@ public class MemberController {
                         Map.of("type", "success",
                                 "text", "회원 가입 되었습니다.")));
 
+    }
+
+    // 아이디 중복 확인
+    @GetMapping("/check-id")
+    public ResponseEntity<?> checkLoginId(@RequestParam String loginId) {
+
+        boolean exists = memberService.existByLoginId(loginId);
+
+        return ResponseEntity.ok(Map.of("exists", exists));
+    }
+
+    // 이메일 중복 확인
+    @GetMapping("/check-email")
+    public ResponseEntity<?> checkEmail(@RequestParam String email) {
+
+        boolean exists = memberService.existByEmail(email);
+
+        return ResponseEntity.ok(Map.of("exists", exists));
     }
 
     // 회원 리스트 조회
@@ -160,14 +199,6 @@ public class MemberController {
                                 "text", "암호가 수정 되었습니다.")));
     }
 
-    // 아이디 중복 확인
-    @GetMapping("/check-id")
-    public ResponseEntity<?> checkLoginId(@RequestParam String loginId) {
-
-        boolean exists = memberService.existByLoginId(loginId);
-
-        return ResponseEntity.ok(Map.of("exists", exists));
-    }
 
     // 로그인
     @PostMapping("login")
