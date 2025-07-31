@@ -109,11 +109,20 @@ function ReviewSection({ productId }) {
                 key={num}
                 style={{
                   fontSize: "24px",
-                  cursor: "pointer",
-                  color: num <= rating ? "gold" : "#ccc",
+                  cursor: rating === 1 ? "pointer" : "default",
+                  color: num <= (hoverRating || rating) ? "gold" : "#ccc",
                   marginRight: "4px",
+                  transition: "color 0.2s",
                 }}
-                onClick={() => setRating(num)}
+                onMouseEnter={() => {
+                  if (rating === 1) setHoverRating(num);
+                }}
+                onMouseLeave={() => {
+                  if (rating === 1) setHoverRating(0);
+                }}
+                onClick={() => {
+                  if (rating === 1) setRating(num);
+                }}
               >
                 ★
               </span>
