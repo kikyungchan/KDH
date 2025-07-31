@@ -43,16 +43,11 @@
     border-radius: 30px;
     padding: 0.5rem 1rem;
     z-index: 999;
-    transform: translateX(150%);
-    opacity: 0;
-    transition: all 0.3s ease;
-    pointer-events: none;
+    display: none;
 }
 
 .search-bar-wrapper.active {
-    transform: translateX(0);
-    opacity: 1;
-    pointer-events: auto;
+    display: flex;
 }
 
 .search-input {

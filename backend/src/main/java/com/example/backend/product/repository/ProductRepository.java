@@ -18,18 +18,8 @@ public interface ProductRepository extends JpaRepository<Product, Integer> {
            "LOWER(p.productName) LIKE LOWER(CONCAT('%', :keyword, '%')) OR " +
            "LOWER(p.info) LIKE LOWER(CONCAT('%', :keyword, '%')) OR " +
            "LOWER(p.detailText) LIKE LOWER(CONCAT('%', :keyword, '%'))")
-    Page<Product> findByProductNameContaining(String productName, Pageable pageable);
+    Page<Product> findByKeyword(@Param("keyword") String keyword, Pageable pageable);
 
-
-    // 검색어있을떄인기순정렬
-    @Query("""
-            SELECT p FROM Product p 
-            LEFT JOIN OrderItem oi ON oi.product = p
-            WHERE p.productName LIKE %:keyword%
-            GROUP BY p
-            ORDER BY COUNT (oi.id) DESC
-            """)
-    Page<Product> findByProductNameContainingOrderByPopularity(@Param("keyword") String keyword, Pageable pageable);
 
     // 전체상품인기순
     @Query("""
@@ -39,4 +29,15 @@ public interface ProductRepository extends JpaRepository<Product, Integer> {
             ORDER BY COUNT(oi.id) DESC
             """)
     Page<Product> findAllOrderByPopularity(Pageable pageable);
+
+    @Query("""
+                SELECT p FROM Product p
+                LEFT JOIN OrderItem oi ON oi.product = p
+                WHERE LOWER(p.productName) LIKE LOWER(CONCAT('%', :keyword, '%'))
+                   OR LOWER(p.info) LIKE LOWER(CONCAT('%', :keyword, '%'))
+                   OR LOWER(p.detailText) LIKE LOWER(CONCAT('%', :keyword, '%'))
+                GROUP BY p
+                ORDER BY COUNT(oi.id) DESC
+            """)
+    Page<Product> findByKeywordOrderByPopularity(String keyword, Pageable pageable);
 }

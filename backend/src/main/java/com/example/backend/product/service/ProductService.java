@@ -94,7 +94,7 @@ public class ProductService {
         Pageable pageable = PageRequest.of(pageNumber - 1, 15);
         if ("popular".equals(sort)) {
             if (keyword != null && !keyword.trim().isEmpty()) {
-                page = productRepository.findByProductNameContainingOrderByPopularity(keyword, pageable);
+                page = productRepository.findByKeywordOrderByPopularity(keyword, pageable);
             } else {
                 page = productRepository.findAllOrderByPopularity(pageable);
             }
@@ -119,7 +119,7 @@ public class ProductService {
             // 정렬 조건
             // 키워드확인
             if (keyword != null && !keyword.trim().isEmpty()) {
-                page = productRepository.findByProductNameContaining(keyword, pageable);
+                page = productRepository.findByKeyword(keyword, pageable);
             } else {
                 page = productRepository.findAll(pageable);
             }
