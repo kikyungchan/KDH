@@ -136,13 +136,6 @@ export function MemberAdd() {
 
   // 회원가입 버튼
   function handleSignUpClick() {
-    console.log({
-      allFieldsFilled,
-      passwordConfirm,
-      loginIdChecked,
-      authCompleted,
-    });
-
     // 모든 입력값 유효성 검사 실행
     const isLoginIdOk = loginIdRegEx.test(loginId);
     const isPasswordOk = passwordRegEx.test(password);
