@@ -18,7 +18,7 @@ import axios from "axios";
 import ScrollToTopButton from "./ScrollToTopButton.jsx";
 import "../css/ProductList.css";
 import ShareModal from "./util/ShareModal.jsx";
-import { FaShareAlt } from "react-icons/fa";
+import { RxShare1 } from "react-icons/rx";
 
 export function ProductDetail() {
   const [showShareModal, setShowShareModal] = useState(false);
@@ -123,9 +123,9 @@ export function ProductDetail() {
                   </span>
                 )}
                 {/* 공유 아이콘 버튼 */}
-                <FaShareAlt
-                  size={20}
-                  style={{ cursor: "pointer", marginLeft: "10px" }}
+                <RxShare1
+                  size={25}
+                  style={{ cursor: "pointer", marginLeft: "70px" }}
                   onClick={() => setShowShareModal(true)}
                   title="공유하기"
                 />
