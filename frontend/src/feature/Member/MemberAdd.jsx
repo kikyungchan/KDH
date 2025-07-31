@@ -41,7 +41,10 @@ export function MemberAdd() {
   const [password2, setPassword2] = useState("");
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
-  const [email, setEmail] = useState("");
+  const [emailId, setEmailId] = useState("");
+  const [emailDomain, setEmailDomain] = useState("");
+  const [customDomain, setCustomDomain] = useState(false);
+  const [fullEmail, setFullEmail] = useState("");
   const [zipCode, setZipCode] = useState("");
   const [addressDetail, setAddressDetail] = useState("");
   // 주소 입력 api
@@ -89,7 +92,7 @@ export function MemberAdd() {
     name,
     birthday,
     phone,
-    email,
+    emailId,
     zipCode,
     address,
   ];
@@ -108,10 +111,14 @@ export function MemberAdd() {
     }
   }, [user]);
 
+  useEffect(() => {
+    setFullEmail(`${emailId}@${emailDomain}`);
+  }, [emailId, emailDomain]);
+
   // 이메일 입력 실시간 검사
   useEffect(() => {
-    setEmailValid(emailRegEx.test(email));
-  }, [email]);
+    setEmailValid(emailRegEx.test(fullEmail));
+  }, [fullEmail]);
 
   // email 인증시 남은시간
   useEffect(() => {
@@ -134,20 +141,20 @@ export function MemberAdd() {
       name,
       birthday,
       phone,
-      email,
+      fullEmail,
       address,
     });
 
     // 모든 입력값 유효성 검사 실행
     const isLoginIdOk = loginIdRegEx.test(loginId);
     const isPasswordOk = passwordRegEx.test(password);
-    const isEmailOk = emailRegEx.test(email);
+    // const isEmailOk = emailRegEx.test(email);
     const isNameOk = nameRegEx.test(name);
     const isPhoneOk = phoneRegEx.test(phone);
     // 상태값 업데이트
     setLoginIdValid(isLoginIdOk);
     setPasswordValid(isPasswordOk);
-    setEmailValid(isEmailOk);
+    // setEmailValid(isEmailOk);
     setNameValid(isNameOk);
     setPhoneValid(isPhoneOk);
     setIsSubmitted(true);
@@ -155,10 +162,10 @@ export function MemberAdd() {
     if (
       !isLoginIdOk ||
       !isPasswordOk ||
-      !isEmailOk ||
       !isNameOk ||
       !isPhoneOk ||
-      !passwordConfirm
+      !passwordConfirm ||
+      !authCompleted
     ) {
       return;
     }
@@ -172,7 +179,7 @@ export function MemberAdd() {
         name: name,
         birthday: birthday,
         phone: phone,
-        email: email,
+        email: fullEmail,
         zipCode: zipCode,
         address: address,
         addressDetail: addressDetail,
@@ -228,14 +235,15 @@ export function MemberAdd() {
 
   // 이메일 인증번호 발송 버튼
   const handleEmailSendButton = () => {
-    if (!emailValid || email.trim() === "") return;
+    if (emailId.trim() === "") return;
+    // !emailValid ||
 
     if (isSending) return; // 중복 클릭 방지
     setIsSending(true);
 
     axios
       .get("/api/email/auth", {
-        params: { address: email },
+        params: { address: fullEmail },
       })
       .then((res) => {
         if (res.data.success) {
@@ -269,7 +277,7 @@ export function MemberAdd() {
 
     axios
       .post("/api/email/auth", {
-        address: email,
+        address: fullEmail,
         authCode: authCode,
       })
       .then((res) => {
@@ -489,27 +497,68 @@ export function MemberAdd() {
                         </FormText>
                       </FormText>
                     </div>
-                    <FormControl
-                      type="text"
-                      value={email}
-                      placeholder="이메일"
-                      autoComplete="email"
-                      onChange={(e) => {
-                        setEmail(e.target.value);
-                      }}
-                      isInvalid={isSubmitted && !emailValid}
-                    />
-                    {isSubmitted && !emailValid && (
-                      <FormText className="text-danger">
-                        유효한 이메일 형식이 아닙니다.
-                      </FormText>
-                    )}
+                    <Row>
+                      <Col>
+                        <FormControl
+                          type="text"
+                          value={emailId}
+                          placeholder="이메일"
+                          autoComplete="email"
+                          onChange={(e) => {
+                            setEmailId(e.target.value);
+                          }}
+                          isInvalid={isSubmitted && !emailValid}
+                        />
+                      </Col>
+                      <Col>@</Col>
+                      <Col>
+                        {customDomain ? (
+                          <FormControl
+                            type="text"
+                            placeholder="직접 입력"
+                            value={emailDomain}
+                            onChange={(e) => setEmailDomain(e.target.value)}
+                            className="w-50"
+                          />
+                        ) : (
+                          <Form.Select
+                            value={emailDomain}
+                            onChange={(e) => {
+                              const value = e.target.value;
+                              if (value === "custom") {
+                                setCustomDomain(true);
+                                setEmailDomain("");
+                              } else {
+                                setEmailDomain(value);
+                              }
+                            }}
+                            className="w-50"
+                          >
+                            <option value="">선택해주세요</option>
+                            <option value="naver.com">naver.com</option>
+                            <option value="hanmail.net">hanmail.net</option>
+                            <option value="daum.net">daum.net</option>
+                            <option value="gmail.com">gmail.com</option>
+                            <option value="nate.com">nate.com</option>
+                            <option value="hotmail.com">hotmail.com</option>
+                            <option value="outlook.com">outlook.com</option>
+                            <option value="icloud.com">icloud.com</option>
+                            <option value="custom">직접입력</option>
+                          </Form.Select>
+                        )}
+                        {/*{isSubmitted && !emailValid && (*/}
+                        {/*  <FormText className="text-danger">*/}
+                        {/*    유효한 이메일 형식이 아닙니다.*/}
+                        {/*  </FormText>*/}
+                        {/*)}*/}
+                      </Col>
+                    </Row>
                     <Button
                       className="mt-2 me-2"
                       onClick={handleEmailSendButton}
                       variant="outline-dark"
                       disabled={
-                        email.trim() === "" ||
+                        emailId.trim() === "" ||
                         !emailValid ||
                         remainTime > 0 || // 이메일 보내고 시간이 남아있으면
                         isSending || // 보내는 도중
