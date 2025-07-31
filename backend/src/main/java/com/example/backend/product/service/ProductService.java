@@ -300,6 +300,8 @@ public class ProductService {
         dto.setName(member.getName());
         dto.setAddress(member.getAddress());
         dto.setPhone(member.getPhone());
+        dto.setZipcode(member.getZipcode());
+        dto.setAddressDetail(member.getAddressDetail());
 
         return dto;
 

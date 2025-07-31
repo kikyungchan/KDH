@@ -39,4 +39,10 @@ public class Member {
     @Column(name = "birthday", nullable = false)
     private LocalDate birthday;
 
+    @Column(name = "zipcode", nullable = false)
+    private String zipcode;
+
+    @Column(name = "address_detail", nullable = false)
+    private String addressDetail;
+
 }

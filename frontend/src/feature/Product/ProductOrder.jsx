@@ -5,12 +5,12 @@ import "./css/Order.css";
 
 function Order(props) {
   const [postalCode, setPostalCode] = useState("");
-  const [detailedAddress, setDetailedAddress] = useState("");
   const [memo, setMemo] = useState("");
   const [customMemo, setCustomMemo] = useState("");
   const [receiverName, setReceiverName] = useState("");
   const [receiverPhone, setReceiverPhone] = useState("");
   const [receiverAddress, setReceiverAddress] = useState("");
+  const [receiverDetailAddress, setReceiverDetailAddress] = useState("");
   const [sameAsOrderer, setSameAsOrderer] = useState(false);
   const [name, setName] = useState("");
   const [address, setAddress] = useState("");
@@ -68,7 +68,7 @@ function Order(props) {
       !receiverName.trim() ||
       !receiverPhone.trim() ||
       !receiverAddress.trim() ||
-      !detailedAddress.trim() ||
+      !receiverDetailAddress.trim() ||
       !postalCode.trim()
     ) {
       alert("배송지 정보를 모두 입력해 주세요.");
@@ -89,7 +89,7 @@ function Order(props) {
       memo: memo === "직접 작성" ? customMemo : memo,
       totalPrice: item.price * item.quantity,
       zipcode: postalCode,
-      addressDetail: detailedAddress,
+      addressDetail: receiverDetailAddress,
     }));
     console.log(payloadList);
 
@@ -131,7 +131,7 @@ function Order(props) {
                 phone: receiverPhone,
                 address: receiverAddress,
                 postalCode,
-                detailedAddress,
+                receiverDetailAddress,
               },
               memo: memo === "직접 작성" ? customMemo : memo,
             },
@@ -159,7 +159,7 @@ function Order(props) {
         receiverPhone: receiverPhone,
         receiverAddress: receiverAddress,
         postalCode: postalCode,
-        detailedAddress: detailedAddress,
+        detailedAddress: receiverDetailAddress,
       }));
       axios.post("/api/product/order/guest", payloadList).then((res) => {
         const token = res.data.guestOrderToken;
@@ -175,7 +175,7 @@ function Order(props) {
               phone: receiverPhone,
               address: receiverAddress,
               postalCode,
-              detailedAddress,
+              receiverDetailAddress,
             },
             memo: memo === "직접 작성" ? customMemo : memo,
           },
@@ -184,18 +184,40 @@ function Order(props) {
     }
   }
 
-  // 체크박스 핸들러
+  // 주문자 정보와 동일 체크박스
   function handleSameAsOrdererChange(e) {
     const checked = e.target.checked;
     setSameAsOrderer(checked);
-    if (checked) {
-      setReceiverName(name);
-      setReceiverPhone(phone);
-      setReceiverAddress(address);
-    } else {
+    const token = localStorage.getItem("token");
+    if (!checked) {
       setReceiverName("");
       setReceiverPhone("");
       setReceiverAddress("");
+      setPostalCode("");
+      setReceiverDetailAddress("");
+      return;
+    }
+    if (token) {
+      // 회원: DB에서 배송정보 불러오기
+      axios
+        .get("/api/product/member/info", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        })
+        .then((res) => {
+          setReceiverName(res.data.name);
+          setReceiverPhone(res.data.phone);
+          setReceiverAddress(res.data.address);
+          setPostalCode(res.data.zipcode);
+          setReceiverDetailAddress(res.data.addressDetail);
+        });
+    } else {
+      setReceiverName(name);
+      setReceiverPhone(phone);
+      setReceiverAddress(address);
+      setPostalCode("");
+      setReceiverDetailAddress("");
     }
   }
 
@@ -346,8 +368,8 @@ function Order(props) {
         <input
           placeholder="상세주소"
           className="order-input-full"
-          value={detailedAddress}
-          onChange={(e) => setDetailedAddress(e.target.value)}
+          value={receiverDetailAddress}
+          onChange={(e) => setReceiverDetailAddress(e.target.value)}
         />
       </div>
 

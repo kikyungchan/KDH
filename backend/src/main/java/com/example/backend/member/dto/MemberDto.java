@@ -13,4 +13,6 @@ public class MemberDto {
     private String email;
     private String phone;
     private String address;
+    private String zipcode;
+    private String addressDetail;
 }
