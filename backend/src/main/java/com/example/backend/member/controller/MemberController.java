@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Map;
+import java.util.NoSuchElementException;
 import java.util.Objects;
 
 @RestController
@@ -225,5 +226,22 @@ public class MemberController {
                                     "text", message)));
         }
     }
+
+    @GetMapping("find-id")
+    public ResponseEntity<?> findLoginId(@RequestParam String email) {
+        try {
+            String maskedId = memberService.findId(email);
+            return ResponseEntity.ok(Map.of(
+                    "success", true,
+                    "loginId", maskedId
+            ));
+        } catch (NoSuchElementException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of(
+                    "success", false,
+                    "message", e.getMessage()
+            ));
+        }
+    }
+
 }
 

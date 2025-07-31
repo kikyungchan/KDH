@@ -21,6 +21,7 @@ import { QnaView } from "./feature/Qna/QnaView.jsx";
 import { FindLoginId } from "./feature/Member/FindLoginId.jsx";
 import { FindPassword } from "./feature/Member/FindPassword.jsx";
 import { ResetPassword } from "./feature/Member/ResetPassword.jsx";
+import { MemberLogout } from "./feature/Member/MemberLogout.jsx";
 
 function App() {
   // const username = prompt("닉네임을 입력해 주세요");
@@ -41,6 +42,7 @@ function App() {
             <Route path="/member" element={<MemberDetail />} />
             <Route path="/signup" element={<MemberAdd />} />
             <Route path="/login" element={<MemberLogin />} />
+            <Route path="/logout" element={<MemberLogout />} />
             <Route path="/find/id" element={<FindLoginId />} />
             <Route path="/find/password" element={<FindPassword />} />
             <Route path="/reset-password" element={<ResetPassword />} />

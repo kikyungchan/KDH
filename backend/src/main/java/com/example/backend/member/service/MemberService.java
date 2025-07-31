@@ -19,6 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.Instant;
 import java.util.List;
 import java.util.Map;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -225,4 +226,22 @@ public class MemberService {
     }
 
 
+    public String findId(String email) {
+
+        Optional<Member> member = memberRepository.findByEmail(email);
+        if (member.isPresent()) {
+            String loginId = member.get().getLoginId();
+            return maskedLoginId(loginId);
+        }
+        throw new NoSuchElementException("해당 이메일로 가입된 아이디가 없습니다.");
+    }
+
+    private String maskedLoginId(String loginId) {
+        int length = loginId.length();
+        int visible = Math.min(3, length); // 앞 최대 3글자만 표시
+        String visiblePart = loginId.substring(0, visible);
+        String maskedPart = "*".repeat(length - visible);
+        return visiblePart + maskedPart;
+    }
 }
+
