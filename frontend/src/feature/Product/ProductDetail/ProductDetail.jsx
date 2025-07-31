@@ -15,6 +15,7 @@ import {
 import ReviewStats from "./ReviewStats.jsx";
 import "../css/ProductDetail.css";
 import axios from "axios";
+import ScrollToTopButton from "./ScrollToTopButton.jsx";
 
 export function ProductDetail() {
   const { setCartCount } = useCart();
@@ -367,6 +368,7 @@ export function ProductDetail() {
           })
         }
       />
+      <ScrollToTopButton />
     </Container>
   );
 }
