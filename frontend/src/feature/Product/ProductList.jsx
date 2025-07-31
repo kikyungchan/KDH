@@ -116,6 +116,11 @@ export function ProductList() {
                           {product.quantity === 0 && (
                             <span className="sold-out-badge">SOLD OUT</span>
                           )}
+                          {product.quantity > 0 && product.quantity < 5 && (
+                            <span className="low-stock-badge">
+                              🔥 {product.quantity}개 남음
+                            </span>
+                          )}
                         </div>
                       </div>
                     </Link>

@@ -150,16 +150,16 @@ export function ProductRegist() {
             onChange={(e) => setInfo(e.target.value)}
           />
         </div>
-
-        <div className="product-regist-field">
-          <label className="product-regist-label">본문영역</label>
-          <textarea
-            rows={5}
-            className="product-regist-textarea"
-            value={detailText}
-            onChange={(e) => setDetailText(e.target.value)}
-          />
-        </div>
+        {/* 본문영역 텍스트 삽입 폼 필요하면 추가.*/}
+        {/*<div className="product-regist-field">*/}
+        {/*  <label className="product-regist-label">본문영역</label>*/}
+        {/*  <textarea*/}
+        {/*    rows={5}*/}
+        {/*    className="product-regist-textarea"*/}
+        {/*    value={detailText}*/}
+        {/*    onChange={(e) => setDetailText(e.target.value)}*/}
+        {/*  />*/}
+        {/*</div>*/}
 
         <div className="product-regist-options">
           <label className="product-regist-label">옵션 목록</label>

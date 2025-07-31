@@ -155,11 +155,34 @@ export function ProductDetail() {
                   >
                     -
                   </button>
-                  <span>{quantity}</span>
+
+                  <input
+                    type="text"
+                    value={quantity}
+                    onChange={(e) => {
+                      const val = parseInt(e.target.value, 10);
+                      if (!isNaN(val)) {
+                        if (val > product.quantity) {
+                          alert(
+                            `현재 재고 부족으로 ${product.quantity}개 이상 구매할 수 없습니다.`,
+                          );
+                        }
+                        setQuantity(
+                          Math.max(1, Math.min(product.quantity, val)),
+                        );
+                      } else {
+                        setQuantity(1);
+                      }
+                    }}
+                    style={{ width: "60px", textAlign: "center" }}
+                  />
+
                   <button
                     type="button"
                     onClick={() =>
-                      setQuantity((prev) => Math.min(99, prev + 1))
+                      setQuantity((prev) =>
+                        Math.min(product.quantity, prev + 1),
+                      )
                     }
                     style={{ width: "30px" }}
                   >
@@ -266,6 +289,8 @@ export function ProductDetail() {
           <hr />
           {/* 본문영역 */}
           <div style={{ marginTop: "50px" }}>
+            {/*본문영역에 텍스트?*/}
+            {/*<div>{product.detailText}</div>*/}
             <div
               style={{ display: "flex", flexDirection: "column", gap: "15px" }}
             >
