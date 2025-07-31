@@ -14,14 +14,14 @@ import java.time.LocalDateTime;
 public class ProductCommentDto {
     private Integer id;
     private String content;
-    private String memberName;
+    private String memberLoginId;
     private LocalDateTime createdAt;
     private Integer productId;
 
-    public ProductCommentDto(Integer id, String content, String memberName, LocalDateTime createdAt) {
+    public ProductCommentDto(Integer id, String content, String memberLoginId, LocalDateTime createdAt) {
         this.id = id;
         this.content = content;
-        this.memberName = memberName;
+        this.memberLoginId = memberLoginId;
         this.createdAt = createdAt;
     }
 }

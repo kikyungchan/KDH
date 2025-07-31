@@ -45,7 +45,7 @@ public class CommentService {
                 .map(comment -> new ProductCommentDto(
                         comment.getId(),
                         comment.getContent(),
-                        comment.getMember().getName(),
+                        comment.getMember().getLoginId(),
                         comment.getCreatedAt()
                 )).toList();
     }

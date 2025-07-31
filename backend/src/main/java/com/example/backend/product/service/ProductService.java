@@ -108,6 +108,7 @@ public class ProductService {
                 case "price_desc":
                     sortOption = Sort.by(Sort.Direction.DESC, "price");
                     break;
+                // ASC 오름차순 0-9 -> ㄱ-ㅎ 순
                 case "category":
                     sortOption = Sort.by(Sort.Direction.ASC, "category");
                     break;
