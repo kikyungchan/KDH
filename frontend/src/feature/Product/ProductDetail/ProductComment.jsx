@@ -5,7 +5,8 @@ function ReviewSection({ productId }) {
   const [showInput, setShowInput] = useState(false);
   const [content, setContent] = useState("");
   const [comments, setComments] = useState([]);
-  const [, set] = useState();
+  const [hoverRating, setHoverRating] = useState(1);
+  const [rating, setRating] = useState(1);
 
   useEffect(() => {
     axios
@@ -22,14 +23,15 @@ function ReviewSection({ productId }) {
 
     const payload = {
       productId,
-      content
+      content,
+      rating,
     };
 
     axios
       .post(`/api/product/comment`, payload, {
         headers: {
-          Authorization: `Bearer ${token}`
-        }
+          Authorization: `Bearer ${token}`,
+        },
       })
       .then(() => {
         alert("리뷰가 등록되었습니다.");
@@ -56,7 +58,7 @@ function ReviewSection({ productId }) {
       style={{
         marginTop: "50px",
         padding: "20px",
-        width: "100%"
+        width: "100%",
       }}
     >
       <h4>상품 리뷰</h4>
@@ -67,6 +69,16 @@ function ReviewSection({ productId }) {
           <strong>
             {c.memberLoginId ? `${c.memberLoginId.slice(0, -4)}****` : "회원"}
           </strong>
+
+          {/* ⭐ 별점 출력 */}
+          <div style={{ margin: "4px 0" }}>
+            {[...Array(5)].map((_, i) => (
+              <span key={i} style={{ color: i < c.rating ? "gold" : "#ccc" }}>
+                ★
+              </span>
+            ))}
+          </div>
+
           <p style={{ margin: "4px 0" }}>{c.content}</p>
           <small style={{ color: "#666" }}>
             {c.createdAt?.replace("T", " ").slice(0, 16)}
@@ -81,7 +93,7 @@ function ReviewSection({ productId }) {
             color: "white",
             border: "none",
             padding: "8px 16px",
-            borderRadius: "4px"
+            borderRadius: "4px",
           }}
           onClick={handleAddCommentButton}
         >
@@ -91,6 +103,22 @@ function ReviewSection({ productId }) {
 
       {showInput && (
         <>
+          <div style={{ marginTop: "10px" }}>
+            {[1, 2, 3, 4, 5].map((num) => (
+              <span
+                key={num}
+                style={{
+                  fontSize: "24px",
+                  cursor: "pointer",
+                  color: num <= rating ? "gold" : "#ccc",
+                  marginRight: "4px",
+                }}
+                onClick={() => setRating(num)}
+              >
+                ★
+              </span>
+            ))}
+          </div>
           <textarea
             style={{
               width: "100%",
@@ -99,7 +127,7 @@ function ReviewSection({ productId }) {
               padding: "10px",
               borderRadius: "6px",
               border: "1px solid #ccc",
-              marginTop: "10px"
+              marginTop: "10px",
             }}
             placeholder="리뷰를 작성해 주세요."
             value={content}
@@ -112,7 +140,7 @@ function ReviewSection({ productId }) {
                 color: "white",
                 border: "none",
                 padding: "8px 16px",
-                borderRadius: "4px"
+                borderRadius: "4px",
               }}
               onClick={handleSubmit}
             >

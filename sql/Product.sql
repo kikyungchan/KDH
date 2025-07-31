@@ -165,5 +165,9 @@ CREATE TABLE product_comment
 ALTER TABLE product_comment
     MODIFY created_at datetime null default now();
 
+# 리뷰테이블에 별점칼럼 추가
+ALTER TABLE product_comment
+    ADD COLUMN rating INT NOT NULL;
+
 
 

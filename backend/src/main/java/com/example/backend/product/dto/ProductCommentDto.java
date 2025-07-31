@@ -17,11 +17,14 @@ public class ProductCommentDto {
     private String memberLoginId;
     private LocalDateTime createdAt;
     private Integer productId;
+    private Integer rating;
 
-    public ProductCommentDto(Integer id, String content, String memberLoginId, LocalDateTime createdAt) {
+
+    public ProductCommentDto(Integer id, String content, String memberLoginId, LocalDateTime createdAt, Integer rating) {
         this.id = id;
         this.content = content;
         this.memberLoginId = memberLoginId;
         this.createdAt = createdAt;
+        this.rating = rating;
     }
 }

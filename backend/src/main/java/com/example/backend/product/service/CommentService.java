@@ -12,6 +12,7 @@ import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -34,6 +35,7 @@ public class CommentService {
         comment.setProduct(product);
         comment.setMember(member);
         comment.setContent(dto.getContent());
+        comment.setRating(dto.getRating());
 
         productCommentRepository.save(comment);
 
@@ -41,13 +43,19 @@ public class CommentService {
 
     public List<ProductCommentDto> getComments(Integer productId) {
         List<ProductComment> comments = productCommentRepository.findByProductIdOrderByIdDesc(productId);
-        return comments.stream()
-                .map(comment -> new ProductCommentDto(
-                        comment.getId(),
-                        comment.getContent(),
-                        comment.getMember().getLoginId(),
-                        comment.getCreatedAt()
-                )).toList();
+        List<ProductCommentDto> result = new ArrayList<>();
+        for (ProductComment comment : comments) {
+            ProductCommentDto dto = new ProductCommentDto();
+            dto.setId(comment.getId());
+            dto.setContent(comment.getContent());
+            dto.setMemberLoginId(comment.getMember().getLoginId());
+            dto.setCreatedAt(comment.getCreatedAt());
+            dto.setProductId(productId);
+            dto.setRating(comment.getRating());
+            result.add(dto);
+
+        }
+        return result;
     }
 
 }

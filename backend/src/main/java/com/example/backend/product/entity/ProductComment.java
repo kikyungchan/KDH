@@ -31,4 +31,8 @@ public class ProductComment {
     // 작성 시각
     @Column(insertable = false, updatable = false)
     private LocalDateTime createdAt;
+
+    // 별점
+    @Column(nullable = false)
+    private Integer rating;
 }
