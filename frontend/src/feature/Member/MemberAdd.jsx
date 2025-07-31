@@ -143,26 +143,16 @@ export function MemberAdd() {
       authCompleted,
     });
 
-    console.log("회원가입 시 전송할 데이터", {
-      loginId,
-      password,
-      name,
-      birthday,
-      phone,
-      fullEmail,
-      address,
-    });
-
     // 모든 입력값 유효성 검사 실행
     const isLoginIdOk = loginIdRegEx.test(loginId);
     const isPasswordOk = passwordRegEx.test(password);
-    // const isEmailOk = emailRegEx.test(email);
+    const isEmailOk = emailRegEx.test(fullEmail);
     const isNameOk = nameRegEx.test(name);
     const isPhoneOk = phoneRegEx.test(phone);
     // 상태값 업데이트
     setLoginIdValid(isLoginIdOk);
     setPasswordValid(isPasswordOk);
-    // setEmailValid(isEmailOk);
+    setEmailValid(isEmailOk);
     setNameValid(isNameOk);
     setPhoneValid(isPhoneOk);
     setIsSubmitted(true);
@@ -216,11 +206,9 @@ export function MemberAdd() {
         if (res.data.exists) {
           setLoginIdChecked(false);
           setLoginIdCheckMessage("이미 사용 중인 아이디입니다.");
-          console.log("백엔드 응답", res.data);
         } else {
           setLoginIdChecked(true);
           setLoginIdCheckMessage("사용 가능한 아이디입니다.");
-          console.log("백엔드 응답", res.data);
         }
       })
       .catch((err) => {
@@ -695,23 +683,6 @@ export function MemberAdd() {
                       주소 검색
                     </Button>
                   </FormGroup>
-                </div>
-                <div>
-                  {!allFieldsFilled && (
-                    <FormText className="text-danger">
-                      모든 항목을 입력해주세요.
-                    </FormText>
-                  )}
-                  {!loginIdChecked && (
-                    <FormText className="text-danger">
-                      아이디 중복 확인을 해주세요.
-                    </FormText>
-                  )}
-                  {!authCompleted && (
-                    <FormText className="text-danger">
-                      이메일 인증을 완료해주세요.
-                    </FormText>
-                  )}
                 </div>
 
                 <div className="text-end mt-2">
