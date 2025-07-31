@@ -7,13 +7,11 @@ function NoticeSection({ style }) {
       style={{
         display: "flex",
         justifyContent: "center",
-        alignItems: "center",
-        width: "75%",
-        marginLeft: "180px",
+        width: "100%",
         ...style,
       }}
     >
-      <div style={{ marginTop: "35px" }}>
+      <div style={{ marginTop: "35px", width: "75%" }}>
         <h2 className="mt-5">NOTICE</h2>
         <Row>
           <Col>
