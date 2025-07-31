@@ -16,12 +16,10 @@ export function CartProvider({ children }) {
           },
         })
         .then((res) => {
-          // const total = res.data.reduce((sum, item) => sum + item.quantity, 0);
           setCartCount(res.data.length);
         });
     } else {
       const guestCart = JSON.parse(localStorage.getItem("guestCart") || "[]");
-      // const total = guestCart.reduce((sum, item) => sum + item.quantity, 0);
       setCartCount(guestCart.length);
     }
   }, []);
