@@ -109,8 +109,30 @@ export function FindPassword() {
       });
   }
 
+  const handleEmailSendButton = () => {
+    // 아이디와 이메일이 매칭되는지 먼저 확인
+    axios
+      .get("/api/member/check-id-email", {
+        params: { loginId, email },
+      })
+      .then((res) => {
+        if (!res.data.matched) {
+          alert("입력하신 아이디와 이메일이 일치하지 않습니다.");
+          return;
+        }
+        sendEmail();
+      })
+      .catch((err) => {
+        console.log(
+          "아이디-이메일 확인 실패",
+          err.response?.data || err.message,
+        );
+        alert("서버 오류로 이메일 확인에 실패했습니다.");
+      });
+  };
+
   // 이메일 인증번호 발송 버튼
-  function handleEmailSendButton() {
+  function sendEmail() {
     // 이메일 입력갑 유효 검사 실행
     const isEmailOk = emailRegEx.test(email);
     setEmailValid(isEmailOk);
@@ -208,7 +230,12 @@ export function FindPassword() {
                 // disabled={authCompleted}
               />
               <div className="text-end mt-2">
-                <Button onClick={handleCheckLoginId} variant="dark" size="sm">
+                <Button
+                  disabled={authCompleted}
+                  onClick={handleCheckLoginId}
+                  variant="dark"
+                  size="sm"
+                >
                   확인
                 </Button>
               </div>

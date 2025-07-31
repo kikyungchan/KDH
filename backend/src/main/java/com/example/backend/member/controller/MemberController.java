@@ -248,7 +248,11 @@ public class MemberController {
     @GetMapping("check-id-email")
     public ResponseEntity<?> checkIdEmailMatch(@RequestParam String loginId,
                                                @RequestParam String email) {
+
         boolean matched = memberService.existByLoginIdAndEmail(loginId, email);
+        System.out.println("입력된 loginId: " + loginId);
+        System.out.println("입력된 email: " + email);
+        System.out.println("조회 결과: " + matched);
         if (matched) {
             return ResponseEntity.ok().body(Map.of("matched", true));
         } else {
