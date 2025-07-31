@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -27,10 +28,13 @@ public class MemberController {
     // 회원 등록
     @PostMapping("/signup")
     public ResponseEntity<?> signup(@RequestBody @Valid MemberForm memberForm,
-                                    BindingResult bindingResult) {
+                                    BindingResult bindingResult,
+                                    Authentication authentication) {
 
         // 로그인 된 상태에서 회원가입 방어
-        if (SecurityContextHolder.getContext().getAuthentication().isAuthenticated()) {
+        if (authentication != null &&
+            authentication.isAuthenticated() &&
+            !(authentication instanceof AnonymousAuthenticationToken)) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body(
                     Map.of("message", Map.of("type", "error", "text", "이미 로그인되어 있습니다.")));
         }

@@ -136,6 +136,13 @@ export function MemberAdd() {
 
   // 회원가입 버튼
   function handleSignUpClick() {
+    console.log({
+      allFieldsFilled,
+      passwordConfirm,
+      loginIdChecked,
+      authCompleted,
+    });
+
     console.log("회원가입 시 전송할 데이터", {
       loginId,
       password,
@@ -235,9 +242,26 @@ export function MemberAdd() {
   };
 
   // 이메일 인증번호 발송 버튼
+  // 1. 이메일 중복여부 확인
   const handleEmailSendButton = () => {
-    if (emailId.trim() === "") return;
-    // !emailValid ||
+    axios
+      .get("/api/member/check-email", {
+        params: { email: fullEmail },
+      })
+      .then((res) => {
+        if (res.data.exists) {
+          alert("이미 사용중인 이메일입니다.");
+        } else {
+          // 중복이 아니면 인증번호 전송
+          sendEmail();
+        }
+      });
+  };
+  // 이메일 인증번호 발송 버튼
+  // 중복여부 확인되면 인증번호 발송
+  const sendEmail = () => {
+    // 정규식이거나 비어있으면  return
+    if (!emailValid || emailId.trim() === "") return;
 
     if (isSending) return; // 중복 클릭 방지
     setIsSending(true);
@@ -248,17 +272,17 @@ export function MemberAdd() {
       })
       .then((res) => {
         if (res.data.success) {
-          console.log("인증번호 전송 성공", res.data.message);
+          console.log("인증번호 전송에 성공했습니다.", res.data.message);
           alert(res.data.message);
           setEmailSent(true);
           setRemainTime(res.data.remainTimeInSec);
         } else {
-          alert(res.data.message);
+          alert(res?.data?.message || "인증번호 전송에 실패했습니다.");
           setRemainTime(res.data.remainTimeInSec);
         }
       })
       .catch((err) => {
-        console.log("인증번호 전송 실패", err.response?.data);
+        console.log("인증번호 전송에 실패했습니다.", err.response?.data);
         alert(err.response?.data || err.message);
       })
       .finally(() => {
@@ -452,7 +476,8 @@ export function MemberAdd() {
                       value={birthday}
                       autoComplete="bday"
                       onChange={(e) => {
-                        setBirthday(e.target.value);
+                        const val = e.target.value;
+                        setBirthday(val === "" ? getToday() : val);
                       }}
                     />
                   </FormGroup>
@@ -671,6 +696,24 @@ export function MemberAdd() {
                     </Button>
                   </FormGroup>
                 </div>
+                <div>
+                  {!allFieldsFilled && (
+                    <FormText className="text-danger">
+                      모든 항목을 입력해주세요.
+                    </FormText>
+                  )}
+                  {!loginIdChecked && (
+                    <FormText className="text-danger">
+                      아이디 중복 확인을 해주세요.
+                    </FormText>
+                  )}
+                  {!authCompleted && (
+                    <FormText className="text-danger">
+                      이메일 인증을 완료해주세요.
+                    </FormText>
+                  )}
+                </div>
+
                 <div className="text-end mt-2">
                   <Button
                     onClick={handleSignUpClick}
