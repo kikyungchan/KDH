@@ -130,7 +130,7 @@ export function MemberDetail() {
                     <div className="text-end">
                       <Button
                         className="me-2"
-                        variant="primary"
+                        variant="dark"
                         onClick={() => navigate(`/member/edit?id=${member.id}`)}
                       >
                         수정

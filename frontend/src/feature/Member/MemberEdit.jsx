@@ -67,9 +67,10 @@ export function MemberEdit() {
       .get(`/api/member?id=${memberParams.get("id")}`)
       .then((res) => {
         setMember(res.data);
-        console.log(res.data);
       })
-      .catch((err) => {})
+      .catch((err) => {
+        alert("잠시 후 다시 시도해주십시오.");
+      })
       .finally(() => {});
   }, [memberParams]);
   if (!member) {
@@ -280,35 +281,43 @@ export function MemberEdit() {
                           })
                         }
                       />
-                      <Button className="mt-1" onClick={handleSearchAddress}>
+                      <Button
+                        variant="dark"
+                        className="mt-1"
+                        onClick={handleSearchAddress}
+                      >
                         주소 검색
                       </Button>
                     </FormGroup>
                   </div>
                   <div className="d-flex justify-content-between">
                     <div>
-                      <Button onClick={() => setChangePasswordModalShow(true)}>
+                      <Button
+                        variant="dark"
+                        onClick={() => setChangePasswordModalShow(true)}
+                      >
                         암호 변경
                       </Button>
                     </div>
                     <div>
                       <Button
+                        variant="dark"
                         onClick={() => setSaveModalShow(true)}
-                        className="me-1"
-                        // onClick={handleMemberInfoChangeButton}
+                        className="me-2"
                         disabled={
                           !member?.name?.trim() ||
                           !member?.birthday?.trim() ||
                           !member?.phone?.trim() ||
                           !member?.email?.trim() ||
                           !member?.address?.trim()
-                          // ||
-                          // !password.trim()
                         }
                       >
                         저장
                       </Button>
-                      <Button onClick={() => setCancelSaveModalShow(true)}>
+                      <Button
+                        variant="dark"
+                        onClick={() => setCancelSaveModalShow(true)}
+                      >
                         취소
                       </Button>
                     </div>
@@ -342,6 +351,7 @@ export function MemberEdit() {
                   </Modal.Body>
                   <Modal.Footer>
                     <Button
+                      variant="dark"
                       onClick={handleMemberInfoChangeButton}
                       disabled={isEditProcessing}
                     >
@@ -361,6 +371,7 @@ export function MemberEdit() {
                       )}
                     </Button>
                     <Button
+                      variant="dark"
                       onClick={() => {
                         setSaveModalShow(false);
                         setOldPassword("");
@@ -387,10 +398,14 @@ export function MemberEdit() {
                     </p>
                   </Modal.Body>
                   <Modal.Footer>
-                    <Button onClick={() => navigate(`/member?id=${member.id}`)}>
+                    <Button
+                      variant="dark"
+                      onClick={() => navigate(`/member?id=${member.id}`)}
+                    >
                       나가기
                     </Button>
                     <Button
+                      variant="dark"
                       onClick={() => {
                         setCancelSaveModalShow(false);
                       }}
@@ -452,6 +467,7 @@ export function MemberEdit() {
                   </Modal.Body>
                   <Modal.Footer>
                     <Button
+                      variant="dark"
                       onClick={() => {
                         setChangePasswordModalShow(false);
                         setOldPassword("");
@@ -462,6 +478,7 @@ export function MemberEdit() {
                       취소
                     </Button>
                     <Button
+                      variant="dark"
                       onClick={handleChangePasswordClick}
                       disabled={
                         changePasswordButtonDisabled || isPasswordProcessing

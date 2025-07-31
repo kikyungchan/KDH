@@ -74,7 +74,9 @@ export function MemberLogin() {
                     />
                   </FormGroup>
                   <div className="text-end">
-                    <Button type="submit">로그인</Button>
+                    <Button variant="dark" type="submit">
+                      로그인
+                    </Button>
                   </div>
                 </Form>
               </Col>

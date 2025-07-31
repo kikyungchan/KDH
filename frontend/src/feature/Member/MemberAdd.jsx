@@ -117,12 +117,12 @@ export function MemberAdd() {
   useEffect(() => {
     let timer;
     if (remainTime > 0) {
-      timer = setInterval(() => {
+      timer = setTimeout(() => {
         setRemainTime((prev) => prev - 1);
       }, 1000);
     }
     return () => {
-      clearInterval(timer);
+      clearTimeout(timer);
     };
   }, [remainTime]);
 
@@ -560,7 +560,7 @@ export function MemberAdd() {
                 <div className="text-end mt-2">
                   <Button
                     onClick={handleSignUpClick}
-                    variant="outline-primary"
+                    variant="dark"
                     disabled={disabled || isProcessing}
                   >
                     {isProcessing ? (
