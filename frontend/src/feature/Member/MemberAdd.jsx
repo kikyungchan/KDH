@@ -9,6 +9,7 @@ import {
   Spinner,
   Form,
   Container,
+  InputGroup,
   Card,
 } from "react-bootstrap";
 import { useContext, useEffect, useState } from "react";
@@ -497,62 +498,79 @@ export function MemberAdd() {
                         </FormText>
                       </FormText>
                     </div>
-                    <Row>
-                      <Col>
-                        <FormControl
-                          type="text"
-                          value={emailId}
-                          placeholder="이메일"
-                          autoComplete="email"
-                          onChange={(e) => {
-                            setEmailId(e.target.value);
-                          }}
-                          isInvalid={isSubmitted && !emailValid}
-                        />
-                      </Col>
-                      <Col>@</Col>
-                      <Col>
-                        {customDomain ? (
+                    <InputGroup>
+                      <FormControl
+                        type="text"
+                        value={emailId}
+                        placeholder="이메일"
+                        autoComplete="email"
+                        onChange={(e) => {
+                          setEmailId(e.target.value);
+                        }}
+                        isInvalid={isSubmitted && !emailValid}
+                      />
+                      <InputGroup.Text
+                        style={{
+                          border: "none",
+                          backgroundColor: "transparent",
+                          paddingLeft: "0.25rem",
+                          paddingRight: "0.25rem",
+                        }}
+                      >
+                        @
+                      </InputGroup.Text>
+                      {customDomain ? (
+                        <>
                           <FormControl
                             type="text"
+                            className="w-75"
                             placeholder="직접 입력"
                             value={emailDomain}
                             onChange={(e) => setEmailDomain(e.target.value)}
-                            className="w-50"
+                            style={{ minWidth: 0 }} // 내부 콘텐츠에 맞춰 크기 증가 방지
                           />
-                        ) : (
-                          <Form.Select
-                            value={emailDomain}
-                            onChange={(e) => {
-                              const value = e.target.value;
-                              if (value === "custom") {
-                                setCustomDomain(true);
-                                setEmailDomain("");
-                              } else {
-                                setEmailDomain(value);
-                              }
+                          <Button
+                            variant="outline-secondary"
+                            onClick={() => {
+                              setCustomDomain(false);
+                              setEmailDomain(""); // 초기화 또는 이전 값 유지할 수도 있음
                             }}
-                            className="w-50"
                           >
-                            <option value="">선택해주세요</option>
-                            <option value="naver.com">naver.com</option>
-                            <option value="hanmail.net">hanmail.net</option>
-                            <option value="daum.net">daum.net</option>
-                            <option value="gmail.com">gmail.com</option>
-                            <option value="nate.com">nate.com</option>
-                            <option value="hotmail.com">hotmail.com</option>
-                            <option value="outlook.com">outlook.com</option>
-                            <option value="icloud.com">icloud.com</option>
-                            <option value="custom">직접입력</option>
-                          </Form.Select>
-                        )}
-                        {/*{isSubmitted && !emailValid && (*/}
-                        {/*  <FormText className="text-danger">*/}
-                        {/*    유효한 이메일 형식이 아닙니다.*/}
-                        {/*  </FormText>*/}
-                        {/*)}*/}
-                      </Col>
-                    </Row>
+                            x
+                          </Button>
+                        </>
+                      ) : (
+                        <Form.Select
+                          value={emailDomain}
+                          onChange={(e) => {
+                            const value = e.target.value;
+                            if (value === "custom") {
+                              setCustomDomain(true);
+                              setEmailDomain("");
+                            } else {
+                              setEmailDomain(value);
+                            }
+                          }}
+                          style={{ width: "100%" }}
+                        >
+                          <option value="">선택해주세요</option>
+                          <option value="naver.com">naver.com</option>
+                          <option value="hanmail.net">hanmail.net</option>
+                          <option value="daum.net">daum.net</option>
+                          <option value="gmail.com">gmail.com</option>
+                          <option value="nate.com">nate.com</option>
+                          <option value="hotmail.com">hotmail.com</option>
+                          <option value="outlook.com">outlook.com</option>
+                          <option value="icloud.com">icloud.com</option>
+                          <option value="custom">직접입력</option>
+                        </Form.Select>
+                      )}
+                      {isSubmitted && !emailValid && (
+                        <FormText className="text-danger">
+                          유효한 이메일 형식이 아닙니다.
+                        </FormText>
+                      )}
+                    </InputGroup>
                     <Button
                       className="mt-2 me-2"
                       onClick={handleEmailSendButton}
@@ -602,6 +620,7 @@ export function MemberAdd() {
                         onChange={(e) => setAuthCode(e.target.value)}
                         isInvalid={authFailed}
                         readOnly={authCompleted}
+                        disabled={authCompleted}
                       />
 
                       <Button
