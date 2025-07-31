@@ -268,17 +268,7 @@ export function MemberEdit() {
                   <div>
                     <FormGroup controlId="email1" className="mb-2">
                       <FormLabel className="fw-semibold">이메일</FormLabel>
-                      <FormControl
-                        value={member.email || ""}
-                        onChange={(e) =>
-                          setMember({ ...member, email: e.target.value })
-                        }
-                      />
-                      {isSubmitted && !emailValid && (
-                        <FormText className="text-danger">
-                          이메일 형식이 올바르지 않습니다.
-                        </FormText>
-                      )}
+                      <FormControl disabled value={member.email || ""} />
                     </FormGroup>
                   </div>
                   <div>

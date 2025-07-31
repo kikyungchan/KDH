@@ -25,13 +25,29 @@ function NavBar(props) {
 
         <div>
           {user?.roles?.includes("admin") && (
-            <Link to="/member/list">회원목록</Link>
+            <Link className="me-2" to="/member/list">
+              회원목록
+            </Link>
           )}
-          {user === null && <Link to="/signup">회원가입</Link>}
-          {user === null && <Link to="/login">로그인</Link>}
-          {user !== null && <Link to="/logout">로그아웃</Link>}
+          {user === null && (
+            <Link className="me-2" to="/signup">
+              회원가입
+            </Link>
+          )}
+          {user === null && (
+            <Link className="me-2" to="/login">
+              로그인
+            </Link>
+          )}
           {user !== null && (
-            <Link to={`/member?id=${user.id}`}>{user.name}</Link>
+            <Link className="me-2" to="/logout">
+              로그아웃
+            </Link>
+          )}
+          {user !== null && (
+            <Link className="me-2" to={`/member?id=${user.id}`}>
+              {`${user.name}님`}
+            </Link>
           )}
         </div>
       </nav>
