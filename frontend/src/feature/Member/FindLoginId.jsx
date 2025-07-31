@@ -19,6 +19,8 @@ export function FindLoginId() {
     /^[A-Za-z0-9]([-_.]?[A-Za-z0-9])*@[A-Za-z0-9]([-_.]?[A-Za-z0-9])*\.[A-Za-z]{2,3}$/;
 
   const [email, setEmail] = useState("");
+  const [foundLoginId, setFoundLoginId] = useState("");
+
   // email 인증
   const [emailSent, setEmailSent] = useState(false);
   const [authCode, setAuthCode] = useState("");
@@ -60,16 +62,17 @@ export function FindLoginId() {
     // 이메일 입력갑 유효 검사 실행
     const isEmailOk = emailRegEx.test(email);
     setEmailValid(isEmailOk);
+    setIsSubmitted(true);
 
     // 정규식이거나 비어있으면  return
-    if (!emailValid || email.trim() === "") return;
+    if (!isEmailOk || email.trim() === "") return;
 
     if (isSending) return; // 중복 클릭 방지
     setIsSending(true);
 
     axios
-      .get("/api/member/find/id", {
-        params: { email: email },
+      .get("/api/email/auth", {
+        params: { address: email },
       })
       .then((res) => {
         if (res.data.success) {
@@ -112,6 +115,7 @@ export function FindLoginId() {
           setAuthCompleted(true); // 이메일 인증 완료 처리
           setIsSubmitted(false); // 경고 문구 방지
           setAuthFailed(false);
+          showFoundId();
         } else {
           alert("인증번호가 일치하지 않습니다.");
           setAuthFailed(true);
@@ -122,6 +126,22 @@ export function FindLoginId() {
         alert("서버 오류로 인증번호 확인에 실패했습니다.");
         setAuthFailed(true);
       });
+  };
+
+  const showFoundId = () => {
+    axios
+      .get("/api/member/find-id", {
+        params: { email },
+      })
+      .then((res) => {
+        if (res.data.success) {
+          setFoundLoginId(res.data.loginId); // 마스킹된 ID
+        } else {
+          alert(res.data.message || "아이디를 찾을 수 없습니다.");
+        }
+      })
+      .catch(() => {})
+      .finally(() => {});
   };
 
   return (
@@ -150,12 +170,22 @@ export function FindLoginId() {
                 }}
                 className="mt-3"
                 placeholder="이메일"
+                disabled={authCompleted}
               />
+              <div>
+                {isSubmitted && !emailValid && (
+                  <FormText className="text-danger">
+                    유효한 이메일 형식이 아닙니다.
+                  </FormText>
+                )}
+              </div>
               <div className="text-end mt-2">
                 <Button
                   onClick={handleEmailSendButton}
                   variant="dark"
                   size="sm"
+                  hidden={authCompleted}
+                  className="mb-2"
                 >
                   {isSending ? (
                     <>
@@ -173,7 +203,65 @@ export function FindLoginId() {
                   )}
                 </Button>
               </div>
+              <div>
+                {remainTime > 0 && !authCompleted && (
+                  <FormText className="text-muted">
+                    인증번호 재전송까지 {remainTime}초 남음
+                  </FormText>
+                )}
+                {authCompleted && (
+                  <FormText className="text-muted">
+                    이메일 인증이 완료되었습니다.
+                  </FormText>
+                )}
+              </div>
             </FormGroup>
+            {/* 인증번호 입력칸 (이메일 전송 후 보여주기) */}
+            {emailSent && !authCompleted && (
+              <>
+                <hr />
+                <FormGroup className="mt-2 fw-semibold">
+                  <FormLabel>인증번호</FormLabel>
+                  <FormControl
+                    type="text"
+                    value={authCode}
+                    placeholder="인증번호"
+                    onChange={(e) => setAuthCode(e.target.value)}
+                    isInvalid={authFailed}
+                    readOnly={authCompleted}
+                    disabled={authCompleted}
+                  />
+                  <div className="text-end">
+                    <Button
+                      className="mt-2 me-2"
+                      variant="dark"
+                      size="sm"
+                      onClick={handleAuthCodeVerify}
+                      disabled={authCompleted}
+                    >
+                      인증번호 확인
+                    </Button>
+                  </div>
+                  {authFailed && (
+                    <FormText className="text-danger">
+                      인증번호를 올바르게 입력하세요.
+                    </FormText>
+                  )}
+                </FormGroup>
+              </>
+            )}
+            {authCompleted && foundLoginId && (
+              <>
+                <br />
+                <div className="mt-3">
+                  <FormText className="text-success fw-bold">
+                    가입된 아이디는
+                    <span className="text-dark">{foundLoginId}</span>
+                    입니다.
+                  </FormText>
+                </div>
+              </>
+            )}
           </Col>
         </Row>
       </Card>

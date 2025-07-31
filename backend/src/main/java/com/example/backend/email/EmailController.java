@@ -20,4 +20,5 @@ public class EmailController {
     public EmailAuthResponseDto checkAuthCode(@RequestBody EmailAuthVerifyRequestDto dto) {
         return emailService.validateAuthCode(dto.getAddress(), dto.getAuthCode());
     }
+
 }
