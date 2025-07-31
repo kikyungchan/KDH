@@ -19,7 +19,6 @@ export function ProductList() {
         `/api/product/list?page=${pageParam}${keyword ? `&keyword=${keyword}` : ""}${sort ? `&sort=${sort}` : ""}`,
       )
       .then((res) => {
-        console.log(res.data.productList);
         setProducts(res.data.productList);
         setPageInfo(res.data.pageInfo);
       })

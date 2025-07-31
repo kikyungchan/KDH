@@ -90,7 +90,6 @@ function Order(props) {
       zipcode: postalCode,
       addressDetail: receiverDetailAddress,
     }));
-    console.log(payloadList);
 
     if (token) {
       // 회원 주문
