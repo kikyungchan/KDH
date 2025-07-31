@@ -18,7 +18,7 @@ import axios from "axios";
 
 export function ProductDetail() {
   const { setCartCount } = useCart();
-
+  const [reviewChanged, setReviewChanged] = useState(false);
   const [showCartConfirmModal, setShowCartConfirmModal] = useState(false);
   const [cartItems, setCartItems] = useState([]);
   const [showModal, setShowModal] = useState(false);
@@ -285,8 +285,14 @@ export function ProductDetail() {
             </div>
             <NoticeSection />
             <hr style={{ marginTop: "75px" }} />
-            <ReviewStats productId={product.id} />
-            <ProductComment productId={product.id} />
+            <ReviewStats
+              productId={product.id}
+              refreshTrigger={reviewChanged}
+            />
+            <ProductComment
+              productId={product.id}
+              onReviewChange={() => setReviewChanged((prev) => !prev)}
+            />
           </div>
           {/*
     todo : faq 페이지, 추천해주는 질문 몇개를 골라서 3개 이상 답하도록

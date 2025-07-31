@@ -4,7 +4,7 @@ import { jwtDecode } from "jwt-decode";
 import { useNavigate } from "react-router";
 import StarRating from "./util/StarRating.jsx";
 
-function ReviewSection({ productId }) {
+function ReviewSection({ productId, onReviewChange }) {
   const [isPurchasable, setIsPurchasable] = useState(false);
   const [alreadyReviewed, setAlreadyReviewed] = useState(false);
   const [editTargetId, setEditTargetId] = useState(null);
@@ -61,6 +61,7 @@ function ReviewSection({ productId }) {
         alert("리뷰가 등록되었습니다.");
         setContent("");
         setShowInput(false);
+        onReviewChange && onReviewChange();
 
         return axios.get(`/api/product/comment/${productId}`);
       })
@@ -104,6 +105,7 @@ function ReviewSection({ productId }) {
       })
       .then(() => {
         alert("리뷰가 삭제되었습니다.");
+        onReviewChange && onReviewChange();
         return axios.get(`/api/product/comment/${productId}`);
       })
       .then((res) => setComments(res.data))
@@ -124,6 +126,7 @@ function ReviewSection({ productId }) {
       })
       .then(() => {
         alert("리뷰가 수정되었습니다.");
+        onReviewChange && onReviewChange();
         setEditTargetId(null);
         return axios.get(`/api/product/comment/${productId}`);
       })

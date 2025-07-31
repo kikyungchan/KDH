@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import "../css/ReviewStats.css"; // 그래프용 스타일 분리
 
-export default function ReviewStats({ productId }) {
+export default function ReviewStats({ productId, refreshTrigger }) {
   const [stats, setStats] = useState(null);
 
   useEffect(() => {
@@ -10,7 +10,7 @@ export default function ReviewStats({ productId }) {
       .get(`/api/product/comment/stat?productId=${productId}`)
       .then((res) => setStats(res.data))
       .catch((err) => console.error(err));
-  }, [productId]);
+  }, [productId, refreshTrigger]);
 
   if (!stats) return null;
 
