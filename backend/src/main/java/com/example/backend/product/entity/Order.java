@@ -1,7 +1,6 @@
 package com.example.backend.product.entity;
 
 import com.example.backend.member.entity.Member;
-import com.example.backend.product.dto.OrderItem;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -40,11 +39,6 @@ public class Order {
     @Column(name = "shipping_address", nullable = false)
     private String shippingAddress;
 
-    @ManyToOne
-    @JoinColumn(name = "product_id")
-    private Product product;
-
-    private Integer quantity;
 
     @Column(name = "login_id", nullable = false)
     private String loginId;
@@ -55,6 +49,14 @@ public class Order {
     @Column(nullable = false)
     private String phone;
 
+    @Column(name = "created_at", nullable = false)
+    private LocalDateTime createdAt;
+
+    @PrePersist
+    protected void onCreate() {
+        this.createdAt = LocalDateTime.now();
+    }
+    
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
     @ToString.Exclude
     private List<OrderItem> orderItems = new ArrayList<>();
@@ -73,4 +75,9 @@ public class Order {
 
     //    private String detailedAddress;
     //    private String postalCode;
+//    @ManyToOne
+//    @JoinColumn(name = "product_id")
+//    private Product product;
+
+//    private Integer quantity;
 }

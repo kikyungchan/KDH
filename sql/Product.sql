@@ -174,3 +174,6 @@ ALTER TABLE orders
 
 ALTER TABLE orders
     DROP COLUMN product_id;
+
+ALTER TABLE orders
+    ADD COLUMN created_at DATETIME NOT NULL DEFAULT NOW();

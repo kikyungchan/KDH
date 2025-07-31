@@ -1,7 +1,6 @@
-package com.example.backend.product.dto;
+package com.example.backend.product.entity;
 
-import com.example.backend.product.entity.Order;
-import com.example.backend.product.entity.Product;
+import com.example.backend.product.dto.ProductOption;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;

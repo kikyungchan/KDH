@@ -135,6 +135,7 @@ public class ProductService {
             dto.setPrice(product.getPrice());
             dto.setQuantity(product.getQuantity());
             dto.setInsertedAt(product.getInsertedAt());
+            dto.setHot(isHotProduct(product.getId()));
             if (!product.getImages().isEmpty()) {
                 dto.setImagePath(List.of(product.getImages().get(0).getStoredPath()));
             }
@@ -310,4 +311,9 @@ public class ProductService {
 
     }
 
+    public boolean isHotProduct(Integer productId) {
+        LocalDateTime oneWeekAgo = LocalDateTime.now().minusWeeks(1);
+        Integer sales = orderItemRepository.getWeeklySales(productId, oneWeekAgo);
+        return sales != null && sales >= 10;
+    }
 }
