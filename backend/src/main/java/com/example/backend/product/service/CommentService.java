@@ -52,10 +52,18 @@ public class CommentService {
             dto.setCreatedAt(comment.getCreatedAt());
             dto.setProductId(productId);
             dto.setRating(comment.getRating());
+            dto.setMemberId(comment.getMember().getId());
             result.add(dto);
 
         }
         return result;
     }
 
+    public void deleteComment(Integer id, String auth) {
+        Jwt jwt = jwtDecoder.decode(auth.replace("Bearer ", ""));
+        Integer memberId = Integer.parseInt(jwt.getSubject());
+
+        ProductComment comment = productCommentRepository.findById(id).get();
+        productCommentRepository.delete(comment);
+    }
 }

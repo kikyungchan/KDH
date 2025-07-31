@@ -26,4 +26,10 @@ public class CommentController {
     public List<ProductCommentDto> getComments(@PathVariable Integer productId) {
         return commentService.getComments(productId);
     }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> deleteComment(@PathVariable Integer id, @RequestHeader("Authorization") String auth) {
+        commentService.deleteComment(id, auth);
+        return ResponseEntity.ok().build();
+    }
 }

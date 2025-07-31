@@ -1,13 +1,21 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import { jwtDecode } from "jwt-decode";
 
 function ReviewSection({ productId }) {
   const [showInput, setShowInput] = useState(false);
   const [content, setContent] = useState("");
   const [comments, setComments] = useState([]);
-  const [hoverRating, setHoverRating] = useState(1);
-  const [rating, setRating] = useState(1);
+  const [hoverRating, setHoverRating] = useState(5);
+  const [rating, setRating] = useState(5);
 
+  const token = localStorage.getItem("token");
+  let currentUserId = null;
+  if (token) {
+    const decoded = jwtDecode(token);
+    currentUserId = parseInt(decoded.sub); // subject에 userId 있다고 가정
+  }
+  // TODO: 본인리뷰에만 수정삭제버튼이보이는지 추후 테스트.
   useEffect(() => {
     axios
       .get(`/api/product/comment/${productId}`)
@@ -53,6 +61,26 @@ function ReviewSection({ productId }) {
     setShowInput(true);
   }
 
+  function handleEdit(c) {}
+
+  function handleDelete(commentId) {
+    const token = localStorage.getItem("token");
+    if (!window.confirm("정말 삭제하시겠습니까?")) return;
+
+    axios
+      .delete(`/api/product/comment/${commentId}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      .then(() => {
+        alert("리뷰가 삭제되었습니다.");
+        return axios.get(`/api/product/comment/${productId}`);
+      })
+      .then((res) => setComments(res.data))
+      .catch((err) => console.log(err));
+  }
+
   return (
     <div
       style={{
@@ -70,7 +98,6 @@ function ReviewSection({ productId }) {
             {c.memberLoginId ? `${c.memberLoginId.slice(0, -4)}****` : "회원"}
           </strong>
 
-          {/* ⭐ 별점 출력 */}
           <div style={{ margin: "4px 0" }}>
             {[...Array(5)].map((_, i) => (
               <span key={i} style={{ color: i < c.rating ? "gold" : "#ccc" }}>
@@ -83,6 +110,14 @@ function ReviewSection({ productId }) {
           <small style={{ color: "#666" }}>
             {c.createdAt?.replace("T", " ").slice(0, 16)}
           </small>
+
+          {/* 내 댓글이면 수정/삭제 버튼 */}
+          {c.memberId === currentUserId && (
+            <div style={{ marginTop: "5px" }}>
+              <button onClick={() => handleEdit(c)}>수정</button>
+              <button onClick={() => handleDelete(c.id)}>삭제</button>
+            </div>
+          )}
         </div>
       ))}
 
