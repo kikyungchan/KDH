@@ -37,7 +37,6 @@ export function MemberDetail() {
       .get(`/api/member?id=${memberParams.get("id")}`)
       .then((res) => {
         setMember(res.data);
-        console.log(res.data);
       })
       .catch((err) => {})
       .finally(() => {});
@@ -58,7 +57,7 @@ export function MemberDetail() {
   // 회원 탈퇴
   function handleWithdrawButtonClick() {
     if (isWithdrawProcessing) return; // 중복 클릭 방어
-    setWithdrawModalShow(true);
+    setIsWithdrawProcessing(true);
 
     axios
       .delete(`/api/member`, {
@@ -72,7 +71,7 @@ export function MemberDetail() {
         setPasswordError("비밀번호가 일치하지 않습니다");
       })
       .finally(() => {
-        setWithdrawModalShow(false);
+        setIsWithdrawProcessing(false);
       });
   }
 
@@ -177,7 +176,10 @@ export function MemberDetail() {
                     </FormGroup>
                   </Modal.Body>
                   <Modal.Footer>
-                    <Button onClick={() => setWithdrawModalShow(false)}>
+                    <Button
+                      variant="dark"
+                      onClick={() => setWithdrawModalShow(false)}
+                    >
                       취소
                     </Button>
                     <Button

@@ -13,20 +13,16 @@ export function MemberList() {
     axios
       .get(`/api/member/list?${searchParams}`)
       .then((res) => {
-        console.log("res.data" + res.data);
+        // console.log("res.data" + res.data);
         setMemberList(res.data.memberList);
         setPageInfo(res.data.pageInfo);
       })
-      .catch((err) => {
-        console.log("잘 안될 때");
-      })
-      .finally(() => {
-        console.log("항상");
-      });
+      .catch((err) => {})
+      .finally(() => {});
   }, [searchParams]);
 
   const pageNumber = [];
-  console.log("pageInfo : ", pageInfo);
+  // console.log("pageInfo : ", pageInfo);
   for (let i = pageInfo.leftPageNumber; i <= pageInfo.rightPageNumber; i++) {
     pageNumber.push(i);
   }
