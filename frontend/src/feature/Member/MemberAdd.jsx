@@ -51,8 +51,8 @@ export function MemberAdd() {
   // email 인증
   const [emailSent, setEmailSent] = useState(false);
   const [authCode, setAuthCode] = useState("");
-  const [authCodeValid, setAuthCodeValid] = useState(false);
   const [remainTime, setRemainTime] = useState(0);
+  const [authFailed, setAuthFailed] = useState(false);
 
   // email 인증 완료
   const [authCompleted, setAuthCompleted] = useState(false);
@@ -90,6 +90,7 @@ export function MemberAdd() {
     birthday,
     phone,
     email,
+    zipCode,
     address,
   ];
   const allFieldsFilled = requiredFields.every((field) => field.trim() !== "");
@@ -97,7 +98,7 @@ export function MemberAdd() {
   // password 와 password2(비밀번호 확인)이 일치하지 않으면 가입버튼 비활성화
   const passwordConfirm = password === password2;
   const disabled =
-    !allFieldsFilled || !passwordConfirm || !loginIdChecked || !authCodeValid;
+    !allFieldsFilled || !passwordConfirm || !loginIdChecked || !authCompleted;
 
   // 로그인 되어 있을때 회원가입 접속 차단
   useEffect(() => {
@@ -229,7 +230,7 @@ export function MemberAdd() {
   const handleEmailSendButton = () => {
     if (!emailValid || email.trim() === "") return;
 
-    if (setIsSending) return; // 중복 클릭 방지
+    if (isSending) return; // 중복 클릭 방지
     setIsSending(true);
 
     axios
@@ -259,9 +260,10 @@ export function MemberAdd() {
   // 인증번호 인증 확인 버튼
   const handleAuthCodeVerify = () => {
     setIsSubmitted(true);
+    setAuthFailed(false);
 
     if (!authCode.trim()) {
-      setAuthCodeValid(false);
+      setAuthFailed(true); // 입력조차 안 했으면 실패로 처리
       return;
     }
 
@@ -273,17 +275,18 @@ export function MemberAdd() {
       .then((res) => {
         if (res.data.success) {
           alert("이메일 인증이 완료되었습니다.");
-          setAuthCodeValid(true);
-          setAuthCompleted(true); // 이메일 인증 완료 처
+          setAuthCompleted(true); // 이메일 인증 완료 처리
+          setIsSubmitted(false); // 경고 문구 방지
+          setAuthFailed(false);
         } else {
           alert("인증번호가 일치하지 않습니다.");
-          setAuthCodeValid(false);
+          setAuthFailed(true);
         }
       })
       .catch((err) => {
         console.error("인증번호 검증 실패", err.response?.data || err.message);
         alert("서버 오류로 인증번호 확인에 실패했습니다.");
-        setAuthCodeValid(false);
+        setAuthFailed(true);
       });
   };
 
@@ -323,7 +326,7 @@ export function MemberAdd() {
                     <Button
                       onClick={() => handleCheckLoginId()}
                       size="sm"
-                      variant="outline-info"
+                      variant="outline-dark"
                       className="mt-1 me-2"
                     >
                       아이디 중복 확인
@@ -459,7 +462,7 @@ export function MemberAdd() {
                     <Button
                       className="mt-1 me-2"
                       onClick={handleEmailSendButton}
-                      variant="outline-info"
+                      variant="outline-dark"
                       disabled={
                         email.trim() === "" ||
                         !emailValid ||
@@ -503,18 +506,19 @@ export function MemberAdd() {
                         value={authCode}
                         placeholder="이메일로 전송된 인증번호를 입력하세요."
                         onChange={(e) => setAuthCode(e.target.value)}
-                        isInvalid={isSubmitted && !authCodeValid}
+                        isInvalid={authFailed}
                         readOnly={authCompleted}
                       />
 
                       <Button
                         className="mt-1 me-2"
+                        variant="dark"
                         onClick={handleAuthCodeVerify}
                         disabled={authCompleted}
                       >
                         인증번호 확인
                       </Button>
-                      {isSubmitted && !authCodeValid && (
+                      {authFailed && (
                         <FormText className="text-danger">
                           인증번호를 올바르게 입력하세요.
                         </FormText>
@@ -546,7 +550,7 @@ export function MemberAdd() {
                     />
                     <Button
                       className="mt-1"
-                      variant="outline-info"
+                      variant="outline-dark"
                       onClick={handleSearchAddress}
                     >
                       주소 검색

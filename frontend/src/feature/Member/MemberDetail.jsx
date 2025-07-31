@@ -22,6 +22,9 @@ export function MemberDetail() {
   const [oldPassword, setOldPassword] = useState("");
   const [passwordError, setPasswordError] = useState("");
 
+  // 버튼 중복 클릭 방어
+  const [isWithdrawProcessing, setIsWithdrawProcessing] = useState(false);
+
   const [memberParams] = useSearchParams();
 
   const navigate = useNavigate();
@@ -54,22 +57,22 @@ export function MemberDetail() {
 
   // 회원 탈퇴
   function handleWithdrawButtonClick() {
-    console.log(member);
+    if (isWithdrawProcessing) return; // 중복 클릭 방어
+    setWithdrawModalShow(true);
+
     axios
       .delete(`/api/member`, {
         data: { id: member.id, oldPassword: oldPassword },
       })
       .then((res) => {
-        console.log("good");
         navigate("/");
         logout();
       })
       .catch((err) => {
-        console.log("bad");
         setPasswordError("비밀번호가 일치하지 않습니다");
       })
       .finally(() => {
-        console.log("always");
+        setWithdrawModalShow(false);
       });
   }
 
@@ -180,9 +183,22 @@ export function MemberDetail() {
                     <Button
                       onClick={handleWithdrawButtonClick}
                       variant="danger"
-                      disabled={!oldPassword}
+                      disabled={!oldPassword || isWithdrawProcessing}
                     >
-                      탈퇴
+                      {isWithdrawProcessing ? (
+                        <>
+                          <Spinner
+                            animation="border"
+                            size="sm"
+                            role="status"
+                            aria-hidden="true"
+                            className="me-2"
+                          />
+                          전송 중...
+                        </>
+                      ) : (
+                        "탈퇴"
+                      )}
                     </Button>
                   </Modal.Footer>
                 </Modal>
