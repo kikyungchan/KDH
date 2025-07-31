@@ -7,4 +7,6 @@ import java.util.List;
 
 public interface ProductCommentRepository extends JpaRepository<ProductComment, Integer> {
     List<ProductComment> findByProductIdOrderByIdDesc(Integer productId);
+
+    boolean existsByMemberIdAndProductId(Integer memberId, Integer productId);
 }

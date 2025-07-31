@@ -5,6 +5,8 @@ import { useNavigate } from "react-router";
 import StarRating from "../StarRating.jsx";
 
 function ReviewSection({ productId }) {
+  const [isPurchasable, setIsPurchasable] = useState(false);
+  const [alreadyReviewed, setAlreadyReviewed] = useState(false);
   const [editTargetId, setEditTargetId] = useState(null);
   const [editHoverRating, setEditHoverRating] = useState(0);
   const [editContent, setEditContent] = useState("");
@@ -25,11 +27,19 @@ function ReviewSection({ productId }) {
   useEffect(() => {
     axios
       .get(`/api/product/comment/${productId}`)
-      .then((res) => {
-        console.log("댓글:", res.data);
-        setComments(res.data);
-      })
-      .catch((err) => console.log(err));
+      .then((res) => setComments(res.data));
+
+    if (token) {
+      axios
+        .get(`/api/product/comment/check?productId=${productId}`, {
+          headers: { Authorization: `Bearer ${token}` },
+        })
+        .then((res) => {
+          setIsPurchasable(res.data);
+          setAlreadyReviewed(res.data);
+        })
+        .catch((err) => console.log(err));
+    }
   }, [productId]);
 
   function handleSubmit() {
@@ -63,6 +73,14 @@ function ReviewSection({ productId }) {
     if (!token) {
       alert("로그인이 필요합니다.");
       navigate("/login");
+      return;
+    }
+    if (alreadyReviewed) {
+      alert("구매한 상품은 한 번만 리뷰작성이 가능합니다.");
+      return;
+    }
+    if (!isPurchasable) {
+      alert("해당 상품을 구매한 회원만 리뷰 작성이 가능합니다.");
       return;
     }
     setShowInput(true);

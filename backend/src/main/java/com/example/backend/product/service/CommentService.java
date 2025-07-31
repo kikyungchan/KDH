@@ -4,6 +4,8 @@ import com.example.backend.member.entity.Member;
 import com.example.backend.product.dto.ProductCommentDto;
 import com.example.backend.product.entity.Product;
 import com.example.backend.product.entity.ProductComment;
+import com.example.backend.product.repository.OrderItemRepository;
+import com.example.backend.product.repository.OrderRepository;
 import com.example.backend.product.repository.ProductCommentRepository;
 import com.example.backend.product.repository.ProductRepository;
 import lombok.RequiredArgsConstructor;
@@ -23,6 +25,8 @@ public class CommentService {
     private final JwtDecoder jwtDecoder;
     private final ProductRepository productRepository;
     private final ProductCommentRepository productCommentRepository;
+    private final OrderRepository orderRepository;
+    private final OrderItemRepository orderItemRepository;
 
     public void addComment(ProductCommentDto dto, String auth) {
         Jwt jwt = jwtDecoder.decode(auth.replace("Bearer ", ""));
@@ -76,5 +80,14 @@ public class CommentService {
         comment.setContent(dto.getContent());
         comment.setRating(dto.getRating());
         productCommentRepository.save(comment);
+    }
+
+    public boolean isPurchasable(Integer memberId, Integer productId) {
+        // 구매이력 확인
+        boolean hasPurchased = orderItemRepository.existsByMemberIdAndProductId(memberId, productId);
+        boolean alreadyReviewed = productCommentRepository.existsByMemberIdAndProductId(memberId, productId);
+        System.out.println("hasPurchased: " + hasPurchased);
+        System.out.println("alreadyReviewed: " + alreadyReviewed);
+        return hasPurchased && !alreadyReviewed;
     }
 }
