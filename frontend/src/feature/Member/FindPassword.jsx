@@ -357,7 +357,14 @@ export function FindPassword() {
                       className="mt-2 me-2"
                       variant="dark"
                       size="sm"
-                      onClick={() => navigate("/api/reset-password")}
+                      onClick={() =>
+                        navigate("/api/reset-password", {
+                          state: {
+                            loginId: loginId,
+                            email: email,
+                          },
+                        })
+                      }
                     >
                       비밀번호 재설정
                     </Button>

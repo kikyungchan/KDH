@@ -368,7 +368,7 @@ export function MemberAdd() {
                   </FormGroup>
                 </div>
                 <div>
-                  <form>
+                  <Form>
                     <FormGroup>
                       <FormLabel className="fw-semibold fs-6 mt-2 mb-1">
                         비밀번호
@@ -396,7 +396,7 @@ export function MemberAdd() {
                         </FormText>
                       )}
                     </FormGroup>
-                  </form>
+                  </Form>
                 </div>
                 <div>
                   <form>
