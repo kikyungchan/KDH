@@ -8,17 +8,20 @@ import CartAdded from "./util/CartAdded.jsx";
 import { useCart } from "../CartContext.jsx";
 import {
   handleBuyButton,
+  handleBuyCurrentProductOnly,
   handleCartButton,
   handleGoToCartWithCurrenProduct,
-  handleBuyCurrentProductOnly,
 } from "./util/ProductDetailUtilButton.jsx";
 import ReviewStats from "./ReviewStats.jsx";
 import "../css/ProductDetail.css";
 import axios from "axios";
 import ScrollToTopButton from "./ScrollToTopButton.jsx";
 import "../css/ProductList.css";
+import ShareModal from "./util/ShareModal.jsx";
+import { FaShareAlt } from "react-icons/fa";
 
 export function ProductDetail() {
+  const [showShareModal, setShowShareModal] = useState(false);
   const { setCartCount } = useCart();
   const [reviewChanged, setReviewChanged] = useState(false);
   const [showCartConfirmModal, setShowCartConfirmModal] = useState(false);
@@ -119,6 +122,13 @@ export function ProductDetail() {
                     🔥 {product.quantity}개 남음
                   </span>
                 )}
+                {/* 공유 아이콘 버튼 */}
+                <FaShareAlt
+                  size={20}
+                  style={{ cursor: "pointer", marginLeft: "10px" }}
+                  onClick={() => setShowShareModal(true)}
+                  title="공유하기"
+                />
               </h2>
               <p>{product.price.toLocaleString()}원</p>
               <p>{product.info}</p>
@@ -392,6 +402,12 @@ export function ProductDetail() {
         }
       />
       <ScrollToTopButton />
+      <ShareModal
+        show={showShareModal}
+        onHide={() => setShowShareModal(false)}
+        shareUrl={window.location.href}
+        productName={product.productName}
+      />
     </Container>
   );
 }
