@@ -101,7 +101,7 @@ export function MemberLogin() {
                   </Link>
                   <span className="mx-2 text-muted">/</span>
                   <Link
-                    to="/find/id"
+                    to="/find/password"
                     className="text-decoration-none text-dark me-2"
                   >
                     비밀번호 찾기
