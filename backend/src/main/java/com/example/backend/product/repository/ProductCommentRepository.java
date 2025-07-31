@@ -9,4 +9,6 @@ public interface ProductCommentRepository extends JpaRepository<ProductComment, 
     List<ProductComment> findByProductIdOrderByIdDesc(Integer productId);
 
     boolean existsByMemberIdAndProductId(Integer memberId, Integer productId);
+
+    List<ProductComment> findByProductId(Integer productId);
 }

@@ -1,0 +1,48 @@
+.review-stats {
+    display: flex;
+    gap: 50px;
+    margin: 30px 0;
+}
+
+.average {
+    font-size: 20px;
+    font-weight: bold;
+    text-align: center;
+}
+
+.score {
+    font-size: 48px;
+    color: orange;
+}
+
+.stars {
+    font-size: 20px;
+    margin-top: 5px;
+}
+
+.bars {
+    flex: 1;
+}
+
+.bar-line {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.label {
+    width: 40px;
+}
+
+.bar {
+    background-color: #eee;
+    height: 12px;
+    width: 200px;
+    margin: 0 10px;
+    position: relative;
+}
+
+.fill {
+    background-color: orange;
+    height: 100%;
+}

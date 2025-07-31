@@ -67,5 +67,11 @@ public class CommentController {
         return ResponseEntity.ok().body(result);
     }
 
+    @GetMapping("/stat")
+    public ResponseEntity<?> getReviewStats(@RequestParam Integer productId) {
+        Map<String, Object> result = commentService.getReviewStats(productId);
+        return ResponseEntity.ok(result);
+    }
+
 
 }

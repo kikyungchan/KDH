@@ -1,11 +1,10 @@
 import { Button, Col, Container, Row, Spinner } from "react-bootstrap";
 import { useNavigate, useSearchParams } from "react-router";
 import NoticeSection from "./util/NoticeSection.jsx";
+import ProductComment from "./ProductComment.jsx";
 import { useEffect, useState } from "react";
 import BuyButton from "./util/BuyButton.jsx";
 import CartAdded from "./util/CartAdded.jsx";
-import "../css/ProductDetail.css";
-import axios from "axios";
 import { useCart } from "../CartContext.jsx";
 import {
   handleBuyButton,
@@ -13,7 +12,9 @@ import {
   handleGoToCartWithCurrenProduct,
   handleBuyCurrentProductOnly,
 } from "./util/ProductDetailUtilButton.jsx";
-import ProductComment from "./ProductComment.jsx";
+import ReviewStats from "./ReviewStats.jsx";
+import "../css/ProductDetail.css";
+import axios from "axios";
 
 export function ProductDetail() {
   const { setCartCount } = useCart();
@@ -284,6 +285,7 @@ export function ProductDetail() {
             </div>
             <NoticeSection />
             <hr style={{ marginTop: "75px" }} />
+            <ReviewStats productId={product.id} />
             <ProductComment productId={product.id} />
           </div>
           {/*

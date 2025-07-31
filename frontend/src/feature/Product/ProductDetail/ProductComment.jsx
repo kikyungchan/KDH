@@ -206,6 +206,7 @@ function ReviewSection({ productId }) {
                   <button onClick={() => handleDelete(c.id)}>삭제</button>
                 </div>
               )}
+              <hr />
             </>
           )}
         </div>

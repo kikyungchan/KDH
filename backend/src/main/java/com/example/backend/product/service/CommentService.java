@@ -15,7 +15,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
+import static software.amazon.awssdk.utils.Validate.getOrDefault;
 
 @Service
 @Transactional
@@ -89,5 +93,26 @@ public class CommentService {
         System.out.println("hasPurchased: " + hasPurchased);
         System.out.println("alreadyReviewed: " + alreadyReviewed);
         return hasPurchased && !alreadyReviewed;
+    }
+
+    public Map<String, Object> getReviewStats(Integer productId) {
+        List<ProductComment> comments = productCommentRepository.findByProductId(productId);
+
+        // 별점 별 개수 집계용 Map
+        Map<Integer, Long> starCount = new HashMap<>();
+        int totalScore = 0;
+        for (ProductComment comment : comments) {
+            int rating = comment.getRating();
+            totalScore += rating;
+
+            // 별점 개수 누적
+            starCount.put(rating, starCount.getOrDefault(rating, 0L) + 1);
+        }
+        double avg = comments.isEmpty() ? 0.0 : (double) totalScore / comments.size();
+        Map<String, Object> result = new HashMap<>();
+        result.put("starCount", starCount);
+        result.put("avg", avg);
+        result.put("total", comments.size());
+        return result;
     }
 }
