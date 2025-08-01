@@ -1,6 +1,6 @@
 import NavBar from "./NavBar.jsx";
 
-function MainLayout() {
+function MainPage() {
   return (
     <>
       <NavBar />
@@ -8,4 +8,4 @@ function MainLayout() {
   );
 }
 
-export default MainLayout;
+export default MainPage;

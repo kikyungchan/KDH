@@ -2,21 +2,24 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 1rem 4rem 2rem 2rem;
+    padding: 1.5rem 4rem;
 }
 
 .navbar-left {
     display: flex;
-    gap: 1rem;
+    gap: 2.5rem;
+    align-items: center;
+    font-weight: 500;
+    font-size: 1rem;
 }
 
 .navbar-icons {
     display: flex;
-    gap: 1rem;
-    font-size: 1.5rem;
+    gap: 2rem;
+    font-size: 1.4rem;
     color: white;
-    padding: 1rem 2rem;
     align-items: center;
+    padding-right: 1rem;
 }
 
 .navbar-icon {
