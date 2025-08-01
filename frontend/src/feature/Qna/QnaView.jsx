@@ -39,7 +39,7 @@ export function QnaView() {
       .then((res) => {
         // user 값이 없음
         console.log("user : ", user);
-        console.log("isAdmin : ", isAdmin.value);
+        console.log("isAdmin : ", isAdmin);
         setQuestion(res.data);
       })
       .catch((err) => {
