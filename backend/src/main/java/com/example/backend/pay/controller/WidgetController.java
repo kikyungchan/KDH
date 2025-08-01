@@ -33,10 +33,12 @@ public class WidgetController {
         String orderId = request.getOrderId();
         Long amount = request.getAmount();
 
+        // paymentKey와 orderId는 결제 조회, 취소에 사용되므로 서버(DB)에 저장해둘것
         logger.info("결제 승인 요청 수신 - orderId: {}, amount: {}, paymentKey: {}", orderId, amount, paymentKey);
 
         // Map 대신 사용
         String requestBodyToToss = objectMapper.writeValueAsString(request);
+        logger.info("requestBodyToToss : {}", requestBodyToToss);
 
         // 시크릭 키 나중에 등록
         String widgetSecretKey = "test_gsk_docs_OaPz8L5KdmQXkzRz3y47BMw6";
@@ -44,6 +46,7 @@ public class WidgetController {
         Base64.Encoder encoder = Base64.getEncoder();
         byte[] encodedBytes = encoder.encode((widgetSecretKey + ":").getBytes(StandardCharsets.UTF_8));
         String authorizations = "Basic " + new String(encodedBytes);
+        logger.info("authorizations : {}", authorizations);
 
 
         // 결제를 승인하면 결제수단에서 금액 차감

@@ -1,10 +1,12 @@
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { useNavigate, useSearchParams } from "react-router";
 import axios from "axios";
+import { toast } from "react-toastify";
 
 export function SuccessPage() {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
+  const hasCalled = useRef(false);
 
   useEffect(() => {
     // 쿼리 파라미터 값이 결제 요청할 때 보낸 데이터와 동일한지 반드시 확인하세요.
@@ -17,22 +19,28 @@ export function SuccessPage() {
 
     async function confirm() {
       // todo : fetch -> axios 로 바꾸기
-      /* axios
-         .post("/api/pay/confirm", requestData, {
-           headers: { "Content-Type": "application/json" },
-           timeout: 15000,
-         })
-         .then((res) => {
-           console.log("res : ", res.data);
-         })
-         .catch((err) => {
-           console.log("err : ", err);
-         })
-         .finally(() => {
-           console.log("always");
-         });*/
+      // StrictMode로 인한 api 두번 보내는 현상 방지
+      if (!hasCalled.current) {
+        hasCalled.current = true;
+        axios
+          .post("/api/pay/confirm", requestData, {
+            headers: { "Content-Type": "application/json" },
+          })
+          .then((res) => {
+            console.log("res : ", res.data);
+            toast("결제가 완료되었습니다", { type: "success" });
+          })
+          .catch((err) => {
+            console.log("err : ", err);
+            toast("결제에 실패하었습니다", { type: "error" });
+          })
+          .finally(() => {
+            console.log("always");
+            hasCalled.current = false;
+          });
+      }
 
-      const response = await fetch("/api/pay/confirm", {
+      /*const response = await fetch("/api/pay/confirm", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -46,7 +54,7 @@ export function SuccessPage() {
         // 결제 실패 비즈니스 로직을 구현하세요.
         navigate(`/fail?message=${json.message}&code=${json.code}`);
         return;
-      }
+      }*/
 
       // 결제 성공 비즈니스 로직을 구현하세요.
     }

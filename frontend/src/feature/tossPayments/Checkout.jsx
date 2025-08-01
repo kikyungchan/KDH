@@ -106,7 +106,7 @@ export function CheckoutPage() {
               // 결제 과정에서 악의적으로 결제 금액이 바뀌는 것을 확인하는 용도입니다.
               await widgets.requestPayment({
                 // orderId: "LsN10ANCHNw-qpWzwa2HL",
-                orderId: "b8f3a2c1-0d7e-4b6f-9a1c-3e8d5f2b0c41",
+                orderId: "b8f3a2c1-0d7e-4b6f-9a1c-3e8d5f2b0c49",
                 orderName: "토스 티셔츠 외 2건",
                 successUrl: window.location.origin + "/pay/success",
                 failUrl: window.location.origin + "/pay/fail",
