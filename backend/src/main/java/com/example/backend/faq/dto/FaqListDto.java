@@ -1,6 +1,6 @@
-package com.example.backend.qna.dto;
+package com.example.backend.faq.dto;
 
-import com.example.backend.product.entity.Product;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -12,13 +12,11 @@ import java.time.ZoneId;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class QuestionListDto {
+public class FaqListDto {
     private Integer id;
-    private String title;
-    //    private Product Product;
-    private String status;
-    private String name;
-    private int category;
+    private String question;
+    private String answer;
+    private Integer category;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
@@ -61,6 +59,7 @@ public class QuestionListDto {
                 return days + "일 전"; // 최소한 일 단위로 표시
             }
         }
+
     }
 
     public String getTimesAgo2() {
@@ -103,5 +102,4 @@ public class QuestionListDto {
             }
         }
     }
-
 }

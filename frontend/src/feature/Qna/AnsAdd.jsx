@@ -1,6 +1,5 @@
 import {
   Button,
-  ButtonGroup,
   Col,
   FormControl,
   FormGroup,
@@ -9,21 +8,21 @@ import {
   Modal,
   Row,
   Spinner,
-  ToggleButton,
 } from "react-bootstrap";
-import Form from "react-bootstrap/Form";
 import { useContext, useEffect, useState } from "react";
 import axios from "axios";
-import { useParams, useSearchParams } from "react-router";
-import { toast } from "react-toastify";
-import { AuthenticationContext } from "../common/AuthenticationContextProvider.jsx";
 
-export function QnaView() {
-  const { user, isAdmin } = useContext(AuthenticationContext);
-  const [searchParams, setSearchParams] = useSearchParams("");
+import { useNavigate, useSearchParams } from "react-router";
+import { AuthenticationContext } from "../common/AuthenticationContextProvider.jsx";
+import { toast } from "react-toastify";
+
+export function AnsAdd() {
   const [question, setQuestion] = useState(null);
+  const [searchParams, setSearchParams] = useSearchParams("");
   const [modalShow, setModalShow] = useState();
-  // searchParams 사용으로 인해 id 굳이 필요할지 의문
+  const [answer, setAnswer] = useState();
+  const [isProcessing, setIsProcessing] = useState(false);
+  const navigate = useNavigate();
   const categoryList = {
     1: { value: "기능 관련" },
     2: { value: "크기·무게 관련" },
@@ -37,8 +36,6 @@ export function QnaView() {
     axios
       .get(`/api/qna/view?${searchParams}`)
       .then((res) => {
-        // user 값이 없음
-        // console.log("user : ", user);
         setQuestion(res.data);
       })
       .catch((err) => {
@@ -49,31 +46,38 @@ export function QnaView() {
       });
   }, []);
 
-  // todo : userid 와 user를 대조후 맞을 경우만 작동하게
-  function handleDeleteButtonClick() {
-    axios
-      // .delete(`/api/qna/?${searchParams}`)
-      .delete(`/api/qna/${question.id}`)
-      .then((res) => {
-        console.log("잘됨");
+  if (!question) {
+    return <Spinner />;
+  }
 
+  function handleAnswerButtonClick() {
+    setIsProcessing(true);
+    axios
+      .post(`/api/qna/addAns`, {
+        questionId: question.id,
+        seller: question.userid,
+        answer: answer,
+      })
+      .then((res) => {
+        console.log("성공");
         const message = res.data.message;
         if (message) {
           toast(message.text, { type: message.type });
         }
+        navigate("/qna/list");
       })
       .catch((err) => {
-        console.log("안된");
-        toast("게시물이 삭제되지 않았습니다.", { type: "warning" });
+        console.log("오류");
+        const message = err.response.data.message;
+        if (message) {
+          // toast 띄우기
+          toast(message.text, { type: message.type });
+        }
       })
       .finally(() => {
-        console.log("항상");
+        console.log("always");
+        setIsProcessing(false);
       });
-    return null;
-  }
-
-  if (!question) {
-    return <Spinner />;
   }
 
   return (
@@ -83,6 +87,8 @@ export function QnaView() {
           <h2 className="mb-4">문의 내역 상세</h2>
           <div className="row">
             <div>
+              {/*<div>*/}
+
               <FormGroup className="mb-3" controlId="category1">
                 <FormLabel>상담유형</FormLabel>
                 <FormControl
@@ -123,7 +129,11 @@ export function QnaView() {
             <div>
               <FormGroup>
                 <FormLabel>제목</FormLabel>
-                <FormControl value={question.title} disabled={true} />
+                <FormControl
+                  value={question.title}
+                  disabled={true}
+                  readOnly={true}
+                />
               </FormGroup>
             </div>
             <div>
@@ -140,56 +150,38 @@ export function QnaView() {
                 />
               </FormGroup>
             </div>
-            {question.answer !== null ? (
-              <div>
-                <FormGroup className="mb-3" controlId="content1">
-                  <FormLabel>답변 내용</FormLabel>
-                  <FormControl
-                    as="textarea"
-                    rows={6}
-                    value={question.answer}
-                    readOnly={true}
-                  />
-                </FormGroup>
-              </div>
-            ) : (
-              <h6 className="text-center">
-                빠른 시일 내에 답변드리도록 하겠습니다
-              </h6>
-            )}
+            <div>
+              <FormGroup className="mb-3" controlId="content1">
+                <FormLabel>답변 내용</FormLabel>
+                <FormControl
+                  as="textarea"
+                  rows={6}
+                  onChange={(e) => setAnswer(e.target.value)}
+                />
+              </FormGroup>
+            </div>
             <br />
             <div className="mb-3">
-              {/*  todo : 로그인 시에도 user 값이 현재 없는 것으로 나오는데 이후 처리*/}
-              {user === null && question.loginId === user && (
-                <Button className="ms-2 btn-danger" onClick={setModalShow}>
-                  삭제
-                </Button>
-              )}
-              {/* todo : is Admin 여부에 따라 보임 관련 코드 수정될 시 즉시 수정할 것*/}
-              {/* todo : 링크 연결 및 답변하기 페이지 만들어야 함*/}
-              {user !== null && isAdmin && (
-                <Button
-                  className="ms-2 btn-primary"
-                  href={`/qna/addAns?${searchParams}`}
-                >
-                  답변하기
-                </Button>
-              )}
+              <Button className="ms-2 btn-primary" onClick={setModalShow}>
+                답변 등록
+              </Button>
             </div>
           </div>
         </div>
       </Col>
       <Modal show={modalShow} onHide={() => setModalShow(false)}>
         <Modal.Header closeButton>
-          <Modal.Title>게시물 삭제 확인</Modal.Title>
+          <Modal.Title>답변 등록 확인</Modal.Title>
         </Modal.Header>
-        <Modal.Body>이 문의 내역을 삭제하시겠습니까?</Modal.Body>
+        <Modal.Body>
+          답변을 등록하면 수정할 수 없습니다. 등록하시겠습니까?
+        </Modal.Body>
         <Modal.Footer>
           <Button variant="outline-dark" onClick={() => setModalShow(false)}>
             취소
           </Button>
-          <Button variant="danger" onClick={handleDeleteButtonClick}>
-            삭제
+          <Button variant="primary" onClick={handleAnswerButtonClick}>
+            답변완료
           </Button>
         </Modal.Footer>
       </Modal>

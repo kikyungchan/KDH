@@ -15,6 +15,11 @@ import { Chat } from "./feature/Chat/Chat.jsx";
 import { QnaAdd } from "./feature/Qna/QnaAdd.jsx";
 import { QnaList } from "./feature/Qna/QnaList.jsx";
 import { QnaView } from "./feature/Qna/QnaView.jsx";
+import { AnsAdd } from "./feature/Qna/AnsAdd.jsx";
+import { FaQList } from "./feature/FaQ/FaQList.jsx";
+import { CheckoutPage } from "./feature/tossPayments/Checkout.jsx";
+import { FailPage } from "./feature/tossPayments/Fail.jsx";
+import { SuccessPage } from "./feature/tossPayments/Success.jsx";
 import { FindLoginId } from "./feature/Member/FindLoginId.jsx";
 import { FindPassword } from "./feature/Member/FindPassword.jsx";
 import { ResetPassword } from "./feature/Member/ResetPassword.jsx";
@@ -34,7 +39,6 @@ function App() {
         <Routes>
           <Route path="/" element={<MainPage />}>
             <Route index element={<MainSlide />} />
-            {/*<Route path="/" */}
             <Route path="product/regist" element={<ProductRegist />} />
             <Route path="product/list" element={<ProductList />} />
             <Route path="product/view" element={<ProductDetail />} />
@@ -54,11 +58,15 @@ function App() {
             <Route path="/find/id" element={<FindLoginId />} />
             <Route path="/find/password" element={<FindPassword />} />
             <Route path="/reset-password" element={<ResetPassword />} />
+            <Route path="/qna/addAns" element={<AnsAdd />} />
             <Route path="/qna/add/:id" element={<QnaAdd />} />
-            <Route path="/qna/list/" element={<QnaList />} />
-            <Route path="/qna/view/" element={<QnaView />} />
-            {/*<Route path="chat/chatting" element={<Chat username={username} />} />*/}
+            <Route path="/qna/list" element={<QnaList />} />
+            <Route path="/qna/view" element={<QnaView />} />
+            <Route path="/faq/list" element={<FaQList />} />
             <Route path="chat/chatting" element={<Chat />} />
+            <Route path="pay/Checkout" element={<CheckoutPage />} />
+            <Route path="pay/success" element={<SuccessPage />} />
+            <Route path="pay/fail" element={<FailPage />} />
           </Route>
         </Routes>
         </CartProvider>

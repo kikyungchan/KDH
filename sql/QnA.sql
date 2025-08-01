@@ -8,6 +8,7 @@ CREATE TABLE question
     status     ENUM ('open','answered','closed') NOT NULL DEFAULT 'open',
     created_at datetime                          NOT NULL DEFAULT NOW(),
     updated_at datetime                          NOT NULL DEFAULT NOW(),
+    category   INTEGER                           NOT NULL,
     PRIMARY KEY (`id`),
     INDEX idx_question_product (product_id),
     INDEX idx_question_user (user_id),
@@ -43,7 +44,7 @@ CREATE TABLE answer
     CONSTRAINT fk_seller_id
         FOREIGN KEY (seller_id)
             REFERENCES member (login_id)
-            ON DELETE RESTRICT
+            ON DELETE CASCADE
             ON UPDATE CASCADE
 );
 

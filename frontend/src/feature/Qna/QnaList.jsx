@@ -23,9 +23,11 @@ export function QnaList() {
     answered: "답변완료",
     closed: "종료",
   };
+
   const radios = [
-    { name: "상품목록", value: "1", checked: true },
-    { name: "문의내역", value: "2" },
+    { name: "상품목록", value: "1", fnc: handleQnaAddButtonClick },
+    { name: "문의내역", value: "2", fnc: handleQnaListButtonClick },
+    { name: "자주 묻는 질문", value: "3", fnc: handleFaQListButtonClick },
   ];
 
   useEffect(() => {
@@ -71,6 +73,14 @@ export function QnaList() {
     navigate("/product/list");
   }
 
+  function handleQnaListButtonClick() {
+    navigate("/qna/list");
+  }
+
+  function handleFaQListButtonClick() {
+    navigate("/faq/list");
+  }
+
   return (
     <>
       <Row className="justify-content-center">
@@ -85,14 +95,12 @@ export function QnaList() {
                     key={idx}
                     id={`radio-${idx}`}
                     type="radio"
-                    variant={idx % 2 ? "outline-primary" : "outline-primary"}
+                    variant={"outline-primary"}
                     name="radio"
                     value={radio.value}
-                    checked={idx % 2 ? true : false}
+                    checked={idx === 1}
                     // onChange={(e) => setRadioValue(e.currentTarget.value)}
-                    onClick={
-                      radio.value === "1" ? handleQnaAddButtonClick : null
-                    }
+                    onClick={radio.fnc}
                   >
                     {radio.name}
                   </ToggleButton>
@@ -105,7 +113,7 @@ export function QnaList() {
                 <thead>
                   <tr>
                     <th style={{ width: "70px" }}>#</th>
-                    <th style={{ width: "100px" }}>답변여부</th>
+                    <th style={{ width: "120px" }}>답변여부</th>
                     <th style={{ width: "270px" }}>제목</th>
                     <th
                       className="d-none d-md-table-cell"
