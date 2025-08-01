@@ -6,9 +6,10 @@
 }
 
 .product-thumbnail {
-    width: 650px;
-    height: 700px;
+    width: 600px;
+    height: 600px;
     margin-bottom: 2rem;
+    object-fit: cover;
 
 }
 
