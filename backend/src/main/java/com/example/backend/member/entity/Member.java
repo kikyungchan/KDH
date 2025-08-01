@@ -45,4 +45,7 @@ public class Member {
     @Column(name = "address_detail")
     private String addressDetail;
 
+    @Column(name = "privacy_agreed", nullable = false)
+    private Boolean privacyAgreed;
+
 }

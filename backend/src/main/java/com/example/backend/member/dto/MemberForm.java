@@ -57,5 +57,7 @@ public class MemberForm {
     @Past(message = "생년월일은 과거 날짜여야 합니다.")
     private LocalDate birthday;
 
+    @NotNull(message = "개인정보 수집 및 이용에 동의하지 않으실경우, 서비스 이용이 어렵습니다.")
+    private Boolean privacyAgreed;
 
 }

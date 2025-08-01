@@ -188,6 +188,7 @@ export function MemberAdd() {
         zipCode: zipCode,
         address: address,
         addressDetail: addressDetail,
+        privacyAgreed: privacyAgreed,
       })
       .then((res) => {
         navigate("/login");

@@ -54,6 +54,7 @@ public class MemberService {
         member.setAddress(memberForm.getAddress());
         member.setZipcode(memberForm.getZipCode());
         member.setAddressDetail(memberForm.getAddressDetail());
+        member.setPrivacyAgreed(memberForm.getPrivacyAgreed());
         memberRepository.save(member);
     }
 

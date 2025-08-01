@@ -15,4 +15,5 @@ public class MemberDto {
     private String zipCode;
     private String address;
     private String addressDetail;
+    private Boolean privacyAgreed;
 }

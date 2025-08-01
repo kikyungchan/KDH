@@ -72,6 +72,11 @@ public class MemberController {
             );
         }
 
+        // 개인 정보 수집 및 이용 동의
+        if (Boolean.FALSE.equals(memberForm.getPrivacyAgreed())) {
+            throw new IllegalArgumentException("개인정보 수집 및 이용 동의가 필요합니다.");
+        }
+
         // 유효성 검사를 통과했을 때 실행
         memberService.signup(memberForm);
         return ResponseEntity.ok().body(
