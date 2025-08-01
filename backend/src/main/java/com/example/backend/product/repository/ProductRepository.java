@@ -21,7 +21,7 @@ public interface ProductRepository extends JpaRepository<Product, Integer> {
     Page<Product> findByKeyword(@Param("keyword") String keyword, Pageable pageable);
 
 
-    // 전체상품인기순
+    // 전체상품인기순 (주문수많은 순서대로)
     @Query("""
             SELECT p FROM Product p
             LEFT JOIN OrderItem oi ON oi.product = p

@@ -12,10 +12,10 @@ import {
   handleCartButton,
   handleGoToCartWithCurrenProduct,
 } from "./util/ProductDetailUtilButton.jsx";
-import ReviewStats from "./ReviewStats.jsx";
+import ReviewStats from "./util/ReviewStats.jsx";
 import "../css/ProductDetail.css";
 import axios from "axios";
-import ScrollToTopButton from "./ScrollToTopButton.jsx";
+import ScrollToTopButton from "./util/ScrollToTopButton.jsx";
 import "../css/ProductList.css";
 import ShareModal from "./util/ShareModal.jsx";
 import { RxShare1 } from "react-icons/rx";

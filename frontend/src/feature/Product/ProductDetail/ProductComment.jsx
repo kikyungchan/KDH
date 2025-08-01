@@ -23,7 +23,7 @@ function ReviewSection({ productId, onReviewChange }) {
     const decoded = jwtDecode(token);
     currentUserId = parseInt(decoded.sub); // subject에 userId 있다고 가정
   }
-  // TODO: 본인리뷰에만 수정삭제버튼이보이는지 추후 테스트.
+
   useEffect(() => {
     axios
       .get(`/api/product/comment/${productId}`)
@@ -65,8 +65,16 @@ function ReviewSection({ productId, onReviewChange }) {
 
         return axios.get(`/api/product/comment/${productId}`);
       })
-      .then((res) => setComments(res.data));
-    // TODO: 구매자 여부 체크 예정
+      .then((res) => setComments(res.data))
+      .then(() => {
+        return axios.get(`/api/product/comment/check?productId=${productId}`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+      })
+      .then((res) => {
+        setIsPurchasable(res.data.hasPurchased);
+        setAlreadyReviewed(res.data.alreadyReviewed);
+      });
   }
 
   function handleAddCommentButton() {
@@ -109,6 +117,16 @@ function ReviewSection({ productId, onReviewChange }) {
         return axios.get(`/api/product/comment/${productId}`);
       })
       .then((res) => setComments(res.data))
+      .then(() => {
+        return axios.get(`/api/product/comment/check?productId=${commentId}`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+      })
+      .then((res) => {
+        setAlreadyReviewed(res.data.alreadyReviewed);
+      })
       .catch((err) => console.log(err));
   }
 

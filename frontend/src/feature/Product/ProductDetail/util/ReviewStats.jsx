@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import "../css/ReviewStats.css"; // 그래프용 스타일 분리
+import "../../css/ReviewStats.css"; // 그래프용 스타일 분리
 
 export default function ReviewStats({ productId, refreshTrigger }) {
   const [stats, setStats] = useState(null);

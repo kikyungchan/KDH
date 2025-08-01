@@ -8,6 +8,7 @@ function NoticeSection({ style }) {
         display: "flex",
         justifyContent: "center",
         width: "100%",
+        fontSize: "13px",
         ...style,
       }}
     >
