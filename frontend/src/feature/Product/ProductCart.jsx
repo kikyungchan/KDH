@@ -273,7 +273,11 @@ function ProductCart(props) {
                   <img
                     src={item.imagePath}
                     alt="상품이미지"
+                    onClick={() =>
+                      navigate(`/product/view?id=${item.productId}`)
+                    }
                     style={{
+                      cursor: "pointer",
                       width: "80px",
                       height: "80px",
                       objectFit: "cover",

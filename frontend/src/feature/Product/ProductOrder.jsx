@@ -239,7 +239,15 @@ function Order(props) {
           <h4>주문 상품 정보</h4>
           {items.map((item, idx) => (
             <div key={idx} className="order-product">
-              <img src={item.imagePath} width={100} alt="상품" />
+              <img
+                onClick={() =>
+                  window.open(`/product/view?id=${item.productId}`, "_blank")
+                }
+                src={item.imagePath}
+                // width={100}
+                alt="상품"
+                style={{ width: "150px", height: "150px", cursor: "pointer" }}
+              />
               <div className="order-product-info">
                 <div>
                   <strong>{item.productName}</strong>
