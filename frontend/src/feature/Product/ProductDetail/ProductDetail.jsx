@@ -127,9 +127,10 @@ export function ProductDetail() {
                 />
               </h2>
               <p>{product.price.toLocaleString()}원</p>
-              <p style={{ whiteSpace: "pre-line", fontSize: "12px" }}>
-                {product.info}
-              </p>
+              <p
+                style={{ whiteSpace: "pre-line", fontSize: "12px" }}
+                dangerouslySetInnerHTML={{ __html: product.info }}
+              ></p>
               <hr />
 
               {/*옵션선택 드롭다운*/}
