@@ -16,9 +16,14 @@ public class ProductLikeController {
 
     @GetMapping("/{id}/like-status")
     public ResponseEntity<?> getLikestatus(@PathVariable("id") Integer productId,
-                                           @RequestHeader("Authorization") String auth) {
-        boolean liked = productLikeService.getLikeStatus(productId, auth);
+                                           @RequestHeader(value = "Authorization", required = false) String auth) {
         int count = productLikeService.getLikeCount(productId);
+        boolean liked = false;
+
+        if (auth != null && !auth.isBlank()) {
+            liked = productLikeService.getLikeStatus(productId, auth);
+        }
+
         return ResponseEntity.ok().body(new LikeResponse(liked, count));
     }
 
