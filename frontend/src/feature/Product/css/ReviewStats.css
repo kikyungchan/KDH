@@ -1,13 +1,17 @@
 .review-stats {
     display: flex;
-    gap: 50px;
-    margin: 30px 0;
+    gap: 40px;
+    margin: 30px auto;
+    padding: 2rem 5rem;
+    background-color: #f4f4f4;
+    font-size: 14px;
 }
 
 .average {
     font-size: 20px;
     font-weight: bold;
     text-align: center;
+    min-width: 120px;
 }
 
 .score {
@@ -31,7 +35,9 @@
 }
 
 .label {
-    width: 40px;
+    width: 50px;
+    padding-left: 5px;
+    text-align: left;
 }
 
 .bar {

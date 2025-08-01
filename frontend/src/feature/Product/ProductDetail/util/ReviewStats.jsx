@@ -28,7 +28,7 @@ export default function ReviewStats({ productId, refreshTrigger }) {
           {typeof average === "number" ? average.toFixed(1) : "0.0"}
         </div>
         <div className="stars">
-          ★ {typeof average === "number" ? average.toFixed(1) : "0.0"} / 5
+          ★ {typeof average === "number" ? average.toFixed(1) : "0.0"} / 5.0
         </div>
         <div>({total ?? 0}개의 구매평)</div>
       </div>
