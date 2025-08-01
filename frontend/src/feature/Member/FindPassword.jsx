@@ -44,6 +44,7 @@ export function FindPassword() {
   const [isSending, setIsSending] = useState(false);
 
   //정규식과 일치하는지
+  const [loginIdValid, setLoginIdValid] = useState(false);
   const [emailValid, setEmailValid] = useState(true);
 
   const navigate = useNavigate();
@@ -79,8 +80,24 @@ export function FindPassword() {
     };
   }, [remainTime]);
 
+  // 이메일 입력값 변경시 상태 초기화
+  useEffect(() => {
+    setEmailSent(false);
+    setAuthCompleted(false);
+    setAuthFailed(false);
+    setAuthCode("");
+    setRemainTime(0);
+  }, [email]);
+
   // 아이디 중복 확인 버튼
   function handleCheckLoginId() {
+    // 아이디 정규식 검증
+    const isLoginIdOk = loginIdRegEx.test(loginId);
+    setLoginIdValid(isLoginIdOk);
+
+    // 정규식이거나 비어있으면  return
+    if (!isLoginIdOk || loginId.trim() === "") return;
+
     if (!loginId.trim()) {
       setLoginIdCheckMessage("아이디를 입력하세요.");
       setLoginIdExists(false);
@@ -156,7 +173,7 @@ export function FindPassword() {
           setRemainTime(res.data.remainTimeInSec);
         } else {
           alert(res?.data?.message || "인증번호 전송에 실패했습니다.");
-          setRemainTime(res.data.remainTimeInSec);
+          return;
         }
       })
       .catch((err) => {
@@ -302,6 +319,7 @@ export function FindPassword() {
                       size="sm"
                       hidden={authCompleted}
                       className="mb-2"
+                      disabled={authCompleted || remainTime > 0 || isSending}
                     >
                       {isSending ? (
                         <>

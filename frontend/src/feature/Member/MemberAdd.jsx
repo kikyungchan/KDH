@@ -16,6 +16,7 @@ import { useContext, useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router";
 import { AuthenticationContext } from "../common/AuthenticationContextProvider.jsx";
+import PrivacyModal from "./PrivacyModal.jsx";
 
 export function MemberAdd() {
   // 입력 항목 정규식
@@ -81,6 +82,10 @@ export function MemberAdd() {
   const [loginIdChecked, setLoginIdChecked] = useState(false);
   const [loginIdCheckMessage, setLoginIdCheckMessage] = useState("");
 
+  // 개인정보 수집
+  const [showPrivacyModal, setShowPrivacyModal] = useState(false);
+  const [privacyAgreed, setPrivacyAgreed] = useState(false);
+
   // 로그인 여부
   const { user } = useContext(AuthenticationContext);
 
@@ -102,7 +107,11 @@ export function MemberAdd() {
   // password 와 password2(비밀번호 확인)이 일치하지 않으면 가입버튼 비활성화
   const passwordConfirm = password === password2;
   const disabled =
-    !allFieldsFilled || !passwordConfirm || !loginIdChecked || !authCompleted;
+    !allFieldsFilled ||
+    !passwordConfirm ||
+    !loginIdChecked ||
+    !authCompleted ||
+    !privacyAgreed;
 
   // 로그인 되어 있을때 회원가입 접속 차단
   useEffect(() => {
@@ -160,6 +169,11 @@ export function MemberAdd() {
     ) {
       return;
     }
+    if (!privacyAgreed) {
+      alert("개인정보 수집 및 이용에 동의하셔야 회원가입이 가능합니다.");
+      return;
+    }
+
     if (isProcessing) return; // 중복 클릭 방지
     setIsProcessing(true);
 
@@ -190,6 +204,12 @@ export function MemberAdd() {
   function handleCheckLoginId() {
     if (!loginId.trim()) {
       setLoginIdCheckMessage("아이디를 입력하세요.");
+      return;
+    }
+
+    if (!loginIdRegEx.test(loginId.trim())) {
+      setLoginIdCheckMessage("유효한 아이디 형식이 아닙니다.");
+      setLoginIdChecked(false);
       return;
     }
 
@@ -302,6 +322,11 @@ export function MemberAdd() {
         alert("서버 오류로 인증번호 확인에 실패했습니다.");
         setAuthFailed(true);
       });
+  };
+
+  // 개인정보 수집 모달
+  const privacyModalShow = () => {
+    setShowPrivacyModal(true);
   };
 
   return (
@@ -677,7 +702,20 @@ export function MemberAdd() {
                     </Button>
                   </FormGroup>
                 </div>
-
+                <div className="d-flex justify-content-end mt-4">
+                  {privacyAgreed && (
+                    <p className="text-success me-2">
+                      개인정보 수집 및 이용에 동의 하셨습니다.
+                    </p>
+                  )}
+                  <Button
+                    variant={privacyAgreed ? "secondary" : "dark"}
+                    disabled={privacyAgreed}
+                    onClick={privacyModalShow}
+                  >
+                    {privacyAgreed ? "동의 완료" : "개인정보 수집 동의"}
+                  </Button>
+                </div>
                 <div className="text-end mt-2">
                   <Button
                     onClick={handleSignUpClick}
@@ -703,6 +741,12 @@ export function MemberAdd() {
               </Card.Body>
             </Card>
           </Col>
+          {/* 동의 모달 */}
+          <PrivacyModal
+            show={showPrivacyModal}
+            onClose={() => setShowPrivacyModal(false)}
+            onAgree={(agreed) => setPrivacyAgreed(agreed)}
+          />
         </Row>
       </Container>
     </div>

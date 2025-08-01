@@ -28,7 +28,6 @@ export function ResetPassword() {
 
   const location = useLocation();
   const token = location.state?.token;
-  console.log("넘겨받은 토큰: ", token);
 
   // password 와 password2(비밀번호 확인)이 일치하지 않으면 버튼 비활성화
   let changePasswordButtonDisabled = false;
@@ -49,14 +48,14 @@ export function ResetPassword() {
 
   // 전송 버튼 클릭 여부
   const [isSubmitted, setIsSubmitted] = useState(false);
-
+  
   // 새로고침시 토큰 초기화
   useEffect(() => {
     if (!token) {
       alert("유효하지 않은 접근입니다.");
       navigate("/");
     }
-  }, []);
+  }, [token, navigate]);
 
   const handleChangePasswordButton = () => {
     setIsSubmitted(true);

@@ -266,7 +266,7 @@ public class MemberController {
             return ResponseEntity.status(400).body("일치하는 정보가 없습니다.");
         }
         String token = UUID.randomUUID().toString();
-        redisUtil.setDataExpire(token, dto.getLoginId(), 300); //5분 TTL
+        redisUtil.setDataExpire(token, dto.getLoginId(), 180); //3분 TTL
 
         return ResponseEntity.ok().body(Map.of("token", token));
     }

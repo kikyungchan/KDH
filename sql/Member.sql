@@ -10,7 +10,10 @@ CREATE TABLE member
     birthday DATE               NOT NULL
 );
 
-DROP TABLE member;
+# DROP TABLE member;
+
+ALTER TABLE member
+    ADD COLUMN privacy_agreed BOOLEAN NOT NULL DEFAULT FALSE;
 
 ALTER TABLE member
     ADD zipcode VARCHAR(10) NOT NULL;
