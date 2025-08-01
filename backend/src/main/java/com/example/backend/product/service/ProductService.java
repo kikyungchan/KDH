@@ -37,6 +37,7 @@ public class ProductService {
     private final MemberRepository memberRepository;
     private final OrderRepository orderRepository;
     private final OrderItemRepository orderItemRepository;
+    private final GuestOrderRepository guestOrderRepository;
 
 
     // url에서 key만 따오는 메소드
@@ -313,8 +314,11 @@ public class ProductService {
     }
 
     public boolean isHotProduct(Integer productId) {
-        LocalDateTime oneWeekAgo = LocalDateTime.now().minusWeeks(1);
-        Integer sales = orderItemRepository.getWeeklySales(productId, oneWeekAgo);
-        return sales != null && sales >= 10;
+        LocalDateTime oneWeekAgo = LocalDateTime.now().minusDays(7);
+        Integer memberSales = orderItemRepository.getWeeklySales(productId, oneWeekAgo);
+        Integer guestSales = guestOrderRepository.getWeeklySales(productId, oneWeekAgo);
+
+        int total = (memberSales != null ? memberSales : 0) + (guestSales != null ? guestSales : 0);
+        return total >= 10;
     }
 }

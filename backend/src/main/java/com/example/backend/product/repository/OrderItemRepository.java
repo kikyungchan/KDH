@@ -17,13 +17,22 @@ public interface OrderItemRepository extends JpaRepository<OrderItem, Integer> {
     boolean existsByMemberIdAndProductId(@Param("memberId") Integer memberId,
                                          @Param("productId") Integer productId);
 
-    @Query(value = """
-            SELECT SUM(oi.quantity)
-            FROM order_item oi
-            JOIN orders o ON oi.order_id = o.id
-            WHERE oi.product_id = :productId
-              AND o.created_at > :since
-            """, nativeQuery = true)
+    // 회원 최근 1주일 주문 주회(HOT배지)
+//    @Query(value = """
+//            SELECT SUM(oi.quantity)
+//            FROM order_item oi
+//            JOIN orders o ON oi.order_id = o.id
+//            WHERE oi.product_id = :productId
+//              AND o.created_at > :since
+//            """, nativeQuery = true)
+//    Integer getWeeklySales(@Param("productId") Integer productId,
+//                           @Param("since") LocalDateTime since);
+
+    @Query("SELECT SUM(oi.quantity) " +
+           "FROM OrderItem oi " +
+           "WHERE oi.order.createdAt > :since " +
+           "AND oi.product.id = :productId")
     Integer getWeeklySales(@Param("productId") Integer productId,
                            @Param("since") LocalDateTime since);
+
 }
