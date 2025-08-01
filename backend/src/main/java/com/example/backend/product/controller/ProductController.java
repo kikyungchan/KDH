@@ -11,13 +11,16 @@ import com.example.backend.product.service.ProductService;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.awt.print.Pageable;
 import java.security.SecureRandom;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -174,6 +177,19 @@ public class ProductController {
         productService.add(form);
 
         return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/hot-random")
+    public ResponseEntity<List<ProductMainSlideDto>> getRandomHotProducts() {
+        LocalDateTime oneWeekAgo = LocalDateTime.now().minusDays(7);
+        PageRequest pageable = PageRequest.of(0, 5);
+        List<Product> hotProducts = productRepository.findHotProductsRandomLimit(oneWeekAgo, pageable);
+        List<ProductMainSlideDto> result = new ArrayList<>();
+        for (Product product : hotProducts) {
+            ProductMainSlideDto dto = ProductMainSlideDto.from(product);
+            result.add(dto);
+        }
+        return ResponseEntity.ok(result);
     }
 
 }

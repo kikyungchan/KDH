@@ -19,6 +19,8 @@ import { QnaView } from "./feature/Qna/QnaView.jsx";
 import Main from "./feature/common/Main.jsx";
 import { ProductOrderComplete } from "./feature/Product/ProductOrderComplete.jsx";
 import { CartProvider } from "./feature/Product/CartContext.jsx";
+import MainPage from "./feature/common/MainPage.jsx";
+import MainSlide from "./feature/common/MainSlide.jsx";
 
 function App() {
   // const username = prompt("닉네임을 입력해 주세요");
@@ -27,7 +29,8 @@ function App() {
       <BrowserRouter>
         <CartProvider>
           <Routes>
-            <Route path="/" element={<Main />}>
+            <Route path="/" element={<MainPage />}>
+              <Route index element={<MainSlide />} />
               {/*<Route path="/" */}
               <Route path="product/regist" element={<ProductRegist />} />
               <Route path="product/list" element={<ProductList />} />
