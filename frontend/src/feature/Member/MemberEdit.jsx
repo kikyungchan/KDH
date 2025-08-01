@@ -45,10 +45,10 @@ export function MemberEdit() {
   const [newPassword2, setNewPassword2] = useState("");
 
   // Modal
-
   const [saveModalShow, setSaveModalShow] = useState(false);
   const [changePasswordModalShow, setChangePasswordModalShow] = useState(false);
   const [cancelSaveModalShow, setCancelSaveModalShow] = useState(false);
+
   // 정규식과 일치하는지
   const [passwordValid, setPasswordValid] = useState(true);
   const [nameValid, setNameValid] = useState(true);
@@ -185,7 +185,6 @@ export function MemberEdit() {
         newPassword: newPassword1,
       })
       .then((res) => {
-        console.log("비밀번호 변경 성공");
         setOldPassword("");
         setNewPassword1("");
         setNewPassword2("");

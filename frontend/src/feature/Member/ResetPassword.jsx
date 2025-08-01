@@ -9,9 +9,11 @@ import {
   FormLabel,
   FormText,
   Row,
+  Spinner,
 } from "react-bootstrap";
 import { useLocation, useNavigate } from "react-router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import axios from "axios";
 
 export function ResetPassword() {
   // password 정규식
@@ -20,13 +22,27 @@ export function ResetPassword() {
   const [password, setPassword] = useState("");
   const [password2, setPassword2] = useState("");
 
+  const [isPasswordProcessing, setIsPasswordProcessing] = useState(false);
+
   const navigate = useNavigate();
 
   const location = useLocation();
-  const { loginId, email } = location.state || {}; // fallback 처리도 함께
+  const token = location.state?.token;
+  console.log("넘겨받은 토큰: ", token);
 
-  // password 와 password2(비밀번호 확인)이 일치하지 않으면 가입버튼 비활성화
-  const passwordConfirm = password === password2;
+  // password 와 password2(비밀번호 확인)이 일치하지 않으면 버튼 비활성화
+  let changePasswordButtonDisabled = false;
+  let passwordConfirm = true;
+  if (password === "") {
+    changePasswordButtonDisabled = true;
+  }
+  if (password2 === "") {
+    changePasswordButtonDisabled = true;
+  }
+  if (password !== password2) {
+    changePasswordButtonDisabled = true;
+    passwordConfirm = false;
+  }
 
   // password 정규식 검증
   const [passwordValid, setPasswordValid] = useState(true);
@@ -34,7 +50,55 @@ export function ResetPassword() {
   // 전송 버튼 클릭 여부
   const [isSubmitted, setIsSubmitted] = useState(false);
 
-  function handleChangePasswordButton() {}
+  // 새로고침시 토큰 초기화
+  useEffect(() => {
+    if (!token) {
+      alert("유효하지 않은 접근입니다.");
+      navigate("/");
+    }
+  }, []);
+
+  const handleChangePasswordButton = () => {
+    setIsSubmitted(true);
+    // 정규식 검증
+    const isPasswordOk = passwordRegEx.test(password);
+
+    // 중복 클릭 방어
+    if (isPasswordProcessing) return;
+    setIsPasswordProcessing(true);
+
+    // 각 항목 입력하지않으면 버튼 비활성화
+    const requiredFields = [password, password2];
+
+    const allFieldsFilled = requiredFields.every(
+      (field) => field.trim() !== "",
+    );
+
+    setPasswordValid(isPasswordOk);
+
+    if (!isPasswordOk || !allFieldsFilled) {
+      setIsPasswordProcessing(false);
+      return;
+    }
+
+    axios
+      .post("/api/member/reset-password", {
+        newPassword: password,
+        token: token,
+      })
+      .then((res) => {
+        navigate("/login");
+        setPassword("");
+        setPassword2("");
+      })
+      .catch((err) => {
+        console.error("비밀번호 변경 실패", err.response?.data || err.message);
+        alert("비밀번호 변경에 실패했습니다. 다시 시도해주세요.");
+      })
+      .finally(() => {
+        setIsPasswordProcessing(false);
+      });
+  };
 
   return (
     <Container
@@ -74,7 +138,7 @@ export function ResetPassword() {
                   placeholder="비밀번호 확인"
                   onChange={(e) => setPassword2(e.target.value)}
                 />
-                {password2 && password !== password2 && (
+                {passwordConfirm || (
                   <div style={{ color: "red", fontSize: "0.875rem" }}>
                     비밀번호가 일치하지 않습니다.
                   </div>
@@ -87,8 +151,24 @@ export function ResetPassword() {
                     variant="dark"
                     size="sm"
                     onClick={handleChangePasswordButton}
+                    disabled={
+                      changePasswordButtonDisabled || isPasswordProcessing
+                    }
                   >
-                    비밀번호 재설정
+                    {isPasswordProcessing ? (
+                      <>
+                        <Spinner
+                          animation="border"
+                          size="sm"
+                          role="status"
+                          aria-hidden="true"
+                          className="me-2"
+                        />
+                        저장 중...
+                      </>
+                    ) : (
+                      "재설정"
+                    )}
                   </Button>
                 </div>
                 <div>
