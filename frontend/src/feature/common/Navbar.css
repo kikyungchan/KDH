@@ -1,8 +1,9 @@
 .navbar-container {
     display: flex;
-    justify-content: space-between;
+    justify-content: center;
     align-items: center;
-    padding: 1.5rem 4rem;
+    padding: 2rem 4rem;
+    gap: 35rem;
 }
 
 .navbar-left {
