@@ -190,7 +190,7 @@ export function MemberAdd() {
         addressDetail: addressDetail,
       })
       .then((res) => {
-        navigate("/");
+        navigate("/login");
       })
       .catch((err) => {
         console.log("에러응답", err.response?.data);

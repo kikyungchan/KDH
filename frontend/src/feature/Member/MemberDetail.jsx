@@ -178,7 +178,10 @@ export function MemberDetail() {
                   <Modal.Footer>
                     <Button
                       variant="dark"
-                      onClick={() => setWithdrawModalShow(false)}
+                      onClick={() => {
+                        setWithdrawModalShow(false);
+                        setOldPassword("");
+                      }}
                     >
                       취소
                     </Button>
