@@ -1,0 +1,54 @@
+.review-stats {
+    display: flex;
+    gap: 40px;
+    margin: 30px auto;
+    padding: 2rem 5rem;
+    background-color: #f4f4f4;
+    font-size: 14px;
+}
+
+.average {
+    font-size: 20px;
+    font-weight: bold;
+    text-align: center;
+    min-width: 120px;
+}
+
+.score {
+    font-size: 48px;
+    color: orange;
+}
+
+.stars {
+    font-size: 20px;
+    margin-top: 5px;
+}
+
+.bars {
+    flex: 1;
+}
+
+.bar-line {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.label {
+    width: 50px;
+    padding-left: 5px;
+    text-align: left;
+}
+
+.bar {
+    background-color: #eee;
+    height: 12px;
+    width: 200px;
+    margin: 0 10px;
+    position: relative;
+}
+
+.fill {
+    background-color: orange;
+    height: 100%;
+}

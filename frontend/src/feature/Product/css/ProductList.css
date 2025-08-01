@@ -21,13 +21,19 @@
 }
 
 .product-image-wrapper {
+    /*width: 100%;*/
+    /*height: 200px; !* 이미지 영역 높이 고정 *!*/
+    /*overflow: hidden;*/
+    /*display: flex;*/
+    /*align-items: center;*/
+    /*justify-content: center;*/
+    /*background-color: rgba(255, 255, 19, 0.56);*/
     width: 100%;
-    height: 200px; /* 이미지 영역 높이 고정 */
+    height: 200px;
     overflow: hidden;
     display: flex;
     align-items: center;
     justify-content: center;
-    background-color: #ffffff;
 }
 
 .product-card:hover {
@@ -38,7 +44,7 @@
 /* 이미지 자체 */
 .product-image {
     height: 100%;
-    width: auto;
+    width: 100%;
     object-fit: contain;
 }
 
@@ -72,7 +78,6 @@
     background-color: #444;
     color: #fff;
     padding: 3px 6px;
-    border-radius: 4px;
     display: inline-block;
 }
 
@@ -88,8 +93,17 @@
     background-color: #a7f3d0; /* 스카이그린 */
     color: #065f46;
     padding: 3px 6px;
-    border-radius: 4px;
     font-weight: bold;
     display: inline-block;
 }
+
+.hot-badge {
+    font-size: 11px;
+    background-color: #f87171; /* 연한 빨강 */
+    color: #7f1d1d; /* 진한 빨강 */
+    padding: 3px 6px;
+    font-weight: bold;
+    display: inline-block;
+}
+
 

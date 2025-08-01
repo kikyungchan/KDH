@@ -53,4 +53,10 @@ INSERT INTO member_role
     (member_id, role_name)
 VALUES (139, 'admin');
 
+ALTER TABLE member
+    ADD zipcode VARCHAR(10) NOT NULL;
+
+ALTER TABLE member
+    ADD address_detail VARCHAR(255) NULL;
+
 

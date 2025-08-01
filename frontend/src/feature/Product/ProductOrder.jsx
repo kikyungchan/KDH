@@ -1,16 +1,16 @@
-import React, { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router";
+import React, { useEffect, useState } from "react";
 import axios from "axios";
-import "./css/Order.css";
+import "./css/ProductOrder.css";
 
 function Order(props) {
   const [postalCode, setPostalCode] = useState("");
-  const [detailedAddress, setDetailedAddress] = useState("");
   const [memo, setMemo] = useState("");
   const [customMemo, setCustomMemo] = useState("");
   const [receiverName, setReceiverName] = useState("");
   const [receiverPhone, setReceiverPhone] = useState("");
   const [receiverAddress, setReceiverAddress] = useState("");
+  const [receiverDetailAddress, setReceiverDetailAddress] = useState("");
   const [sameAsOrderer, setSameAsOrderer] = useState(false);
   const [name, setName] = useState("");
   const [address, setAddress] = useState("");
@@ -25,7 +25,6 @@ function Order(props) {
   const shippingFee = totalItemPrice >= 100000 ? 0 : 3000;
   const navigate = useNavigate();
 
-  // TODO: 우편번호 상세주소 회원가입시 주소입력하면서 받으면 좋을듯
   useEffect(() => {
     const token = localStorage.getItem("token");
     if (token) {
@@ -68,7 +67,7 @@ function Order(props) {
       !receiverName.trim() ||
       !receiverPhone.trim() ||
       !receiverAddress.trim() ||
-      !detailedAddress.trim() ||
+      !receiverDetailAddress.trim() ||
       !postalCode.trim()
     ) {
       alert("배송지 정보를 모두 입력해 주세요.");
@@ -88,11 +87,13 @@ function Order(props) {
       shippingAddress: address,
       memo: memo === "직접 작성" ? customMemo : memo,
       totalPrice: item.price * item.quantity,
+      zipcode: postalCode,
+      addressDetail: receiverDetailAddress,
     }));
-    console.log(payloadList);
 
     if (token) {
       // 회원 주문
+      let orderToken = "";
       axios
         .post("/api/product/order", payloadList, {
           headers: {
@@ -100,15 +101,39 @@ function Order(props) {
           },
         })
         .then((res) => {
-          //주문 성공후 장바구니 비우기
-          return axios.delete("/api/product/cart/deleteAll", {
+          orderToken = res.data.orderToken;
+
+          // 구매한 상품들의 cartId 목록
+          const cartIdsToDelete = items
+            .map((item) => ({ cartId: item.cartId }))
+            .filter((id) => id.cartId != null);
+
+          if (cartIdsToDelete.length > 0) return;
+
+          return axios.delete("/api/product/cart/delete", {
             headers: {
               Authorization: `Bearer ${token}`,
             },
+            data: cartIdsToDelete,
           });
         })
         .then((res) => {
           alert("주문이 완료되었습니다.");
+          navigate("/product/order/complete", {
+            state: {
+              items,
+              orderToken,
+              orderer: { name, phone, address },
+              receiver: {
+                name: receiverName,
+                phone: receiverPhone,
+                address: receiverAddress,
+                postalCode,
+                receiverDetailAddress,
+              },
+              memo: memo === "직접 작성" ? customMemo : memo,
+            },
+          });
         })
         .catch((err) => {
           console.log(err);
@@ -132,38 +157,76 @@ function Order(props) {
         receiverPhone: receiverPhone,
         receiverAddress: receiverAddress,
         postalCode: postalCode,
-        detailedAddress: detailedAddress,
+        detailedAddress: receiverDetailAddress,
       }));
-      axios
-        .post("/api/product/order/guest", payloadList)
-        .then((res) => {
-          const token = res.data.guestOrderToken;
-          alert("비회원 주문 완료\n주문번호: " + token);
-          localStorage.setItem("guestOrderToken", token);
+      axios.post("/api/product/order/guest", payloadList).then((res) => {
+        const token = res.data.guestOrderToken;
+        alert("주문이 완료되었습니다.");
 
-          localStorage.removeItem("guestCart");
-          localStorage.removeItem("guestOrderToken");
-        })
-        .catch((err) => {
-          console.log(err);
-          alert("주문 실패");
+        navigate("/product/order/complete", {
+          state: {
+            items,
+            orderToken: token,
+            orderer: { name, phone, address },
+            receiver: {
+              name: receiverName,
+              phone: receiverPhone,
+              address: receiverAddress,
+              postalCode,
+              receiverDetailAddress,
+            },
+            memo: memo === "직접 작성" ? customMemo : memo,
+          },
         });
+      });
     }
   }
 
-  // 체크박스 핸들러
+  // 주문자 정보와 동일 체크박스
   function handleSameAsOrdererChange(e) {
     const checked = e.target.checked;
     setSameAsOrderer(checked);
-    if (checked) {
-      setReceiverName(name);
-      setReceiverPhone(phone);
-      setReceiverAddress(address);
-    } else {
+    const token = localStorage.getItem("token");
+    if (!checked) {
       setReceiverName("");
       setReceiverPhone("");
       setReceiverAddress("");
+      setPostalCode("");
+      setReceiverDetailAddress("");
+      return;
     }
+    if (token) {
+      // 회원: DB에서 배송정보 불러오기
+      axios
+        .get("/api/product/member/info", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        })
+        .then((res) => {
+          setReceiverName(res.data.name);
+          setReceiverPhone(res.data.phone);
+          setReceiverAddress(res.data.address);
+          setPostalCode(res.data.zipcode);
+          setReceiverDetailAddress(res.data.addressDetail);
+        });
+    } else {
+      setReceiverName(name);
+      setReceiverPhone(phone);
+      setReceiverAddress(address);
+      setPostalCode("");
+      setReceiverDetailAddress("");
+    }
+  }
+
+  function handleSearchAddress() {
+    new window.daum.Postcode({
+      oncomplete: function (data) {
+        setReceiverAddress(data.address); // 도로명 주소
+        setPostalCode(data.zonecode); // 우편번호 필요하면 이것도
+        console.log("작동");
+      },
+    }).open();
   }
 
   return (
@@ -176,7 +239,14 @@ function Order(props) {
           <h4>주문 상품 정보</h4>
           {items.map((item, idx) => (
             <div key={idx} className="order-product">
-              <img src={item.imagePath} width={100} alt="상품" />
+              <img
+                onClick={() =>
+                  window.open(`/product/view?id=${item.productId}`, "_blank")
+                }
+                src={item.imagePath}
+                alt="상품"
+                style={{ width: "150px", height: "150px", cursor: "pointer" }}
+              />
               <div className="order-product-info">
                 <div>
                   <strong>{item.productName}</strong>
@@ -290,7 +360,9 @@ function Order(props) {
             value={postalCode}
             onChange={(e) => setPostalCode(e.target.value)}
           />
-          <button className="order-input-full">주소찾기</button>
+          <button onClick={handleSearchAddress} className="order-input-full">
+            주소찾기
+          </button>
         </div>
         <input
           placeholder="주소"
@@ -301,8 +373,8 @@ function Order(props) {
         <input
           placeholder="상세주소"
           className="order-input-full"
-          value={detailedAddress}
-          onChange={(e) => setDetailedAddress(e.target.value)}
+          value={receiverDetailAddress}
+          onChange={(e) => setReceiverDetailAddress(e.target.value)}
         />
       </div>
 

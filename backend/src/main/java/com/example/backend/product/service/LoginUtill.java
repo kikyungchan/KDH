@@ -6,8 +6,8 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class LoginUtill {
-    public Long getLoginMemberId() {
+    public Integer getLoginMemberId() {
         Jwt jwt = (Jwt) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        return Long.valueOf(jwt.getSubject());
+        return Integer.valueOf(jwt.getSubject());
     }
 }

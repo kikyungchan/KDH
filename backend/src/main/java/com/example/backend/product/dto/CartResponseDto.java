@@ -1,22 +1,21 @@
 package com.example.backend.product.dto;
 
 import com.example.backend.product.entity.Cart;
-import com.example.backend.product.entity.ProductImage;
 import lombok.Data;
 
 import java.util.List;
 
 @Data
 public class CartResponseDto {
-    private Long cartId;
+    private Integer cartId;
     private String imagePath;
     private String productName;
     private String optionName;
     private Integer quantity;
     private Integer price;
     private Integer totalPrice;
-    private Long productId;
-    private Long optionId;
+    private Integer productId;
+    private Integer optionId;
 
     private List<ProductOptionDto> options;
 
@@ -25,7 +24,7 @@ public class CartResponseDto {
         this.cartId = cart.getId();
         this.productName = cart.getProduct().getProductName();
         this.quantity = cart.getQuantity();
-        this.productId = Long.valueOf(cart.getProduct().getId());
+        this.productId = cart.getProduct().getId();
         // 옵션이 있는 경우
         if (cart.getOption() != null) {
             this.price = cart.getOption().getPrice();
@@ -37,7 +36,7 @@ public class CartResponseDto {
             this.optionName = null;
             this.optionId = null;
         }
-        
+
         this.totalPrice = this.price * this.quantity;
 
         //썸네일

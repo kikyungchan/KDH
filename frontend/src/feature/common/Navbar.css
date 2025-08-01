@@ -1,0 +1,91 @@
+.navbar-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 2rem 4rem;
+    gap: 25rem;
+
+}
+
+.navbar-left {
+    display: flex;
+    gap: 2.5rem;
+    align-items: center;
+    font-weight: 500;
+    font-size: 1rem;
+}
+
+.navbar-icons {
+    display: flex;
+    gap: 2rem;
+    font-size: 1.4rem;
+    color: white;
+    align-items: center;
+    padding-right: 1rem;
+
+}
+
+.navbar-icon {
+    display: flex;
+    align-items: center;
+    color: black;
+    cursor: pointer;
+    position: relative;
+}
+
+/* 필요 시 장바구니 뱃지용 wrapper 예시 */
+.cart-icon-wrapper {
+    position: relative;
+}
+
+.search-bar-wrapper {
+    position: absolute;
+    top: 10%;
+    right: 2rem;
+    align-items: center;
+    background: white;
+    border: 1px solid #ccc;
+    border-radius: 30px;
+    padding: 0.5rem 1rem;
+    z-index: 999;
+    display: none;
+}
+
+.search-bar-wrapper.active {
+    display: flex;
+}
+
+.search-input {
+    border: none;
+    outline: none;
+    padding: 0.3rem 1rem;
+    font-size: 14px;
+    width: 200px;
+}
+
+.search-close-icon {
+    margin-right: 0.5rem;
+    cursor: pointer;
+}
+
+.cart-icon-wrapper {
+    position: relative;
+}
+
+.cart-badge {
+    position: absolute;
+    top: -6px;
+    right: -6px;
+    background-color: red;
+    color: white;
+    border-radius: 50%;
+    font-size: 12px;
+    padding: 2px 6px;
+    font-weight: bold;
+}
+
+.navbar-logo {
+    font-size: 24px;
+    font-weight: bold;
+    text-decoration: none;
+}

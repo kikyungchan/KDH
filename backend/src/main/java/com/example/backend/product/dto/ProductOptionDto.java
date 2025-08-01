@@ -4,7 +4,7 @@ import lombok.Data;
 
 @Data
 public class ProductOptionDto {
-    private Long id;
+    private Integer id;
     private String optionName;
     private Integer price;
 }

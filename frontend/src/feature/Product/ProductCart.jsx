@@ -1,9 +1,11 @@
-import React, { useEffect, useState } from "react";
 import { Col, Container, Row } from "react-bootstrap";
-import axios from "axios";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
+import axios from "axios";
+import { useCart } from "./CartContext.jsx";
 
 function ProductCart(props) {
+  const { setCartCount } = useCart();
   const navigate = useNavigate();
   const [showModal, setShowModal] = useState(false);
   const [selectedItem, setSelectedItem] = useState(null);
@@ -94,6 +96,7 @@ function ProductCart(props) {
         .then((res) => {
           setCartItems(res.data); //
           setCheckedIds([]);
+          setCartCount(res.data.length);
         })
         .catch((err) => {
           console.error("삭제 실패:", err);
@@ -106,13 +109,15 @@ function ProductCart(props) {
       setCartItems(newCartItems);
       setCheckedIds([]);
       localStorage.setItem("guestCart", JSON.stringify(newCartItems));
+      setCartCount(newCartItems.length);
     }
   }
 
   function handleUpdateCartItem() {
     const token = localStorage.getItem("token");
-    // 회원 장바구니 수정
+
     if (token) {
+      // 회원
       const data = {
         cartId: selectedItem.cartId,
         optionId: selectedOptionId,
@@ -126,7 +131,6 @@ function ProductCart(props) {
           },
         })
         .then(() => {
-          //변경 성공시 장바구니 목록 갱신
           return axios.get("/api/product/cart", {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -139,52 +143,60 @@ function ProductCart(props) {
         })
         .catch((err) => {});
     } else {
-      // 비회원 수정 처리
+      // 비회원
       const existingCart = JSON.parse(
         localStorage.getItem("guestCart") || "[]",
       );
 
-      const newOption = selectedItem.options.find(
-        (opt) => opt.id === selectedOptionId,
-      );
-      if (!newOption) return;
-
       let updatedCart = [...existingCart];
 
-      for (let i = 0; i < updatedCart.length; i++) {
-        const item = updatedCart[i];
+      // 옵션이 있는 상품
+      if ((selectedItem.options || []).length > 0) {
+        const newOption = selectedItem.options.find(
+          (opt) => opt.id === selectedOptionId,
+        );
+        if (!newOption) return;
 
-        const isEditingTarget =
-          item.productName === selectedItem.productName &&
-          item.optionName === selectedItem.optionName;
+        for (let i = 0; i < updatedCart.length; i++) {
+          const item = updatedCart[i];
 
-        const isTargetMerged =
-          item.productName === selectedItem.productName &&
-          item.optionName === newOption.optionName;
+          const isEditingTarget =
+            item.productName === selectedItem.productName &&
+            item.optionName === selectedItem.optionName;
 
-        // 병합 대상이 있음 (선택한 옵션이 이미 있음)
-        if (isTargetMerged && !isEditingTarget) {
-          item.quantity += selectedQuantity;
+          const isTargetMerged =
+            item.productName === selectedItem.productName &&
+            item.optionName === newOption.optionName;
 
-          // 기존 편집 대상 항목 제거
-          updatedCart = updatedCart.filter(
-            (it) =>
-              !(
-                it.productName === selectedItem.productName &&
-                it.optionName === selectedItem.optionName
-              ),
-          );
+          if (isTargetMerged && !isEditingTarget) {
+            item.quantity += selectedQuantity;
 
-          break;
+            updatedCart = updatedCart.filter(
+              (it) =>
+                !(
+                  it.productName === selectedItem.productName &&
+                  it.optionName === selectedItem.optionName
+                ),
+            );
+            break;
+          }
+
+          if (isEditingTarget) {
+            item.optionName = newOption.optionName;
+            item.price = newOption.price;
+            item.quantity = selectedQuantity;
+            item.optionId = newOption.id;
+            break;
+          }
         }
-
-        // 단순 수정만 필요한 경우
-        if (isEditingTarget) {
-          item.optionName = newOption.optionName;
-          item.price = newOption.price;
-          item.quantity = selectedQuantity;
-          item.optionId = newOption.id;
-          break;
+      } else {
+        // 옵션이 없는 상품 → 수량만 수정
+        for (let i = 0; i < updatedCart.length; i++) {
+          const item = updatedCart[i];
+          if (item.productId === selectedItem.productId) {
+            item.quantity = selectedQuantity;
+            break;
+          }
         }
       }
 
@@ -208,6 +220,7 @@ function ProductCart(props) {
           ...item,
           productId: item.productId,
           optionId: item.optionId,
+          cartId: item.cartId,
         })),
       },
     });
@@ -260,11 +273,14 @@ function ProductCart(props) {
                   <img
                     src={item.imagePath}
                     alt="상품이미지"
+                    onClick={() =>
+                      navigate(`/product/view?id=${item.productId}`)
+                    }
                     style={{
-                      width: "80px",
-                      height: "80px",
+                      cursor: "pointer",
+                      width: "120px",
+                      height: "100px",
                       objectFit: "cover",
-                      borderRadius: "6px",
                     }}
                   />
                   <div style={{ display: "flex", flexDirection: "column" }}>
@@ -390,30 +406,32 @@ function ProductCart(props) {
             </div>
 
             {/* 옵션 선택 */}
-            <div>
-              <label>옵션 선택</label>
-              <select
-                className="form-select"
-                value={
-                  selectedOptionId !== null ? String(selectedOptionId) : ""
-                }
-                onChange={(e) => {
-                  const value = e.target.value;
-                  console.log("선택된 값:", value);
-                  setSelectedOptionId(Number(value));
-                }}
-              >
-                <option value="">옵션 선택</option>
-                {(selectedItem.options || []).map((opt) => (
-                  <option key={opt.id} value={String(opt.id)}>
-                    {opt.optionName} (+{opt.price?.toLocaleString()}원)
-                  </option>
-                ))}
-              </select>
-            </div>
+            {(selectedItem.options || []).length > 0 && (
+              <div>
+                <label>옵션 선택</label>
+                <select
+                  className="form-select"
+                  value={
+                    selectedOptionId !== null ? String(selectedOptionId) : ""
+                  }
+                  onChange={(e) => {
+                    const value = e.target.value;
+                    setSelectedOptionId(Number(value));
+                  }}
+                >
+                  <option value="">옵션 선택</option>
+                  {selectedItem.options.map((opt) => (
+                    <option key={opt.id} value={String(opt.id)}>
+                      {opt.optionName} (+{opt.price?.toLocaleString()}원)
+                    </option>
+                  ))}
+                </select>
+              </div>
+            )}
 
             {/* 수량 설정 */}
             <div className="mt-3 d-flex align-items-center">
+              <label>수량</label>
               <button
                 onClick={() => setSelectedQuantity((q) => Math.max(1, q - 1))}
               >

@@ -2,10 +2,9 @@ package com.example.backend.qna.service;
 
 import com.example.backend.member.entity.Member;
 import com.example.backend.product.entity.Product;
-import com.example.backend.product.entity.ProductImage;
+import com.example.backend.product.dto.ProductImage;
 import com.example.backend.product.repository.ProductImageRepository;
 import com.example.backend.product.repository.ProductRepository;
-import com.example.backend.product.service.S3Uploader;
 import com.example.backend.qna.dto.QuestionAddForm;
 import com.example.backend.qna.dto.QuestionDto;
 import com.example.backend.qna.dto.QuestionListDto;
@@ -21,7 +20,6 @@ import com.example.backend.member.repository.MemberRepository;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 @Service
 @Transactional

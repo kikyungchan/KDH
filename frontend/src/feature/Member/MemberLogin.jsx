@@ -14,12 +14,14 @@ import { useContext, useState } from "react";
 import { useNavigate, Link } from "react-router";
 import axios from "axios";
 import { AuthenticationContext } from "../common/AuthenticationContextProvider.jsx";
+import { useCart } from "../Product/CartContext.jsx";
 
 export function MemberLogin() {
   const [loginId, setLoginId] = useState("");
   const [password, setPassword] = useState("");
   const { login } = useContext(AuthenticationContext);
   const navigate = useNavigate();
+  const { setCartCount } = useCart();
 
   function handleLogInButtonClick(e) {
     e.preventDefault(); // form submit 기본 동작 방지(리로드 X)
@@ -32,6 +34,17 @@ export function MemberLogin() {
       .then((res) => {
         const token = res.data.token;
         login(token);
+
+        // 로그인시 회원장바구니 새로고침.
+        axios
+          .get("/api/product/cart", {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          })
+          .then((res) => {
+            setCartCount(res.data.length);
+          });
 
         const message = res.data.message;
         console.log(message.text);

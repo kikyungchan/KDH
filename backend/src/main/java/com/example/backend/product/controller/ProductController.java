@@ -11,19 +11,19 @@ import com.example.backend.product.service.ProductService;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
-import org.eclipse.angus.mail.imap.protocol.INTERNALDATE;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.awt.print.Pageable;
 import java.security.SecureRandom;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 
 @RestController
 @RequiredArgsConstructor
@@ -41,7 +41,7 @@ public class ProductController {
 
         public static String generateToken() {
             StringBuilder sb = new StringBuilder();
-            for (int i = 0; i < 12; i++) {
+            for (int i = 0; i < 16; i++) {
                 sb.append(random.nextInt(10));
             }
             return sb.toString();
@@ -102,8 +102,9 @@ public class ProductController {
     @PostMapping("/order")
     public ResponseEntity<?> createOrder(@RequestBody List<OrderRequest> reqList,
                                          @RequestHeader("Authorization") String auth) {
-        productService.order(reqList, auth);
-        return ResponseEntity.ok().build();
+
+        String orderToken = productService.order(reqList, auth);
+        return ResponseEntity.ok(Map.of("orderToken", orderToken));
     }
 
     @PutMapping(value = "/edit", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
@@ -140,8 +141,10 @@ public class ProductController {
     }
 
     @GetMapping("/list")
-    public ResponseEntity<?> list(@RequestParam(defaultValue = "1") Integer page) {
-        return ResponseEntity.ok(productService.list(page));
+    public ResponseEntity<?> list(@RequestParam(defaultValue = "1") Integer page,
+                                  @RequestParam(required = false) String keyword,
+                                  @RequestParam(required = false) String sort) {
+        return ResponseEntity.ok(productService.list(page, keyword, sort));
     }
 
     @PostMapping(value = "/regist", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
@@ -151,8 +154,8 @@ public class ProductController {
                                     @RequestParam String category,
                                     @RequestParam String info,
                                     @RequestParam String options,
+                                    @RequestParam String detailText,
                                     @RequestParam("images") List<MultipartFile> images) {
-//        System.out.println("productForm = " + productForm);
         ObjectMapper objectMapper = new ObjectMapper();
         List<ProductOptionDto> optionList;
         try {
@@ -169,10 +172,24 @@ public class ProductController {
         form.setInfo(info);
         form.setOptions(optionList);
         form.setImages(images);
+        form.setDetailText(detailText);
 
         productService.add(form);
 
         return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/hot-random")
+    public ResponseEntity<List<ProductMainSlideDto>> getRandomHotProducts() {
+        LocalDateTime oneWeekAgo = LocalDateTime.now().minusDays(7);
+        PageRequest pageable = PageRequest.of(0, 5);
+        List<Product> hotProducts = productRepository.findHotProductsRandomLimit(oneWeekAgo, pageable);
+        List<ProductMainSlideDto> result = new ArrayList<>();
+        for (Product product : hotProducts) {
+            ProductMainSlideDto dto = ProductMainSlideDto.from(product);
+            result.add(dto);
+        }
+        return ResponseEntity.ok(result);
     }
 
 }
