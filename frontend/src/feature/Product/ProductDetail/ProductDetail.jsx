@@ -90,10 +90,6 @@ export function ProductDetail() {
             {/* 썸네일 이미지 */}
             {thumbnail && (
               <img
-                style={{
-                  width: "500px",
-                  height: "500px",
-                }}
                 className="product-thumbnail"
                 src={thumbnail}
                 alt="썸네일 이미지"
@@ -131,7 +127,9 @@ export function ProductDetail() {
                 />
               </h2>
               <p>{product.price.toLocaleString()}원</p>
-              <p>{product.info}</p>
+              <p style={{ whiteSpace: "pre-line", fontSize: "12px" }}>
+                {product.info}
+              </p>
               <hr />
 
               {/*옵션선택 드롭다운*/}

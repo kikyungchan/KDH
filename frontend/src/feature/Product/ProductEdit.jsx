@@ -244,6 +244,7 @@ export function ProductEdit() {
             <div className="product-edit-field">
               <label className="product-edit-label">상품설명</label>
               <textarea
+                rows={20}
                 value={form.info}
                 onChange={handleChange}
                 name="info"
