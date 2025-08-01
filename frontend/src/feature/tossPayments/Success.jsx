@@ -28,35 +28,22 @@ export function SuccessPage() {
           })
           .then((res) => {
             console.log("res : ", res.data);
+            navigate("/product/list");
             toast("결제가 완료되었습니다", { type: "success" });
           })
           .catch((err) => {
             console.log("err : ", err);
-            toast("결제에 실패하었습니다", { type: "error" });
+            const message = err.response.data.message ?? err.message;
+            // navigate(window.location.origin + `/pay/fail?message=${message}`);
+            // window.location.href = `/pay/fail?message=${message}`;
+            toast(message, { type: "error" });
+            navigate("/product/list");
           })
           .finally(() => {
             console.log("always");
             hasCalled.current = false;
           });
       }
-
-      /*const response = await fetch("/api/pay/confirm", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(requestData),
-      });
-
-      const json = await response.json();
-
-      if (!response.ok) {
-        // 결제 실패 비즈니스 로직을 구현하세요.
-        navigate(`/fail?message=${json.message}&code=${json.code}`);
-        return;
-      }*/
-
-      // 결제 성공 비즈니스 로직을 구현하세요.
     }
 
     confirm();

@@ -4,6 +4,8 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.Map;
 
 @Data
@@ -12,7 +14,7 @@ import java.util.Map;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class TossPaymentResDto {
     // 토스페이먼츠 API 응답 문서(https://docs.tosspayments.com/reference#payment-%EA%B0%9D%EC%B2%B4) 참고
-    private String mId; // 상점 아이디
+    private String mid; // 상점 아이디
     private String version;
     private String paymentKey;
     private String status; // 결제 상태 (DONE, CANCELED 등)
@@ -20,8 +22,8 @@ public class TossPaymentResDto {
     private String method; // 결제 수단 (카드, 가상계좌 등)
     private String orderId;
     private String orderName;
-    private String requestedAt; // 요청 시각
-    private String approvedAt; // 승인 시각
+    private OffsetDateTime requestedAt; // 요청 시각
+    private OffsetDateTime approvedAt; // 승인 시각
     private Boolean useEscrow;
     private Boolean cultureExpense;
     private Object virtualAccount; //가상게좌 여부

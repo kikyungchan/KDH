@@ -1,5 +1,6 @@
 import { loadTossPayments, ANONYMOUS } from "@tosspayments/tosspayments-sdk";
 import { useEffect, useState } from "react";
+import { v4 as uuidv4 } from "uuid";
 
 // 이거 하드코딩 괜찮나..?
 const clientKey = "test_gck_docs_Ovk5rk1EwkEbP0W43n07xlzm";
@@ -13,6 +14,8 @@ export function CheckoutPage() {
   });
   const [ready, setReady] = useState(false);
   const [widgets, setWidgets] = useState(null);
+  // const orderId = crypto.randomUUID();
+  const orderId = uuidv4();
 
   useEffect(() => {
     async function fetchPaymentWidgets() {
@@ -74,7 +77,7 @@ export function CheckoutPage() {
         {/* 이용약관 UI */}
         <div id="agreement" />
         {/* 쿠폰 체크박스 */}
-        <div>
+        {/*<div>
           <div>
             <label htmlFor="coupon-box">
               <input
@@ -82,7 +85,6 @@ export function CheckoutPage() {
                 type="checkbox"
                 aria-checked="true"
                 disabled={!ready}
-                // todo : event 관련 알아보기
                 onChange={(event) => {
                   // ------  주문서의 결제 금액이 변경되었을 경우 결제 금액 업데이트 ------
                   setAmount(
@@ -93,7 +95,7 @@ export function CheckoutPage() {
               <span>5,000원 쿠폰 적용</span>
             </label>
           </div>
-        </div>
+        </div>*/}
         {/* 결제하기 버튼 */}
         {/*todo : 결제 처리하기 (현재 기존요청을 처리중이라며 결제가 안됨 서버에도 접속 못하는것 같음)*/}
         <button
@@ -105,8 +107,7 @@ export function CheckoutPage() {
               // 결제를 요청하기 전에 orderId, amount를 서버에 저장하세요.
               // 결제 과정에서 악의적으로 결제 금액이 바뀌는 것을 확인하는 용도입니다.
               await widgets.requestPayment({
-                // orderId: "LsN10ANCHNw-qpWzwa2HL",
-                orderId: "b8f3a2c1-0d7e-4b6f-9a1c-3e8d5f2b0c49",
+                orderId: orderId,
                 orderName: "토스 티셔츠 외 2건",
                 successUrl: window.location.origin + "/pay/success",
                 failUrl: window.location.origin + "/pay/fail",
