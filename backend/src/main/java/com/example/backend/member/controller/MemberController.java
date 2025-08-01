@@ -1,7 +1,10 @@
 package com.example.backend.member.controller;
 
 import com.example.backend.member.dto.*;
+import com.example.backend.member.entity.Member;
+import com.example.backend.member.repository.MemberRepository;
 import com.example.backend.member.service.MemberService;
+import com.example.backend.util.RedisUtil;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -14,10 +17,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-import java.util.Map;
-import java.util.NoSuchElementException;
-import java.util.Objects;
+import java.util.*;
 
 @RestController
 @RequiredArgsConstructor
@@ -25,6 +25,8 @@ import java.util.Objects;
 public class MemberController {
 
     private final MemberService memberService;
+    private final RedisUtil redisUtil;
+    private final MemberRepository memberRepository;
 
     // 회원 등록
     @PostMapping("/signup")
@@ -260,6 +262,33 @@ public class MemberController {
         }
     }
 
+    @PostMapping("/issue-reset-token")
+    public ResponseEntity<?> issueResetToken(@RequestBody IdEmailDto dto) {
+        if (!memberService.existByLoginIdAndEmail(dto.getLoginId(), dto.getEmail())) {
+            return ResponseEntity.status(400).body("일치하는 정보가 없습니다.");
+        }
+        String token = UUID.randomUUID().toString();
+        redisUtil.setDataExpire(token, dto.getLoginId(), 300); //5분 TTL
 
+        return ResponseEntity.ok().body(Map.of("token", token));
+    }
+
+    @PostMapping("/reset-password")
+    public ResponseEntity<?> resetPassword(@RequestBody ResetPasswordForm form) {
+        String loginId = redisUtil.getData(form.getToken());
+        if (loginId == null) {
+            return ResponseEntity.status(400).body("만료되었거나 유효하지 않은 토큰입니다.");
+        }
+        // 로그인 아이디로 회원 조회 -> memberId(Integer 추출)
+        Integer memberId = memberService.getMemberIdByLoginId(loginId);
+
+        ChangePasswordForm passwordForm = new ChangePasswordForm();
+        passwordForm.setNewPassword(form.getNewPassword());
+
+        memberService.changePassword(memberId, passwordForm);
+        redisUtil.deleteData(form.getToken());
+
+        return ResponseEntity.ok().body(Map.of("success", true));
+    }
 }
 

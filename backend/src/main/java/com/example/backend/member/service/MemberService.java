@@ -167,16 +167,12 @@ public class MemberService {
         String oldPassword = data.getOldPassword(); // 현재 password
         String newPassword = data.getNewPassword(); // 새 password
 
-        System.out.println(passwordEncoder.matches("choi1563", "$2a$10$07IJyschqLEPkgS1iNyWsuzPjtpmjqOuEycUvJo1uN/arc9uCt6Da"));
-
-        System.out.println("입력한 현재 비밀번호: " + data.getOldPassword());
-        System.out.println("DB 저장 비밀번호: " + member.getPassword());
-        System.out.println("매치 결과: " + passwordEncoder.matches(data.getOldPassword(), member.getPassword()));
-
-
-        // 1. 기존 비밀번호 확인
-        if (!passwordEncoder.matches(oldPassword, member.getPassword())) {
-            throw new RuntimeException("비밀번호가 일치하지 않습니다.");
+        // oldPassword 가 있을때만 검증
+        if (oldPassword != null && !oldPassword.isBlank()) {
+            // 1. 기존 비밀번호 확인
+            if (!passwordEncoder.matches(oldPassword, member.getPassword())) {
+                throw new RuntimeException("비밀번호가 일치하지 않습니다.");
+            }
         }
 
         // 2. 새 비밀번호 입력 확인
@@ -246,6 +242,11 @@ public class MemberService {
 
     public boolean existByLoginIdAndEmail(String loginId, String email) {
         return memberRepository.existsByLoginIdAndEmail(loginId, email);
+    }
+
+    // 로그인 아이디로 id 값 찾기
+    public Integer getMemberIdByLoginId(String loginId) {
+        return memberRepository.findByLoginId(loginId).get().getId();
     }
 }
 
