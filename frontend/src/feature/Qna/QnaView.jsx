@@ -38,7 +38,8 @@ export function QnaView() {
       .get(`/api/qna/view?${searchParams}`)
       .then((res) => {
         // user 값이 없음
-        // console.log("user : ", user);
+        console.log("user : ", user);
+        console.log("isAdmin : ", isAdmin.value);
         setQuestion(res.data);
       })
       .catch((err) => {
@@ -153,26 +154,30 @@ export function QnaView() {
                 </FormGroup>
               </div>
             ) : (
-              <h6 className="text-center">
-                빠른 시일 내에 답변드리도록 하겠습니다
-              </h6>
+              <>
+                <h6 className="text-center">
+                  빠른 시일 내에 답변드리도록 하겠습니다
+                </h6>
+                <div>
+                  {/* todo : is Admin 여부에 따라 보임 관련 코드 수정될 시 즉시 수정할 것*/}
+                  {/* todo : 링크 연결 및 답변하기 페이지 만들어야 함*/}
+                  {user !== null && isAdmin && (
+                    <Button
+                      className="ms-2 btn-primary"
+                      href={`/qna/addAns?${searchParams}`}
+                    >
+                      답변하기
+                    </Button>
+                  )}
+                </div>
+              </>
             )}
             <br />
             <div className="mb-3">
               {/*  todo : 로그인 시에도 user 값이 현재 없는 것으로 나오는데 이후 처리*/}
-              {user === null && question.loginId === user && (
+              {user !== null && question.loginId === user && (
                 <Button className="ms-2 btn-danger" onClick={setModalShow}>
                   삭제
-                </Button>
-              )}
-              {/* todo : is Admin 여부에 따라 보임 관련 코드 수정될 시 즉시 수정할 것*/}
-              {/* todo : 링크 연결 및 답변하기 페이지 만들어야 함*/}
-              {user !== null && isAdmin && (
-                <Button
-                  className="ms-2 btn-primary"
-                  href={`/qna/addAns?${searchParams}`}
-                >
-                  답변하기
                 </Button>
               )}
             </div>
