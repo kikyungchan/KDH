@@ -244,7 +244,6 @@ function Order(props) {
                   window.open(`/product/view?id=${item.productId}`, "_blank")
                 }
                 src={item.imagePath}
-                // width={100}
                 alt="상품"
                 style={{ width: "150px", height: "150px", cursor: "pointer" }}
               />

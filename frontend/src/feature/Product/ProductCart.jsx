@@ -278,10 +278,9 @@ function ProductCart(props) {
                     }
                     style={{
                       cursor: "pointer",
-                      width: "80px",
-                      height: "80px",
+                      width: "120px",
+                      height: "100px",
                       objectFit: "cover",
-                      borderRadius: "6px",
                     }}
                   />
                   <div style={{ display: "flex", flexDirection: "column" }}>
