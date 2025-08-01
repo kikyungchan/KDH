@@ -47,8 +47,10 @@ function NavBar(props) {
     <>
       <nav className="navbar-container">
         {/* 왼쪽 메뉴 */}
+        <Link to="/" className="navbar-logo">
+          코데헌
+        </Link>
         <div className="navbar-left">
-          <Link to="/">메인</Link>
           <Link to="/product/list">상품목록</Link>
           <Link to="/product/regist">상품등록</Link>
           {user !== null && isAdmin && <Link to="/member/list">회원목록</Link>}
