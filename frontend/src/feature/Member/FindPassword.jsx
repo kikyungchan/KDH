@@ -201,6 +201,25 @@ export function FindPassword() {
       });
   };
 
+  const handleResetPasswordButton = () => {
+    axios
+      .post("/api/member/issue-reset-token", {
+        loginId,
+        email,
+      })
+      .then((res) => {
+        const token = res.data.token;
+        navigate("/reset-password", {
+          state: {
+            token: token,
+          },
+        });
+      })
+      .catch((err) => {
+        alert("토큰 발급 실패: " + (err.response?.data || err.message));
+      });
+  };
+
   return (
     <Container
       fluid
@@ -357,14 +376,7 @@ export function FindPassword() {
                       className="mt-2 me-2"
                       variant="dark"
                       size="sm"
-                      onClick={() =>
-                        navigate("/reset-password", {
-                          state: {
-                            loginId: loginId,
-                            email: email,
-                          },
-                        })
-                      }
+                      onClick={handleResetPasswordButton}
                     >
                       비밀번호 재설정
                     </Button>
