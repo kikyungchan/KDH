@@ -1,11 +1,10 @@
 package com.example.backend.product.controller;
 
 import com.example.backend.product.dto.ProductCommentDto;
-import com.example.backend.product.entity.ProductComment;
 import com.example.backend.product.repository.OrderItemRepository;
 import com.example.backend.product.repository.OrderRepository;
 import com.example.backend.product.repository.ProductCommentRepository;
-import com.example.backend.product.service.CommentService;
+import com.example.backend.product.service.ProductCommentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.oauth2.jwt.Jwt;
@@ -20,8 +19,8 @@ import java.util.Map;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/product/comment")
-public class CommentController {
-    private final CommentService commentService;
+public class ProductCommentController {
+    private final ProductCommentService commentService;
     private final JwtDecoder jwtDecoder;
     private final OrderRepository orderRepository;
     private final JwtEncoder jwtEncoder;

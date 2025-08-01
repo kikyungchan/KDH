@@ -177,3 +177,21 @@ ALTER TABLE orders
 
 ALTER TABLE orders
     ADD COLUMN created_at DATETIME NOT NULL DEFAULT NOW();
+
+# 좋아요 테이블
+CREATE TABLE product_like
+(
+    id         INT AUTO_INCREMENT NOT NULL,
+    member_id  INT                NULL,
+    product_id INT                NULL,
+    CONSTRAINT pk_product_like PRIMARY KEY (id)
+);
+
+ALTER TABLE product_like
+    ADD CONSTRAINT uc_eddc7679868d4979a9c6687aa UNIQUE (member_id, product_id);
+
+ALTER TABLE product_like
+    ADD CONSTRAINT FK_PRODUCT_LIKE_ON_MEMBER FOREIGN KEY (member_id) REFERENCES prj4.member (id);
+
+ALTER TABLE product_like
+    ADD CONSTRAINT FK_PRODUCT_LIKE_ON_PRODUCT FOREIGN KEY (product_id) REFERENCES product (id);

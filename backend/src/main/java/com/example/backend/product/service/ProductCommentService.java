@@ -19,12 +19,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static software.amazon.awssdk.utils.Validate.getOrDefault;
-
 @Service
 @Transactional
 @RequiredArgsConstructor
-public class CommentService {
+public class ProductCommentService {
 
     private final JwtDecoder jwtDecoder;
     private final ProductRepository productRepository;

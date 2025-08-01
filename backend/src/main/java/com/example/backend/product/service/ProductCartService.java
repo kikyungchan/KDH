@@ -24,7 +24,7 @@ import java.util.List;
 @Service
 @Transactional
 @RequiredArgsConstructor
-public class CartService {
+public class ProductCartService {
     private final CartRepository cartRepository;
     private final ProductRepository productRepository;
     private final ProductOptionRepository productOptionRepository;

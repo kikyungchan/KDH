@@ -19,6 +19,7 @@ import ScrollToTopButton from "./util/ScrollToTopButton.jsx";
 import "../css/ProductList.css";
 import ShareModal from "./util/ShareModal.jsx";
 import { RxShare1 } from "react-icons/rx";
+import LikeButton from "./util/LikeButton.jsx";
 
 export function ProductDetail() {
   const [showShareModal, setShowShareModal] = useState(false);
@@ -134,6 +135,7 @@ export function ProductDetail() {
                   onClick={() => setShowShareModal(true)}
                   title="공유하기"
                 />
+                <LikeButton productId={product.id} />
               </h2>
               <p>{product.price.toLocaleString()}원</p>
               <p

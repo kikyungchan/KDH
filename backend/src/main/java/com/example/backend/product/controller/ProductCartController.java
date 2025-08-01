@@ -4,7 +4,7 @@ import com.example.backend.product.dto.CartDeleteRequest;
 import com.example.backend.product.dto.CartItemDto;
 import com.example.backend.product.dto.CartResponseDto;
 import com.example.backend.product.dto.CartUpdateRequest;
-import com.example.backend.product.service.CartService;
+import com.example.backend.product.service.ProductCartService;
 import com.example.backend.product.service.ProductService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -13,15 +13,14 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.*;
 
-import java.security.Principal;
 import java.util.List;
 
 @Slf4j
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/product")
-public class CartController {
-    private final CartService cartService;
+public class ProductCartController {
+    private final ProductCartService cartService;
     private final ProductService productService;
 
     @DeleteMapping("/cart/deleteAll")
