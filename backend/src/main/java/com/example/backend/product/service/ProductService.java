@@ -171,6 +171,7 @@ public class ProductService {
         dto.setInfo(product.getInfo());
         dto.setQuantity(product.getQuantity());
         dto.setDetailText(product.getDetailText());
+        dto.setHot(isHotProduct(product.getId()));
         dto.setInsertedAt(product.getInsertedAt());
 
         List<String> imagePaths = product.getImages().stream().map(ProductImage::getStoredPath).toList();

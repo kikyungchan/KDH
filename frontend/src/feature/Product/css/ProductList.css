@@ -72,7 +72,6 @@
     background-color: #444;
     color: #fff;
     padding: 3px 6px;
-    border-radius: 4px;
     display: inline-block;
 }
 
@@ -88,7 +87,6 @@
     background-color: #a7f3d0; /* 스카이그린 */
     color: #065f46;
     padding: 3px 6px;
-    border-radius: 4px;
     font-weight: bold;
     display: inline-block;
 }
@@ -98,7 +96,6 @@
     background-color: #f87171; /* 연한 빨강 */
     color: #7f1d1d; /* 진한 빨강 */
     padding: 3px 6px;
-    border-radius: 4px;
     font-weight: bold;
     display: inline-block;
 }

@@ -107,6 +107,15 @@ export function ProductDetail() {
                   return isNew ? <span className="new-badge">NEW</span> : null;
                 })()}
 
+                {product.hot && (
+                  <span
+                    style={{ fontSize: "12px" }}
+                    className="badge hot-badge"
+                  >
+                    HOT
+                  </span>
+                )}
+
                 {/* 품절 뱃지 */}
                 {product.quantity === 0 && (
                   <span className="sold-out-badge">SOLD OUT</span>
