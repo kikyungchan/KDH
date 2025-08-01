@@ -1,13 +1,17 @@
 import {
   Button,
+  Card,
   Col,
+  Container,
+  Form,
   FormControl,
   FormGroup,
   FormLabel,
+  FormText,
   Row,
 } from "react-bootstrap";
 import { useContext, useState } from "react";
-import { useNavigate } from "react-router";
+import { useNavigate, Link } from "react-router";
 import axios from "axios";
 import { AuthenticationContext } from "../common/AuthenticationContextProvider.jsx";
 
@@ -17,7 +21,9 @@ export function MemberLogin() {
   const { login } = useContext(AuthenticationContext);
   const navigate = useNavigate();
 
-  function handleLogInButtonClick() {
+  function handleLogInButtonClick(e) {
+    e.preventDefault(); // form submit 기본 동작 방지(리로드 X)
+
     axios
       .post("/api/member/login", {
         loginId: loginId,
@@ -32,34 +38,80 @@ export function MemberLogin() {
         navigate("/");
       })
       .catch((err) => {
+        alert(err.response.data.message.text);
         console.log(err.response.data.message);
       })
-      .finally(() => {
-        console.log("always");
-      });
+      .finally(() => {});
   }
 
   return (
-    <Row className="justify-content-center">
-      <Col>
-        <h2>로그인</h2>
-        <FormGroup controlId="loginId1">
-          <FormLabel>아이디</FormLabel>
-          <FormControl
-            value={loginId}
-            onChange={(e) => setLoginId(e.target.value)}
-          />
-        </FormGroup>
-        <FormGroup controlId="password1">
-          <FormLabel>비밀번호</FormLabel>
-          <FormControl
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-          />
-        </FormGroup>
-        <Button onClick={handleLogInButtonClick}>로그인</Button>
-      </Col>
-    </Row>
+    <div style={{ backgroundColor: "#f8f9fa", minHeight: "100vh" }}>
+      <Container
+        fluid
+        className="d-flex justify-content-center align-items-center py-5"
+      >
+        <Card
+          style={{ width: "100%", maxWidth: "400px" }}
+          className="shadow p-4"
+        >
+          <Card.Body>
+            <Row className="justify-content-center">
+              <Col>
+                <h3 className="text-center mb-4">로그인</h3>
+                <Form onSubmit={handleLogInButtonClick}>
+                  <FormGroup controlId="loginId1" className="mb-3">
+                    <FormLabel>아이디</FormLabel>
+                    <FormControl
+                      value={loginId}
+                      onChange={(e) => setLoginId(e.target.value)}
+                    />
+                  </FormGroup>
+                  <FormGroup controlId="password1" className="mb-3">
+                    <FormLabel>비밀번호</FormLabel>
+                    <FormControl
+                      type="password"
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
+                    />
+                  </FormGroup>
+                  <div className="text-center mt-3">
+                    <Button
+                      variant="dark"
+                      type="submit"
+                      className="w-100 py-2 fw-bold"
+                    >
+                      로그인
+                    </Button>
+                  </div>
+                </Form>
+                <div className="text-end mt-3" style={{ fontSize: "0.85rem" }}>
+                  <Link
+                    to="/signup"
+                    className="text-decoration-none text-dark me-2"
+                  >
+                    회원가입
+                  </Link>
+                </div>
+                <div className="text-end mt-2" style={{ fontSize: "0.85rem" }}>
+                  <Link
+                    to="/find/id"
+                    className="text-decoration-none text-dark"
+                  >
+                    아이디 찾기
+                  </Link>
+                  <span className="mx-2 text-muted">/</span>
+                  <Link
+                    to="/find/password"
+                    className="text-decoration-none text-dark me-2"
+                  >
+                    비밀번호 찾기
+                  </Link>
+                </div>
+              </Col>
+            </Row>
+          </Card.Body>
+        </Card>
+      </Container>
+    </div>
   );
 }

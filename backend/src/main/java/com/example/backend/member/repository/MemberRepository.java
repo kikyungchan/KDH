@@ -16,6 +16,8 @@ public interface MemberRepository extends JpaRepository<Member, Integer> {
 
     boolean existsByLoginId(String loginId);
 
+    boolean existsByEmail(String email);
+
     @Query("""
             SELECT new com.example.backend.member.dto.MemberListDto(
                 m.id, m.loginId, m.name, m.phone, m.email
@@ -25,4 +27,8 @@ public interface MemberRepository extends JpaRepository<Member, Integer> {
     Page<MemberListDto> findAllBy(Pageable pageable);
 
     Optional<Member> findByLoginId(String loginId);
+
+    Optional<Member> findByEmail(String email);
+
+    boolean existsByLoginIdAndEmail(String loginId, String email);
 }

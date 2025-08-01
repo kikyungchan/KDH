@@ -10,7 +10,24 @@ CREATE TABLE member
     birthday DATE               NOT NULL
 );
 
-DROP TABLE member;
+# DROP TABLE member;
+
+ALTER TABLE member
+    ADD COLUMN privacy_agreed BOOLEAN NOT NULL DEFAULT FALSE;
+
+ALTER TABLE member
+    ADD zipcode VARCHAR(10) NOT NULL;
+
+ALTER TABLE member
+    ADD address_detail VARCHAR(255) NULL;
+
+ALTER TABLE member
+    ADD CONSTRAINT uq_member_email UNIQUE (email);
+
+SELECT email, COUNT(*)
+FROM member
+GROUP BY email
+HAVING COUNT(*) > 1;
 
 
 ALTER TABLE member

@@ -54,8 +54,13 @@ public class MemberUpdateForm {
     )
     private String phone;
 
+    @NotBlank(message = "우편번호는 필수입니다.")
+    private String zipCode;
+
     @NotBlank(message = "주소는 필수입니다.")
     private String address;
+
+    private String addressDetail;
 
     @NotNull(message = "생년월일은 필수입니다.")
     @Past(message = "생년월일은 과거 날짜여야 합니다.")

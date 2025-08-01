@@ -39,4 +39,13 @@ public class Member {
     @Column(name = "birthday", nullable = false)
     private LocalDate birthday;
 
+    @Column(name = "zipcode", nullable = false, length = 10)
+    private String zipcode;
+
+    @Column(name = "address_detail")
+    private String addressDetail;
+
+    @Column(name = "privacy_agreed", nullable = false)
+    private Boolean privacyAgreed;
+
 }

@@ -8,6 +8,7 @@ import com.example.backend.member.repository.MemberRoleRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.jwt.JwtClaimsSet;
 import org.springframework.security.oauth2.jwt.JwtEncoder;
@@ -18,6 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.Instant;
 import java.util.List;
 import java.util.Map;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -30,6 +32,16 @@ public class MemberService {
     private final JwtEncoder jwtEncoder;
     private final MemberRoleRepository memberRoleRepository;
 
+    // 이메일 중복확인
+    public boolean existByEmail(String email) {
+        return memberRepository.existsByEmail(email);
+    }
+
+    // 아이디 중복확인
+    public boolean existByLoginId(String loginId) {
+        return memberRepository.existsByLoginId(loginId);
+    }
+
     // 회원 등록
     public void signup(MemberForm memberForm) {
         Member member = new Member();
@@ -40,6 +52,9 @@ public class MemberService {
         member.setPhone(memberForm.getPhone());
         member.setEmail(memberForm.getEmail());
         member.setAddress(memberForm.getAddress());
+        member.setZipcode(memberForm.getZipCode());
+        member.setAddressDetail(memberForm.getAddressDetail());
+        member.setPrivacyAgreed(memberForm.getPrivacyAgreed());
         memberRepository.save(member);
     }
 
@@ -84,7 +99,9 @@ public class MemberService {
         memberDto.setBirthday(member.getBirthday());
         memberDto.setPhone(member.getPhone());
         memberDto.setEmail(member.getEmail());
+        memberDto.setZipCode(member.getZipcode());
         memberDto.setAddress(member.getAddress());
+        memberDto.setAddressDetail(member.getAddressDetail());
 
         return memberDto;
     }
@@ -126,7 +143,9 @@ public class MemberService {
         member.setBirthday(memberUpdateForm.getBirthday());
         member.setPhone(memberUpdateForm.getPhone());
         member.setEmail(memberUpdateForm.getEmail());
+        member.setZipcode(memberUpdateForm.getZipCode());
         member.setAddress(memberUpdateForm.getAddress());
+        member.setAddressDetail(memberUpdateForm.getAddressDetail());
 
         // 새 비밀번호가 입력된 경우에만 변경
         if (newPassword != null && !newPassword.isBlank()) {
@@ -141,9 +160,6 @@ public class MemberService {
         memberRepository.save(member);
     }
 
-    public boolean existByLoginId(String loginId) {
-        return memberRepository.existsByLoginId(loginId);
-    }
 
     public void changePassword(Integer memberId, ChangePasswordForm data) {
         Member member = memberRepository.findById(memberId)
@@ -152,16 +168,12 @@ public class MemberService {
         String oldPassword = data.getOldPassword(); // 현재 password
         String newPassword = data.getNewPassword(); // 새 password
 
-        System.out.println(passwordEncoder.matches("choi1563", "$2a$10$07IJyschqLEPkgS1iNyWsuzPjtpmjqOuEycUvJo1uN/arc9uCt6Da"));
-
-        System.out.println("입력한 현재 비밀번호: " + data.getOldPassword());
-        System.out.println("DB 저장 비밀번호: " + member.getPassword());
-        System.out.println("매치 결과: " + passwordEncoder.matches(data.getOldPassword(), member.getPassword()));
-
-
-        // 1. 기존 비밀번호 확인
-        if (!passwordEncoder.matches(oldPassword, member.getPassword())) {
-            throw new RuntimeException("비밀번호가 일치하지 않습니다.");
+        // oldPassword 가 있을때만 검증
+        if (oldPassword != null && !oldPassword.isBlank()) {
+            // 1. 기존 비밀번호 확인
+            if (!passwordEncoder.matches(oldPassword, member.getPassword())) {
+                throw new RuntimeException("비밀번호가 일치하지 않습니다.");
+            }
         }
 
         // 2. 새 비밀번호 입력 확인
@@ -209,4 +221,33 @@ public class MemberService {
 
         return jwtEncoder.encode(JwtEncoderParameters.from(claims)).getTokenValue();
     }
+
+
+    public String findId(String email) {
+
+        Optional<Member> member = memberRepository.findByEmail(email);
+        if (member.isPresent()) {
+            String loginId = member.get().getLoginId();
+            return maskedLoginId(loginId);
+        }
+        throw new NoSuchElementException("해당 이메일로 가입된 아이디가 없습니다.");
+    }
+
+    private String maskedLoginId(String loginId) {
+        int length = loginId.length();
+        int visible = Math.min(3, length); // 앞 최대 3글자만 표시
+        String visiblePart = loginId.substring(0, visible);
+        String maskedPart = "*".repeat(length - visible);
+        return visiblePart + maskedPart;
+    }
+
+    public boolean existByLoginIdAndEmail(String loginId, String email) {
+        return memberRepository.existsByLoginIdAndEmail(loginId, email);
+    }
+
+    // 로그인 아이디로 id 값 찾기
+    public Integer getMemberIdByLoginId(String loginId) {
+        return memberRepository.findByLoginId(loginId).get().getId();
+    }
 }
+
