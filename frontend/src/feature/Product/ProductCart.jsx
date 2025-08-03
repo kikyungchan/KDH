@@ -227,7 +227,7 @@ function ProductCart(props) {
   }
 
   return (
-    <Container>
+    <Container className="mt-4">
       <h2>장바구니</h2>
       {cartItems.length === 0 ? (
         <div className="text-center py-5">
