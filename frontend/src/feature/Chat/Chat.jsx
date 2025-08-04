@@ -1,13 +1,15 @@
-import { useEffect, useRef, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import { Client } from "@stomp/stompjs";
 import SockJS from "sockjs-client";
-// import { Stomp } from "stompjs";
+import { AuthenticationContext } from "../common/AuthenticationContextProvider.jsx";
+
 const WS_URL = "http://localhost:8080/ws-chat";
 const WS_PATH = "/ws-chat";
 const SEND_DEST = "/app/chat/private";
 const SUBSCRIBE_DEST = "/user/queue/messages";
 
 export function Chat() {
+  const { user, isAdmin } = useContext(AuthenticationContext);
   const [target, setTarget] = useState(""); //수신자 id
   const [text, setText] = useState(""); // 보낼 텍스트
   const [msgs, setMsgs] = useState([]); // 주고 받은 메시지들
@@ -15,11 +17,11 @@ export function Chat() {
   const clientRef = useRef(null); // STOMP 인스턴스 담아 둘 상자
 
   useEffect(() => {
-    const name = prompt("닉네임을 입력해 주세요").trim();
-    console.log("name : ", name);
-    setUsername(name);
+    // const name = prompt("닉네임을 입력해 주세요").trim();
+    console.log("name : ", user);
+    setUsername(user);
     console.log("username1 : ", username);
-    
+
     const client = new Client({
       webSocketFactory: () => new SockJS(WS_PATH), // SockJS 연결
       debug: (str) => console.log("[STOMP]", str),
