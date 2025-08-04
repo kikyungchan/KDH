@@ -12,7 +12,9 @@ import "./Navbar.css";
 import { useCart } from "../Product/CartContext.jsx";
 import NavLeft from "./NavLeft";
 import NavRight from "./NavRight";
+import Search from "./SearchBar";
 import "bootstrap/dist/css/bootstrap-grid.min.css";
+import SearchBar from "./SearchBar";
 
 function NavBar(props) {
   const [showMobileCategory, setShowMobileCategory] = useState(false);
@@ -94,27 +96,9 @@ function NavBar(props) {
             코데헌
           </Link>
         </div>
-
+        {/*왼쪽 메뉴*/}
         <NavLeft handleCategoryClick={handleCategoryClick} />
-
         {/* 오른쪽 아이콘 */}
-        {/*<div className="navbar-right">*/}
-        {/*  <div className="navbar-icons">*/}
-        {/*    <FiSearch*/}
-        {/*      ref={iconRef}*/}
-        {/*      className="navbar-icon"*/}
-        {/*      onClick={() => setShowSearch((prev) => !prev)}*/}
-        {/*      style={{ cursor: "pointer" }}*/}
-        {/*    />*/}
-        {/*    <Link to={user ? `/member?id=${user.id}` : "/login"}>*/}
-        {/*      <FiUser className="navbar-icon" />*/}
-        {/*    </Link>*/}
-        {/*    <Link to="/product/cart" className="cart-icon-wrapper">*/}
-        {/*      <FiShoppingCart className="navbar-icon" />*/}
-        {/*      {cartCount > 0 && <span className="cart-badge">{cartCount}</span>}*/}
-        {/*    </Link>*/}
-        {/*  </div>*/}
-        {/*</div>*/}
         <NavRight
           user={user}
           iconRef={iconRef}
@@ -122,29 +106,16 @@ function NavBar(props) {
         />
       </nav>
       {/* 돋보기 눌렀을떄 나오는 검색창 */}
-      <div
-        ref={searchRef}
-        className={`search-bar-wrapper ${showSearch ? "active" : ""}`}
-      >
-        <FiChevronLeft
-          className="search-close-icon"
-          onClick={() => setShowSearch(false)}
-        />
-        <input
-          type="text"
-          placeholder="키워드로 검색"
-          className="search-input"
-          value={keyword}
-          onChange={(e) => setKeyword(e.target.value)}
-          onKeyDown={(e) => {
-            if (e.key === "Enter" && keyword.trim() !== "") {
-              navigate(`/product/list?keyword=${keyword.trim()}`);
-              setKeyword("");
-              setShowSearch(false); // 검색 후 닫기
-            }
-          }}
-        />
-      </div>
+      <SearchBar
+        showSearch={showSearch}
+        setShowSearch={setShowSearch}
+        keyword={keyword}
+        setKeyword={setKeyword}
+        searchRef={searchRef}
+        iconRef={iconRef}
+        navigate={navigate}
+      />
+
       {/* 모바일 메뉴 드롭다운 */}
       {isMobileMenuOpen && (
         <div className="mobile-menu" ref={menuRef}>
