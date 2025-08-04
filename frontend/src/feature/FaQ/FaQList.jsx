@@ -18,6 +18,7 @@ import { useContext, useEffect, useState } from "react";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { AuthenticationContext } from "../common/AuthenticationContextProvider.jsx";
+import "./faqList.css";
 
 export function FaQList() {
   const { user, isAdmin } = useContext(AuthenticationContext);
@@ -117,35 +118,32 @@ export function FaQList() {
             <div>
               <ButtonGroup>
                 {radios.map((radio, idx) => (
-                  <ToggleButton
+                  <input
                     key={idx}
-                    id={`radio-${idx}`}
+                    className="btn btn-outline"
                     type="radio"
-                    variant="outline-primary"
-                    name="radio"
+                    name="바로가기"
+                    aria-label={radio.name}
                     value={radio.value}
                     checked={idx === 2}
                     onClick={radio.fnc}
-                  >
-                    {radio.name}
-                  </ToggleButton>
+                  />
                 ))}
               </ButtonGroup>
             </div>
             <br />
             {faqList.length > 0 ? (
-              <Accordion>
+              <>
                 {faqList.map((faq) => (
-                  <Accordion.Item eventKey="0" flush>
-                    <Accordion.Header>
-                      <h6>{faq.question}</h6>
-                    </Accordion.Header>
-                    <Accordion.Body>
-                      <p>{faq.answer}</p>
-                    </Accordion.Body>
-                  </Accordion.Item>
+                  <div className="collapse collapse-plus bg-base-100 border border-base-300">
+                    <input type="checkbox" name="faqlist" />
+                    <div className="collapse-title font-semibold">
+                      {faq.question}
+                    </div>
+                    <div className="collapse-content text-sm">{faq.answer}</div>
+                  </div>
                 ))}
-              </Accordion>
+              </>
             ) : (
               <p>
                 작성된 글이 없습니다. <br />새 글을 작성해 보세요.
@@ -156,15 +154,23 @@ export function FaQList() {
           <div>
             {/*todo : 관리자인지 여부 확인*/}
             {isAdmin && (
-              <Button className="btn-primary" onClick={setModalShow}>
+              // <Button className="btn-primary" onClick={setModalShow}>
+              //   등록하기
+              // </Button>
+              <button
+                className="btn btn-accent"
+                onClick={() =>
+                  document.getElementById("my_modal_1").showModal()
+                }
+              >
                 등록하기
-              </Button>
+              </button>
             )}
           </div>
         </Col>
         {/*  todo : admin 확인되면 modal 띄워서 자주 묻는 질문 CUD 할 수 있게 기능 추가*/}
 
-        <Modal show={modalShow}>
+        {/*<Modal show={modalShow}>
           <Modal.Header>
             <Modal.Title>FaQ 등록</Modal.Title>
           </Modal.Header>
@@ -193,7 +199,46 @@ export function FaQList() {
               등록
             </Button>
           </Modal.Footer>
-        </Modal>
+        </Modal>*/}
+
+        <dialog id="my_modal_1" className="modal">
+          <div className="modal-box">
+            <h3 className="font-bold text-lg">FaQ 등록</h3>
+            <br />
+            <h6>faq 질문</h6>
+            <label className="floating-label">
+              <input
+                type="textarea"
+                placeholder="질문을 입력해주세요"
+                className="textarea input-md w-full"
+                value={title}
+                onChange={(e) => setTitle(e.target.value)}
+              />
+            </label>
+            <br />
+            <h6>faq 답변</h6>
+            <label className="floating-label">
+              <input
+                type="textarea"
+                placeholder="답변을 입력해주세요"
+                className="textarea input-md w-full"
+                value={content}
+                onChange={(e) => setContent(e.target.value)}
+              />
+            </label>
+            <div className="modal-action">
+              <button
+                className="btn mx-1 btn-accent"
+                onClick={handleSaveButtonClick}
+              >
+                등록
+              </button>
+              <form method="dialog">
+                <button className="btn mx-1 btn-default">취소</button>
+              </form>
+            </div>
+          </div>
+        </dialog>
       </Row>
       <Row className="my-3">
         <Col>

@@ -1,0 +1,27 @@
+td, tr, th {
+    text-align: center;
+}
+
+th.num {
+    width: 70px;
+}
+
+th.ansCheck {
+    width: 120px;
+}
+
+th.title {
+    width: 500px;
+}
+
+th.writer {
+    width: 100px;
+}
+
+th.wdate {
+    width: 140px;
+}
+
+th.edate {
+    width: 140px;
+}

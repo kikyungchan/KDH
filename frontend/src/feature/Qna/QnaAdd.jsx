@@ -141,24 +141,19 @@ export function QnaAdd() {
           <div>
             {/*<Button disabled={true}>상담문의</Button>*/}
             {/*<Button>상담내역</Button>*/}
+
             <ButtonGroup>
               {radios.map((radio, idx) => (
-                <ToggleButton
+                <input
                   key={idx}
-                  id={`radio-${idx}`}
+                  className="btn btn-outline"
                   type="radio"
-                  variant={"outline-primary"}
-                  name="radio"
+                  name="바로가기"
+                  aria-label={radio.name}
                   value={radio.value}
-                  checked={radioValue === radio.value}
-                  onChange={(e) => setRadioValue(e.currentTarget.value)}
-                  onClick={
-                    // radio.value === "2" ? handleQnalistButtonClick : null
-                    radio.fnc
-                  }
-                >
-                  {radio.name}
-                </ToggleButton>
+                  checked={idx === 0}
+                  onClick={radio.fnc}
+                />
               ))}
             </ButtonGroup>
           </div>

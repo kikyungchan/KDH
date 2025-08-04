@@ -12,6 +12,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate, useSearchParams } from "react-router";
 import { FaRegComments, FaRegImages } from "react-icons/fa";
+import "./qnaList.css";
 
 export function QnaList() {
   const [questionList, setQuestionList] = useState(null);
@@ -25,7 +26,12 @@ export function QnaList() {
   };
 
   const radios = [
-    { name: "상품목록", value: "1", fnc: handleQnaAddButtonClick },
+    {
+      name: "상품목록",
+      value: "1",
+      class: "btn",
+      fnc: handleQnaAddButtonClick,
+    },
     { name: "문의내역", value: "2", fnc: handleQnaListButtonClick },
     { name: "자주 묻는 질문", value: "3", fnc: handleFaQListButtonClick },
   ];
@@ -66,7 +72,7 @@ export function QnaList() {
 
   // useState 안전장치
   if (!questionList) {
-    return <Spinner />;
+    return <span className="loading loading-spinner"></span>;
   }
 
   function handleQnaAddButtonClick() {
@@ -91,19 +97,16 @@ export function QnaList() {
               {/* todo : onclick 시 상품 질문 페이지로 넘어가게 */}
               <ButtonGroup>
                 {radios.map((radio, idx) => (
-                  <ToggleButton
+                  <input
                     key={idx}
-                    id={`radio-${idx}`}
+                    className="btn btn-outline"
                     type="radio"
-                    variant={"outline-primary"}
-                    name="radio"
+                    name="바로가기"
+                    aria-label={radio.name}
                     value={radio.value}
                     checked={idx === 1}
-                    // onChange={(e) => setRadioValue(e.currentTarget.value)}
                     onClick={radio.fnc}
-                  >
-                    {radio.name}
-                  </ToggleButton>
+                  />
                 ))}
               </ButtonGroup>
             </div>
@@ -112,27 +115,12 @@ export function QnaList() {
               <Table striped={true} hover={true}>
                 <thead>
                   <tr>
-                    <th style={{ width: "70px" }}>#</th>
-                    <th style={{ width: "120px" }}>답변여부</th>
-                    <th style={{ width: "270px" }}>제목</th>
-                    <th
-                      className="d-none d-md-table-cell"
-                      style={{ width: "100px" }}
-                    >
-                      작성자
-                    </th>
-                    <th
-                      className="d-none d-lg-table-cell"
-                      style={{ width: "140px" }}
-                    >
-                      작성일시
-                    </th>
-                    <th
-                      className="d-none d-lg-table-cell"
-                      style={{ width: "140px" }}
-                    >
-                      수정일시
-                    </th>
+                    <th className="num">#</th>
+                    <th className="ansCheck">답변여부</th>
+                    <th className="title">제목</th>
+                    <th className="d-none d-md-table-cell writer">작성자</th>
+                    <th className="d-none d-lg-table-cell wdate">작성일시</th>
+                    <th className="d-none d-lg-table-cell edate">수정일시</th>
                   </tr>
                 </thead>
                 <tbody>

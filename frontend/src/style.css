@@ -2,13 +2,33 @@
 
 @plugin "daisyui" {
     /*themes: light --default*/
-    themes: pastel --default
+    /*themes: pastel --default*/
     /*themes: garden --default*/
     /*themes: silk --default*/
     /*themes: fantasy --default*/
-    /*themes: lofi --default*/
+    themes: lofi --default
     /*, dark --prefersdark;*/
 }
 * {
     font-family: "Paperlogy";
 }
+
+
+.container {
+    max-width: 1256px;
+    margin: 0 auto;
+    padding: 30px 60px;
+}
+
+.container > h2 {
+    font-size: 36px;
+}
+
+td, tr, th {
+    text-align: center;
+}
+
+/*
+.row {
+    margin: auto 10px;
+}*/
