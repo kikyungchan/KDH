@@ -10,7 +10,6 @@
     align-items: center;
     padding: 2rem 4rem;
     gap: 25rem;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); /* 선택사항 */
     height: 80px; /* 높이를 명시적으로 설정 */
 }
 
@@ -40,7 +39,7 @@
     position: relative;
 }
 
-/* 필요 시 장바구니 뱃지용 wrapper 예시 */
+/*장바구니 뱃지용*/
 .cart-icon-wrapper {
     position: relative;
 }
@@ -96,7 +95,3 @@
     font-weight: bold;
     text-decoration: none;
 }
-
-/*body, html {*/
-/*    overflow: hidden;*/
-/*}*/
