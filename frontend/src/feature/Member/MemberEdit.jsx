@@ -15,7 +15,9 @@ import {
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate, useSearchParams } from "react-router";
-import { jwtDecode } from "jwt-decode";
+import LeaveMemberEditModal from "./Modal/LeaveMemberEditModal.jsx";
+import ConfirmEditModal from "./Modal/ConfirmEditModal.jsx";
+import ChangePasswordModal from "./Modal/ChangePasswordModal.jsx";
 
 export function MemberEdit() {
   // 입력 항목 정규식
@@ -68,7 +70,7 @@ export function MemberEdit() {
       .then((res) => {
         setMember(res.data);
       })
-      .catch((err) => {
+      .catch(() => {
         alert("잠시 후 다시 시도해주십시오.");
       })
       .finally(() => {});
@@ -122,10 +124,10 @@ export function MemberEdit() {
         oldPassword: oldPassword,
         newPassword: newPassword1,
       })
-      .then((res) => {
+      .then(() => {
         navigate(`/member?id=${member.id}`);
       })
-      .catch((err) => {
+      .catch(() => {
         alert("비밀번호가 일치하지 않습니다.");
       })
       .finally(() => {
@@ -184,18 +186,25 @@ export function MemberEdit() {
         oldPassword: oldPassword,
         newPassword: newPassword1,
       })
-      .then((res) => {
+      .then(() => {
         setOldPassword("");
         setNewPassword1("");
         setNewPassword2("");
         setChangePasswordModalShow(false);
       })
-      .catch((err) => {
+      .catch(() => {
         alert("비밀번호가 일치하지 않습니다.");
       })
       .finally(() => {
         setIsPasswordProcessing(false);
       });
+  }
+
+  function handleCloseChangePasswordModal() {
+    setChangePasswordModalShow(false);
+    setOldPassword("");
+    setNewPassword1("");
+    setNewPassword2("");
   }
 
   return (
@@ -322,184 +331,37 @@ export function MemberEdit() {
                     </div>
                   </div>
                 </Col>
-                {/* 회원 정보 수정 모달*/}
-                <Modal
+                <ConfirmEditModal
                   show={saveModalShow}
-                  onHide={() => {
-                    setSaveModalShow(false);
-                    setOldPassword("");
-                  }}
-                >
-                  <Modal.Header closeButton>
-                    <Modal.Title>회원 정보 수정 확인</Modal.Title>
-                  </Modal.Header>
-                  <Modal.Body>
-                    <FormGroup>
-                      <FormLabel>암호 입력</FormLabel>
-                      <FormControl
-                        type="password"
-                        value={oldPassword}
-                        onChange={(e) => setOldPassword(e.target.value)}
-                      />
-                      {isSubmitted && oldPassword.trim() === "" && (
-                        <FormText className="text-danger">
-                          암호를 입력해주세요.
-                        </FormText>
-                      )}
-                    </FormGroup>
-                  </Modal.Body>
-                  <Modal.Footer>
-                    <Button
-                      variant="dark"
-                      onClick={handleMemberInfoChangeButton}
-                      disabled={isEditProcessing}
-                    >
-                      {isEditProcessing ? (
-                        <>
-                          <Spinner
-                            animation="border"
-                            size="sm"
-                            role="status"
-                            aria-hidden="true"
-                            className="me-2"
-                          />
-                          저장 중...
-                        </>
-                      ) : (
-                        "저장"
-                      )}
-                    </Button>
-                    <Button
-                      variant="dark"
-                      onClick={() => {
-                        setSaveModalShow(false);
-                        setOldPassword("");
-                        setIsSubmitted(false);
-                      }}
-                    >
-                      취소
-                    </Button>
-                  </Modal.Footer>
-                </Modal>
-                {/* 회원 정보 저장 나가기 모달 */}
-                <Modal
+                  onClose={() => setSaveModalShow(false)}
+                  onSubmit={handleMemberInfoChangeButton}
+                  oldPassword={oldPassword}
+                  setOldPassword={setOldPassword}
+                  isSubmitted={isSubmitted}
+                  setIsSubmitted={setIsSubmitted}
+                  isEditProcessing={isEditProcessing}
+                />
+                {/* 회원 정보 수정 취소 모달 */}
+                <LeaveMemberEditModal
                   show={cancelSaveModalShow}
-                  onHide={() => setCancelSaveModalShow(false)}
-                >
-                  <Modal.Header closeButton>
-                    <ModalTitle className="fs-5">
-                      변경 내용이 저장되지 않았습니다.
-                    </ModalTitle>
-                  </Modal.Header>
-                  <Modal.Body>
-                    <p className="mt-2">
-                      변경 사항을 저장하지 않고 나가시겠습니까?
-                    </p>
-                  </Modal.Body>
-                  <Modal.Footer>
-                    <Button
-                      variant="dark"
-                      onClick={() => navigate(`/member?id=${member.id}`)}
-                    >
-                      나가기
-                    </Button>
-                    <Button
-                      variant="dark"
-                      onClick={() => {
-                        setCancelSaveModalShow(false);
-                      }}
-                    >
-                      취소
-                    </Button>
-                  </Modal.Footer>
-                </Modal>
-                {/*  비밀 번호 변경 모달 */}
-                <Modal
+                  onClose={() => setCancelSaveModalShow(false)}
+                  onLeave={() => navigate(`/member?id=${member.id}`)}
+                />
+                {/* 비밀번호 변경 모달 */}
+                <ChangePasswordModal
                   show={changePasswordModalShow}
-                  onHide={() => {
-                    setChangePasswordModalShow(false);
-                    setOldPassword("");
-                    setNewPassword1("");
-                    setNewPassword2("");
-                  }}
-                >
-                  <Modal.Header closeButton>
-                    <Modal.Title>비밀번호 변경</Modal.Title>
-                  </Modal.Header>
-                  <Modal.Body>
-                    <p className="mb-3" style={{ fontSize: "13px" }}>
-                      비밀번호는 영문+숫자 조합, 8~20자 사이로 입력하세요.
-                    </p>
-                    <FormGroup>
-                      <FormLabel className="mb-2">현재 비밀번호</FormLabel>
-                      <FormControl
-                        id="withdraw-password"
-                        type="password"
-                        value={oldPassword}
-                        onChange={(e) => setOldPassword(e.target.value)}
-                        autoFocus
-                      />
-                    </FormGroup>
-                    <FormGroup className="mb-2 mt-2">
-                      <FormLabel>변경할 비밀번호</FormLabel>
-                      <FormControl
-                        id="withdraw-password"
-                        type="password"
-                        value={newPassword1}
-                        onChange={(e) => setNewPassword1(e.target.value)}
-                      />
-                    </FormGroup>
-                    <FormGroup className="mb-2">
-                      <FormLabel>변경할 비밀번호 확인</FormLabel>
-                      <FormControl
-                        id="withdraw-password"
-                        type="password"
-                        value={newPassword2}
-                        onChange={(e) => setNewPassword2(e.target.value)}
-                      />
-                      {passwordConfirm || (
-                        <FormText className="text-danger">
-                          비밀번호가 일치하지 않습니다.
-                        </FormText>
-                      )}
-                    </FormGroup>
-                  </Modal.Body>
-                  <Modal.Footer>
-                    <Button
-                      variant="dark"
-                      onClick={() => {
-                        setChangePasswordModalShow(false);
-                        setOldPassword("");
-                        setNewPassword1("");
-                        setNewPassword2("");
-                      }}
-                    >
-                      취소
-                    </Button>
-                    <Button
-                      variant="dark"
-                      onClick={handleChangePasswordClick}
-                      disabled={
-                        changePasswordButtonDisabled || isPasswordProcessing
-                      }
-                    >
-                      {isPasswordProcessing ? (
-                        <>
-                          <Spinner
-                            animation="border"
-                            size="sm"
-                            role="status"
-                            aria-hidden="true"
-                            className="me-2"
-                          />
-                          저장 중...
-                        </>
-                      ) : (
-                        "저장"
-                      )}
-                    </Button>
-                  </Modal.Footer>
-                </Modal>
+                  onClose={handleCloseChangePasswordModal}
+                  oldPassword={oldPassword}
+                  setOldPassword={setOldPassword}
+                  newPassword1={newPassword1}
+                  setNewPassword1={setNewPassword1}
+                  newPassword2={newPassword2}
+                  setNewPassword2={setNewPassword2}
+                  passwordConfirm={passwordConfirm}
+                  handleChangePasswordClick={handleChangePasswordClick}
+                  changePasswordButtonDisabled={changePasswordButtonDisabled}
+                  isPasswordProcessing={isPasswordProcessing}
+                />
               </Row>
             </Card.Body>
           </Card>

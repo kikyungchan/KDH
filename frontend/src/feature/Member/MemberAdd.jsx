@@ -16,7 +16,7 @@ import { useContext, useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router";
 import { AuthenticationContext } from "../common/AuthenticationContextProvider.jsx";
-import PrivacyModal from "./PrivacyModal.jsx";
+import PrivacyModal from "./Modal/PrivacyModal.jsx";
 
 export function MemberAdd() {
   // 입력 항목 정규식
@@ -331,7 +331,12 @@ export function MemberAdd() {
   };
 
   return (
-    <div style={{ backgroundColor: "#f8f9fa", minHeight: "100vh" }}>
+    <div
+      style={{
+        backgroundColor: "#f8f9fa",
+        minHeight: "100vh",
+      }}
+    >
       <Container
         fluid
         className="d-flex justify-content-center align-items-center"
