@@ -139,6 +139,14 @@
     overflow: visible !important; /* ✅ 잘리는 현상 방지 */
 }
 
+.mobile-category-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    align-items: flex-start;
+    margin-top: 0.5rem;
+}
+
 /* 드롭다운 메뉴 스타일 */
 .dropdown {
     position: relative;
@@ -192,6 +200,7 @@
 
     .navbar-left {
         display: none !important;
+        flex-wrap: nowrap;
     }
 }
 

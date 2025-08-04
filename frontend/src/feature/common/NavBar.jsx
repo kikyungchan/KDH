@@ -93,11 +93,16 @@ function NavBar(props) {
           </Link>
         </div>
         {/* 왼쪽 메뉴 */}
-        <div className="navbar-left">
+        <div className="navbar-left flex items-center gap-2">
+          {/* 모든상품 드롭다운 */}
           <div className="dropdown dropdown-hover">
-            <label tabIndex={0} className="btn btn-ghost m-1 text-xl">
+            <div
+              tabIndex={0}
+              role="button"
+              className="btn btn-ghost text-xl whitespace-nowrap"
+            >
               모든상품
-            </label>
+            </div>
             <ul
               tabIndex={0}
               className="menu dropdown-content z-[1000] p-2 shadow bg-base-100 rounded-box w-52"
@@ -217,14 +222,7 @@ function NavBar(props) {
               모든상품 ▾
             </div>
             {showMobileCategory && (
-              <div
-                style={{
-                  marginTop: "2px",
-                  display: "flex",
-                  flexDirection: "column",
-                  gap: "0.5rem",
-                }}
-              >
+              <div className="mobile-category-list">
                 <button onClick={() => handleCategoryClick("")}>전체</button>
                 <button onClick={() => handleCategoryClick("outer")}>
                   겉옷
