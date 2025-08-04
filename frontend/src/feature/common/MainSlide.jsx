@@ -21,7 +21,6 @@ function MainSlide() {
     axios
       .get("/api/product/hot-random")
       .then((res) => {
-        console.log("슬라이드 데이터:", res.data);
         setSlides(res.data);
       })
       .catch((err) => console.error(err));
