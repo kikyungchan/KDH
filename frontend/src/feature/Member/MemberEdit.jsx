@@ -345,6 +345,7 @@ export function MemberEdit() {
                 <LeaveMemberEditModal
                   show={cancelSaveModalShow}
                   onClose={() => setCancelSaveModalShow(false)}
+                  onLeave={() => navigate(`/member?id=${member.id}`)}
                 />
                 {/* 비밀번호 변경 모달 */}
                 <ChangePasswordModal

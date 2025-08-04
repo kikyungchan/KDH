@@ -1,8 +1,7 @@
 import { Button, Modal, ModalTitle } from "react-bootstrap";
 import { useNavigate } from "react-router";
 
-export default function LeaveMemberEditModal({ show, onClose, member }) {
-  const navigate = useNavigate();
+export default function LeaveMemberEditModal({ show, onClose, onLeave }) {
   return (
     <Modal show={show} onHide={onClose}>
       <Modal.Header closeButton>
@@ -14,10 +13,7 @@ export default function LeaveMemberEditModal({ show, onClose, member }) {
         <p className="mt-2">변경 사항을 저장하지 않고 나가시겠습니까?</p>
       </Modal.Body>
       <Modal.Footer>
-        <Button
-          variant="dark"
-          onClick={() => navigate(`/member?id=${member.id}`)}
-        >
+        <Button variant="dark" onClick={onLeave}>
           나가기
         </Button>
         <Button variant="dark" onClick={onClose}>

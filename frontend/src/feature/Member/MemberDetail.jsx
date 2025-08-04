@@ -78,7 +78,7 @@ export function MemberDetail() {
   }
 
   function handleCloseWithdrawModal() {
-    setIsWithdrawProcessing(false);
+    setWithdrawModalShow(false);
     setOldPassword("");
     setPasswordError("");
   }

@@ -14,7 +14,6 @@ export default function WithdrawModal({
   oldPassword,
   setOldPassword,
   passwordError,
-  setPasswordError,
   handleWithdrawButtonClick,
   isWithdrawProcessing,
 }) {
@@ -45,12 +44,7 @@ export default function WithdrawModal({
         </FormGroup>
       </Modal.Body>
       <Modal.Footer>
-        <Button
-          variant="dark"
-          onClick={() => {
-            onClose();
-          }}
-        >
+        <Button variant="dark" onClick={onClose}>
           취소
         </Button>
         <Button
