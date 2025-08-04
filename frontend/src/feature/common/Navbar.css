@@ -87,12 +87,48 @@
     text-decoration: none;
 }
 
+/* 햄버거 아이콘 기본 숨김 */
+.hamburger-icon {
+    display: none;
+    font-size: 1.6rem;
+    cursor: pointer;
+    color: black;
+}
+
+
+/* 모바일 메뉴 드롭다운 */
+.mobile-menu {
+    position: absolute;
+    top: 80px;
+    left: 0;
+    right: 0;
+    background-color: white;
+    z-index: 999;
+    display: flex;
+    flex-direction: column;
+    padding: 1rem 2rem;
+    gap: 1rem;
+    border-top: 1px solid #ccc;
+}
+
+/*767이하에서 햄버거메뉴*/
+@media (max-width: 767px) {
+    .hamburger-icon {
+        display: block;
+    }
+
+    .navbar-left {
+        display: none !important;
+    }
+}
+
 /*  sm (~767) */
 @media (min-width: 768px) {
     .navbar-left {
         display: flex;
         gap: 1rem;
         font-size: 0.9rem;
+
     }
 }
 

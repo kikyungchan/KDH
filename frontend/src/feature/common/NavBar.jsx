@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router";
 import { AuthenticationContext } from "./AuthenticationContextProvider.jsx";
 import {
   FiChevronLeft,
+  FiMenu,
   FiSearch,
   FiShoppingCart,
   FiUser,
@@ -11,6 +12,7 @@ import "./Navbar.css";
 import { useCart } from "../Product/CartContext.jsx";
 
 function NavBar(props) {
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const { cartCount } = useCart();
   const { user, isAdmin } = useContext(AuthenticationContext);
   const [showSearch, setShowSearch] = useState(false);
@@ -65,6 +67,12 @@ function NavBar(props) {
           <Link to="/pay/Checkout">토스 페이먼츠</Link>
         </div>
 
+        {/* 모바일 메뉴 아이콘 */}
+        <FiMenu
+          className="hamburger-icon"
+          onClick={() => setIsMobileMenuOpen((prev) => !prev)}
+        />
+
         {/* 오른쪽 아이콘 */}
         <div className="navbar-icons">
           <FiSearch
@@ -107,6 +115,22 @@ function NavBar(props) {
           }}
         />
       </div>
+      {/* 모바일 메뉴 드롭다운 */}
+      {isMobileMenuOpen && (
+        <div className="mobile-menu">
+          <Link to="/product/list">상품목록</Link>
+          <Link to="/product/regist">상품등록</Link>
+          {user !== null && isAdmin && <Link to="/member/list">회원목록</Link>}
+          {user === null && <Link to="/signup">회원가입</Link>}
+          {user !== null && <Link to="/logout">로그아웃</Link>}
+          {user !== null && (
+            <Link to={`/member?id=${user.id}`}>{user.name}</Link>
+          )}
+          {user !== null && <Link to={"/qna/list"}>문의 내역</Link>}
+          <Link to="/chat/chatting">채팅 프로토콜</Link>
+          <Link to="/pay/Checkout">토스 페이먼츠</Link>
+        </div>
+      )}
     </>
   );
 }
