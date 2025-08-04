@@ -20,41 +20,51 @@ export default function WithdrawModal({
   if (!show) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-white bg-opacity-50">
-      <div className="bg-white rounded-xl w-full max-w-md p-6 shadow-xl">
-        <div className="flex justify-between items-center mb-4">
-          <h3 className="text-lg font-semibold">회원 탈퇴 확인</h3>
+    <div className="modal modal-open">
+      <div className="modal-box w-full max-w-md">
+        {/* 모달 헤더 */}
+        <div className="flex justify-between items-center mb-2">
+          <h3 className="text-lg font-bold">회원 탈퇴 확인</h3>
           <button className="btn btn-sm btn-circle" onClick={onClose}>
             ✕
           </button>
         </div>
 
+        {/* 설명 */}
         <p className="text-sm text-gray-600 mb-4">
           정말 탈퇴하시겠습니까? 탈퇴를 위해 비밀번호를 입력해주세요.
         </p>
 
-        <div className="flex items-center justify-content-between form-control mb-4">
-          <label htmlFor="withdraw-password" className=" label font-semibold">
+        {/* 비밀번호 입력란 */}
+        <div className="flex items-start gap-6 mb-4">
+          {/* 왼쪽 라벨 */}
+          <label
+            htmlFor="withdraw-password"
+            className="w-24 pt-2 font-semibold text-sm text-gray-700"
+          >
             비밀번호
           </label>
-          <input
-            id="withdraw-password"
-            type="password"
-            className={`input input-bordered ${
-              passwordError ? "input-error" : ""
-            }`}
-            value={oldPassword}
-            onChange={(e) => setOldPassword(e.target.value)}
-            autoFocus
-          />
-          {passwordError && (
-            <label className="label text-red-500 text-sm mt-1">
-              {passwordError}
-            </label>
-          )}
+
+          {/* 오른쪽 input + 에러 */}
+          <div className="flex flex-col flex-1">
+            <input
+              id="withdraw-password"
+              type="password"
+              className={`input input-bordered ${
+                passwordError ? "input-error" : ""
+              }`}
+              value={oldPassword}
+              onChange={(e) => setOldPassword(e.target.value)}
+              autoFocus
+            />
+            {passwordError && (
+              <span className="text-error text-sm mt-1">{passwordError}</span>
+            )}
+          </div>
         </div>
 
-        <div className="flex justify-end space-x-2">
+        {/* 버튼 영역 */}
+        <div className="modal-action">
           <button className="btn" onClick={onClose}>
             취소
           </button>
@@ -64,7 +74,7 @@ export default function WithdrawModal({
             disabled={!oldPassword || isWithdrawProcessing}
           >
             {isWithdrawProcessing && (
-              <span className="loading loading-spinner loading-sm mr-2"></span>
+              <span className="loading loading-spinner loading-sm mr-2" />
             )}
             탈퇴
           </button>
