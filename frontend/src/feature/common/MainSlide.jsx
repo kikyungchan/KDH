@@ -61,6 +61,8 @@ function MainSlide() {
 
   return (
     <Swiper
+      touchStartPreventDefault={false}
+      touchMoveStopPropagation={false}
       direction="vertical"
       slidesPerView={1}
       spaceBetween={0}

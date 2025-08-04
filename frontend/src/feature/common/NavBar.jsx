@@ -16,6 +16,7 @@ function NavBar(props) {
   const { cartCount } = useCart();
   const { user, isAdmin } = useContext(AuthenticationContext);
   const [showSearch, setShowSearch] = useState(false);
+  const menuRef = useRef(null);
   const searchRef = useRef(null);
   const iconRef = useRef(null);
   const navigate = useNavigate();
@@ -45,13 +46,39 @@ function NavBar(props) {
     };
   }, [showSearch]);
 
+  useEffect(() => {
+    function handleClickOutside(e) {
+      const isMenuClick = menuRef.current && menuRef.current.contains(e.target);
+      const isHamburgerClick = e.target.closest(".hamburger-icon");
+
+      if (!isMenuClick && !isHamburgerClick) {
+        setIsMobileMenuOpen(false);
+      }
+    }
+
+    if (isMobileMenuOpen) {
+      document.addEventListener("mousedown", handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [isMobileMenuOpen]);
+
   return (
     <>
       <nav className="navbar-container">
+        {/* 모바일 메뉴 아이콘 */}
+        <FiMenu
+          className="hamburger-icon"
+          onClick={() => setIsMobileMenuOpen((prev) => !prev)}
+        />
+        <div className="navbar-center">
+          <Link to="/" className="navbar-logo">
+            코데헌
+          </Link>
+        </div>
         {/* 왼쪽 메뉴 */}
-        <Link to="/" className="navbar-logo">
-          코데헌
-        </Link>
         <div className="navbar-left">
           <Link to="/product/list">상품목록</Link>
           <Link to="/product/regist">상품등록</Link>
@@ -84,11 +111,6 @@ function NavBar(props) {
               {cartCount > 0 && <span className="cart-badge">{cartCount}</span>}
             </Link>
           </div>
-          {/* 모바일 메뉴 아이콘 */}
-          <FiMenu
-            className="hamburger-icon"
-            onClick={() => setIsMobileMenuOpen((prev) => !prev)}
-          />
         </div>
       </nav>
       {/* 돋보기 눌렀을떄 나오는 검색창 */}
@@ -117,7 +139,7 @@ function NavBar(props) {
       </div>
       {/* 모바일 메뉴 드롭다운 */}
       {isMobileMenuOpen && (
-        <div className="mobile-menu">
+        <div className="mobile-menu" ref={menuRef}>
           <Link to="/product/list" onClick={() => setIsMobileMenuOpen(false)}>
             상품목록
           </Link>

@@ -14,6 +14,7 @@
 }
 
 .navbar-left {
+    font-size: 24px;
     display: none;
 }
 
@@ -88,10 +89,10 @@
 }
 
 .navbar-logo {
-    font-size: 24px;
+    font-size: 40px;
     font-weight: bold;
     text-decoration: none;
-    margin-right: 2.4rem;
+    margin-right: 1.8rem;
 }
 
 /* 햄버거 아이콘 기본 숨김 */
@@ -127,10 +128,17 @@
 }
 
 
-/*767이하에서 햄버거메뉴*/
+/* 모바일 레이아웃용 설정 */
 @media (max-width: 767px) {
     .hamburger-icon {
         display: block;
+        order: -1; /* 햄버거를 맨 앞쪽으로 */
+    }
+
+    .navbar-center {
+        position: absolute;
+        left: 50%;
+        transform: translateX(-50%);
     }
 
     .navbar-left {
@@ -142,8 +150,8 @@
 @media (min-width: 768px) {
     .navbar-left {
         display: flex;
-        gap: 1rem;
-        font-size: 0.9rem;
+        gap: 0.9rem;
+        font-size: 1.2rem;
 
     }
 }
@@ -159,7 +167,7 @@
 /* lg (1024~) */
 @media (min-width: 1024px) {
     .navbar-left {
-        gap: 3.3rem;
-        font-size: 1rem;
+        gap: 2.7rem;
+        font-size: 1.4rem;
     }
 }
