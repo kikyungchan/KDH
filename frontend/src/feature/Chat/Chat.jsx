@@ -82,15 +82,26 @@ export function Chat() {
         }}
       >
         {msgs.map((m, i) => (
-          <div
-            key={i}
-            style={{
-              textAlign: m.from === username ? "right" : "left",
-              margin: "5px 0",
-            }}
-          >
-            <strong>{m.from}:</strong> {m.message}
-          </div>
+          <>
+            <div className={`chat chat-${username ? "start" : "end"}`}>
+              <div className="chat-image avatar">
+                <div className="w-10 rounded-full">
+                  <img
+                    alt="Tailwind CSS chat bubble component"
+                    src="https://img.daisyui.com/images/profile/demo/kenobee@192.webp"
+                  />
+                </div>
+              </div>
+              <div className="chat-header">
+                {m.from}님<time className="text-xs opacity-50">12:45</time>
+              </div>
+              <div className="chat-bubble">
+                {/*<strong>{m.from}:</strong> */}
+                {m.message}
+              </div>
+              {/*<div className="chat-footer opacity-50">Delivered</di>v*/}
+            </div>
+          </>
         ))}
       </div>
       <div>
