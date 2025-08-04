@@ -87,8 +87,8 @@
     text-decoration: none;
 }
 
-/* ✅ sm (640px 이상) */
-@media (min-width: 767px) {
+/*  sm (~767) */
+@media (min-width: 768px) {
     .navbar-left {
         display: flex;
         gap: 1rem;
@@ -96,8 +96,8 @@
     }
 }
 
-/* ✅ md (768px 이상) */
-@media (min-width: 768px) {
+/*  md (768~1023) */
+@media (min-width: 769px) {
     .navbar-container {
         display: flex;
         gap: 1.5rem;
@@ -105,7 +105,7 @@
     }
 }
 
-/* ✅ lg (1024px 이상) */
+/* lg (1024~) */
 @media (min-width: 1024px) {
     .navbar-left {
         gap: 2rem;
