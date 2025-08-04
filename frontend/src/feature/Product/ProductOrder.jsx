@@ -207,7 +207,7 @@ function Order(props) {
           setReceiverName(res.data.name);
           setReceiverPhone(res.data.phone);
           setReceiverAddress(res.data.address);
-          setPostalCode(res.data.zipcode);
+          setPostalCode(res.data.zipCode);
           setReceiverDetailAddress(res.data.addressDetail);
         });
     } else {
