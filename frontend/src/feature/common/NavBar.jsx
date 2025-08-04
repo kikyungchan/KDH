@@ -80,7 +80,7 @@ function NavBar(props) {
         </div>
         {/* 왼쪽 메뉴 */}
         <div className="navbar-left">
-          <Link to="/product/list">상품목록</Link>
+          <Link to="/product/list">모든상품</Link>
           <Link to="/product/regist">상품등록</Link>
           {user !== null && isAdmin && <Link to="/member/list">회원목록</Link>}
           {user === null && <Link to="/signup">회원가입</Link>}
@@ -141,7 +141,7 @@ function NavBar(props) {
       {isMobileMenuOpen && (
         <div className="mobile-menu" ref={menuRef}>
           <Link to="/product/list" onClick={() => setIsMobileMenuOpen(false)}>
-            상품목록
+            모든상품
           </Link>
           <Link to="/product/regist" onClick={() => setIsMobileMenuOpen(false)}>
             상품등록

@@ -1,5 +1,5 @@
 .product-list-container {
-    max-width: 1700px;
+    max-width: 1600px;
     width: 100%;
     margin: 0 auto;
     padding: 2rem;
@@ -84,9 +84,9 @@
 }
 
 
-@media (min-width: 640px) {
+@media (max-width: 767px) {
     #product-list-container .product-grid {
-        grid-template-columns: repeat(1, 500px);
+        grid-template-columns: repeat(1, 400px);
     }
 }
 
