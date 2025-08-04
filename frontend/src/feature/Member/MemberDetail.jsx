@@ -84,17 +84,113 @@ export function MemberDetail() {
   }
 
   return (
-    <div style={{ backgroundColor: "#f8f9fa", minHeight: "100vh" }}>
-      <Container
-        className="d-flex justify-content-center align-items-center"
-        style={{ paddingTop: "40px" }}
-      >
-        <div style={{ width: "100%", maxWidth: "600px" }}>
-          <Card className="p-4 shadow rounded">
-            <Card.Body>
+    <div className="bg-gray-100 min-h-screen">
+      <div className="flex justify-center items-start pt-10">
+        <div className="w-full max-w-[600px]">
+          <div className="p-6 shadow rounded-2xl bg-white">
               <Row>
                 <Col>
-                  <h2 className="mb-4 text-center">회원 정보</h2>
+                  <h2 className="mb-6 text-center text-2xl font-semibold">회원 정보</h2>
+
+                  <div className="space-y-4">
+                    {/* 아이디 */}
+                    <div>
+                      <label className="block font-semibold mb-1">아이디</label>
+                      <input
+                        type="text"
+                        readOnly
+                        value={member.loginId}
+                        className="w-full rounded px-3 py-2 bg-gray-100 cursor-not-allowed"
+                      />
+                    </div>
+
+                    {/* 이름 */}
+                    <div>
+                      <label className="block font-semibold mb-1">이름</label>
+                      <input
+                        type="text"
+                        readOnly
+                        value={member.name}
+                        className="w-full rounded px-3 py-2 bg-gray-100 cursor-not-allowed"
+                      />
+                    </div>
+
+                    {/* 생년월일 */}
+                    <div>
+                      <label className="block font-semibold mb-1">생년월일</label>
+                      <input
+                        type="text"
+                        readOnly
+                        value={member.birthday}
+                        className="w-full rounded px-3 py-2 bg-gray-100 cursor-not-allowed"
+                      />
+                    </div>
+
+                    {/* 전화번호 */}
+                    <div>
+                      <label className="block font-semibold mb-1">전화번호</label>
+                      <input
+                        type="text"
+                        readOnly
+                        value={member.phone}
+                        className="w-full rounded px-3 py-2 bg-gray-100 cursor-not-allowed"
+                      />
+                    </div>
+
+                    {/* 이메일 */}
+                    <div>
+                      <label className="block font-semibold mb-1">이메일</label>
+                      <input
+                        type="text"
+                        readOnly
+                        value={member.email}
+                        className="w-full rounded px-3 py-2 bg-gray-100 cursor-not-allowed"
+                      />
+                    </div>
+
+                    {/* 주소 */}
+                    <div>
+                      <label className="block font-semibold mb-1">주소</label>
+                      <input
+                        type="text"
+                        readOnly
+                        value={member.zipCode}
+                        className="w-full rounded px-3 py-2 bg-gray-100 cursor-not-allowed mb-2"
+                      />
+                      <input
+                        type="text"
+                        readOnly
+                        value={member.address}
+                        className="w-full rounded px-3 py-2 bg-gray-100 cursor-not-allowed mb-2"
+                      />
+                      <input
+                        type="text"
+                        readOnly
+                        value={member.addressDetail}
+                        className="w-full rounded px-3 py-2 bg-gray-100 cursor-not-allowed"
+                      />
+                    </div>
+                  </div>
+
+                  {/* 버튼 */}
+                  {hasAccess(member.loginId) && (
+                    <div className="text-right mt-6">
+                      <button
+                        className="bg-neutral text-white px-4 py-2 rounded mr-2 hover:opacity-90 transition"
+                        onClick={() => navigate(`/member/edit?id=${member.id}`)}
+                      >
+                        수정
+                      </button>
+                      <button
+                        className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600 transition"
+                        onClick={() => setWithdrawModalShow(true)}
+                      >
+                        탈퇴
+                      </button>
+                    </div>
+                  )}
+                  {/*
+                  <h2 className="mb-6 text-center text-2xl font-semibold">회원 정보</h2>
                   <div>
                     <FormGroup controlId="loginId1" className="mb-2">
                       <FormLabel className="fw-semibold">아이디</FormLabel>
@@ -135,21 +231,25 @@ export function MemberDetail() {
                   </div>
                   {hasAccess(member.loginId) && (
                     <div className="text-end">
-                      <Button
-                        className="me-2"
+                      <button
+                        className="
+                        btn btn-neutral
+                        me-2"
                         variant="dark"
                         onClick={() => navigate(`/member/edit?id=${member.id}`)}
                       >
                         수정
-                      </Button>
-                      <Button
+                      </button>
+                      <button
+                        className="btn btn-neutral"
                         variant="danger"
                         onClick={() => setWithdrawModalShow(true)}
                       >
                         탈퇴
-                      </Button>
+                      </button>
                     </div>
                   )}
+                  */}
                 </Col>
                 <WithdrawModal
                   show={withdrawModalShow}
@@ -162,10 +262,9 @@ export function MemberDetail() {
                   isWithdrawProcessing={isWithdrawProcessing}
                 />
               </Row>
-            </Card.Body>
-          </Card>
+          </div>
         </div>
-      </Container>
+      </div>
     </div>
   );
 }
