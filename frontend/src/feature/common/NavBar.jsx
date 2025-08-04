@@ -216,40 +216,78 @@ function NavBar(props) {
         <div className="mobile-menu" ref={menuRef}>
           <div>
             <div
+              className="btn btn-sm btn-ghost text-left cursor-pointer text-xl"
               onClick={() => setShowMobileCategory((prev) => !prev)}
-              style={{ fontWeight: "bold", cursor: "pointer" }}
+              s
             >
               모든상품 ▾
             </div>
             {showMobileCategory && (
               <div className="mobile-category-list">
-                <button onClick={() => handleCategoryClick("")}>전체</button>
-                <button onClick={() => handleCategoryClick("outer")}>
+                <button
+                  className="text-lg btn btn-sm btn-ghost text-left cursor-pointer"
+                  onClick={() => handleCategoryClick("")}
+                >
+                  전체
+                </button>
+                <button
+                  className="text-lg btn btn-sm btn-ghost text-left cursor-pointer"
+                  onClick={() => handleCategoryClick("outer")}
+                >
                   겉옷
                 </button>
-                <button onClick={() => handleCategoryClick("top")}>상의</button>
-                <button onClick={() => handleCategoryClick("bottom")}>
+                <button
+                  className="text-lg btn btn-sm btn-ghost text-left cursor-pointer"
+                  onClick={() => handleCategoryClick("top")}
+                >
+                  상의
+                </button>
+                <button
+                  className="text-lg btn btn-sm btn-ghost text-left cursor-pointer"
+                  onClick={() => handleCategoryClick("bottom")}
+                >
                   하의
                 </button>
-                <button onClick={() => handleCategoryClick("hat")}>모자</button>
+                <button
+                  className="text-lg btn btn-sm btn-ghost text-left cursor-pointer"
+                  onClick={() => handleCategoryClick("hat")}
+                >
+                  모자
+                </button>
               </div>
             )}
           </div>
-          <Link to="/product/regist" onClick={() => setIsMobileMenuOpen(false)}>
+          <Link
+            to="/product/regist"
+            onClick={() => setIsMobileMenuOpen(false)}
+            className="btn btn-ghost w-full justify-start text-left text-xl"
+          >
             상품등록
           </Link>
           {user !== null && isAdmin && (
-            <Link to="/member/list" onClick={() => setIsMobileMenuOpen(false)}>
+            <Link
+              to="/member/list"
+              onClick={() => setIsMobileMenuOpen(false)}
+              className="btn btn-ghost w-full justify-start text-left text-xl"
+            >
               회원목록
             </Link>
           )}
           {user === null && (
-            <Link to="/signup" onClick={() => setIsMobileMenuOpen(false)}>
+            <Link
+              to="/signup"
+              onClick={() => setIsMobileMenuOpen(false)}
+              className="btn btn-ghost w-full justify-start text-left text-xl"
+            >
               회원가입
             </Link>
           )}
           {user !== null && (
-            <Link to="/logout" onClick={() => setIsMobileMenuOpen(false)}>
+            <Link
+              to="/logout"
+              onClick={() => setIsMobileMenuOpen(false)}
+              className="btn btn-ghost w-full justify-start text-left text-xl"
+            >
               로그아웃
             </Link>
           )}
@@ -257,19 +295,32 @@ function NavBar(props) {
             <Link
               to={`/member?id=${user.id}`}
               onClick={() => setIsMobileMenuOpen(false)}
+              className="btn btn-ghost w-full justify-start text-left text-xl"
             >
               {user.name}
             </Link>
           )}
           {user !== null && (
-            <Link to="/qna/list" onClick={() => setIsMobileMenuOpen(false)}>
+            <Link
+              to="/qna/list"
+              onClick={() => setIsMobileMenuOpen(false)}
+              className="btn btn-ghost w-full justify-start text-left text-xl"
+            >
               문의 내역
             </Link>
           )}
-          <Link to="/chat/chatting" onClick={() => setIsMobileMenuOpen(false)}>
+          <Link
+            to="/chat/chatting"
+            onClick={() => setIsMobileMenuOpen(false)}
+            className="btn btn-ghost w-full justify-start text-left text-xl"
+          >
             채팅 프로토콜
           </Link>
-          <Link to="/pay/Checkout" onClick={() => setIsMobileMenuOpen(false)}>
+          <Link
+            to="/pay/Checkout"
+            onClick={() => setIsMobileMenuOpen(false)}
+            className="btn btn-ghost w-full justify-start text-left text-xl"
+          >
             토스 페이먼츠
           </Link>
         </div>
