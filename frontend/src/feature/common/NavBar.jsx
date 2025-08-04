@@ -10,6 +10,8 @@ import {
 } from "react-icons/fi";
 import "./Navbar.css";
 import { useCart } from "../Product/CartContext.jsx";
+import NavLeft from "./NavLeft";
+import NavRight from "./NavRight";
 import "bootstrap/dist/css/bootstrap-grid.min.css";
 
 function NavBar(props) {
@@ -92,100 +94,32 @@ function NavBar(props) {
             코데헌
           </Link>
         </div>
-        {/* 왼쪽 메뉴 */}
-        <div className="navbar-left flex items-center gap-2">
-          {/* 모든상품 드롭다운 */}
-          <div className="dropdown dropdown-hover">
-            <div
-              tabIndex={0}
-              role="button"
-              className="btn btn-ghost text-xl whitespace-nowrap"
-            >
-              모든상품
-            </div>
-            <ul
-              tabIndex={0}
-              className="menu dropdown-content z-[1000] p-2 shadow bg-base-100 rounded-box w-52"
-            >
-              <li>
-                <button onClick={() => handleCategoryClick("")}>전체</button>
-              </li>
-              <li>
-                <button onClick={() => handleCategoryClick("outer")}>
-                  겉옷
-                </button>
-              </li>
-              <li>
-                <button onClick={() => handleCategoryClick("top")}>상의</button>
-              </li>
-              <li>
-                <button onClick={() => handleCategoryClick("bottom")}>
-                  하의
-                </button>
-              </li>
-              <li>
-                <button onClick={() => handleCategoryClick("hat")}>모자</button>
-              </li>
-            </ul>
-          </div>
 
-          <Link to="/product/regist" className="btn btn-ghost text-xl">
-            상품등록
-          </Link>
-          {user !== null && isAdmin && (
-            <Link to="/member/list" className="btn btn-ghost text-xl">
-              회원목록
-            </Link>
-          )}
-          {user === null && (
-            <Link to="/signup" className="btn btn-ghost text-xl">
-              회원가입
-            </Link>
-          )}
-          {user !== null && (
-            <Link to="/logout" className="btn btn-ghost text-xl">
-              로그아웃
-            </Link>
-          )}
-          {user !== null && (
-            <Link
-              to={`/member?id=${user.id}`}
-              className="btn btn-ghost text-xl"
-            >
-              {user.name}
-            </Link>
-          )}
-          {user !== null && (
-            <Link to="/qna/list" className="btn btn-ghost text-xl">
-              문의 내역
-            </Link>
-          )}
-          <Link to="/chat/chatting" className="btn btn-ghost text-xl">
-            채팅 프로토콜
-          </Link>
-          <Link to="/pay/Checkout" className="btn btn-ghost text-xl">
-            토스 페이먼츠
-          </Link>
-        </div>
+        <NavLeft handleCategoryClick={handleCategoryClick} />
 
         {/* 오른쪽 아이콘 */}
-        <div className="navbar-right">
-          <div className="navbar-icons">
-            <FiSearch
-              ref={iconRef}
-              className="navbar-icon"
-              onClick={() => setShowSearch((prev) => !prev)}
-              style={{ cursor: "pointer" }}
-            />
-            <Link to={user ? `/member?id=${user.id}` : "/login"}>
-              <FiUser className="navbar-icon" />
-            </Link>
-            <Link to="/product/cart" className="cart-icon-wrapper">
-              <FiShoppingCart className="navbar-icon" />
-              {cartCount > 0 && <span className="cart-badge">{cartCount}</span>}
-            </Link>
-          </div>
-        </div>
+        {/*<div className="navbar-right">*/}
+        {/*  <div className="navbar-icons">*/}
+        {/*    <FiSearch*/}
+        {/*      ref={iconRef}*/}
+        {/*      className="navbar-icon"*/}
+        {/*      onClick={() => setShowSearch((prev) => !prev)}*/}
+        {/*      style={{ cursor: "pointer" }}*/}
+        {/*    />*/}
+        {/*    <Link to={user ? `/member?id=${user.id}` : "/login"}>*/}
+        {/*      <FiUser className="navbar-icon" />*/}
+        {/*    </Link>*/}
+        {/*    <Link to="/product/cart" className="cart-icon-wrapper">*/}
+        {/*      <FiShoppingCart className="navbar-icon" />*/}
+        {/*      {cartCount > 0 && <span className="cart-badge">{cartCount}</span>}*/}
+        {/*    </Link>*/}
+        {/*  </div>*/}
+        {/*</div>*/}
+        <NavRight
+          user={user}
+          iconRef={iconRef}
+          onSearchToggle={() => setShowSearch((prev) => !prev)}
+        />
       </nav>
       {/* 돋보기 눌렀을떄 나오는 검색창 */}
       <div
