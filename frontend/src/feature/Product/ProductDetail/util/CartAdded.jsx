@@ -1,55 +1,45 @@
-import { Modal } from "react-bootstrap";
 import { useNavigate } from "react-router";
+import { useEffect, useRef } from "react";
 
 function CartAdded({ show, onHide }) {
   const navigate = useNavigate();
+  const dialogRef = useRef();
+
+  useEffect(() => {
+    if (show) {
+      dialogRef.current?.showModal();
+    } else {
+      dialogRef.current?.close();
+    }
+  }, [show]);
 
   return (
-    <Modal show={show} onHide={onHide} centered>
-      <Modal.Body
-        className="text-center d-flex justify-content-center align-items-center"
-        style={{ height: "130px", fontSize: "14px", padding: "0" }}
-      >
-        <p style={{ marginBottom: "0", fontSize: "16px" }}>
-          선택하신 상품을 장바구니에 담았습니다
-        </p>
-      </Modal.Body>
-      <div
-        style={{
-          display: "flex",
-          borderTop: "1px solid #ddd",
-          borderBottomLeftRadius: "10px",
-          borderBottomRightRadius: "10px",
-          overflow: "hidden",
-        }}
-      >
-        <button
-          onClick={onHide}
-          style={{
-            flex: 1,
-            padding: "12px 0",
-            border: "none",
-            background: "white",
-            fontWeight: "bold",
-            borderRight: "1px solid #ddd",
-          }}
-        >
-          계속쇼핑
-        </button>
-        <button
-          onClick={() => navigate("/product/cart")}
-          style={{
-            flex: 1,
-            padding: "12px 0",
-            border: "none",
-            background: "white",
-            fontWeight: "bold",
-          }}
-        >
-          장바구니
-        </button>
+    <dialog ref={dialogRef} className="modal">
+      <div className="modal-box p-0">
+        <div className="flex flex-col items-center justify-center py-8">
+          <p className="text-lg font-semibold mb-2">
+            선택하신 상품을 장바구니에 담았습니다
+          </p>
+        </div>
+        <div className="flex border-t border-gray-200">
+          <button
+            onClick={onHide}
+            className="flex-1 py-3 text-sm font-bold border-r border-gray-200"
+          >
+            계속쇼핑
+          </button>
+          <button
+            onClick={() => navigate("/product/cart")}
+            className="flex-1 py-3 text-sm font-bold"
+          >
+            장바구니
+          </button>
+        </div>
       </div>
-    </Modal>
+      <form method="dialog" className="modal-backdrop">
+        <button onClick={onHide}>닫기</button>
+      </form>
+    </dialog>
   );
 }
 

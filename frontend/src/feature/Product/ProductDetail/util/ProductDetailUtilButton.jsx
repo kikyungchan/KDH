@@ -118,16 +118,19 @@ export function handleCartButton({
   } else {
     const existingCart = JSON.parse(localStorage.getItem("guestCart") || "[]");
 
-    if (product.options?.length > 0) {
-      const enrichedOptions = (product.options || []).map((opt, idx) => ({
-        ...opt,
-        id: idx + 1,
-      }));
-      const selectedId = enrichedOptions.find(
-        (opt) => opt.optionName === selectedOption.optionName,
-      )?.id;
+    let cartItem;
 
-      const cartItem = {
+    const enrichedOptions = (product.options || []).map((opt, idx) => ({
+      ...opt,
+      id: idx + 1,
+    }));
+
+    const selectedId = enrichedOptions.find(
+      (opt) => opt.optionName === selectedOption?.optionName,
+    )?.id;
+
+    if (product.options?.length > 0 && selectedOption) {
+      cartItem = {
         productId: product.id,
         optionId: selectedId,
         productName: product.productName,
@@ -137,19 +140,8 @@ export function handleCartButton({
         imagePath: thumbnail,
         options: enrichedOptions,
       };
-
-      const existingIndex = existingCart.findIndex(
-        (item) =>
-          item.productId === cartItem.productId &&
-          item.optionName === cartItem.optionName,
-      );
-      if (existingIndex > -1) {
-        existingCart[existingIndex].quantity += quantity;
-      } else {
-        existingCart.push(cartItem);
-      }
-    } else {
-      const cartItem = {
+    } else if (product.options?.length === 0) {
+      cartItem = {
         productId: product.id,
         productName: product.productName,
         price: product.price,
@@ -159,15 +151,21 @@ export function handleCartButton({
         optionId: null,
         options: [],
       };
+    } else {
+      alert("옵션을 선택해주세요.");
+      return;
+    }
 
-      const existingIndex = existingCart.findIndex(
-        (item) => item.productId === cartItem.productId,
-      );
-      if (existingIndex > -1) {
-        existingCart[existingIndex].quantity += quantity;
-      } else {
-        existingCart.push(cartItem);
-      }
+    const existingIndex = existingCart.findIndex(
+      (item) =>
+        item.productId === cartItem.productId &&
+        item.optionName === cartItem.optionName,
+    );
+
+    if (existingIndex > -1) {
+      existingCart[existingIndex].quantity += quantity;
+    } else {
+      existingCart.push(cartItem);
     }
 
     localStorage.setItem("guestCart", JSON.stringify(existingCart));

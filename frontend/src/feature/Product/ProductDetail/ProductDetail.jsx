@@ -264,7 +264,7 @@ export function ProductDetail() {
               ) : (
                 // 재고 있는 경우 기존 버튼들
                 <div style={{ marginTop: "2px", display: "flex", gap: "10px" }}>
-                  <button
+                  <Button
                     onClick={() =>
                       handleBuyButton({
                         product,
@@ -284,8 +284,8 @@ export function ProductDetail() {
                     }}
                   >
                     구매하기
-                  </button>
-                  <button
+                  </Button>
+                  <Button
                     onClick={() =>
                       handleCartButton({
                         product,
@@ -299,7 +299,7 @@ export function ProductDetail() {
                     style={{ border: "3", width: "150px" }}
                   >
                     장바구니
-                  </button>
+                  </Button>
                 </div>
               )}
               <br />

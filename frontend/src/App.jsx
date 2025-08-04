@@ -24,7 +24,6 @@ import { FindLoginId } from "./feature/Member/FindLoginId.jsx";
 import { FindPassword } from "./feature/Member/FindPassword.jsx";
 import { ResetPassword } from "./feature/Member/ResetPassword.jsx";
 import { MemberLogout } from "./feature/Member/MemberLogout.jsx";
-import Main from "./feature/common/Main.jsx";
 import { ProductOrderComplete } from "./feature/Product/ProductOrderComplete.jsx";
 import { CartProvider } from "./feature/Product/CartContext.jsx";
 import MainPage from "./feature/common/MainPage.jsx";

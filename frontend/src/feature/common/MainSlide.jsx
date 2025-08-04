@@ -11,7 +11,12 @@ function MainSlide() {
   const [slides, setSlides] = useState([]);
   const swiperRef = useRef(null);
   const hasJustReachedEnd = useRef(false);
-
+  useEffect(() => {
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.body.style.overflow = "auto";
+    };
+  }, []);
   useEffect(() => {
     axios
       .get("/api/product/hot-random")

@@ -6,16 +6,10 @@ function MainPage() {
   const location = useLocation();
 
   useEffect(() => {
-    if (location.pathname === "/") {
-      document.body.style.overflow = "hidden";
-    } else {
-      document.body.style.overflow = "auto";
-    }
-
     return () => {
-      document.body.style.overflow = "auto";
+      document.body.style.overflow = "auto"; // 페이지 떠날 땐 항상 복구
     };
-  }, [location.pathname]);
+  }, []);
   return (
     <>
       <NavBar />
