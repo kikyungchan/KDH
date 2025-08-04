@@ -15,8 +15,8 @@ import {
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate, useSearchParams } from "react-router";
-import { jwtDecode } from "jwt-decode";
 import LeaveMemberEditModal from "./Modal/LeaveMemberEditModal.jsx";
+import ConfirmEditModal from "./Modal/ConfirmEditModal.jsx";
 
 export function MemberEdit() {
   // 입력 항목 정규식
@@ -69,7 +69,7 @@ export function MemberEdit() {
       .then((res) => {
         setMember(res.data);
       })
-      .catch((err) => {
+      .catch(() => {
         alert("잠시 후 다시 시도해주십시오.");
       })
       .finally(() => {});
@@ -123,10 +123,10 @@ export function MemberEdit() {
         oldPassword: oldPassword,
         newPassword: newPassword1,
       })
-      .then((res) => {
+      .then(() => {
         navigate(`/member?id=${member.id}`);
       })
-      .catch((err) => {
+      .catch(() => {
         alert("비밀번호가 일치하지 않습니다.");
       })
       .finally(() => {
@@ -185,13 +185,13 @@ export function MemberEdit() {
         oldPassword: oldPassword,
         newPassword: newPassword1,
       })
-      .then((res) => {
+      .then(() => {
         setOldPassword("");
         setNewPassword1("");
         setNewPassword2("");
         setChangePasswordModalShow(false);
       })
-      .catch((err) => {
+      .catch(() => {
         alert("비밀번호가 일치하지 않습니다.");
       })
       .finally(() => {
@@ -323,65 +323,17 @@ export function MemberEdit() {
                     </div>
                   </div>
                 </Col>
-                {/* TODO : 회원 정보 수정 모달 jsx로 따로 빼기 */}
-                <Modal
+                <ConfirmEditModal
                   show={saveModalShow}
-                  onHide={() => {
-                    setSaveModalShow(false);
-                    setOldPassword("");
-                  }}
-                >
-                  <Modal.Header closeButton>
-                    <Modal.Title>회원 정보 수정 확인</Modal.Title>
-                  </Modal.Header>
-                  <Modal.Body>
-                    <FormGroup>
-                      <FormLabel>암호 입력</FormLabel>
-                      <FormControl
-                        type="password"
-                        value={oldPassword}
-                        onChange={(e) => setOldPassword(e.target.value)}
-                      />
-                      {isSubmitted && oldPassword.trim() === "" && (
-                        <FormText className="text-danger">
-                          암호를 입력해주세요.
-                        </FormText>
-                      )}
-                    </FormGroup>
-                  </Modal.Body>
-                  <Modal.Footer>
-                    <Button
-                      variant="dark"
-                      onClick={handleMemberInfoChangeButton}
-                      disabled={isEditProcessing}
-                    >
-                      {isEditProcessing ? (
-                        <>
-                          <Spinner
-                            animation="border"
-                            size="sm"
-                            role="status"
-                            aria-hidden="true"
-                            className="me-2"
-                          />
-                          저장 중...
-                        </>
-                      ) : (
-                        "저장"
-                      )}
-                    </Button>
-                    <Button
-                      variant="dark"
-                      onClick={() => {
-                        setSaveModalShow(false);
-                        setOldPassword("");
-                        setIsSubmitted(false);
-                      }}
-                    >
-                      취소
-                    </Button>
-                  </Modal.Footer>
-                </Modal>
+                  onClose={() => setSaveModalShow(false)}
+                  onSubmit={handleMemberInfoChangeButton}
+                  oldPassword={oldPassword}
+                  setOldPassword={setOldPassword}
+                  isSubmitted={isSubmitted}
+                  setIsSubmitted={setIsSubmitted}
+                  isEditProcessing={isEditProcessing}
+                />
+                {/* 회원 정보 수정 취소 모달 */}
                 <LeaveMemberEditModal
                   show={cancelSaveModalShow}
                   onClose={() => setCancelSaveModalShow(false)}
