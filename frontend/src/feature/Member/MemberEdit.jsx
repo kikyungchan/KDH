@@ -336,7 +336,7 @@ export function MemberEdit() {
                     {/* 오른쪽: 저장 / 취소 */}
                     <div className="space-x-2">
                       <button
-                        className="btn btn-primary"
+                        className="btn btn-neutral"
                         onClick={() => setSaveModalShow(true)}
                         disabled={
                           !member?.name?.trim() ||
@@ -349,7 +349,7 @@ export function MemberEdit() {
                         저장
                       </button>
                       <button
-                        className="btn"
+                        className="btn btn-neutral"
                         onClick={() => setCancelSaveModalShow(true)}
                       >
                         취소

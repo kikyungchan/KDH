@@ -20,8 +20,6 @@ export default function WithdrawModal({
   if (!show) return null;
 
   return (
-
-
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-white bg-opacity-50">
       <div className="bg-white rounded-xl w-full max-w-md p-6 shadow-xl">
         <div className="flex justify-between items-center mb-4">
