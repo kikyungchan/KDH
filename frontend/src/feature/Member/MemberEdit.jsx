@@ -17,6 +17,7 @@ import axios from "axios";
 import { useNavigate, useSearchParams } from "react-router";
 import LeaveMemberEditModal from "./Modal/LeaveMemberEditModal.jsx";
 import ConfirmEditModal from "./Modal/ConfirmEditModal.jsx";
+import ChangePasswordModal from "./Modal/ChangePasswordModal.jsx";
 
 export function MemberEdit() {
   // 입력 항목 정규식
@@ -199,6 +200,13 @@ export function MemberEdit() {
       });
   }
 
+  function handleCloseChangePasswordModal() {
+    setChangePasswordModalShow(false);
+    setOldPassword("");
+    setNewPassword1("");
+    setNewPassword2("");
+  }
+
   return (
     <div style={{ backgroundColor: "#f8f9fa", minHeight: "100vh" }}>
       <Container
@@ -338,93 +346,21 @@ export function MemberEdit() {
                   show={cancelSaveModalShow}
                   onClose={() => setCancelSaveModalShow(false)}
                 />
-                {/*  TODO : 비밀 번호 변경 모달 jsx로 따로 빼기 */}
-                <Modal
+                {/* 비밀번호 변경 모달 */}
+                <ChangePasswordModal
                   show={changePasswordModalShow}
-                  onHide={() => {
-                    setChangePasswordModalShow(false);
-                    setOldPassword("");
-                    setNewPassword1("");
-                    setNewPassword2("");
-                  }}
-                >
-                  <Modal.Header closeButton>
-                    <Modal.Title>비밀번호 변경</Modal.Title>
-                  </Modal.Header>
-                  <Modal.Body>
-                    <p className="mb-3" style={{ fontSize: "13px" }}>
-                      비밀번호는 영문+숫자 조합, 8~20자 사이로 입력하세요.
-                    </p>
-                    <FormGroup>
-                      <FormLabel className="mb-2">현재 비밀번호</FormLabel>
-                      <FormControl
-                        id="withdraw-password"
-                        type="password"
-                        value={oldPassword}
-                        onChange={(e) => setOldPassword(e.target.value)}
-                        autoFocus
-                      />
-                    </FormGroup>
-                    <FormGroup className="mb-2 mt-2">
-                      <FormLabel>변경할 비밀번호</FormLabel>
-                      <FormControl
-                        id="withdraw-password"
-                        type="password"
-                        value={newPassword1}
-                        onChange={(e) => setNewPassword1(e.target.value)}
-                      />
-                    </FormGroup>
-                    <FormGroup className="mb-2">
-                      <FormLabel>변경할 비밀번호 확인</FormLabel>
-                      <FormControl
-                        id="withdraw-password"
-                        type="password"
-                        value={newPassword2}
-                        onChange={(e) => setNewPassword2(e.target.value)}
-                      />
-                      {passwordConfirm || (
-                        <FormText className="text-danger">
-                          비밀번호가 일치하지 않습니다.
-                        </FormText>
-                      )}
-                    </FormGroup>
-                  </Modal.Body>
-                  <Modal.Footer>
-                    <Button
-                      variant="dark"
-                      onClick={() => {
-                        setChangePasswordModalShow(false);
-                        setOldPassword("");
-                        setNewPassword1("");
-                        setNewPassword2("");
-                      }}
-                    >
-                      취소
-                    </Button>
-                    <Button
-                      variant="dark"
-                      onClick={handleChangePasswordClick}
-                      disabled={
-                        changePasswordButtonDisabled || isPasswordProcessing
-                      }
-                    >
-                      {isPasswordProcessing ? (
-                        <>
-                          <Spinner
-                            animation="border"
-                            size="sm"
-                            role="status"
-                            aria-hidden="true"
-                            className="me-2"
-                          />
-                          저장 중...
-                        </>
-                      ) : (
-                        "저장"
-                      )}
-                    </Button>
-                  </Modal.Footer>
-                </Modal>
+                  onClose={handleCloseChangePasswordModal}
+                  oldPassword={oldPassword}
+                  setOldPassword={setOldPassword}
+                  newPassword1={newPassword1}
+                  setNewPassword1={setNewPassword1}
+                  newPassword2={newPassword2}
+                  setNewPassword2={setNewPassword2}
+                  passwordConfirm={passwordConfirm}
+                  handleChangePasswordClick={handleChangePasswordClick}
+                  changePasswordButtonDisabled={changePasswordButtonDisabled}
+                  isPasswordProcessing={isPasswordProcessing}
+                />
               </Row>
             </Card.Body>
           </Card>
