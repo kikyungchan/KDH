@@ -67,27 +67,28 @@ function NavBar(props) {
           <Link to="/pay/Checkout">토스 페이먼츠</Link>
         </div>
 
-        {/* 모바일 메뉴 아이콘 */}
-        <FiMenu
-          className="hamburger-icon"
-          onClick={() => setIsMobileMenuOpen((prev) => !prev)}
-        />
-
         {/* 오른쪽 아이콘 */}
-        <div className="navbar-icons">
-          <FiSearch
-            ref={iconRef}
-            className="navbar-icon"
-            onClick={() => setShowSearch((prev) => !prev)}
-            style={{ cursor: "pointer" }}
+        <div className="navbar-right">
+          <div className="navbar-icons">
+            <FiSearch
+              ref={iconRef}
+              className="navbar-icon"
+              onClick={() => setShowSearch((prev) => !prev)}
+              style={{ cursor: "pointer" }}
+            />
+            <Link to={user ? `/member?id=${user.id}` : "/login"}>
+              <FiUser className="navbar-icon" />
+            </Link>
+            <Link to="/product/cart" className="cart-icon-wrapper">
+              <FiShoppingCart className="navbar-icon" />
+              {cartCount > 0 && <span className="cart-badge">{cartCount}</span>}
+            </Link>
+          </div>
+          {/* 모바일 메뉴 아이콘 */}
+          <FiMenu
+            className="hamburger-icon"
+            onClick={() => setIsMobileMenuOpen((prev) => !prev)}
           />
-          <Link to={user ? `/member?id=${user.id}` : "/login"}>
-            <FiUser className="navbar-icon" />
-          </Link>
-          <Link to="/product/cart" className="cart-icon-wrapper">
-            <FiShoppingCart className="navbar-icon" />
-            {cartCount > 0 && <span className="cart-badge">{cartCount}</span>}
-          </Link>
         </div>
       </nav>
       {/* 돋보기 눌렀을떄 나오는 검색창 */}

@@ -1,5 +1,5 @@
 .navbar-container {
-    position: fixed; /* <- 고정 위치 */
+    position: fixed; /* 고정 위치 */
     top: 0;
     left: 0;
     right: 0;
@@ -19,9 +19,8 @@
 
 .navbar-icons {
     display: flex;
-    gap: 2rem;
+    gap: 1.5rem;
     font-size: 1.4rem;
-    color: white;
     align-items: center;
     padding-right: 1rem;
 
@@ -110,6 +109,15 @@
     gap: 1rem;
     border-top: 1px solid #ccc;
 }
+
+.navbar-right {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 1rem;
+    flex: 1;
+}
+
 
 /*767이하에서 햄버거메뉴*/
 @media (max-width: 767px) {
