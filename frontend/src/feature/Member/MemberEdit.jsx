@@ -12,9 +12,9 @@ import {
   Row,
   Spinner,
 } from "react-bootstrap";
-import { useEffect, useState } from "react";
+import {useEffect, useState} from "react";
 import axios from "axios";
-import { useNavigate, useSearchParams } from "react-router";
+import {useNavigate, useSearchParams} from "react-router";
 import LeaveMemberEditModal from "./Modal/LeaveMemberEditModal.jsx";
 import ConfirmEditModal from "./Modal/ConfirmEditModal.jsx";
 import ChangePasswordModal from "./Modal/ChangePasswordModal.jsx";
@@ -73,13 +73,14 @@ export function MemberEdit() {
       .catch(() => {
         alert("잠시 후 다시 시도해주십시오.");
       })
-      .finally(() => {});
+      .finally(() => {
+      });
   }, [memberParams]);
   if (!member) {
     return (
       <div>
         <div>
-          <Spinner />
+          <Spinner/>
         </div>
         회원 정보를 불러오는 중 . . .{" "}
       </div>
@@ -138,7 +139,7 @@ export function MemberEdit() {
   if (!member) {
     return (
       <div>
-        <Spinner />
+        <Spinner/>
         회원 정보를 불러오는 중...
       </div>
     );
@@ -208,110 +209,135 @@ export function MemberEdit() {
   }
 
   return (
-    <div style={{ backgroundColor: "#f8f9fa", minHeight: "100vh" }}>
+    <div style={{backgroundColor: "#f8f9fa", minHeight: "100vh"}}>
       <Container
         className="d-flex justify-content-center align-items-center"
-        style={{ paddingTop: "40px" }}
+        style={{paddingTop: "40px"}}
       >
-        <div style={{ width: "100%", maxWidth: "600px" }}>
+        <div style={{width: "100%", maxWidth: "600px"}}>
           <Card className="p-4 shadow rounded">
             <Card.Body>
               <Row>
                 <Col>
-                  <h2 className="mb-4 text-center">회원 정보 수정</h2>
-                  <div>
-                    <FormGroup controlId="loginId1" className="mb-2">
-                      <FormLabel className="fw-semibold">아이디</FormLabel>
-                      <FormControl disabled value={member.loginId || ""} />
-                    </FormGroup>
+                  <h2 className="mb-6 text-center text-xl font-semibold">회원 정보 수정</h2>
+
+                  {/* 아이디 (읽기 전용) */}
+                  <div className="flex items-center gap-4 mb-4">
+                    <label className="label font-semibold mr-6">아이디</label>
+                    <input
+                      type="text"
+                      value={member.loginId || ""}
+                      disabled
+                      className="font-semibold input input-bordered bg-gray-100 cursor-not-allowed"
+                    />
                   </div>
-                  <div>
-                    <FormGroup controlId="name1" className="mb-2">
-                      <FormLabel className="fw-semibold">이름</FormLabel>
-                      <FormControl
-                        value={member.name || ""}
-                        onChange={(e) =>
-                          setMember({ ...member, name: e.target.value })
-                        }
+
+                  {/* 이름 */}
+                  <div className="flex items-center gap-4 mb-4">
+                    <label className="w-24 label font-semibold mr-6">이름</label>
+                    <input
+                      type="text"
+                      value={member.name || ""}
+                      onChange={(e) => setMember({...member, name: e.target.value})}
+                      className="input input-bordered"
+                    />
+                    {isSubmitted && !nameValid && (
+                      <span className="text-error text-sm mt-1">
+                        이름 형식이 올바르지 않습니다.
+                      </span>
+                    )}
+                  </div>
+
+                  {/* 생년월일 */}
+                  <div className="flex items-center gap-4 mb-4">
+                    <label className="label font-semibold mr-6">생년월일</label>
+                    <input
+                      type="date"
+                      value={member.birthday || ""}
+                      onChange={(e) => setMember({...member, birthday: e.target.value})}
+                      className="input input-bordered"
+                    />
+                  </div>
+
+                  {/* 전화번호 */}
+                  <div className="flex items-center gap-4 mb-4">
+                    <label className="label font-semibold mr-6">전화번호</label>
+                    <input
+                      type="text"
+                      value={member.phone || ""}
+                      onChange={(e) => setMember({...member, phone: e.target.value})}
+                      className="input input-bordered"
+                    />
+                    {isSubmitted && !phoneValid && (
+                      <span className="text-error text-sm mt-1">
+                        전화번호 형식이 올바르지 않습니다.
+                      </span>
+                    )}
+                  </div>
+
+                  {/* 이메일 (읽기 전용) */}
+                  <div className="flex items-center gap-4 mb-4">
+                    <label className="label font-semibold mr-6">이메일</label>
+                    <input
+                      type="email"
+                      value={member.email || ""}
+                      disabled
+                      className="font-semibold input input-bordered bg-gray-100 cursor-not-allowed"
+                    />
+                  </div>
+
+                  {/* 주소 */}
+                  <div className="flex items-start gap-4 mb-4">
+                    {/* 좌측: 고정 라벨 */}
+                    <label className="label font-semibold mr-6">주소</label>
+
+                    {/* 우측: input 요소들 */}
+                    <div className="flex flex-col flex-1 gap-2">
+                      <input
+                        type="text"
+                        value={member.zipCode || ""}
+                        readOnly
+                        className="input input-bordered bg-gray-100 cursor-not-allowed"
                       />
-                      {isSubmitted && !nameValid && (
-                        <FormText className="text-danger">
-                          이름 형식이 올바르지 않습니다.
-                        </FormText>
-                      )}
-                    </FormGroup>
-                  </div>
-                  <div>
-                    <FormGroup controlId="birthday1" className="mb-2">
-                      <FormLabel className="fw-semibold">생년월일</FormLabel>
-                      <FormControl
-                        value={member.birthday || ""}
-                        type="date"
-                        onChange={(e) =>
-                          setMember({ ...member, birthday: e.target.value })
-                        }
+                      <input
+                        type="text"
+                        value={member.address || ""}
+                        readOnly
+                        className="input input-bordered bg-gray-100 cursor-not-allowed"
                       />
-                    </FormGroup>
-                  </div>
-                  <div>
-                    <FormGroup controlId="phone1" className="mb-2">
-                      <FormLabel className="fw-semibold">전화번호</FormLabel>
-                      <FormControl
-                        value={member.phone || ""}
-                        onChange={(e) =>
-                          setMember({ ...member, phone: e.target.value })
-                        }
-                      />
-                      {isSubmitted && !phoneValid && (
-                        <FormText className="text-danger">
-                          전화번호 형식이 올바르지 않습니다.
-                        </FormText>
-                      )}
-                    </FormGroup>
-                  </div>
-                  <div>
-                    <FormGroup controlId="email1" className="mb-2">
-                      <FormLabel className="fw-semibold">이메일</FormLabel>
-                      <FormControl disabled value={member.email || ""} />
-                    </FormGroup>
-                  </div>
-                  <div>
-                    <FormGroup controlId="address1" className="mb-2">
-                      <FormLabel className="fw-semibold">주소</FormLabel>
-                      <FormControl value={member.zipCode || ""} readOnly />
-                      <FormControl value={member.address || ""} readOnly />
-                      <FormControl
-                        value={member.addressDetail || ""}
-                        onChange={(e) =>
-                          setMember({
-                            ...member,
-                            addressDetail: e.target.value,
-                          })
-                        }
-                      />
-                      <Button
-                        variant="dark"
-                        className="mt-1"
-                        onClick={handleSearchAddress}
-                      >
-                        주소 검색
-                      </Button>
-                    </FormGroup>
-                  </div>
-                  <div className="d-flex justify-content-between">
-                    <div>
-                      <Button
-                        variant="dark"
-                        onClick={() => setChangePasswordModalShow(true)}
-                      >
-                        암호 변경
-                      </Button>
+                      <div className="flex">
+                        <input
+                          type="text"
+                          value={member.addressDetail || ""}
+                          onChange={(e) =>
+                            setMember({...member, addressDetail: e.target.value})
+                          }
+                          className="input input-bordered"
+                        />
+                        <button
+                          onClick={handleSearchAddress}
+                          className="btn btn-neutral w-fit ml-2"
+                        >
+                          주소 검색
+                        </button>
+                      </div>
                     </div>
-                    <div>
-                      <Button
-                        variant="dark"
+                  </div>
+                  {/* 하단 버튼들 */}
+                  <div className="flex justify-between mt-10">
+                    {/* 왼쪽: 암호 변경 */}
+                    <button
+                      className="btn btn-neutral"
+                      onClick={() => setChangePasswordModalShow(true)}
+                    >
+                      암호 변경
+                    </button>
+
+                    {/* 오른쪽: 저장 / 취소 */}
+                    <div className="space-x-2">
+                      <button
+                        className="btn btn-primary"
                         onClick={() => setSaveModalShow(true)}
-                        className="me-2"
                         disabled={
                           !member?.name?.trim() ||
                           !member?.birthday?.trim() ||
@@ -321,13 +347,13 @@ export function MemberEdit() {
                         }
                       >
                         저장
-                      </Button>
-                      <Button
-                        variant="dark"
+                      </button>
+                      <button
+                        className="btn"
                         onClick={() => setCancelSaveModalShow(true)}
                       >
                         취소
-                      </Button>
+                      </button>
                     </div>
                   </div>
                 </Col>
