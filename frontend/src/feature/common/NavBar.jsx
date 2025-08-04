@@ -107,11 +107,10 @@ function NavBar(props) {
           value={keyword}
           onChange={(e) => setKeyword(e.target.value)}
           onKeyDown={(e) => {
-            if (e.key === "Enter") {
-              if (keyword.trim() !== "") {
-                navigate(`/product/list?keyword=${keyword.trim()}`);
-                setKeyword("");
-              }
+            if (e.key === "Enter" && keyword.trim() !== "") {
+              navigate(`/product/list?keyword=${keyword.trim()}`);
+              setKeyword("");
+              setShowSearch(false); // 검색 후 닫기
             }
           }}
         />

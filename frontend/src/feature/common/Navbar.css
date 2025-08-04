@@ -41,13 +41,16 @@
 
 .search-bar-wrapper {
     position: fixed;
-    top: 60px;
+    top: 80px; /* navbar 높이에 맞춰서 */
     left: 0;
     right: 0;
-    background: white;
-    padding: 10px;
-    z-index: 50;
+    background: #f9f9f9;
+    padding: 12px 20px;
+    z-index: 999;
     display: none;
+    align-items: center;
+    border-bottom: 1px solid #ccc;
+    transition: all 0.3s ease;
 }
 
 .search-bar-wrapper.active {
@@ -55,16 +58,20 @@
 }
 
 .search-input {
-    border: none;
+    flex: 1;
+    border: 1px solid #ddd;
+    border-radius: 4px;
     outline: none;
-    padding: 0.3rem 1rem;
-    font-size: 14px;
-    width: 200px;
+    padding: 0.5rem 1rem;
+    font-size: 1rem;
+    background-color: white;
 }
 
 .search-close-icon {
-    margin-right: 0.5rem;
+    margin-right: 0.8rem;
+    font-size: 1.2rem;
     cursor: pointer;
+    color: black;
 }
 
 .cart-icon-wrapper {
