@@ -25,6 +25,7 @@ function MainSlide() {
       direction="vertical"
       slidesPerView={1}
       spaceBetween={0}
+      loop={true}
       mousewheel={true}
       // autoplay={{ delay: 3000 }}
       modules={[Mousewheel, Pagination]}
