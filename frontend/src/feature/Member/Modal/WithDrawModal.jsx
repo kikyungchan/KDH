@@ -65,9 +65,6 @@ export default function WithdrawModal({
 
         {/* 버튼 영역 */}
         <div className="modal-action">
-          <button className="btn" onClick={onClose}>
-            취소
-          </button>
           <button
             className="btn btn-error"
             onClick={handleWithdrawButtonClick}
@@ -77,6 +74,9 @@ export default function WithdrawModal({
               <span className="loading loading-spinner loading-sm mr-2" />
             )}
             탈퇴
+          </button>
+          <button className="btn btn-neutral" onClick={onClose}>
+            취소
           </button>
         </div>
       </div>

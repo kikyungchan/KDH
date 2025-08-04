@@ -176,80 +176,19 @@ export function MemberDetail() {
                   {hasAccess(member.loginId) && (
                     <div className="text-right mt-6">
                       <button
-                        className="bg-neutral text-white px-4 py-2 rounded mr-2 hover:opacity-90 transition"
+                        className="btn btn-info px-4 py-2 rounded mr-2 hover:opacity-90 transition"
                         onClick={() => navigate(`/member/edit?id=${member.id}`)}
                       >
                         수정
                       </button>
                       <button
-                        className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600 transition"
+                        className="btn btn-error px-4 py-2 rounded mr-2 hover:opacity-90 transition"
                         onClick={() => setWithdrawModalShow(true)}
                       >
                         탈퇴
                       </button>
                     </div>
                   )}
-                  {/*
-                  <h2 className="mb-6 text-center text-2xl font-semibold">회원 정보</h2>
-                  <div>
-                    <FormGroup controlId="loginId1" className="mb-2">
-                      <FormLabel className="fw-semibold">아이디</FormLabel>
-                      <FormControl readOnly value={member.loginId} />
-                    </FormGroup>
-                  </div>
-                  <div>
-                    <FormGroup controlId="name1" className="mb-2">
-                      <FormLabel className="fw-semibold">이름</FormLabel>
-                      <FormControl readOnly value={member.name} />
-                    </FormGroup>
-                  </div>
-                  <div>
-                    <FormGroup controlId="birthday1" className="mb-2">
-                      <FormLabel className="fw-semibold">생년월일</FormLabel>
-                      <FormControl readOnly value={member.birthday} />
-                    </FormGroup>
-                  </div>
-                  <div>
-                    <FormGroup controlId="phone1" className="mb-2">
-                      <FormLabel className="fw-semibold">전화번호</FormLabel>
-                      <FormControl readOnly value={member.phone} />
-                    </FormGroup>
-                  </div>
-                  <div>
-                    <FormGroup controlId="email1" className="mb-2">
-                      <FormLabel className="fw-semibold">이메일</FormLabel>
-                      <FormControl readOnly value={member.email} />
-                    </FormGroup>
-                  </div>
-                  <div>
-                    <FormGroup controlId="address1" className="mb-2">
-                      <FormLabel className="fw-semibold">주소</FormLabel>
-                      <FormControl readOnly value={member.zipCode} />
-                      <FormControl readOnly value={member.address} />
-                      <FormControl readOnly value={member.addressDetail} />
-                    </FormGroup>
-                  </div>
-                  {hasAccess(member.loginId) && (
-                    <div className="text-end">
-                      <button
-                        className="
-                        btn btn-neutral
-                        me-2"
-                        variant="dark"
-                        onClick={() => navigate(`/member/edit?id=${member.id}`)}
-                      >
-                        수정
-                      </button>
-                      <button
-                        className="btn btn-neutral"
-                        variant="danger"
-                        onClick={() => setWithdrawModalShow(true)}
-                      >
-                        탈퇴
-                      </button>
-                    </div>
-                  )}
-                  */}
                 </Col>
                 <WithdrawModal
                   show={withdrawModalShow}

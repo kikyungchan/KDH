@@ -316,7 +316,7 @@ export function MemberEdit() {
                         />
                         <button
                           onClick={handleSearchAddress}
-                          className="btn btn-neutral w-fit ml-2"
+                          className="btn btn-outline btn-neutral w-fit ml-2"
                         >
                           주소 검색
                         </button>
@@ -336,7 +336,7 @@ export function MemberEdit() {
                     {/* 오른쪽: 저장 / 취소 */}
                     <div className="space-x-2">
                       <button
-                        className="btn btn-neutral"
+                        className="btn btn-info"
                         onClick={() => setSaveModalShow(true)}
                         disabled={
                           !member?.name?.trim() ||

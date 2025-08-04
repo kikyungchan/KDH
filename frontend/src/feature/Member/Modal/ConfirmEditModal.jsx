@@ -30,6 +30,7 @@ export default function ConfirmEditModal({
             onClick={() => {
               onClose();
               setOldPassword("");
+              setIsSubmitted(false);
             }}
           >
             ✕
@@ -38,7 +39,7 @@ export default function ConfirmEditModal({
 
         {/* 내용 */}
         <div className="flex items-start gap-6 mb-2">
-          <label className="w-24 label font-semibold pt-2">암호 입력</label>
+          <label className="block text-sm font-semibold pt-2">비밀번호 입력</label>
 
           <div className="flex flex-col flex-1">
             <input
@@ -59,7 +60,7 @@ export default function ConfirmEditModal({
         {/* 하단 버튼 */}
         <div className="modal-action">
           <button
-            className="btn btn-neutral"
+            className="btn btn-info"
             onClick={onSubmit}
             disabled={isEditProcessing}
           >
