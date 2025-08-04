@@ -28,7 +28,7 @@ td, tr, th {
     text-align: center;
 }
 
-/*
 .row {
-    margin: auto 10px;
-}*/
+    width: 1256px;
+    max-width: 1256px;
+}

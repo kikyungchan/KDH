@@ -99,7 +99,7 @@ export function CheckoutPage() {
         {/* 결제하기 버튼 */}
         {/*todo : 결제 처리하기 (현재 기존요청을 처리중이라며 결제가 안됨 서버에도 접속 못하는것 같음)*/}
         <button
-          className="button btn primary w-100"
+          className="button btn primary w-full"
           disabled={!ready}
           onClick={async () => {
             try {

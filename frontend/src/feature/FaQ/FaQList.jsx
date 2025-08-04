@@ -81,9 +81,10 @@ export function FaQList() {
 
   // useState 안전장치
   if (!faqList) {
-    return <Spinner />;
+    return <span className="loading loading-spinner"></span>;
   }
 
+  // todo : 백엔드도 text형으로 바꾸기
   function handleSaveButtonClick() {
     axios
       .post("/api/faq/add", {
@@ -96,6 +97,7 @@ export function FaQList() {
         if (message) {
           toast(message.text, { type: message.type });
         }
+        window.location.reload();
       })
       .catch((err) => {
         console.log("err");
@@ -112,7 +114,7 @@ export function FaQList() {
   return (
     <>
       <Row className="justify-content-center">
-        <Col md={8} lg={6} className="mt-5">
+        <Col md={8} lg={9} className="mt-5">
           <div className="container">
             <h2 className="mb-4">자주 묻는 질문</h2>
             <div>
@@ -205,27 +207,24 @@ export function FaQList() {
           <div className="modal-box">
             <h3 className="font-bold text-lg">FaQ 등록</h3>
             <br />
-            <h6>faq 질문</h6>
-            <label className="floating-label">
-              <input
-                type="textarea"
+            <fieldset className="fieldset">
+              <legend className="fieldset-legend">faq 질문</legend>
+              <textarea
+                className="textarea h-24 w-full"
                 placeholder="질문을 입력해주세요"
-                className="textarea input-md w-full"
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
-              />
-            </label>
-            <br />
-            <h6>faq 답변</h6>
-            <label className="floating-label">
-              <input
-                type="textarea"
+              ></textarea>
+            </fieldset>
+            <fieldset className="fieldset">
+              <legend className="fieldset-legend">faq 답변</legend>
+              <textarea
+                className="textarea h-24 w-full"
                 placeholder="답변을 입력해주세요"
-                className="textarea input-md w-full"
                 value={content}
                 onChange={(e) => setContent(e.target.value)}
-              />
-            </label>
+              ></textarea>
+            </fieldset>
             <div className="modal-action">
               <button
                 className="btn mx-1 btn-accent"
@@ -240,41 +239,60 @@ export function FaQList() {
           </div>
         </dialog>
       </Row>
-      <Row className="my-3">
-        <Col>
-          <Pagination className="justify-content-center">
-            <Pagination.First
-              disabled={pageInfo.currentPageNumber === 1}
-              onClick={() => handlePageNumberClick(1)}
-            ></Pagination.First>
-            <Pagination.Prev
-              disabled={pageInfo.leftPageNumber <= 1}
-              onClick={() =>
-                handlePageNumberClick(pageInfo.leftPageNumber - 10)
+      <div className="my-3 flex justify-center">
+        <div className="join">
+          {/* First Page */}
+          <button
+            className="join-item btn"
+            disabled={pageInfo.currentPageNumber === 1}
+            onClick={() => handlePageNumberClick(1)}
+          >
+            «
+          </button>
+
+          {/* Previous Page */}
+          <button
+            className="join-item btn"
+            disabled={pageInfo.leftPageNumber <= 1}
+            onClick={() => handlePageNumberClick(pageInfo.leftPageNumber - 10)}
+          >
+            ‹
+          </button>
+
+          {/* Page Numbers */}
+          {pageNumbers.map((pageNumber) => (
+            <button
+              key={pageNumber}
+              className={
+                pageInfo.currentPageNumber === pageNumber
+                  ? "join-item btn btn-active"
+                  : "join-item btn"
               }
-            ></Pagination.Prev>
-            {pageNumbers.map((pageNumber) => (
-              <Pagination.Item
-                key={pageNumber}
-                onClick={() => handlePageNumberClick(pageNumber)}
-                active={pageInfo.currentPageNumber === pageNumber}
-              >
-                {pageNumber}
-              </Pagination.Item>
-            ))}
-            <Pagination.Next
-              disabled={pageInfo.rightPageNumber >= pageInfo.totalPages}
-              onClick={() =>
-                handlePageNumberClick(pageInfo.rightPageNumber + 1)
-              }
-            ></Pagination.Next>
-            <Pagination.Last
-              disabled={pageInfo.currentPageNumber === pageInfo.totalPages}
-              onClick={() => handlePageNumberClick(pageInfo.totalPages)}
-            ></Pagination.Last>
-          </Pagination>
-        </Col>
-      </Row>
+              onClick={() => handlePageNumberClick(pageNumber)}
+            >
+              {pageNumber}
+            </button>
+          ))}
+
+          {/* Next Page */}
+          <button
+            className="join-item btn"
+            disabled={pageInfo.rightPageNumber >= pageInfo.totalPages}
+            onClick={() => handlePageNumberClick(pageInfo.rightPageNumber + 1)}
+          >
+            ›
+          </button>
+
+          {/* Last Page */}
+          <button
+            className="join-item btn"
+            disabled={pageInfo.currentPageNumber === pageInfo.totalPages}
+            onClick={() => handlePageNumberClick(pageInfo.totalPages)}
+          >
+            »
+          </button>
+        </div>
+      </div>
     </>
   );
 }

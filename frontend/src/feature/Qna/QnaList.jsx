@@ -90,7 +90,7 @@ export function QnaList() {
   return (
     <>
       <Row className="justify-content-center">
-        <Col md={8} lg={6} className="mt-5">
+        <Col md={8} lg={9} className="mt-5">
           <div className="container">
             <h2 className="mb-4">문의 내역</h2>
             <div>
