@@ -118,17 +118,46 @@ function NavBar(props) {
       {/* 모바일 메뉴 드롭다운 */}
       {isMobileMenuOpen && (
         <div className="mobile-menu">
-          <Link to="/product/list">상품목록</Link>
-          <Link to="/product/regist">상품등록</Link>
-          {user !== null && isAdmin && <Link to="/member/list">회원목록</Link>}
-          {user === null && <Link to="/signup">회원가입</Link>}
-          {user !== null && <Link to="/logout">로그아웃</Link>}
-          {user !== null && (
-            <Link to={`/member?id=${user.id}`}>{user.name}</Link>
+          <Link to="/product/list" onClick={() => setIsMobileMenuOpen(false)}>
+            상품목록
+          </Link>
+          <Link to="/product/regist" onClick={() => setIsMobileMenuOpen(false)}>
+            상품등록
+          </Link>
+          {user !== null && isAdmin && (
+            <Link to="/member/list" onClick={() => setIsMobileMenuOpen(false)}>
+              회원목록
+            </Link>
           )}
-          {user !== null && <Link to={"/qna/list"}>문의 내역</Link>}
-          <Link to="/chat/chatting">채팅 프로토콜</Link>
-          <Link to="/pay/Checkout">토스 페이먼츠</Link>
+          {user === null && (
+            <Link to="/signup" onClick={() => setIsMobileMenuOpen(false)}>
+              회원가입
+            </Link>
+          )}
+          {user !== null && (
+            <Link to="/logout" onClick={() => setIsMobileMenuOpen(false)}>
+              로그아웃
+            </Link>
+          )}
+          {user !== null && (
+            <Link
+              to={`/member?id=${user.id}`}
+              onClick={() => setIsMobileMenuOpen(false)}
+            >
+              {user.name}
+            </Link>
+          )}
+          {user !== null && (
+            <Link to="/qna/list" onClick={() => setIsMobileMenuOpen(false)}>
+              문의 내역
+            </Link>
+          )}
+          <Link to="/chat/chatting" onClick={() => setIsMobileMenuOpen(false)}>
+            채팅 프로토콜
+          </Link>
+          <Link to="/pay/Checkout" onClick={() => setIsMobileMenuOpen(false)}>
+            토스 페이먼츠
+          </Link>
         </div>
       )}
     </>
