@@ -15,6 +15,8 @@ import { useContext, useEffect, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router";
 import axios from "axios";
 import { AuthenticationContext } from "../common/AuthenticationContextProvider.jsx";
+import WithDrawModal from "./Modal/WithDrawModal.jsx";
+import WithdrawModal from "./Modal/WithDrawModal.jsx";
 
 export function MemberDetail() {
   const [member, setMember] = useState(null);
@@ -73,6 +75,12 @@ export function MemberDetail() {
       .finally(() => {
         setIsWithdrawProcessing(false);
       });
+  }
+
+  function handleCloseWithdrawModal() {
+    setIsWithdrawProcessing(false);
+    setOldPassword("");
+    setPasswordError("");
   }
 
   return (
@@ -143,71 +151,16 @@ export function MemberDetail() {
                     </div>
                   )}
                 </Col>
-                {/* TODO : 회원 탈퇴 모달 jsx로 따로 빼기 */}
-                <Modal
+                <WithdrawModal
                   show={withdrawModalShow}
-                  onHide={() => setWithdrawModalShow(false)}
-                >
-                  <Modal.Header closeButton>
-                    <Modal.Title>회원 탈퇴 확인</Modal.Title>
-                  </Modal.Header>
-                  <Modal.Body>
-                    <p className="mb-3" style={{ fontSize: "13px" }}>
-                      정말 탈퇴하시겠습니까? 탈퇴를 위해 비밀번호를
-                      입력해주세요.
-                    </p>
-                    <FormGroup>
-                      <FormLabel>비밀번호</FormLabel>
-                      <FormControl
-                        id="withdraw-password"
-                        type="password"
-                        value={oldPassword}
-                        onChange={(e) => {
-                          setOldPassword(e.target.value);
-                          setPasswordError("");
-                        }}
-                        autoFocus
-                        isInvalid={!!passwordError}
-                      />
-                      {passwordError && (
-                        <FormText className="text-danger">
-                          {passwordError}
-                        </FormText>
-                      )}
-                    </FormGroup>
-                  </Modal.Body>
-                  <Modal.Footer>
-                    <Button
-                      variant="dark"
-                      onClick={() => {
-                        setWithdrawModalShow(false);
-                        setOldPassword("");
-                      }}
-                    >
-                      취소
-                    </Button>
-                    <Button
-                      onClick={handleWithdrawButtonClick}
-                      variant="danger"
-                      disabled={!oldPassword || isWithdrawProcessing}
-                    >
-                      {isWithdrawProcessing ? (
-                        <>
-                          <Spinner
-                            animation="border"
-                            size="sm"
-                            role="status"
-                            aria-hidden="true"
-                            className="me-2"
-                          />
-                          전송 중...
-                        </>
-                      ) : (
-                        "탈퇴"
-                      )}
-                    </Button>
-                  </Modal.Footer>
-                </Modal>
+                  onClose={handleCloseWithdrawModal}
+                  oldPassword={oldPassword}
+                  setOldPassword={setOldPassword}
+                  passwordError={passwordError}
+                  setPasswordError={setPasswordError}
+                  handleWithdrawButtonClick={handleWithdrawButtonClick}
+                  isWithdrawProcessing={isWithdrawProcessing}
+                />
               </Row>
             </Card.Body>
           </Card>
