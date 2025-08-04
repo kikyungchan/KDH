@@ -38,6 +38,7 @@ function App() {
         <CartProvider>
           <Routes>
             <Route path="/" element={<MainPage />}>
+              {/*<Route index element={<coverSlide />} />*/}
               <Route index element={<MainSlide />} />
               <Route path="product/regist" element={<ProductRegist />} />
               <Route path="product/list" element={<ProductList />} />
