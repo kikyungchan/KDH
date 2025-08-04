@@ -84,6 +84,7 @@
     font-size: 24px;
     font-weight: bold;
     text-decoration: none;
+    margin-right: 2.4rem;
 }
 
 /* 햄버거 아이콘 기본 숨김 */
@@ -144,15 +145,14 @@
 @media (min-width: 769px) {
     .navbar-container {
         display: flex;
-        gap: 1.5rem;
-        font-size: 0.9rem;
+        font-size: 1rem;
     }
 }
 
 /* lg (1024~) */
 @media (min-width: 1024px) {
     .navbar-left {
-        gap: 2rem;
+        gap: 3.3rem;
         font-size: 1rem;
     }
 }
