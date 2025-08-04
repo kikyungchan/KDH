@@ -93,7 +93,7 @@ public class ProductService {
     public Map<String, Object> list(Integer pageNumber, String keyword, String sort) {
         Page<Product> page;
 
-        Pageable pageable = PageRequest.of(pageNumber - 1, 15);
+        Pageable pageable = PageRequest.of(pageNumber - 1, 16);
         if ("popular".equals(sort)) {
             if (keyword != null && !keyword.trim().isEmpty()) {
                 page = productRepository.findByKeywordOrderByPopularity(keyword, pageable);
@@ -118,7 +118,7 @@ public class ProductService {
                     sortOption = Sort.by(Sort.Direction.DESC, "id"); // 최신순
 
             }
-            pageable = PageRequest.of(pageNumber - 1, 15, sortOption);
+            pageable = PageRequest.of(pageNumber - 1, 16, sortOption);
             // 정렬 조건
             // 키워드확인
             if (keyword != null && !keyword.trim().isEmpty()) {
