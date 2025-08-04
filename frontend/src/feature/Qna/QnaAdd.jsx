@@ -98,7 +98,7 @@ export function QnaAdd() {
             toast(message.text, { type: message.type });
           }
           // navigate(-1);
-          navigate("/");
+          navigate("/qna/list");
         })
         .catch((err) => {
           console.log("잘 안되면 실행되는 코드");

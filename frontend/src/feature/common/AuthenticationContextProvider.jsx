@@ -75,10 +75,8 @@ export function AuthenticationContextProvider({ children }) {
   }
 
   // isAdmin
-  function isAdmin() {
-    return Array.isArray(user?.roles) && user.roles.includes("admin");
-  }
-
+  const isAdmin = Array.isArray(user?.roles) && user.roles.includes("admin");
+  
   return (
     <AuthenticationContext
       value={{

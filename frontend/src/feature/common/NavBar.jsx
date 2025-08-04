@@ -61,7 +61,6 @@ function NavBar(props) {
             <Link to={`/member?id=${user.id}`}>{user.name}</Link>
           )}
           {user !== null && <Link to={"/qna/list"}>문의 내역</Link>}
-          <br />
           <Link to="/chat/chatting">채팅 프로토콜</Link>
           <Link to="/pay/Checkout">토스 페이먼츠</Link>
         </div>

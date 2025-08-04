@@ -1,0 +1,11 @@
+@import "tailwindcss";
+
+@plugin "daisyui" {
+    /*themes: light --default*/
+    /*themes: pastel --default*/
+    /*themes: garden --default*/
+    /*themes: silk --default*/
+    /*themes: fantasy --default*/
+    themes: lofi --default
+    /*, dark --prefersdark;*/
+}
