@@ -6,15 +6,16 @@ import "./css/ProductList.css";
 export function ProductList() {
   const [searchParams, setSearchParams] = useSearchParams();
   const pageParam = parseInt(searchParams.get("page")) || 1;
-  const keyword = searchParams.get("keyword") || "";
   const [products, setProducts] = useState([]);
   const [pageInfo, setPageInfo] = useState({});
   const [sort, setSort] = useState("recent");
+  const keyword = searchParams.get("keyword") || "";
+  const category = searchParams.get("category") || "";
 
   useEffect(() => {
     axios
       .get(
-        `/api/product/list?page=${pageParam}${keyword ? `&keyword=${keyword}` : ""}${sort ? `&sort=${sort}` : ""}`,
+        `/api/product/list?page=${pageParam}${keyword ? `&keyword=${keyword}` : ""}${category ? `&category=${category}` : ""}${sort ? `&sort=${sort}` : ""}`,
       )
       .then((res) => {
         setProducts(res.data.productList);
@@ -23,7 +24,7 @@ export function ProductList() {
       .catch((err) => {
         console.log(err.message);
       });
-  }, [pageParam, keyword, sort]);
+  }, [pageParam, keyword, sort, category]);
 
   const handlePageClick = (page) => {
     const newParams = {};
@@ -47,6 +48,7 @@ export function ProductList() {
     setSort(newSort);
     const newParams = {};
     if (keyword) newParams.keyword = keyword;
+    if (category) newParams.category = category;
     newParams.page = 1;
     newParams.sort = newSort;
     setSearchParams(newParams);
@@ -65,7 +67,6 @@ export function ProductList() {
           <option value="popular">인기순</option>
           <option value="price_asc">가격 낮은순</option>
           <option value="price_desc">가격 높은순</option>
-          <option value="category">카테고리순</option>
         </select>
       </div>
 

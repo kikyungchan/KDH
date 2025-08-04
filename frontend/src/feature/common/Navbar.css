@@ -134,6 +134,48 @@
     flex: 1;
 }
 
+.navbar-container,
+.navbar-left {
+    overflow: visible !important; /* ✅ 잘리는 현상 방지 */
+}
+
+/* 드롭다운 메뉴 스타일 */
+.dropdown {
+    position: relative;
+}
+
+.dropdown-title {
+    position: relative;
+    cursor: pointer;
+}
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    flex-direction: column;
+    background-color: white;
+    border: 1px solid #ccc;
+    min-width: 140px;
+    z-index: 1000;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.dropdown-content a {
+    padding: 0.5rem 1rem;
+    text-decoration: none;
+    color: black;
+    white-space: nowrap;
+}
+
+.dropdown-content a:hover {
+    background-color: #f0f0f0;
+}
+
+.dropdown:hover .dropdown-content {
+    display: flex;
+}
 
 /* 모바일 레이아웃용 설정 */
 @media (max-width: 767px) {

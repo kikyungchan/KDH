@@ -90,44 +90,56 @@ public class ProductService {
         productImageRepository.saveAll(imageList);
     }
 
-    public Map<String, Object> list(Integer pageNumber, String keyword, String sort) {
+    public Map<String, Object> list(Integer pageNumber, String keyword, String sort, String category) {
         Page<Product> page;
+        Pageable pageable;
 
-        Pageable pageable = PageRequest.of(pageNumber - 1, 16);
+        // 기본 페이지네이션
+        Sort sortOption;
+        switch (sort) {
+            case "price_asc":
+                sortOption = Sort.by(Sort.Direction.ASC, "price");
+                break;
+            case "price_desc":
+                sortOption = Sort.by(Sort.Direction.DESC, "price");
+                break;
+            default:
+                sortOption = Sort.by(Sort.Direction.DESC, "id"); // 최신순
+        }
+        pageable = PageRequest.of(pageNumber - 1, 16, sortOption);
+
+        boolean hasKeyword = keyword != null && !keyword.trim().isEmpty();
+        boolean hasCategory = category != null && !category.trim().isEmpty();
+
         if ("popular".equals(sort)) {
-            if (keyword != null && !keyword.trim().isEmpty()) {
-                page = productRepository.findByKeywordOrderByPopularity(keyword, pageable);
+            if (hasCategory) {
+                if (hasKeyword) {
+                    page = productRepository.findByCategoryAndKeywordOrderByPopularity(category, keyword, pageable);
+                } else {
+                    page = productRepository.findByCategoryOrderByPopularity(category, pageable);
+                }
             } else {
-                page = productRepository.findAllOrderByPopularity(pageable);
+                if (hasKeyword) {
+                    page = productRepository.findByKeywordOrderByPopularity(keyword, pageable);
+                } else {
+                    page = productRepository.findAllOrderByPopularity(pageable);
+                }
             }
         } else {
-
-            Sort sortOption;
-            switch (sort) {
-                case "price_asc":
-                    sortOption = Sort.by(Sort.Direction.ASC, "price");
-                    break;
-                case "price_desc":
-                    sortOption = Sort.by(Sort.Direction.DESC, "price");
-                    break;
-                // ASC 오름차순 0-9 -> ㄱ-ㅎ 순
-                case "category":
-                    sortOption = Sort.by(Sort.Direction.ASC, "category");
-                    break;
-                default:
-                    sortOption = Sort.by(Sort.Direction.DESC, "id"); // 최신순
-
-            }
-            pageable = PageRequest.of(pageNumber - 1, 16, sortOption);
-            // 정렬 조건
-            // 키워드확인
-            if (keyword != null && !keyword.trim().isEmpty()) {
-                page = productRepository.findByKeyword(keyword, pageable);
+            if (hasCategory) {
+                if (hasKeyword) {
+                    page = productRepository.findByCategoryAndKeyword(category, keyword, pageable);
+                } else {
+                    page = productRepository.findByCategory(category, pageable);
+                }
             } else {
-                page = productRepository.findAll(pageable);
+                if (hasKeyword) {
+                    page = productRepository.findByKeyword(keyword, pageable);
+                } else {
+                    page = productRepository.findAll(pageable);
+                }
             }
         }
-
 
         List<ProductDto> content = page.getContent().stream().map(product -> {
             ProductDto dto = new ProductDto();
@@ -161,6 +173,7 @@ public class ProductService {
                 "productList", content
         );
     }
+
 
     public ProductDto view(Integer id) {
         Product product = productRepository.findById(id).get();

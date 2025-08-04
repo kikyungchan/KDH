@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useRef, useState } from "react";
-import { Link, useNavigate } from "react-router";
+import { Link, useLocation, useNavigate } from "react-router";
 import { AuthenticationContext } from "./AuthenticationContextProvider.jsx";
 import {
   FiChevronLeft,
@@ -10,8 +10,10 @@ import {
 } from "react-icons/fi";
 import "./Navbar.css";
 import { useCart } from "../Product/CartContext.jsx";
+import "bootstrap/dist/css/bootstrap-grid.min.css";
 
 function NavBar(props) {
+  const [showMobileCategory, setShowMobileCategory] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const { cartCount } = useCart();
   const { user, isAdmin } = useContext(AuthenticationContext);
@@ -20,6 +22,7 @@ function NavBar(props) {
   const searchRef = useRef(null);
   const iconRef = useRef(null);
   const navigate = useNavigate();
+  const location = useLocation();
   const [keyword, setKeyword] = useState("");
 
   // 검색창 아이콘 한번더 누르거나 바깥영역누르면 검색창닫히도록
@@ -53,6 +56,7 @@ function NavBar(props) {
 
       if (!isMenuClick && !isHamburgerClick) {
         setIsMobileMenuOpen(false);
+        setShowMobileCategory(false);
       }
     }
 
@@ -64,6 +68,16 @@ function NavBar(props) {
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, [isMobileMenuOpen]);
+
+  const handleCategoryClick = (category) => {
+    const params = new URLSearchParams(location.search);
+    params.set("category", category);
+    if (!params.get("sort")) {
+      params.set("sort", "recent"); // 기본 정렬값
+    }
+    navigate(`/product/list?${params.toString()}`);
+    setIsMobileMenuOpen(false);
+  };
 
   return (
     <>
@@ -80,18 +94,73 @@ function NavBar(props) {
         </div>
         {/* 왼쪽 메뉴 */}
         <div className="navbar-left">
-          <Link to="/product/list">모든상품</Link>
-          <Link to="/product/regist">상품등록</Link>
-          {user !== null && isAdmin && <Link to="/member/list">회원목록</Link>}
-          {user === null && <Link to="/signup">회원가입</Link>}
-          {/*{user === null && <Link to="/login">로그인</Link>}*/}
-          {user !== null && <Link to="/logout">로그아웃</Link>}
-          {user !== null && (
-            <Link to={`/member?id=${user.id}`}>{user.name}</Link>
+          <div className="dropdown dropdown-hover">
+            <label tabIndex={0} className="btn btn-ghost m-1 text-xl">
+              모든상품
+            </label>
+            <ul
+              tabIndex={0}
+              className="menu dropdown-content z-[1000] p-2 shadow bg-base-100 rounded-box w-52"
+            >
+              <li>
+                <button onClick={() => handleCategoryClick("")}>전체</button>
+              </li>
+              <li>
+                <button onClick={() => handleCategoryClick("outer")}>
+                  겉옷
+                </button>
+              </li>
+              <li>
+                <button onClick={() => handleCategoryClick("top")}>상의</button>
+              </li>
+              <li>
+                <button onClick={() => handleCategoryClick("bottom")}>
+                  하의
+                </button>
+              </li>
+              <li>
+                <button onClick={() => handleCategoryClick("hat")}>모자</button>
+              </li>
+            </ul>
+          </div>
+
+          <Link to="/product/regist" className="btn btn-ghost text-xl">
+            상품등록
+          </Link>
+          {user !== null && isAdmin && (
+            <Link to="/member/list" className="btn btn-ghost text-xl">
+              회원목록
+            </Link>
           )}
-          {user !== null && <Link to={"/qna/list"}>문의 내역</Link>}
-          <Link to="/chat/chatting">채팅 프로토콜</Link>
-          <Link to="/pay/Checkout">토스 페이먼츠</Link>
+          {user === null && (
+            <Link to="/signup" className="btn btn-ghost text-xl">
+              회원가입
+            </Link>
+          )}
+          {user !== null && (
+            <Link to="/logout" className="btn btn-ghost text-xl">
+              로그아웃
+            </Link>
+          )}
+          {user !== null && (
+            <Link
+              to={`/member?id=${user.id}`}
+              className="btn btn-ghost text-xl"
+            >
+              {user.name}
+            </Link>
+          )}
+          {user !== null && (
+            <Link to="/qna/list" className="btn btn-ghost text-xl">
+              문의 내역
+            </Link>
+          )}
+          <Link to="/chat/chatting" className="btn btn-ghost text-xl">
+            채팅 프로토콜
+          </Link>
+          <Link to="/pay/Checkout" className="btn btn-ghost text-xl">
+            토스 페이먼츠
+          </Link>
         </div>
 
         {/* 오른쪽 아이콘 */}
@@ -140,9 +209,34 @@ function NavBar(props) {
       {/* 모바일 메뉴 드롭다운 */}
       {isMobileMenuOpen && (
         <div className="mobile-menu" ref={menuRef}>
-          <Link to="/product/list" onClick={() => setIsMobileMenuOpen(false)}>
-            모든상품
-          </Link>
+          <div>
+            <div
+              onClick={() => setShowMobileCategory((prev) => !prev)}
+              style={{ fontWeight: "bold", cursor: "pointer" }}
+            >
+              모든상품 ▾
+            </div>
+            {showMobileCategory && (
+              <div
+                style={{
+                  marginTop: "2px",
+                  display: "flex",
+                  flexDirection: "column",
+                  gap: "0.5rem",
+                }}
+              >
+                <button onClick={() => handleCategoryClick("")}>전체</button>
+                <button onClick={() => handleCategoryClick("outer")}>
+                  겉옷
+                </button>
+                <button onClick={() => handleCategoryClick("top")}>상의</button>
+                <button onClick={() => handleCategoryClick("bottom")}>
+                  하의
+                </button>
+                <button onClick={() => handleCategoryClick("hat")}>모자</button>
+              </div>
+            )}
+          </div>
           <Link to="/product/regist" onClick={() => setIsMobileMenuOpen(false)}>
             상품등록
           </Link>

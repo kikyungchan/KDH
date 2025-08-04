@@ -54,4 +54,52 @@ public interface ProductRepository extends JpaRepository<Product, Integer> {
            "HAVING SUM(oi.quantity) >= 10" +
            ") ORDER BY FUNCTION('RAND')")
     List<Product> findHotProductsRandomLimit(LocalDateTime oneWeekAgo, PageRequest pageable);
+
+    @Query("SELECT p FROM Product p WHERE p.category = :category AND " +
+           "(LOWER(p.productName) LIKE LOWER(CONCAT('%', :keyword, '%')) " +
+           "OR LOWER(p.info) LIKE LOWER(CONCAT('%', :keyword, '%')) " +
+           "OR LOWER(p.detailText) LIKE LOWER(CONCAT('%', :keyword, '%')))")
+    Page<Product> findByCategoryAndKeyword(@Param("category") String category,
+                                           @Param("keyword") String keyword,
+                                           Pageable pageable);
+
+//    @Query("SELECT p FROM Product p LEFT JOIN OrderItem oi ON oi.product = p " +
+//           "WHERE p.category = :category GROUP BY p.id ORDER BY COUNT(oi.id) DESC")
+//    Page<Product> findByCategoryOrderByPopularity(@Param("category") String category,
+//                                                  Pageable pageable);
+
+//    @Query("SELECT p FROM Product p LEFT JOIN OrderItem oi ON oi.product = p " +
+//           "WHERE p.category = :category AND " +
+//           "(LOWER(p.productName) LIKE LOWER(CONCAT('%', :keyword, '%')) " +
+//           "OR LOWER(p.info) LIKE LOWER(CONCAT('%', :keyword, '%')) " +
+//           "OR LOWER(p.detailText) LIKE LOWER(CONCAT('%', :keyword, '%'))) " +
+//           "GROUP BY p.id ORDER BY COUNT(oi.id) DESC")
+//    Page<Product> findByCategoryAndKeywordOrderByPopularity(@Param("category") String category,
+//                                                            @Param("keyword") String keyword,
+//                                                            Pageable pageable);
+
+
+    Page<Product> findByCategory(String category, Pageable pageable);
+
+    @Query("""
+                SELECT p FROM Product p
+                LEFT JOIN OrderItem oi ON oi.product = p
+                WHERE p.category = :category
+                GROUP BY p
+                ORDER BY COUNT(oi.id) DESC
+            """)
+    Page<Product> findByCategoryOrderByPopularity(@Param("category") String category, Pageable pageable);
+
+    @Query("""
+                SELECT p FROM Product p
+                LEFT JOIN OrderItem oi ON oi.product = p
+                WHERE p.category = :category AND (
+                    LOWER(p.productName) LIKE LOWER(CONCAT('%', :keyword, '%')) OR
+                    LOWER(p.info) LIKE LOWER(CONCAT('%', :keyword, '%')) OR
+                    LOWER(p.detailText) LIKE LOWER(CONCAT('%', :keyword, '%'))
+                )
+                GROUP BY p
+                ORDER BY COUNT(oi.id) DESC
+            """)
+    Page<Product> findByCategoryAndKeywordOrderByPopularity(@Param("category") String category, @Param("keyword") String keyword, Pageable pageable);
 }

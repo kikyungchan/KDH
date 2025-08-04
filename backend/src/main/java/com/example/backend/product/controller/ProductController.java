@@ -143,8 +143,9 @@ public class ProductController {
     @GetMapping("/list")
     public ResponseEntity<?> list(@RequestParam(defaultValue = "1") Integer page,
                                   @RequestParam(required = false) String keyword,
-                                  @RequestParam(required = false) String sort) {
-        return ResponseEntity.ok(productService.list(page, keyword, sort));
+                                  @RequestParam(required = false) String sort,
+                                  @RequestParam(required = false) String category) {
+        return ResponseEntity.ok(productService.list(page, keyword, sort, category));
     }
 
     @PostMapping(value = "/regist", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
