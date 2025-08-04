@@ -11,9 +11,11 @@
   },
   "dependencies": {
     "@stomp/stompjs": "^7.1.1",
+    "@tailwindcss/vite": "^4.1.11",
     "@tosspayments/tosspayments-sdk": "^2.3.5",
     "axios": "^1.10.0",
     "bootstrap": "^5.3.7",
+    "daisyui": "^5.0.50",
     "jwt-decode": "^4.0.0",
     "prettier": "^3.6.2",
     "react": "^19.1.0",
@@ -25,6 +27,7 @@
     "react-router-dom": "^6.30.1",
     "react-toastify": "^11.0.5",
     "sockjs-client": "^1.6.1",
+    "tailwindcss": "^4.1.11",
     "uuid": "^11.1.0"
   },
   "devDependencies": {

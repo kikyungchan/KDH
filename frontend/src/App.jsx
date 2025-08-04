@@ -36,39 +36,39 @@ function App() {
     <AuthenticationContextProvider>
       <BrowserRouter>
         <CartProvider>
-        <Routes>
-          <Route path="/" element={<MainPage />}>
-            <Route index element={<MainSlide />} />
-            <Route path="product/regist" element={<ProductRegist />} />
-            <Route path="product/list" element={<ProductList />} />
-            <Route path="product/view" element={<ProductDetail />} />
-            <Route path="product/edit" element={<ProductEdit />} />
-            <Route path="product/order" element={<ProductOrder />} />
-            <Route path="product/cart" element={<ProductCart />} />
-            <Route
-              path="product/order/complete"
-              element={<ProductOrderComplete />}
-            />
-            <Route path="/member/edit" element={<MemberEdit />} />
-            <Route path="/member/list" element={<MemberList />} />
-            <Route path="/member" element={<MemberDetail />} />
-            <Route path="/signup" element={<MemberAdd />} />
-            <Route path="/login" element={<MemberLogin />} />
-            <Route path="/logout" element={<MemberLogout />} />
-            <Route path="/find/id" element={<FindLoginId />} />
-            <Route path="/find/password" element={<FindPassword />} />
-            <Route path="/reset-password" element={<ResetPassword />} />
-            <Route path="/qna/addAns" element={<AnsAdd />} />
-            <Route path="/qna/add/:id" element={<QnaAdd />} />
-            <Route path="/qna/list" element={<QnaList />} />
-            <Route path="/qna/view" element={<QnaView />} />
-            <Route path="/faq/list" element={<FaQList />} />
-            <Route path="chat/chatting" element={<Chat />} />
-            <Route path="pay/Checkout" element={<CheckoutPage />} />
-            <Route path="pay/success" element={<SuccessPage />} />
-            <Route path="pay/fail" element={<FailPage />} />
-          </Route>
-        </Routes>
+          <Routes>
+            <Route path="/" element={<MainPage />}>
+              <Route index element={<MainSlide />} />
+              <Route path="product/regist" element={<ProductRegist />} />
+              <Route path="product/list" element={<ProductList />} />
+              <Route path="product/view" element={<ProductDetail />} />
+              <Route path="product/edit" element={<ProductEdit />} />
+              <Route path="product/order" element={<ProductOrder />} />
+              <Route path="product/cart" element={<ProductCart />} />
+              <Route
+                path="product/order/complete"
+                element={<ProductOrderComplete />}
+              />
+              <Route path="/member/edit" element={<MemberEdit />} />
+              <Route path="/member/list" element={<MemberList />} />
+              <Route path="/member" element={<MemberDetail />} />
+              <Route path="/signup" element={<MemberAdd />} />
+              <Route path="/login" element={<MemberLogin />} />
+              <Route path="/logout" element={<MemberLogout />} />
+              <Route path="/find/id" element={<FindLoginId />} />
+              <Route path="/find/password" element={<FindPassword />} />
+              <Route path="/reset-password" element={<ResetPassword />} />
+              <Route path="/qna/addAns" element={<AnsAdd />} />
+              <Route path="/qna/add/:id" element={<QnaAdd />} />
+              <Route path="/qna/list" element={<QnaList />} />
+              <Route path="/qna/view" element={<QnaView />} />
+              <Route path="/faq/list" element={<FaQList />} />
+              <Route path="chat/chatting" element={<Chat />} />
+              <Route path="pay/Checkout" element={<CheckoutPage />} />
+              <Route path="pay/success" element={<SuccessPage />} />
+              <Route path="pay/fail" element={<FailPage />} />
+            </Route>
+          </Routes>
         </CartProvider>
       </BrowserRouter>
     </AuthenticationContextProvider>
