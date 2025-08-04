@@ -30,26 +30,23 @@ function MainSlide() {
       const isLast = swiper.activeIndex === slides.length - 1;
       const isFirst = swiper.activeIndex === 0;
 
-      if (isLast) {
-        if (hasJustReachedEnd.current) {
-          // 두 번째 휠에만 반응
-          if (e.deltaY > 0) {
+      if (isLast && e.deltaY > 0) {
+        if (!hasJustReachedEnd.current) {
+          hasJustReachedEnd.current = true;
+          setTimeout(() => {
             swiper.slideTo(0);
-            e.preventDefault();
             hasJustReachedEnd.current = false;
-          }
-        } else {
-          hasJustReachedEnd.current = true;
+          }, 500);
+          e.preventDefault();
         }
-      } else if (isFirst) {
-        if (hasJustReachedEnd.current) {
-          if (e.deltaY < 0) {
-            swiper.slideTo(slides.length - 1);
-            e.preventDefault();
-            hasJustReachedEnd.current = false;
-          }
-        } else {
+      } else if (isFirst && e.deltaY < 0) {
+        if (!hasJustReachedEnd.current) {
           hasJustReachedEnd.current = true;
+          setTimeout(() => {
+            swiper.slideTo(slides.length - 1);
+            hasJustReachedEnd.current = false;
+          }, 500);
+          e.preventDefault();
         }
       } else {
         hasJustReachedEnd.current = false;
