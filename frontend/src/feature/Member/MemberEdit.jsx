@@ -16,6 +16,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate, useSearchParams } from "react-router";
 import { jwtDecode } from "jwt-decode";
+import LeaveMemberEditModal from "./Modal/LeaveMemberEditModal.jsx";
 
 export function MemberEdit() {
   // 입력 항목 정규식
@@ -322,7 +323,7 @@ export function MemberEdit() {
                     </div>
                   </div>
                 </Col>
-                {/* 회원 정보 수정 모달*/}
+                {/* TODO : 회원 정보 수정 모달 jsx로 따로 빼기 */}
                 <Modal
                   show={saveModalShow}
                   onHide={() => {
@@ -381,39 +382,11 @@ export function MemberEdit() {
                     </Button>
                   </Modal.Footer>
                 </Modal>
-                {/* 회원 정보 저장 나가기 모달 */}
-                <Modal
+                <LeaveMemberEditModal
                   show={cancelSaveModalShow}
-                  onHide={() => setCancelSaveModalShow(false)}
-                >
-                  <Modal.Header closeButton>
-                    <ModalTitle className="fs-5">
-                      변경 내용이 저장되지 않았습니다.
-                    </ModalTitle>
-                  </Modal.Header>
-                  <Modal.Body>
-                    <p className="mt-2">
-                      변경 사항을 저장하지 않고 나가시겠습니까?
-                    </p>
-                  </Modal.Body>
-                  <Modal.Footer>
-                    <Button
-                      variant="dark"
-                      onClick={() => navigate(`/member?id=${member.id}`)}
-                    >
-                      나가기
-                    </Button>
-                    <Button
-                      variant="dark"
-                      onClick={() => {
-                        setCancelSaveModalShow(false);
-                      }}
-                    >
-                      취소
-                    </Button>
-                  </Modal.Footer>
-                </Modal>
-                {/*  비밀 번호 변경 모달 */}
+                  onClose={() => setCancelSaveModalShow(false)}
+                />
+                {/*  TODO : 비밀 번호 변경 모달 jsx로 따로 빼기 */}
                 <Modal
                   show={changePasswordModalShow}
                   onHide={() => {

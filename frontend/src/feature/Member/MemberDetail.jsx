@@ -143,6 +143,7 @@ export function MemberDetail() {
                     </div>
                   )}
                 </Col>
+                {/* TODO : 회원 탈퇴 모달 jsx로 따로 빼기 */}
                 <Modal
                   show={withdrawModalShow}
                   onHide={() => setWithdrawModalShow(false)}
