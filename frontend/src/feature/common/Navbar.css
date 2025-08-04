@@ -81,11 +81,17 @@
 
 
 .cart-badge {
-    background: red;
+    position: absolute;
+    top: -6px;
+    right: -6px;
+    background-color: red;
     color: white;
-    font-size: 0.75rem;
-    padding: 0 6px;
+    font-size: 10px;
+    padding: 2px 6px;
     border-radius: 9999px;
+    font-weight: bold;
+    line-height: 1;
+    z-index: 10;
 }
 
 .navbar-logo {
