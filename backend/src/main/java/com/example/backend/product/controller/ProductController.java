@@ -193,4 +193,9 @@ public class ProductController {
         return ResponseEntity.ok(result);
     }
 
+    @GetMapping("/best")
+    public ResponseEntity<List<ProductMainSlideDto>> getTopProducts() {
+        List<ProductMainSlideDto> topProducts = productService.getTopSellingProducts();
+        return ResponseEntity.ok(topProducts);
+    }
 }

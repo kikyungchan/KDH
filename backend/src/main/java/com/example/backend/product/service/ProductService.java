@@ -308,6 +308,17 @@ public class ProductService {
         return orderToken;
     }
 
+    public List<ProductMainSlideDto> getTopSellingProducts() {
+        Pageable pageable = PageRequest.of(0, 3);
+        List<Product> topProducts = productRepository.findTopSellingProducts(pageable);
+        List<ProductMainSlideDto> result = new ArrayList<>();
+        for (Product product : topProducts) {
+            ProductMainSlideDto dto = ProductMainSlideDto.from(product);
+            result.add(dto);
+        }
+        return result;
+    }
+
     public MemberDto getmemberinfo(String auth) {
         String token = auth.replace("Bearer ", "");
         Jwt decoded = jwtDecoder.decode(token);

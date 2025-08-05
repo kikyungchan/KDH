@@ -63,22 +63,6 @@ public interface ProductRepository extends JpaRepository<Product, Integer> {
                                            @Param("keyword") String keyword,
                                            Pageable pageable);
 
-//    @Query("SELECT p FROM Product p LEFT JOIN OrderItem oi ON oi.product = p " +
-//           "WHERE p.category = :category GROUP BY p.id ORDER BY COUNT(oi.id) DESC")
-//    Page<Product> findByCategoryOrderByPopularity(@Param("category") String category,
-//                                                  Pageable pageable);
-
-//    @Query("SELECT p FROM Product p LEFT JOIN OrderItem oi ON oi.product = p " +
-//           "WHERE p.category = :category AND " +
-//           "(LOWER(p.productName) LIKE LOWER(CONCAT('%', :keyword, '%')) " +
-//           "OR LOWER(p.info) LIKE LOWER(CONCAT('%', :keyword, '%')) " +
-//           "OR LOWER(p.detailText) LIKE LOWER(CONCAT('%', :keyword, '%'))) " +
-//           "GROUP BY p.id ORDER BY COUNT(oi.id) DESC")
-//    Page<Product> findByCategoryAndKeywordOrderByPopularity(@Param("category") String category,
-//                                                            @Param("keyword") String keyword,
-//                                                            Pageable pageable);
-
-
     Page<Product> findByCategory(String category, Pageable pageable);
 
     @Query("""
@@ -102,4 +86,14 @@ public interface ProductRepository extends JpaRepository<Product, Integer> {
                 ORDER BY COUNT(oi.id) DESC
             """)
     Page<Product> findByCategoryAndKeywordOrderByPopularity(@Param("category") String category, @Param("keyword") String keyword, Pageable pageable);
+
+    //    누적판매량기준
+    @Query("""
+                SELECT p FROM Product p
+                LEFT JOIN OrderItem oi ON oi.product = p
+                GROUP BY p
+                ORDER BY SUM(oi.quantity) DESC
+            """)
+    List<Product> findTopSellingProducts(Pageable pageable);
+
 }
