@@ -107,10 +107,7 @@ export function Chat() {
                       {m.from}님
                       <time className="text-xs opacity-50">12:45</time>
                     </div>
-                    <div className="chat-bubble">
-                      {/*<strong>{m.from}:</strong> */}
-                      {m.message}
-                    </div>
+                    <div className="chat-bubble">{m.message}</div>
                     {/*<div className="chat-footer opacity-50">Delivered</di>v*/}
                   </div>
                 </>

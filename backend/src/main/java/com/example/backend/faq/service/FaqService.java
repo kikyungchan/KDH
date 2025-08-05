@@ -57,7 +57,7 @@ public class FaqService {
             return false;
         }
 
-        if (dto.getAnswer() == null || dto.getAnswer().trim().isBlank()) {
+        if (dto.getAnswer() == null || dto.getAnswer().isBlank()) {
             return false;
         }
 
@@ -73,7 +73,7 @@ public class FaqService {
 
         Member user = memberRepository.findById(Integer.valueOf(authentication.getName())).get();
         faq.setUser(user);
-        
+
         faqRepository.save(faq);
     }
 }

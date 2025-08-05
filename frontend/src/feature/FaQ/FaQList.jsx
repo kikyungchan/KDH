@@ -28,6 +28,7 @@ export function FaQList() {
   const [modalShow, setModalShow] = useState();
   const [title, setTitle] = useState();
   const [content, setContent] = useState();
+  const [category, setCategory] = useState();
   const [searchParams, setSearchParams] = useSearchParams("1");
   const radios = [
     { name: "상품목록", value: "1", fnc: handleQnaAddButtonClick },
@@ -90,6 +91,7 @@ export function FaQList() {
       .post("/api/faq/add", {
         question: title,
         answer: content,
+        category: category,
       })
       .then((res) => {
         console.log("success");
@@ -138,11 +140,13 @@ export function FaQList() {
               <>
                 {faqList.map((faq) => (
                   <div className="collapse collapse-plus bg-base-100 border border-base-300">
-                    <input type="checkbox" name="faqlist" />
+                    <input type="checkbox" name="faqlist" className="w-full" />
                     <div className="collapse-title font-semibold">
                       {faq.question}
                     </div>
-                    <div className="collapse-content text-sm">{faq.answer}</div>
+                    <pre className="collapse-content text-sm whitespace-pre-wrap break-words">
+                      {faq.answer}
+                    </pre>
                   </div>
                 ))}
               </>
@@ -207,6 +211,25 @@ export function FaQList() {
           <div className="modal-box">
             <h3 className="font-bold text-lg">FaQ 등록</h3>
             <br />
+            <fieldset className="fieldset">
+              <legend className="fieldset-legend">카테고리</legend>
+              <select
+                defaultValue="Pick a browser"
+                className="select"
+                onChange={(e) => setCategory(e.target.value)}
+              >
+                <option disabled hidden selected>
+                  카테고리를 선택해주세요
+                </option>
+                <option value="1">주문/결제</option>
+                <option value="2">배송관련</option>
+                <option value="3">취소/환불</option>
+                <option value="4">반품/교환</option>
+                <option value="5">증빙서류발급</option>
+                <option value="6">로그인/회원정보</option>
+                <option value="7">서비스/기타</option>
+              </select>
+            </fieldset>
             <fieldset className="fieldset">
               <legend className="fieldset-legend">faq 질문</legend>
               <textarea

@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 import org.hibernate.annotations.ColumnDefault;
+import org.w3c.dom.Text;
 
 import java.time.LocalDateTime;
 
@@ -23,6 +24,7 @@ public class Faq {
     @Column(name = "question")
     private String question;
 
+    @Lob
     @Column(name = "answer")
     private String answer;
 
