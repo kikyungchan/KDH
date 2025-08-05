@@ -19,7 +19,7 @@
     height: 600px;
     overflow: hidden;
     border-radius: 6px;
-    /*border: 1px solid black;*/
+    border: 1px solid black;
 }
 
 .main-visual-img {
@@ -50,7 +50,7 @@
     height: 600px; /* 왼쪽 메인 비주얼 박스 높이에 맞춤 */
     position: relative;
     overflow: hidden;
-    /*border: 1px solid black;*/
+    border: 1px solid black;
     border-radius: 6px;
 }
 

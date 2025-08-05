@@ -2,12 +2,10 @@ import React from "react";
 import { FiChevronLeft } from "react-icons/fi";
 
 function SearchBar({
-  showSearch,
   setShowSearch,
   keyword,
   setKeyword,
   searchRef,
-  iconRef,
   navigate,
 }) {
   return (

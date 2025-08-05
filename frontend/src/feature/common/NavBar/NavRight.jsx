@@ -11,6 +11,7 @@ function NavRight({
   setShowSearch,
   keyword,
   setKeyword,
+  onSearchToggle,
   searchRef,
 }) {
   const { cartCount } = useCart();
@@ -29,17 +30,8 @@ function NavRight({
         <FiSearch
           ref={iconRef}
           className="navbar-icon"
-          onClick={handleSearchClick}
+          onClick={() => onSearchToggle()}
           style={{ cursor: "pointer" }}
-        />
-        <SearchBar
-          showSearch={showSearch}
-          setShowSearch={setShowSearch}
-          keyword={keyword}
-          setKeyword={setKeyword}
-          searchRef={searchRef}
-          iconRef={iconRef}
-          navigate={navigate}
         />
         <Link to={user ? `/member?id=${user.id}` : "/login"}>
           <FiUser className="navbar-icon" />

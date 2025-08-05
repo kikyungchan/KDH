@@ -13,6 +13,7 @@
     display: flex;
     gap: 24px;
     overflow-x: auto;
+
 }
 
 .best-product-rating {
@@ -33,6 +34,7 @@
     cursor: pointer;
     padding: 10px;
     flex-shrink: 0;
+    border: 1px solid;
 }
 
 .best-product-img {

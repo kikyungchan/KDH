@@ -112,6 +112,15 @@ function NavBar(props) {
             navigate={navigate}
           />
         </div>
+        {showSearch && (
+          <SearchBar
+            setShowSearch={setShowSearch}
+            keyword={keyword}
+            setKeyword={setKeyword}
+            searchRef={searchRef}
+            navigate={navigate}
+          />
+        )}
       </nav>
       {/* 모바일 메뉴 드롭다운 */}
       {isMobileMenuOpen && (
