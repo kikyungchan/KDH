@@ -12,10 +12,10 @@ import {
   InputGroup,
   Card,
 } from "react-bootstrap";
-import { useContext, useEffect, useState } from "react";
+import {useContext, useEffect, useState} from "react";
 import axios from "axios";
-import { useNavigate } from "react-router";
-import { AuthenticationContext } from "../common/AuthenticationContextProvider.jsx";
+import {useNavigate} from "react-router";
+import {AuthenticationContext} from "../common/AuthenticationContextProvider.jsx";
 import PrivacyModal from "./Modal/PrivacyModal.jsx";
 
 export function MemberAdd() {
@@ -87,7 +87,7 @@ export function MemberAdd() {
   const [privacyAgreed, setPrivacyAgreed] = useState(false);
 
   // 로그인 여부
-  const { user } = useContext(AuthenticationContext);
+  const {user} = useContext(AuthenticationContext);
 
   const navigate = useNavigate();
 
@@ -230,7 +230,8 @@ export function MemberAdd() {
         setLoginIdCheckMessage("확인 중 오류가 발생했습니다");
         console.log("error", err.response?.data || err.message);
       })
-      .finally(() => {});
+      .finally(() => {
+      });
   }
 
   // 주소 확인
@@ -248,7 +249,7 @@ export function MemberAdd() {
   const handleEmailSendButton = () => {
     axios
       .get("/api/member/check-email", {
-        params: { email: fullEmail },
+        params: {email: fullEmail},
       })
       .then((res) => {
         if (res.data.exists) {
@@ -270,7 +271,7 @@ export function MemberAdd() {
 
     axios
       .get("/api/email/auth", {
-        params: { address: fullEmail },
+        params: {address: fullEmail},
       })
       .then((res) => {
         if (res.data.success) {
@@ -331,430 +332,372 @@ export function MemberAdd() {
   };
 
   return (
-    <div
-      style={{
-        backgroundColor: "#f8f9fa",
-        minHeight: "100vh",
-      }}
-    >
-      <Container
-        fluid
-        className="d-flex justify-content-center align-items-center"
-        style={{ minHeight: "100vh" }}
-      >
-        <Row className="w-100" style={{ maxWidth: "600px" }}>
-          <Col>
-            <Card className="p-4 shadow rounded">
-              <Card.Body>
-                <h2 className="text-center mb-4">회원 등록</h2>
-                <div>
-                  <FormGroup>
-                    <FormLabel className="fw-semibold fs-6 mb-1">
-                      아이디
-                    </FormLabel>
-                    <div className="mb-1 mt-0">
-                      <FormText className="fs-7">
-                        <FormText className="text-muted fs-7">
-                          아이디는 영문으로 시작하며 4~20자, 영문+숫자 조합만
-                          가능합니다.
-                        </FormText>
-                      </FormText>
-                    </div>
-                    <FormControl
-                      type="text"
-                      value={loginId}
-                      placeholder="아이디"
-                      autoComplete="username"
-                      onChange={(e) => {
-                        setLoginId(e.target.value);
-                        setLoginIdChecked(false);
-                        setLoginIdCheckMessage("");
-                      }}
-                      isInvalid={isSubmitted && !loginIdValid}
-                    />
-                    {/* 아이디 형식이 맞지않을때 (정규식은 최상단 위치) */}
-                    {isSubmitted && !loginIdValid && (
-                      <FormText className="text-danger">
-                        유효한 아이디 형식이 아닙니다.
-                      </FormText>
-                    )}
-                    <Button
-                      onClick={() => handleCheckLoginId()}
-                      size="sm"
-                      variant="outline-dark"
-                      className="mt-2 me-2"
-                    >
-                      아이디 중복 확인
-                    </Button>
-                    {/* 아이디 중복 관련 메세지 */}
-                    {loginIdCheckMessage && (
-                      <FormText
-                        className={
-                          loginIdChecked ? "text-success" : "text-danger"
-                        }
-                      >
-                        {loginIdCheckMessage}
-                      </FormText>
-                    )}
-                  </FormGroup>
-                </div>
-                <div>
-                  <Form>
-                    <FormGroup>
-                      <FormLabel className="fw-semibold fs-6 mt-2 mb-1">
-                        비밀번호
-                      </FormLabel>
-                      <div className="mb-1 mt-0">
-                        <FormText className="fs-7">
-                          <FormText className="text-muted fs-7">
-                            비밀번호는 영문+숫자 조합, 8~20자 사이로
-                            입력해주세요.
-                          </FormText>
-                        </FormText>
-                      </div>
-                      <FormControl
-                        type="password"
-                        value={password}
-                        placeholder="비밀번호"
-                        onChange={(e) => {
-                          setPassword(e.target.value);
-                        }}
-                        isInvalid={isSubmitted && !passwordValid}
-                      />
-                      {isSubmitted && !passwordValid && (
-                        <FormText className="text-danger">
-                          유효한 비밀번호 형식이 아닙니다.
-                        </FormText>
-                      )}
-                    </FormGroup>
-                  </Form>
-                </div>
-                <div>
-                  <form>
-                    <FormGroup>
-                      <FormLabel className="fw-semibold mt-2">
-                        비밀번호 확인
-                      </FormLabel>
-                      <FormControl
-                        type="password"
-                        value={password2}
-                        placeholder="비밀번호 확인"
-                        onChange={(e) => {
-                          setPassword2(e.target.value);
-                        }}
-                      />
-                      {password2 && password !== password2 && (
-                        <div style={{ color: "red", fontSize: "0.875rem" }}>
-                          비밀번호가 일치하지 않습니다.
+    <div className="fixed inset-0 bg-gray-100 overflow-y-auto mt-10">
+      <div className="flex justify-center items-start min-h-screen pt-10 pb-10">
+        <div className="w-full max-w-[600px]">
+          <div className="p-6 shadow rounded-2xl bg-white">
+            <Row>
+              <Col>
+                <Card className="p-4 shadow rounded">
+                  <Card.Body>
+
+                    <h2 className="mb-6 text-center text-2xl font-semibold">회원 등록</h2>
+                    {/* 아이디 */}
+                    <div className="flex items-start gap-6 mb-2">
+                      <form className="w-full">
+                        <label className="block font-semibold mb-1">아이디</label>
+                        <p className="text-sm text-muted mb-1">
+                          아이디는 영문으로 시작하며 4~20자, 영문+숫자 조합만 가능합니다.
+                        </p>
+                        <div className="flex gap-2">
+                          <input
+                            type="text"
+                            value={loginId}
+                            placeholder="아이디"
+                            autoComplete="username"
+                            onChange={(e) => {
+                              setLoginId(e.target.value);
+                              setLoginIdChecked(false);
+                              setLoginIdCheckMessage("");
+                            }}
+                            className={`w-full rounded px-3 py-2 bg-gray-100 mb-2 ${
+                              isSubmitted && !loginIdValid ? "border-red-500" : "border-gray-300"
+                            }`}
+                          />
                         </div>
-                      )}
-                    </FormGroup>
-                  </form>
-                </div>
-                <div>
-                  <FormGroup>
-                    <FormLabel className="fw-semibold fs-6 mt-2 mb-1">
-                      이름
-                    </FormLabel>
-                    <div className="mb-1 mt-0">
-                      <FormText className="fs-7">
-                        <FormText className="text-muted fs-7">
+                        <div className="flex items-center gap-3">
+                          <button
+                            type="button"
+                            onClick={() => handleCheckLoginId()}
+                            className="btn btn-outline btn-sm btn-neutral mt-1"
+                          >
+                            아이디 중복 확인
+                          </button>
+                          {/* 아이디 형식이 맞지않을때 (정규식은 최상단 위치) */}
+                          {isSubmitted && !loginIdValid && (
+                            <p style={{color: "red", fontSize: "0.875rem"}}>
+                              유효한 아이디 형식이 아닙니다.
+                            </p>
+                          )}
+                          {/* 아이디 중복 관련 메세지 */}
+                          {loginIdCheckMessage && (
+                            <p style={{fontSize: "0.875rem"}}
+                               className={`mt-1 ${loginIdChecked ? "text-success" : "text-red-500"}`}>
+
+                              {loginIdCheckMessage}
+                            </p>
+                          )}
+                        </div>
+                      </form>
+                    </div>
+                    <div>
+                      <form>
+                        <label className="block font-semibold mb-1">비밀번호</label>
+                        <p className="text-sm text-muted mb-1">
+                          비밀번호는 영문+숫자 조합, 8~20자 사이로
+                          입력해주세요.
+                        </p>
+                        <input
+                          type="password"
+                          value={password}
+                          placeholder="비밀번호"
+                          className="w-full rounded px-3 py-2 bg-gray-100 mb-2"
+                          onChange={(e) => {
+                            setPassword(e.target.value);
+                          }}
+                          isInvalid={isSubmitted && !passwordValid}
+                        />
+                        {isSubmitted && !passwordValid && (
+                          <p style={{color: "red", fontSize: "0.875rem"}}>
+                            유효한 비밀번호 형식이 아닙니다.
+                          </p>
+                        )}
+                      </form>
+                    </div>
+                    <div>
+                      <form>
+                        <label className="block font-semibold mb-1">비밀번호 확인</label>
+                        <input
+                          type="password"
+                          value={password2}
+                          placeholder="비밀번호 확인"
+                          className="w-full rounded px-3 py-2 bg-gray-100 mb-2"
+                          onChange={(e) => {
+                            setPassword2(e.target.value);
+                          }}
+                        />
+                        {password2 && password !== password2 && (
+                          <p style={{color: "red", fontSize: "0.875rem"}}>
+                            비밀번호가 일치하지 않습니다.
+                          </p>
+                        )}
+                      </form>
+                    </div>
+                    <div>
+                      <form>
+                        <label className="block font-semibold mb-1">이름</label>
+                        <p className="text-sm text-muted mb-1">
                           이름은 한글 또는 영문 2~20자까지 입력 가능합니다.
-                        </FormText>
-                      </FormText>
+                        </p>
+                        <input
+                          type="text"
+                          value={name}
+                          placeholder="이름"
+                          autoComplete="name"
+                          className="w-full rounded px-3 py-2 bg-gray-100 mb-2"
+                          onChange={(e) => {
+                            setName(e.target.value);
+                          }}
+                          isInvalid={isSubmitted && !nameValid}
+                        />
+                        {isSubmitted && !nameValid && (
+                          <p style={{color: "red", fontSize: "0.875rem"}}>
+                            유효한 이름 형식이 아닙니다.
+                          </p>
+                        )}
+                      </form>
                     </div>
-                    <FormControl
-                      type="text"
-                      value={name}
-                      placeholder="이름"
-                      autoComplete="name"
-                      onChange={(e) => {
-                        setName(e.target.value);
-                      }}
-                      isInvalid={isSubmitted && !nameValid}
-                    />
-                    {isSubmitted && !nameValid && (
-                      <FormText className="text-danger">
-                        유효한 이름 형식이 아닙니다.
-                      </FormText>
-                    )}
-                  </FormGroup>
-                </div>
-                <div>
-                  <FormGroup>
-                    <FormLabel className="fw-semibold mt-2">생년월일</FormLabel>
-                    <FormControl
-                      type="date"
-                      value={birthday}
-                      autoComplete="bday"
-                      onChange={(e) => {
-                        const val = e.target.value;
-                        setBirthday(val === "" ? getToday() : val);
-                      }}
-                    />
-                  </FormGroup>
-                </div>
-                <div>
-                  <FormGroup>
-                    <FormLabel className="fw-semibold fs-6 mt-2 mb-1">
-                      전화번호
-                    </FormLabel>
-                    <div className="mb-1 mt-0">
-                      <FormText className="fs-7">
-                        <FormText className="text-muted fs-7">
-                          하이픈(-)없이 숫자만 입력해주세요. (예: 01012345678)
-                        </FormText>
-                      </FormText>
+                    <div>
+                      <form>
+                        <label className="block font-semibold mb-1">생년월일</label>
+                        <input
+                          type="date"
+                          value={birthday}
+                          autoComplete="bday"
+                          className="w-full rounded px-3 py-2 bg-gray-100 mb-2"
+                          onChange={(e) => {
+                            const val = e.target.value;
+                            setBirthday(val === "" ? getToday() : val);
+                          }}
+                        />
+                      </form>
                     </div>
-                    <FormControl
-                      type="text"
-                      value={phone}
-                      placeholder="전화번호"
-                      autoComplete="tel"
-                      onChange={(e) => {
-                        setPhone(e.target.value);
-                      }}
-                      isInvalid={isSubmitted && !phoneValid}
-                    />
-                    {isSubmitted && !phoneValid && (
-                      <FormText className="text-danger">
-                        유효한 전화번호 형식이 아닙니다.
-                      </FormText>
-                    )}
-                  </FormGroup>
-                </div>
-                <div>
-                  <FormGroup>
-                    <FormLabel className="fw-semibold fs-6 mt-2 mb-1">
-                      이메일
-                    </FormLabel>
-                    <div className="mb-1 mt-0">
-                      <FormText className="fs-7">
-                        <FormText className="text-muted fs-7">
+                    <div>
+                      <form>
+                        <label className="block font-semibold mb-1">전화번호</label>
+                        <p className="text-sm text-muted mb-1">
+                          하이픈(-)없이 숫자만 입력해주세요. (예: 01012345678)</p>
+                        <input
+                          type="text"
+                          value={phone}
+                          placeholder="전화번호"
+                          autoComplete="tel"
+                          className="w-full rounded px-3 py-2 bg-gray-100 mb-2"
+                          onChange={(e) => {
+                            setPhone(e.target.value);
+                          }}
+                          isInvalid={isSubmitted && !phoneValid}
+                        />
+                        {isSubmitted && !phoneValid && (
+                          <p style={{color: "red", fontSize: "0.875rem"}}>
+                            유효한 전화번호 형식이 아닙니다.
+                          </p>
+                        )}
+                      </form>
+                    </div>
+                    <div>
+                      <form>
+                        <label className="block font-semibold mb-1">이메일</label>
+                        <p className="text-sm text-muted mb-1">
                           예: example@domain.com 형식의 이메일을 입력하세요.
-                        </FormText>
-                      </FormText>
-                    </div>
-                    <InputGroup>
-                      <FormControl
-                        type="text"
-                        value={emailId}
-                        placeholder="이메일"
-                        autoComplete="email"
-                        onChange={(e) => {
-                          setEmailId(e.target.value);
-                        }}
-                        isInvalid={isSubmitted && !emailValid}
-                        style={{ flex: "0 0 40%" }}
-                      />
-                      <InputGroup.Text
-                        style={{
-                          border: "none",
-                          backgroundColor: "transparent",
-                          paddingLeft: "0.25rem",
-                          paddingRight: "0.25rem",
-                        }}
-                      >
-                        @
-                      </InputGroup.Text>
-                      {customDomain ? (
-                        <>
-                          <div style={{ display: "flex", flex: "1 1 55%" }}>
-                            <FormControl
-                              type="text"
-                              placeholder="직접 입력"
+                        </p>
+                        <div className="flex gap-2 items-center">
+                          <input
+                            type="text"
+                            value={emailId}
+                            onChange={(e) => setEmailId(e.target.value)}
+                            className="w-2/5 rounded px-3 py-2 bg-gray-100 mb-2"
+                          />
+                          <span>@</span>
+                          {customDomain ? (
+                            <>
+                              <input
+                                type="text"
+                                value={emailDomain}
+                                onChange={(e) => setEmailDomain(e.target.value)}
+                                className="flex-1 rounded px-3 py-2 bg-gray-100 mb-2"
+                              />
+                              <button
+                                className="btn btn-outline btn-sm"
+                                onClick={() => setCustomDomain(false)}
+                              >
+                                x
+                              </button>
+                            </>
+                          ) : (
+                            <select
+                              className="flex-1 rounded px-3 py-2 bg-gray-100 mb-2"
                               value={emailDomain}
-                              onChange={(e) => setEmailDomain(e.target.value)}
-                            />
-                            <Button
-                              variant="outline-secondary"
-                              onClick={() => {
-                                setCustomDomain(false);
-                                setEmailDomain(""); // 초기화 또는 이전 값 유지할 수도 있음
+                              onChange={(e) => {
+                                const value = e.target.value;
+                                if (value === "custom") {
+                                  setCustomDomain(true);
+                                  setEmailDomain("");
+                                } else {
+                                  setEmailDomain(value);
+                                }
                               }}
                             >
-                              x
-                            </Button>
-                          </div>
-                        </>
-                      ) : (
-                        <Form.Select
-                          value={emailDomain}
-                          onChange={(e) => {
-                            const value = e.target.value;
-                            if (value === "custom") {
-                              setCustomDomain(true);
-                              setEmailDomain("");
-                            } else {
-                              setEmailDomain(value);
-                            }
-                          }}
-                          style={{ flex: "1 1 55%" }}
+                              <option value="">선택해주세요</option>
+                              <option value="naver.com">naver.com</option>
+                              <option value="hanmail.net">hanmail.net</option>
+                              <option value="daum.net">daum.net</option>
+                              <option value="gmail.com">gmail.com</option>
+                              <option value="nate.com">nate.com</option>
+                              <option value="hotmail.com">hotmail.com</option>
+                              <option value="outlook.com">outlook.com</option>
+                              <option value="icloud.com">icloud.com</option>
+                              <option value="custom">직접입력</option>
+                            </select>
+                          )}
+                        </div>
+                        {isSubmitted && !emailValid && (
+                          <p style={{color: "red", fontSize: "0.875rem"}}>유효한 이메일 형식이 아닙니다.</p>
+                        )}
+                        <button
+                          className="btn btn-outline btn-sm mt-2"
+                          onClick={handleEmailSendButton}
+                          disabled={
+                            emailId.trim() === "" ||
+                            !emailValid ||
+                            remainTime > 0 ||
+                            isSending ||
+                            authCompleted
+                          }
                         >
-                          <option value="">선택해주세요</option>
-                          <option value="naver.com">naver.com</option>
-                          <option value="hanmail.net">hanmail.net</option>
-                          <option value="daum.net">daum.net</option>
-                          <option value="gmail.com">gmail.com</option>
-                          <option value="nate.com">nate.com</option>
-                          <option value="hotmail.com">hotmail.com</option>
-                          <option value="outlook.com">outlook.com</option>
-                          <option value="icloud.com">icloud.com</option>
-                          <option value="custom">직접입력</option>
-                        </Form.Select>
-                      )}
-                    </InputGroup>
-                    {isSubmitted && !emailValid && (
-                      <FormText className="text-danger">
-                        유효한 이메일 형식이 아닙니다.
-                      </FormText>
-                    )}
-                    <Button
-                      className="mt-2 me-2"
-                      onClick={handleEmailSendButton}
-                      variant="outline-dark"
-                      disabled={
-                        emailId.trim() === "" ||
-                        !emailValid ||
-                        remainTime > 0 || // 이메일 보내고 시간이 남아있으면
-                        isSending || // 보내는 도중
-                        authCompleted // 인증 완료되면
-                      }
-                    >
-                      {isSending ? (
-                        <>
-                          <Spinner
-                            animation="border"
-                            size="sm"
-                            role="status"
-                            aria-hidden="true"
-                            className="me-2"
-                          />
-                          전송 중...
-                        </>
-                      ) : (
-                        "인증번호 전송"
-                      )}
-                    </Button>
-                    {remainTime > 0 && !authCompleted && (
-                      <FormText className="text-muted">
-                        인증번호 재전송까지 {remainTime}초 남음
-                      </FormText>
-                    )}
-                    {authCompleted && (
-                      <FormText className="text-muted">
-                        이메일 인증이 완료되었습니다.
-                      </FormText>
-                    )}
-                  </FormGroup>
-                  {/* 인증번호 입력칸 (이메일 전송 후 보여주기) */}
-                  {emailSent && (
-                    <FormGroup className="mt-2 fw-semibold">
-                      <FormLabel>인증번호</FormLabel>
-                      <FormControl
-                        type="text"
-                        value={authCode}
-                        placeholder="이메일로 전송된 인증번호를 입력하세요."
-                        onChange={(e) => setAuthCode(e.target.value)}
-                        isInvalid={authFailed}
-                        readOnly={authCompleted}
-                        disabled={authCompleted}
-                      />
+                          {isSending ? (
+                            <>
+                              <span className="loading loading-spinner loading-sm mr-2"/>
+                              전송 중...
+                            </>
+                          ) : (
+                            "인증번호 전송"
+                          )}
+                        </button>
+                        {remainTime > 0 && !authCompleted && (
+                          <p className="text-sm text-muted mt-1">
+                            인증번호 재전송까지 {remainTime}초 남음
+                          </p>
+                        )}
+                        {authCompleted && (
+                          <p className="text-sm text-success mt-1">
+                            이메일 인증이 완료되었습니다.
+                          </p>
+                        )}
+                      </form>
+                    </div>
 
-                      <Button
-                        className="mt-2 me-2"
-                        variant="dark"
-                        onClick={handleAuthCodeVerify}
-                        disabled={authCompleted}
-                      >
-                        인증번호 확인
-                      </Button>
-                      {authFailed && (
-                        <FormText className="text-danger">
-                          인증번호를 올바르게 입력하세요.
-                        </FormText>
-                      )}
-                    </FormGroup>
-                  )}
-                </div>
-                <div>
-                  <FormGroup>
-                    <FormLabel className="fw-bold mt-2">주소</FormLabel>
-                    <FormControl
-                      type="text"
-                      value={zipCode}
-                      placeholder="우편번호"
-                      readOnly
-                    />
-                    <FormControl
-                      type="text"
-                      value={address}
-                      placeholder="주소"
-                      autoComplete="address-line1"
-                      readOnly
-                    />
-                    <FormControl
-                      type="text"
-                      value={addressDetail}
-                      placeholder="상세주소를 입력하세요"
-                      onChange={(e) => setAddressDetail(e.target.value)}
-                    />
-                    <Button
-                      className="mt-2"
-                      variant="outline-dark"
-                      onClick={handleSearchAddress}
-                    >
-                      주소 검색
-                    </Button>
-                  </FormGroup>
-                </div>
-                <div className="d-flex justify-content-end mt-4">
-                  {privacyAgreed && (
-                    <p className="text-success me-2">
-                      개인정보 수집 및 이용에 동의 하셨습니다.
-                    </p>
-                  )}
-                  <Button
-                    variant={privacyAgreed ? "secondary" : "dark"}
-                    disabled={privacyAgreed}
-                    onClick={privacyModalShow}
-                  >
-                    {privacyAgreed ? "동의 완료" : "개인정보 수집 동의"}
-                  </Button>
-                </div>
-                <div className="text-end mt-2">
-                  <Button
-                    onClick={handleSignUpClick}
-                    variant="dark"
-                    disabled={disabled || isProcessing}
-                  >
-                    {isProcessing ? (
-                      <>
-                        <Spinner
-                          animation="border"
-                          size="sm"
-                          role="status"
-                          aria-hidden="true"
-                          className="me-2"
-                        />
-                        전송 중...
-                      </>
-                    ) : (
-                      "회원 등록"
+                    {/* 인증번호 입력 */}
+                    {emailSent && (
+                      <div>
+                        <form>
+                          <label className="block font-semibold mb-1 mt-2">인증번호</label>
+                          <input
+                            type="text"
+                            value={authCode}
+                            onChange={(e) => setAuthCode(e.target.value)}
+                            placeholder="이메일로 전송된 인증번호를 입력하세요."
+                            className={`w-full rounded px-3 py-2 border ${authFailed ? "border-red-500" : "border-gray-300"}`}
+                            disabled={authCompleted}
+                            readOnly={authCompleted}
+                          />
+                          <button
+                            className="btn btn-dark btn-sm mt-2"
+                            onClick={handleAuthCodeVerify}
+                            disabled={authCompleted}
+                          >
+                            인증번호 확인
+                          </button>
+                          {authFailed && (
+                            <p className="text-error text-sm mt-1">인증번호를 올바르게 입력하세요.</p>
+                          )}
+                        </form>
+                      </div>
                     )}
-                  </Button>
-                </div>
-              </Card.Body>
-            </Card>
-          </Col>
-          {/* 동의 모달 */}
-          <PrivacyModal
-            show={showPrivacyModal}
-            onClose={() => setShowPrivacyModal(false)}
-            onAgree={(agreed) => setPrivacyAgreed(agreed)}
-          />
-        </Row>
-      </Container>
+                    <div>
+                      <form>
+                        <label className="fw-bold mt-2">주소</label>
+                        <input
+                          type="text"
+                          value={zipCode}
+                          placeholder="우편번호"
+                          className="w-full rounded px-3 py-2 bg-gray-100 mb-2"
+                          readOnly
+                        />
+                        <input
+                          type="text"
+                          value={address}
+                          placeholder="주소"
+                          className="w-full rounded px-3 py-2 bg-gray-100 mb-2"
+                          autoComplete="address-line1"
+                          readOnly
+                        />
+                        <input
+                          type="text"
+                          value={addressDetail}
+                          placeholder="상세주소를 입력하세요"
+                          className="w-full rounded px-3 py-2 bg-gray-100 mb-2"
+                          onChange={(e) => setAddressDetail(e.target.value)}
+                        />
+                        <button
+                          className="mt-2 btn btn-sm btn-outline btn-neutral"
+                          onClick={handleSearchAddress}
+                        >
+                          주소 검색
+                        </button>
+                      </form>
+                    </div>
+                    <div className="d-flex justify-content-end mt-4">
+                      {privacyAgreed && (
+                        <p className="text-success me-2">
+                          개인정보 수집 및 이용에 동의 하셨습니다.
+                        </p>
+                      )}
+                      <Button
+                        variant={privacyAgreed ? "secondary" : "dark"}
+                        disabled={privacyAgreed}
+                        onClick={privacyModalShow}
+                      >
+                        {privacyAgreed ? "동의 완료" : "개인정보 수집 동의"}
+                      </Button>
+                    </div>
+                    <div className="text-end mt-2">
+                      <Button
+                        onClick={handleSignUpClick}
+                        variant="dark"
+                        disabled={disabled || isProcessing}
+                      >
+                        {isProcessing ? (
+                          <>
+                            <Spinner
+                              animation="border"
+                              size="sm"
+                              role="status"
+                              aria-hidden="true"
+                              className="me-2"
+                            />
+                            전송 중...
+                          </>
+                        ) : (
+                          "회원 등록"
+                        )}
+                      </Button>
+                    </div>
+                  </Card.Body>
+                </Card>
+              </Col>
+              {/* 동의 모달 */
+              }
+              <PrivacyModal
+                show={showPrivacyModal}
+                onClose={() => setShowPrivacyModal(false)}
+                onAgree={(agreed) => setPrivacyAgreed(agreed)}
+              />
+            </Row>
+          </div>
+        </div>
+      </div>
     </div>
-  );
+  )
+    ;
 }
