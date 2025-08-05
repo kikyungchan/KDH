@@ -55,9 +55,9 @@ export function ProductList() {
   };
 
   return (
-    <div id="product-list-container" className="w-full pt-3 px-109">
+    <div id="product-list-container" className="w-full pt-3 px-90">
       <div className="flex justify-between items-center mb-6">
-        <h2 className="text-xl font-bold" style={{ fontSize: "2rem" }}>
+        <h2 className="text-xl" style={{ fontSize: "2rem" }}>
           상품 목록
         </h2>
         <select

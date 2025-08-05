@@ -1,6 +1,7 @@
 .category-menu-wrapper {
     padding: 2rem 1rem;
     background-color: white;
+
 }
 
 .category-title {
@@ -12,14 +13,24 @@
 .category-list-scroll {
     display: flex;
     overflow-x: auto;
-    gap: 1.5rem;
+    gap: 1.21rem;
     padding-bottom: 1rem;
+}
+
+.category-img {
+    width: 100%;
+    height: 140px;
+    object-fit: contain;
+    border-radius: 8px;
 }
 
 .category-item {
     flex: 0 0 auto;
     text-align: center;
     cursor: pointer;
+    width: 120px;
+    height: 200px;
+
 }
 
 .category-icon {
@@ -28,7 +39,7 @@
 }
 
 .category-label {
-    font-size: 0.9rem;
+    font-size: 1rem;
     color: #333;
     white-space: nowrap;
 }

@@ -8,6 +8,9 @@ const categories = [
   { name: "상의", value: "top", image: "/CategoryImage/top.png" },
   { name: "하의", value: "bottom", image: "/CategoryImage/bottom.png" },
   { name: "신발", value: "shoes", image: "/CategoryImage/shoes.png" },
+  { name: "가방", value: "shoes", image: "/CategoryImage/bag.png" },
+  { name: "양말", value: "shoes", image: "/CategoryImage/socks.png" },
+  { name: "벨트", value: "shoes", image: "/CategoryImage/belt.png" },
 ];
 
 function CategoryMenu() {
