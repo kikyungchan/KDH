@@ -27,6 +27,7 @@ export function ProductDetail() {
   const [reviewChanged, setReviewChanged] = useState(false);
   const [showCartConfirmModal, setShowCartConfirmModal] = useState(false);
   const [showModal, setShowModal] = useState(false);
+  const [cartItems, setCartItems] = useState([]);
   const [selectedOption, setSelectedOption] = useState(null);
   const [quantity, setQuantity] = useState(1);
   const [product, setProduct] = useState(null);
@@ -311,6 +312,7 @@ export function ProductDetail() {
                         thumbnail,
                         setShowCartConfirmModal,
                         navigate,
+                        setCartItems,
                       })
                     }
                     style={{

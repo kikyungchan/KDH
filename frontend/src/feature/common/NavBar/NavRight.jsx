@@ -7,7 +7,6 @@ import SearchBar from "./SearchBar.jsx";
 function NavRight({
   user,
   iconRef,
-  onSearchToggle,
   showSearch,
   setShowSearch,
   keyword,
@@ -17,13 +16,20 @@ function NavRight({
   const { cartCount } = useCart();
   const navigate = useNavigate();
 
+  const handleSearchClick = () => {
+    if (keyword.trim() !== "") {
+      navigate(`/product/list?keyword=${keyword.trim()}`);
+      setKeyword("");
+    }
+  };
+
   return (
     <div className="navbar-right">
       <div className="navbar-icons">
         <FiSearch
           ref={iconRef}
           className="navbar-icon"
-          onClick={onSearchToggle}
+          onClick={handleSearchClick}
           style={{ cursor: "pointer" }}
         />
         <SearchBar

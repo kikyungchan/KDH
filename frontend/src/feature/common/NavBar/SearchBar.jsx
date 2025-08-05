@@ -11,10 +11,7 @@ function SearchBar({
   navigate,
 }) {
   return (
-    <div
-      ref={searchRef}
-      className={`search-bar-popup ${showSearch ? "active" : ""}`}
-    >
+    <div ref={searchRef} className="search-bar-popup active">
       <FiChevronLeft
         className="search-close-icon"
         onClick={() => setShowSearch(false)}

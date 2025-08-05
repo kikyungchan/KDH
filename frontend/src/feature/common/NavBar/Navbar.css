@@ -73,7 +73,7 @@
     position: absolute;
     top: 50%;
     transform: translateY(-50%);
-    right: 100%; /* 아이콘 왼쪽에 붙게 */
+    right: 11%; /* 아이콘 왼쪽에 붙게 */
     display: none;
     align-items: center;
     background: #f1f1f1;
