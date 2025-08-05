@@ -269,7 +269,8 @@ export function ProductDetail() {
                   </div>
                 </>
               )}
-
+              {/*가격이랑 버튼사이 여백주기*/}
+              <div className="mt-3"></div>
               {/*버튼*/}
               {product.quantity === 0 ? (
                 // 품절 상태일 경우
