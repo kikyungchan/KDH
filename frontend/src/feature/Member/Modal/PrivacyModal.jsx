@@ -1,12 +1,18 @@
 import { Modal, Button } from "react-bootstrap";
 
 export default function PrivacyModal({ show, onClose, onAgree }) {
+  if (!show) return null;
   return (
-    <Modal show={show} onHide={onClose}>
-      <Modal.Header closeButton>
-        <Modal.Title>개인정보 수집 및 이용 동의</Modal.Title>
-      </Modal.Header>
-      <Modal.Body>
+    <div className="modal modal-open">
+      <div className="modal-box w-full max-w-lg">
+
+        <div className="flex justify-between items-center mb-3">
+          <h3 className="text-lg font-bold">개인정보 수집 및 이용 동의</h3>
+          <button className="btn btn-sm btn-circle" onClick={onClose}>
+            ✕
+          </button>
+        </div>
+      <div className="mb-3">
         <p>1. 수집 항목: 이름, 전화번호, 이메일</p>
         <p>2. 수집 목적: 서비스 제공, 본인 확인, 문의 응대</p>
         <p>3. 보유 기간: 회원 탈퇴 시까지 또는 수집 후 1년간 보관</p>
@@ -19,21 +25,23 @@ export default function PrivacyModal({ show, onClose, onAgree }) {
         </p>
         <br />
         <p>※ 위 내용을 확인하였으며, 개인정보 수집 및 이용에 동의합니다.</p>
-      </Modal.Body>
-      <Modal.Footer>
-        <Button
-          variant="dark"
+      </div>
+      <div className="flex gap-2 justify-content-end">
+        <button
+          type="button"
+          className="btn btn-sm btn-neutral"
           onClick={() => {
             onAgree(true); // 동의함
             onClose();
           }}
         >
           동의
-        </Button>
-        <Button variant="secondary" onClick={onClose}>
+        </button>
+        <Button type="button" className="btn btn-sm btn-error" onClick={onClose}>
           닫기
         </Button>
-      </Modal.Footer>
-    </Modal>
+      </div>
+      </div>
+    </div>
   );
 }
