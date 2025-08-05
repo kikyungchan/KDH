@@ -3,7 +3,7 @@ import "./CategoryMenu.css";
 import { useNavigate } from "react-router";
 
 const categories = [
-  { name: "모자", value: "hat", image: "/CategoryImage/shoes.png" },
+  { name: "모자", value: "hat", image: "/CategoryImage/hat.png" },
   { name: "겉옷", value: "outer", image: "/CategoryImage/outer.png" },
   { name: "상의", value: "top", image: "/CategoryImage/top.png" },
   { name: "하의", value: "bottom", image: "/CategoryImage/bottom.png" },

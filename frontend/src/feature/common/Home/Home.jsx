@@ -11,7 +11,6 @@ function Home() {
   const navigate = useNavigate();
   const [leftVisual, setLeftVisual] = useState();
   const [currentIndex, setCurrentIndex] = useState(1);
-  const [hotItems, setHotItems] = useState([]);
   const [shuffledItems, setShuffledItems] = useState([]);
   const swiperRef = useRef(null);
 
@@ -20,7 +19,6 @@ function Home() {
       .get("/api/product/hot-random")
       .then((res) => {
         const sliced = res.data.slice(0, 10);
-        setHotItems(sliced);
 
         // 좌측용 랜덤 하나
         const randomOne = sliced[Math.floor(Math.random() * sliced.length)];
