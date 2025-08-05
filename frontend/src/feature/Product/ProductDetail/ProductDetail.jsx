@@ -106,6 +106,7 @@ export function ProductDetail() {
                   justifyContent: "space-between",
                   alignItems: "center",
                   marginBottom: "1rem",
+                  paddingRight: "30px",
                 }}
               >
                 <div
@@ -294,7 +295,7 @@ export function ProductDetail() {
                   style={{
                     marginTop: "2px",
                     display: "flex",
-                    width: "600px",
+                    width: "500px",
                     margin: "0 auto",
                     gap: "34px",
                     padding: "0 33px",
