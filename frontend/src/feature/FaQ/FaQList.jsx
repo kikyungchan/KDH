@@ -139,96 +139,110 @@ export function FaQList() {
   return (
     <>
       <Row className="justify-content-center">
-        <Col md={8} lg={9} className="mt-5">
+        <Col md={12} lg={9} className="mt-5">
           <div className="container">
-            <h2 className="mb-4">자주 묻는 질문</h2>
-            <h2 className="text-2xl font-bold mb-4">무엇을 도와드릴까요?</h2>
-            <div>
-              <ul>
-                <li className="mb-2 py-0.7">
-                  <a
-                    href="/faq/list?c=2&#배송은+얼마나+걸리나요?"
-                    className="flex items-center text-blue-600 hover:underline"
-                  >
-                    <span className="bg-blue-100 text-blue-600 rounded-full w-5 h-5 flex items-center justify-center mr-2 text-xs font-bold">
-                      Q
-                    </span>
-                    배송은 얼마나 걸리나요?
+            {/*<h2 className="mb-4">자주 묻는 질문</h2>*/}
+            <section className="bg-white lg:py-12">
+              <div className="lg:flex">
+                <div className="mb-8 lg:w-1/2 w-full">
+                  <h2 className="text-2xl font-bold my-4">
+                    무엇을 도와드릴까요?
+                  </h2>
+                  <ul>
+                    <li className="mb-2 py-1">
+                      <a
+                        href="/faq/list?c=2&#배송은+얼마나+걸리나요?"
+                        className="flex items-center text-[#1B64DA] hover:underline"
+                      >
+                        <span className="bg-blue-100 text-[#1B64DA] rounded-full w-5 h-5 flex items-center justify-center mr-2 text-xs font-bold">
+                          Q
+                        </span>
+                        배송은 얼마나 걸리나요?
+                      </a>
+                    </li>
+                    <li className="mb-2 py-1">
+                      <a
+                        href="/faq/list?c=3&#주문+취소는+어떻게+하나요"
+                        className="flex items-center text-[#1B64DA] hover:underline"
+                      >
+                        <span className="bg-blue-100 text-[#1B64DA] rounded-full w-5 h-5 flex items-center justify-center mr-2 text-xs font-bold">
+                          Q
+                        </span>
+                        주문 취소는 어떻게 하나요?
+                      </a>
+                    </li>
+                    <li className="mb-2 py-1">
+                      <a
+                        href="/faq/list?c=7&#제품의+자세한+정보는+어떻게+알+수+있나요"
+                        className="flex items-center text-[#1B64DA] hover:underline"
+                      >
+                        <span className="bg-blue-100 text-[#1B64DA] rounded-full w-5 h-5 flex items-center justify-center mr-2 text-xs font-bold">
+                          Q
+                        </span>
+                        제품의 자세한 정보를 알고 싶어요.
+                      </a>
+                    </li>
+                    <li className="mb-2 py-1">
+                      <a
+                        href="/faq/list?c=4&#제품이+불량입니다.+반품+혹은+교환은+어떻게+하나요"
+                        className="flex items-center text-blue-600 hover:underline"
+                      >
+                        <span className="bg-blue-100 text-blue-600 rounded-full w-5 h-5 flex items-center justify-center mr-2 text-xs font-bold">
+                          Q
+                        </span>
+                        제품이 불량일 때는?
+                      </a>
+                    </li>
+                    <li className="mb-2 py-1">
+                      <a
+                        href="/faq/list?c=6&#카카오+계정으로+로그인+하면+&amp;#39;이미+카카오로+가입하신+이메일입니다&amp;#39;+라고+나오는데+어떻게+해야+하나요"
+                        className="flex items-center text-blue-600 hover:underline"
+                      >
+                        <span className="bg-blue-100 text-blue-600 rounded-full w-5 h-5 flex items-center justify-center mr-2 text-xs font-bold">
+                          Q
+                        </span>
+                        카카오 계정으로 로그인하면 이미 가입되었다고 합니다.
+                      </a>
+                    </li>
+                  </ul>
+                </div>
+                <div className="lg:w-1/2 w-full lg:flex space-x-2 ml-auto">
+                  {/*<button className="btn btn-default btn-outline shadow-md">
+                    1:1 상담하기
+                  </button>
+                  <a href="/contacts/new" className="btn btn-outline">
+                    이메일 문의하기
                   </a>
-                </li>
-                <li className="mb-2 py-0.7">
-                  <a
-                    href="/faq/list?c=3&#주문+취소는+어떻게+하나요"
-                    className="flex items-center text-blue-600 hover:underline"
-                  >
-                    <span className="bg-blue-100 text-blue-600 rounded-full w-5 h-5 flex items-center justify-center mr-2 text-xs font-bold">
-                      Q
-                    </span>
-                    주문 취소는 어떻게 하나요?
-                  </a>
-                </li>
-                <li className="mb-2 py-0.7">
-                  <a
-                    href="/faq/list?c=7&#제품의+자세한+정보는+어떻게+알+수+있나요"
-                    className="flex items-center text-blue-600 hover:underline"
-                  >
-                    <span className="bg-blue-100 text-blue-600 rounded-full w-5 h-5 flex items-center justify-center mr-2 text-xs font-bold">
-                      Q
-                    </span>
-                    제품의 자세한 정보를 알고 싶어요.
-                  </a>
-                </li>
-                <li className="mb-2 py-0.7">
-                  <a
-                    href="/faq/list?c=4&#제품이+불량입니다.+반품+혹은+교환은+어떻게+하나요"
-                    className="flex items-center text-blue-600 hover:underline"
-                  >
-                    <span className="bg-blue-100 text-blue-600 rounded-full w-5 h-5 flex items-center justify-center mr-2 text-xs font-bold">
-                      Q
-                    </span>
-                    제품이 불량일 때는?
-                  </a>
-                </li>
-                <li className="mb-2 py-0.7">
-                  <a
-                    href="/faq/list?c=6&#카카오+계정으로+로그인+하면+&amp;#39;이미+카카오로+가입하신+이메일입니다&amp;#39;+라고+나오는데+어떻게+해야+하나요"
-                    className="flex items-center text-blue-600 hover:underline"
-                  >
-                    <span className="bg-blue-100 text-blue-600 rounded-full w-5 h-5 flex items-center justify-center mr-2 text-xs font-bold">
-                      Q
-                    </span>
-                    카카오 계정으로 로그인하면 이미 가입되었다고 합니다.
-                  </a>
-                </li>
-              </ul>
-              <div className="flex space-x-2">
-                <button className="btn btn-default btn-outline shadow-md">
-                  1:1 상담하기
-                </button>
-                <a href="/contacts/new" className="btn btn-outline">
-                  이메일 문의하기
-                </a>
-                <button className="btn btn-outline">
-                  이메일 주소 복사하기
-                </button>
+                  <button className="btn btn-outline">
+                    이메일 주소 복사하기
+                  </button>*/}
+                  <div className="p-4 bg-gray-100 rounded-2xl mx-auto">
+                    <h2 className="text-xl font-bold mb-2.5">고객센터</h2>
+                    <ol className="list-disc  list-outside pl-5 space-y-2 text-gray-700">
+                      <li>평일: 전체 문의 상담</li>
+                      <li>토요일, 공휴일: 오늘의집 직접배송 주문건 상담</li>
+                      <li>일요일: 휴무</li>
+                    </ol>
+                    <ButtonGroup className="mt-22 ">
+                      {radios.map((radio, idx) => (
+                        <input
+                          key={idx}
+                          className="btn btn-outline mx-2 my-1
+                          btn-block lg:w-auto lg:my-auto"
+                          type="radio"
+                          name="바로가기"
+                          aria-label={radio.name}
+                          value={radio.value}
+                          checked={idx === 2}
+                          onClick={radio.fnc}
+                        />
+                      ))}
+                    </ButtonGroup>
+                  </div>
+                </div>
               </div>
-            </div>
-            <div>
-              <ButtonGroup>
-                {radios.map((radio, idx) => (
-                  <input
-                    key={idx}
-                    className="btn btn-outline"
-                    type="radio"
-                    name="바로가기"
-                    aria-label={radio.name}
-                    value={radio.value}
-                    checked={idx === 2}
-                    onClick={radio.fnc}
-                  />
-                ))}
-              </ButtonGroup>
-            </div>
+            </section>
+
             <div>
               <nav className="pt-10 px-6 pb-0">
                 {catlist.map((cat, idx) => (
@@ -236,7 +250,7 @@ export function FaQList() {
                     <button
                       id={cat.name}
                       type="checkbox"
-                      className={`btn btn-primary mx-1 rounded-full
+                      className={`btn btn-primary m-1 rounded-full
                       ${searchCategory == cat.value ? "" : "btn-outline"}`}
                       // onClick={() => setsearchCategory(cat.value)}
                       onClick={() => handleCategoryButtonClick(cat.value)}
