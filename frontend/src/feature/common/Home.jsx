@@ -41,6 +41,7 @@ function Home() {
             <>
               <img
                 src={leftVisual.thumbnailUrl}
+                onClick={() => navigate(`/product/view?id=${leftVisual.id}`)}
                 alt="HOT 상품"
                 className="main-visual-img"
               />
