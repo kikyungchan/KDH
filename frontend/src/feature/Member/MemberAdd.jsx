@@ -332,8 +332,8 @@ export function MemberAdd() {
   };
 
   return (
-    <div className="fixed inset-0 bg-gray-100 overflow-y-auto mt-10">
-      <div className="flex justify-center items-start min-h-screen pt-10 pb-10">
+    <div className="bg-gray-100 min-h-screen overflow-y-auto pt-10">
+      <div className="flex justify-center items-start min-h-screen pb-10">
         <div className="w-full max-w-[600px] mx-auto px-4">
           <div className="px-8 py-6 shadow rounded-2xl bg-white">
             <Row>
@@ -708,6 +708,5 @@ export function MemberAdd() {
         </div>
       </div>
     </div>
-  )
-    ;
+  );
 }

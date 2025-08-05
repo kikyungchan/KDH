@@ -86,7 +86,7 @@ export function MemberDetail() {
   return (
     <div className="bg-gray-100 min-h-screen">
       <div className="flex justify-center items-start pt-10">
-        <div className="w-full max-w-[600px]">
+        <div className="w-full max-w-[600px] mx-auto px-4">
           <div className="px-8 py-6 shadow rounded-2xl bg-white">
               <Row>
                 <Col>
