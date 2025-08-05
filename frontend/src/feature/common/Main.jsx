@@ -1,4 +1,4 @@
-import NavBar from "./NavBar.jsx";
+import NavBar from "./NavBar/NavBar.jsx";
 import { Outlet, useLocation } from "react-router";
 import { useEffect } from "react";
 

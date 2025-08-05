@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from "react-router";
 import { FiSearch, FiUser, FiShoppingCart } from "react-icons/fi";
-import { useCart } from "../Product/CartContext.jsx";
+import { useCart } from "../../Product/CartContext.jsx";
 
 function NavRight({ user, iconRef, onSearchToggle }) {
   const { cartCount } = useCart();

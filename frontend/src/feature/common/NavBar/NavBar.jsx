@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useRef, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router";
-import { AuthenticationContext } from "./AuthenticationContextProvider.jsx";
+import { AuthenticationContext } from "../AuthenticationContextProvider.jsx";
 import {
   FiChevronLeft,
   FiMenu,
@@ -9,12 +9,12 @@ import {
   FiUser,
 } from "react-icons/fi";
 import "./Navbar.css";
-import { useCart } from "../Product/CartContext.jsx";
-import NavLeft from "./NavLeft";
-import NavRight from "./NavRight";
-import Search from "./SearchBar";
+import { useCart } from "../../Product/CartContext.jsx";
+import NavLeft from "./NavLeft.jsx";
+import NavRight from "./NavRight.jsx";
+import Search from "./SearchBar.jsx";
 import "bootstrap/dist/css/bootstrap-grid.min.css";
-import SearchBar from "./SearchBar";
+import SearchBar from "./SearchBar.jsx";
 
 function NavBar(props) {
   const [showMobileCategory, setShowMobileCategory] = useState(false);
