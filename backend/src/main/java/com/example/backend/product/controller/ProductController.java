@@ -183,7 +183,7 @@ public class ProductController {
     @GetMapping("/hot-random")
     public ResponseEntity<List<ProductMainSlideDto>> getRandomHotProducts() {
         LocalDateTime oneWeekAgo = LocalDateTime.now().minusDays(7);
-        PageRequest pageable = PageRequest.of(0, 10);
+        PageRequest pageable = PageRequest.of(0, 5);
         List<Product> hotProducts = productRepository.findHotProductsRandomLimit(oneWeekAgo, pageable);
         List<ProductMainSlideDto> result = new ArrayList<>();
         for (Product product : hotProducts) {
@@ -194,8 +194,8 @@ public class ProductController {
     }
 
     @GetMapping("/best")
-    public ResponseEntity<List<ProductMainSlideDto>> getTopProducts() {
-        List<ProductMainSlideDto> topProducts = productService.getTopSellingProducts();
+    public ResponseEntity<List<ProductBestDto>> getTopProducts() {
+        List<ProductBestDto> topProducts = productService.getTopSellingProducts();
         return ResponseEntity.ok(topProducts);
     }
 }

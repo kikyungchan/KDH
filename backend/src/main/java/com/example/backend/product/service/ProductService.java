@@ -38,6 +38,7 @@ public class ProductService {
     private final OrderRepository orderRepository;
     private final OrderItemRepository orderItemRepository;
     private final GuestOrderRepository guestOrderRepository;
+    private final ProductCommentRepository productCommentRepository;
 
 
     // url에서 key만 따오는 메소드
@@ -308,12 +309,14 @@ public class ProductService {
         return orderToken;
     }
 
-    public List<ProductMainSlideDto> getTopSellingProducts() {
+    public List<ProductBestDto> getTopSellingProducts() {
         Pageable pageable = PageRequest.of(0, 3);
         List<Product> topProducts = productRepository.findTopSellingProducts(pageable);
-        List<ProductMainSlideDto> result = new ArrayList<>();
+        List<ProductBestDto> result = new ArrayList<>();
         for (Product product : topProducts) {
-            ProductMainSlideDto dto = ProductMainSlideDto.from(product);
+            Double avg = productCommentRepository.getAverageRating(product.getId());
+            Integer cnt = productCommentRepository.getReviewCount(product.getId());
+            ProductBestDto dto = ProductBestDto.from(product, avg, cnt);
             result.add(dto);
         }
         return result;

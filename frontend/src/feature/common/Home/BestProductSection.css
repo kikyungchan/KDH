@@ -15,6 +15,14 @@
     overflow-x: auto;
 }
 
+.best-product-rating {
+    font-size: 0.9rem;
+    color: #555;
+    margin-top: 4px;
+    border: 1px solid red; /* 확인용 */
+}
+
+
 .best-product-card {
     width: 350px;
     height: 350px;
