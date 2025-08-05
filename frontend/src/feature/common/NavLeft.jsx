@@ -1,23 +1,30 @@
-import React from "react";
-import { Link } from "react-router";
+import React, { useState } from "react";
+import { Link, useNavigate } from "react-router";
 
 function NavLeft({ user, isAdmin, handleCategoryClick }) {
+  const navigate = useNavigate();
+  const [dropdownOpen, setDropdownOpen] = useState(false);
   return (
     <div className="navbar-left flex items-center gap-2">
-      <div className="dropdown dropdown-hover">
-        <div
-          tabIndex={0}
-          role="button"
-          className="btn btn-ghost text-xl whitespace-nowrap"
-        >
-          모든상품
-        </div>
+      <div
+        className={`dropdown ${dropdownOpen ? "dropdown-open" : ""}`}
+        onMouseEnter={() => setDropdownOpen(true)}
+        onMouseLeave={() => setDropdownOpen(false)}
+      >
+        <Link to="/product/list" onClick={() => handleCategoryClick("")}>
+          <button
+            tabIndex={0}
+            className="btn btn-ghost text-xl whitespace-nowrap"
+          >
+            모든상품
+          </button>
+        </Link>
         <ul
           tabIndex={0}
           className="menu dropdown-content z-[1000] p-2 shadow bg-base-100 rounded-box w-52"
         >
           <li>
-            <button onClick={() => handleCategoryClick("")}>전체</button>
+            <button onClick={() => navigate("/product/list")}>전체</button>
           </li>
           <li>
             <button onClick={() => handleCategoryClick("outer")}>겉옷</button>
@@ -60,12 +67,12 @@ function NavLeft({ user, isAdmin, handleCategoryClick }) {
           </Link>
         </>
       )}
-      <Link to="/chat/chatting" className="btn btn-ghost text-xl">
-        채팅 프로토콜
-      </Link>
-      <Link to="/pay/Checkout" className="btn btn-ghost text-xl">
-        토스 페이먼츠
-      </Link>
+      {/*<Link to="/chat/chatting" className="btn btn-ghost text-xl">*/}
+      {/*  채팅 프로토콜*/}
+      {/*</Link>*/}
+      {/*<Link to="/pay/Checkout" className="btn btn-ghost text-xl">*/}
+      {/*  토스 페이먼츠*/}
+      {/*</Link>*/}
     </div>
   );
 }

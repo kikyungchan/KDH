@@ -56,7 +56,7 @@ export function ProductList() {
 
   return (
     <div id="product-list-container" className="product-list-container">
-      <div className="flex justify-between items-center mb-6">
+      <div className="max-w-[1600px] mx-auto w-full flex justify-between items-center mb-6 px-4">
         <h2 className="text-xl font-bold">상품 목록</h2>
         <select
           className="select select-sm w-52"

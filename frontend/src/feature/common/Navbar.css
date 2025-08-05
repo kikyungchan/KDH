@@ -1,16 +1,11 @@
 .navbar-container {
-    position: fixed; /* 고정 위치 */
+    position: fixed;
     top: 0;
     left: 0;
     right: 0;
     z-index: 1000;
-    background-color: white; /* 배경 없으면 아래 컨텐츠랑 겹칠 수 있음 */
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 2rem 2rem;
-    gap: 1rem;
-    height: 80px; /* 높이를 명시적으로 설정 */
+    background-color: white;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05); /* 부드러운 그림자 */
 }
 
 .navbar-left {
@@ -20,11 +15,10 @@
 
 .navbar-icons {
     display: flex;
-    gap: 1rem;
+    gap: 1.5rem;
     font-size: 1.4rem;
     align-items: center;
-
-
+    /*margin-right: 10rem;*/
 }
 
 .navbar-icon {
@@ -33,6 +27,40 @@
     color: black;
     cursor: pointer;
     position: relative;
+}
+
+.navbar-inner {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 80px;
+    max-width: 1600px;
+    margin: 0 auto;
+    padding: 0 1rem; /* = px-4 */
+    width: 100%;
+}
+
+.navbar-logo {
+    font-size: 40px;
+    font-weight: bold;
+    text-decoration: none;
+    margin-right: 3rem;
+    /*margin-right: 1.8rem;*/
+    /*margin-left: 10rem;*/
+
+}
+
+.navbar-right {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 1rem;
+    flex: 1;
+}
+
+.navbar-container,
+.navbar-left {
+    overflow: visible !important; /* ✅ 잘리는 현상 방지 */
 }
 
 /*장바구니 뱃지용*/
@@ -94,14 +122,6 @@
     z-index: 10;
 }
 
-.navbar-logo {
-    font-size: 40px;
-    font-weight: bold;
-    text-decoration: none;
-    margin-right: 1.8rem;
-
-}
-
 /* 햄버거 아이콘 기본 숨김 */
 .hamburger-icon {
     display: none;
@@ -126,19 +146,6 @@
     border-top: 1px solid #ccc;
 }
 
-.navbar-right {
-    display: flex;
-    align-items: center;
-    justify-content: flex-end;
-    gap: 1rem;
-    flex: 1;
-}
-
-.navbar-container,
-.navbar-left {
-    overflow: visible !important; /* ✅ 잘리는 현상 방지 */
-}
-
 .mobile-category-list {
     display: flex;
     flex-direction: column;
@@ -146,6 +153,7 @@
     align-items: flex-start;
     margin-top: 0.5rem;
 }
+
 
 /* 드롭다운 메뉴 스타일 */
 .dropdown {

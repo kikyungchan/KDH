@@ -86,24 +86,26 @@ function NavBar(props) {
   return (
     <>
       <nav className="navbar-container">
-        {/* 모바일 메뉴 아이콘 */}
-        <FiMenu
-          className="hamburger-icon"
-          onClick={() => setIsMobileMenuOpen((prev) => !prev)}
-        />
-        <div className="navbar-center">
-          <Link to="/" className="navbar-logo">
-            코데헌
-          </Link>
+        <div className="navbar-inner">
+          {/* 모바일 메뉴 아이콘 */}
+          <FiMenu
+            className="hamburger-icon"
+            onClick={() => setIsMobileMenuOpen((prev) => !prev)}
+          />
+          <div className="navbar-center">
+            <Link to="/" className="navbar-logo">
+              코데헌
+            </Link>
+          </div>
+          {/*왼쪽 메뉴*/}
+          <NavLeft handleCategoryClick={handleCategoryClick} />
+          {/* 오른쪽 아이콘 */}
+          <NavRight
+            user={user}
+            iconRef={iconRef}
+            onSearchToggle={() => setShowSearch((prev) => !prev)}
+          />
         </div>
-        {/*왼쪽 메뉴*/}
-        <NavLeft handleCategoryClick={handleCategoryClick} />
-        {/* 오른쪽 아이콘 */}
-        <NavRight
-          user={user}
-          iconRef={iconRef}
-          onSearchToggle={() => setShowSearch((prev) => !prev)}
-        />
       </nav>
       {/* 돋보기 눌렀을떄 나오는 검색창 */}
       <SearchBar
