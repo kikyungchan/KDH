@@ -55,11 +55,13 @@ export function ProductList() {
   };
 
   return (
-    <div id="product-list-container" className="container">
+    <div id="product-list-container" className="w-full pt-3 px-109">
       <div className="flex justify-between items-center mb-6">
-        <h2 className="text-xl font-bold ">상품 목록</h2>
+        <h2 className="text-xl font-bold" style={{ fontSize: "2rem" }}>
+          상품 목록
+        </h2>
         <select
-          className="select select-sm w-52 "
+          className="select select-sm w-52"
           value={sort}
           onChange={handleSortChange}
         >

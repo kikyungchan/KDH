@@ -365,8 +365,9 @@ export function ProductDetail() {
           <hr />
           {/* 본문영역 */}
           <div style={{ marginTop: "50px" }}>
-            {/*본문영역에 텍스트?*/}
+            {/*본문영역에 텍스트*/}
             {/*<div>{product.detailText}</div>*/}
+
             <div
               style={{ display: "flex", flexDirection: "column", gap: "15px" }}
             >
@@ -375,13 +376,12 @@ export function ProductDetail() {
                   key={index}
                   src={path}
                   alt={`상세 이미지 ${index + 1}`}
-                  className="product-detail
-                  -image"
+                  className="product-detail-image"
                 />
               ))}
             </div>
             <NoticeSection />
-            <hr style={{ marginTop: "75px" }} />
+            <hr style={{ marginTop: "50px" }} />
             <ReviewStats
               productId={product.id}
               refreshTrigger={reviewChanged}
