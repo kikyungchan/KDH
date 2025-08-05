@@ -563,12 +563,12 @@ export function MemberAdd() {
                             )}
                           </button>
                           {remainTime > 0 && !authCompleted && (
-                            <p className="text-sm text-muted mt-1">
+                            <p className="text-sm text-muted">
                               인증번호 재전송까지 {remainTime}초 남음
                             </p>
                           )}
                           {authCompleted && (
-                            <p className="text-sm text-info mt-1">
+                            <p className="text-sm text-info">
                               이메일 인증이 완료되었습니다.
                             </p>
                           )}

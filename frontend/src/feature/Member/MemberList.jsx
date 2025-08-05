@@ -1,7 +1,7 @@
-import { Card, Col, Container, Pagination, Row, Table } from "react-bootstrap";
-import { useEffect, useState } from "react";
+import {Card, Col, Container, Pagination, Row, Table} from "react-bootstrap";
+import {useEffect, useState} from "react";
 import axios from "axios";
-import { useNavigate, useSearchParams } from "react-router";
+import {useNavigate, useSearchParams} from "react-router";
 
 export function MemberList() {
   const [memberList, setMemberList] = useState([]);
@@ -17,8 +17,10 @@ export function MemberList() {
         setMemberList(res.data.memberList);
         setPageInfo(res.data.pageInfo);
       })
-      .catch((err) => {})
-      .finally(() => {});
+      .catch((err) => {
+      })
+      .finally(() => {
+      });
   }, [searchParams]);
 
   const pageNumber = [];
@@ -34,94 +36,84 @@ export function MemberList() {
   }
 
   return (
-    <>
-      <div style={{ backgroundColor: "#f8f9fa", minHeight: "100vh" }}>
-        <Container className="py-4">
-          <Row className="mb-4">
-            <Col>
-              <h2 className="text-center">회원목록</h2>
-            </Col>
-          </Row>
-          <div>
-            <Row>
-              <Col>
-                <Card className="shadow">
-                  <Card.Body>
-                    <Table
-                      hover
-                      responsive
-                      className="mb-0 text-center align-middle"
-                    >
-                      <thead className="thead-light">
-                        <tr>
-                          <th>회원번호</th>
-                          <th>아이디</th>
-                          <th>이름</th>
-                          <th>전화번호</th>
-                          <th>이메일</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {memberList.map((member) => (
-                          <tr
-                            key={member.id}
-                            onClick={() => navigate(`/member?id=${member.id}`)}
-                            style={{ cursor: "pointer" }}
-                          >
-                            <td>{member.id}</td>
-                            <td>{member.loginId}</td>
-                            <td>{member.name}</td>
-                            <td>{member.phone}</td>
-                            <td>{member.email}</td>
-                          </tr>
-                        ))}
-                      </tbody>
-                    </Table>
-                  </Card.Body>
-                </Card>
-              </Col>
-            </Row>
-            {/* 페이지 네이션 */}
-            <Row className="mt-4">
-              <Col>
-                <Pagination className="justify-content-center">
-                  <Pagination.First
-                    disabled={pageInfo.currentPageNumber === 1}
-                    onClick={() => handlePageNumberClick(1)}
-                  ></Pagination.First>
-                  <Pagination.Prev
-                    disabled={pageInfo.leftPageNumber <= 1}
-                    onClick={() =>
-                      handlePageNumberClick(pageInfo.leftPageNumber - 10)
-                    }
-                  ></Pagination.Prev>
-                  {pageNumber.map((pageNumber) => (
-                    <Pagination.Item
-                      key={pageNumber}
-                      onClick={() => handlePageNumberClick(pageNumber)}
-                      active={pageInfo.currentPageNumber === pageNumber}
-                    >
-                      {pageNumber}
-                    </Pagination.Item>
-                  ))}
-                  <Pagination.Next
-                    disabled={pageInfo.rightPageNumber >= pageInfo.totalPages}
-                    onClick={() =>
-                      handlePageNumberClick(pageInfo.rightPageNumber + 1)
-                    }
-                  ></Pagination.Next>
-                  <Pagination.Last
-                    disabled={
-                      pageInfo.currentPageNumber === pageInfo.totalPages
-                    }
-                    onClick={() => handlePageNumberClick(pageInfo.totalPages)}
-                  ></Pagination.Last>
-                </Pagination>
-              </Col>
-            </Row>
+      <div className="bg-gray-100 min-h-screen">
+        <div className="flex justify-center items-start pt-10">
+          <div className="w-full max-w-[1200px] mx-auto px-4">
+            <div className="px-8 py-6 shadow rounded-2xl bg-white">
+              <Row>
+                <Col>
+                  <h2 className="mb-6 text-center text-2xl font-bold">회원 목록</h2>
+                  <table
+                    hover
+                    responsive
+                    className="table table-striped"
+                  >
+                    <thead className="thead-light">
+                    <tr>
+                      <th>회원번호</th>
+                      <th>아이디</th>
+                      <th>이름</th>
+                      <th>전화번호</th>
+                      <th>이메일</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {memberList.map((member) => (
+                      <tr
+                        key={member.id}
+                        onClick={() => navigate(`/member?id=${member.id}`)}
+                        style={{cursor: "pointer"}}
+                      >
+                        <td>{member.id}</td>
+                        <td>{member.loginId}</td>
+                        <td>{member.name}</td>
+                        <td>{member.phone}</td>
+                        <td>{member.email}</td>
+                      </tr>
+                    ))}
+                    </tbody>
+                  </table>
+                </Col>
+              </Row>
+            </div>
           </div>
-        </Container>
+          {/* 페이지 네이션 */}
+          <div className="mt-4">
+              <Pagination className="justify-content-center">
+                <Pagination.First
+                  disabled={pageInfo.currentPageNumber === 1}
+                  onClick={() => handlePageNumberClick(1)}
+                ></Pagination.First>
+                <Pagination.Prev
+                  disabled={pageInfo.leftPageNumber <= 1}
+                  onClick={() =>
+                    handlePageNumberClick(pageInfo.leftPageNumber - 10)
+                  }
+                ></Pagination.Prev>
+                {pageNumber.map((pageNumber) => (
+                  <Pagination.Item
+                    key={pageNumber}
+                    onClick={() => handlePageNumberClick(pageNumber)}
+                    active={pageInfo.currentPageNumber === pageNumber}
+                  >
+                    {pageNumber}
+                  </Pagination.Item>
+                ))}
+                <Pagination.Next
+                  disabled={pageInfo.rightPageNumber >= pageInfo.totalPages}
+                  onClick={() =>
+                    handlePageNumberClick(pageInfo.rightPageNumber + 1)
+                  }
+                ></Pagination.Next>
+                <Pagination.Last
+                  disabled={
+                    pageInfo.currentPageNumber === pageInfo.totalPages
+                  }
+                  onClick={() => handlePageNumberClick(pageInfo.totalPages)}
+                ></Pagination.Last>
+              </Pagination>
+          </div>
+        </div>
       </div>
-    </>
   );
 }
