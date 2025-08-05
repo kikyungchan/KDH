@@ -36,84 +36,100 @@ export function MemberList() {
   }
 
   return (
-      <div className="bg-gray-100 min-h-screen">
-        <div className="flex justify-center items-start pt-10">
-          <div className="w-full max-w-[1200px] mx-auto px-4">
-            <div className="px-8 py-6 shadow rounded-2xl bg-white">
-              <Row>
-                <Col>
-                  <h2 className="mb-6 text-center text-2xl font-bold">회원 목록</h2>
-                  <table
-                    hover
-                    responsive
-                    className="table table-striped"
-                  >
-                    <thead className="thead-light">
-                    <tr>
-                      <th>회원번호</th>
-                      <th>아이디</th>
-                      <th>이름</th>
-                      <th>전화번호</th>
-                      <th>이메일</th>
+    <div className="bg-gray-100 min-h-screen">
+      <div className="flex justify-center items-start pt-10">
+        <div className="w-full max-w-[1200px] mx-auto px-4">
+          <div className="px-8 py-6 shadow rounded-2xl bg-white">
+            <Row>
+              <Col>
+                <h2 className="mb-6 text-center text-2xl font-bold">회원 목록</h2>
+                <table
+                  hover
+                  responsive
+                  className="table table-striped"
+                >
+                  <thead className="thead-light">
+                  <tr>
+                    <th>회원번호</th>
+                    <th>아이디</th>
+                    <th>이름</th>
+                    <th>전화번호</th>
+                    <th>이메일</th>
+                  </tr>
+                  </thead>
+                  <tbody>
+                  {memberList.map((member) => (
+                    <tr
+                      key={member.id}
+                      onClick={() => navigate(`/member?id=${member.id}`)}
+                      style={{cursor: "pointer"}}
+                    >
+                      <td>{member.id}</td>
+                      <td>{member.loginId}</td>
+                      <td>{member.name}</td>
+                      <td>{member.phone}</td>
+                      <td>{member.email}</td>
                     </tr>
-                    </thead>
-                    <tbody>
-                    {memberList.map((member) => (
-                      <tr
-                        key={member.id}
-                        onClick={() => navigate(`/member?id=${member.id}`)}
-                        style={{cursor: "pointer"}}
-                      >
-                        <td>{member.id}</td>
-                        <td>{member.loginId}</td>
-                        <td>{member.name}</td>
-                        <td>{member.phone}</td>
-                        <td>{member.email}</td>
-                      </tr>
-                    ))}
-                    </tbody>
-                  </table>
-                </Col>
-              </Row>
-            </div>
+                  ))}
+                  </tbody>
+                </table>
+              </Col>
+            </Row>
           </div>
           {/* 페이지 네이션 */}
-          <div className="mt-4">
-              <Pagination className="justify-content-center">
-                <Pagination.First
-                  disabled={pageInfo.currentPageNumber === 1}
-                  onClick={() => handlePageNumberClick(1)}
-                ></Pagination.First>
-                <Pagination.Prev
-                  disabled={pageInfo.leftPageNumber <= 1}
-                  onClick={() =>
-                    handlePageNumberClick(pageInfo.leftPageNumber - 10)
-                  }
-                ></Pagination.Prev>
-                {pageNumber.map((pageNumber) => (
-                  <Pagination.Item
-                    key={pageNumber}
-                    onClick={() => handlePageNumberClick(pageNumber)}
-                    active={pageInfo.currentPageNumber === pageNumber}
-                  >
-                    {pageNumber}
-                  </Pagination.Item>
-                ))}
-                <Pagination.Next
-                  disabled={pageInfo.rightPageNumber >= pageInfo.totalPages}
-                  onClick={() =>
-                    handlePageNumberClick(pageInfo.rightPageNumber + 1)
-                  }
-                ></Pagination.Next>
-                <Pagination.Last
-                  disabled={
-                    pageInfo.currentPageNumber === pageInfo.totalPages
-                  }
-                  onClick={() => handlePageNumberClick(pageInfo.totalPages)}
-                ></Pagination.Last>
-              </Pagination>
+          <div className="mt-4 flex justify-center">
+            <div className="join">
+              <button
+                className="join-item btn btn-sm"
+                disabled={pageInfo.currentPageNumber === 1}
+                onClick={() => handlePageNumberClick(1)}
+              >
+                «
+              </button>
+
+              <button
+                className="join-item btn btn-sm"
+                disabled={pageInfo.leftPageNumber <= 1}
+                onClick={() =>
+                  handlePageNumberClick(pageInfo.leftPageNumber - 10)
+                }
+              >
+                ‹
+              </button>
+
+              {pageNumber.map((num) => (
+                <button
+                  key={num}
+                  onClick={() => handlePageNumberClick(num)}
+                  className={`join-item btn btn-sm ${
+                    pageInfo.currentPageNumber === num ? "btn-active btn-neutral" : ""
+                  }`}
+                >
+                  {num}
+                </button>
+              ))}
+
+              <button
+                className="join-item btn btn-sm"
+                disabled={pageInfo.rightPageNumber >= pageInfo.totalPages}
+                onClick={() =>
+                  handlePageNumberClick(pageInfo.rightPageNumber + 1)
+                }
+              >
+                ›
+              </button>
+
+              <button
+                className="join-item btn btn-sm"
+                disabled={pageInfo.currentPageNumber === pageInfo.totalPages}
+                onClick={() => handlePageNumberClick(pageInfo.totalPages)}
+              >
+                »
+              </button>
+            </div>
           </div>
         </div>
       </div>
+    </div>
   );
 }
