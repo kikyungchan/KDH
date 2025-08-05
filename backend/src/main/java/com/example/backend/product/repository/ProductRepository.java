@@ -45,7 +45,7 @@ public interface ProductRepository extends JpaRepository<Product, Integer> {
             """)
     Page<Product> findByKeywordOrderByPopularity(String keyword, Pageable pageable);
 
-    // 주간 주문량 10개이상 아이템 5개 랜덤
+    // 주간 주문량 10개이상 아이템 랜덤
     @EntityGraph(attributePaths = "images")
     @Query("SELECT p FROM Product p WHERE p.id IN (" +
            "SELECT oi.product.id FROM OrderItem oi " +
