@@ -1,11 +1,7 @@
 import { useLocation, useNavigate } from "react-router";
 import "./css/ProductOrder.css";
-import { useCart } from "./CartContext.jsx";
-import { useEffect } from "react";
-import axios from "axios";
 
 export function ProductOrderComplete() {
-  const { setCartCount } = useCart();
   const { state } = useLocation();
   const navigate = useNavigate();
   const { orderToken, items, orderer, receiver, memo } = state;
@@ -14,56 +10,6 @@ export function ProductOrderComplete() {
     0,
   );
   const shippingFee = totalItemPrice >= 100000 ? 0 : 3000;
-
-  useEffect(() => {
-    const token = localStorage.getItem("token");
-
-    if (token) {
-      // 로그인 사용자: 주문한 상품들 cartId 기반 삭제
-      const deleteList = items.map((item) => ({
-        cartId: item.cartId,
-      }));
-
-      axios
-        .delete("/api/product/cart/delete", {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "Content-Type": "application/json",
-          },
-          data: deleteList,
-        })
-        .then(() => {
-          return axios.get("/api/product/cart", {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          });
-        })
-        .then((res) => {
-          setCartCount(res.data.length);
-        })
-        .catch((err) => {
-          console.error("장바구니 삭제 및 갱신 실패", err);
-        });
-    } else {
-      // 비회원: localStorage 에서 삭제
-      const guestCart = JSON.parse(localStorage.getItem("guestCart") || "[]");
-
-      const updatedCart = guestCart.filter(
-        (cartItem) =>
-          !items.some(
-            (ordered) =>
-              cartItem.productId === ordered.productId &&
-              cartItem.optionId === ordered.optionId &&
-              cartItem.quantity === ordered.quantity &&
-              cartItem.productName === ordered.productName,
-          ),
-      );
-
-      localStorage.setItem("guestCart", JSON.stringify(updatedCart));
-      setCartCount(updatedCart.length);
-    }
-  }, []);
 
   return (
     <div className="container order-container">

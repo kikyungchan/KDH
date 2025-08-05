@@ -2,6 +2,7 @@ import { useLocation, useNavigate } from "react-router";
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import "./css/ProductOrder.css";
+import { useCart } from "./CartContext.jsx";
 
 function Order(props) {
   const [postalCode, setPostalCode] = useState("");
@@ -16,6 +17,7 @@ function Order(props) {
   const [address, setAddress] = useState("");
   const [phone, setPhone] = useState("");
   const { state } = useLocation();
+  const { setCartCount } = useCart();
   // items가 배열이 아니더라도 자동으로 배열로 감싸줌.
   const items = state?.items ?? (state ? [state] : []);
   const totalItemPrice = items.reduce(
@@ -108,14 +110,23 @@ function Order(props) {
             .map((item) => ({ cartId: item.cartId }))
             .filter((id) => id.cartId != null);
 
-          if (cartIdsToDelete.length > 0) return;
-
+          if (cartIdsToDelete.length === 0) return;
           return axios.delete("/api/product/cart/delete", {
             headers: {
               Authorization: `Bearer ${token}`,
             },
             data: cartIdsToDelete,
           });
+        })
+        .then(() => {
+          return axios.get("/api/product/cart", {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          });
+        })
+        .then((res) => {
+          setCartCount(res.data);
         })
         .then((res) => {
           alert("주문이 완료되었습니다.");
@@ -162,7 +173,19 @@ function Order(props) {
       axios.post("/api/product/order/guest", payloadList).then((res) => {
         const token = res.data.guestOrderToken;
         alert("주문이 완료되었습니다.");
+        const guestCart = JSON.parse(localStorage.getItem("guestCart") || "[]");
 
+        const updatedCart = guestCart.filter(
+          (cartItem) =>
+            !items.some(
+              (ordered) =>
+                cartItem.productId === ordered.productId &&
+                cartItem.optionId === ordered.optionId &&
+                cartItem.quantity === ordered.quantity &&
+                cartItem.productName === ordered.productName,
+            ),
+        );
+        setCartCount(updatedCart.length);
         navigate("/product/order/complete", {
           state: {
             items,
