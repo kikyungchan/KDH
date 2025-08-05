@@ -71,7 +71,7 @@ function NavBar(props) {
             onClick={() => setShowSearch((prev) => !prev)}
             style={{ cursor: "pointer" }}
           />
-          <NavUserMenu user={user} logout={logout} />
+          <NavUserMenu user={user} logout={logout} isAdmin={isAdmin} />
           <Link to="/product/cart" className="cart-icon-wrapper">
             <FiShoppingCart className="navbar-icon" />
             {cartCount > 0 && <span className="cart-badge">{cartCount}</span>}

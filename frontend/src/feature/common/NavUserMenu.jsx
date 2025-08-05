@@ -1,7 +1,7 @@
 import {FiUser} from "react-icons/fi";
 import {Link} from "react-router";
 
-export function NavUserMenu({user, logout}) {
+export function NavUserMenu({user, logout, isAdmin}) {
   return (
     <div className="dropdown dropdown-end">
       <div tabIndex={0} role="button" className="btn btn-ghost btn-circle avatar">
@@ -17,9 +17,16 @@ export function NavUserMenu({user, logout}) {
             <li>
               <Link to={`/member?id=${user.id}`}>회원 정보</Link>
             </li>
-            <li>
-              <Link to="/orders">주문 내역</Link>
-            </li>
+            {isAdmin && (
+              <li>
+                <Link to="/member/list">회원 목록</Link>
+              </li>
+            )}
+            {!isAdmin && (
+              <li>
+                <Link to="/orders">주문 내역</Link>
+              </li>
+            )}
             <li>
               <button onClick={logout}>로그아웃</button>
             </li>
