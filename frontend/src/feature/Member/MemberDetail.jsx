@@ -172,7 +172,7 @@ export function MemberDetail() {
                         type="text"
                         readOnly
                         value={member.addressDetail}
-                        className=" input input-bordered px-3 py-2 mb-2"/>
+                        className=" input input-bordered px-3 py-2"/>
 
                     </div>
                   </div>
@@ -180,15 +180,15 @@ export function MemberDetail() {
 
                 {/* 버튼 */}
                 {hasAccess(member.loginId) && (
-                  <div className="text-right mt-6">
+                  <div className="flex space-x-2 justify-content-end mt-10">
                     <button
-                      className="btn btn-info px-4 py-2 rounded mr-2 hover:opacity-90 transition"
+                      className="btn btn-info"
                       onClick={() => navigate(`/member/edit?id=${member.id}`)}
                     >
                       수정
                     </button>
                     <button
-                      className="btn btn-error px-4 py-2 rounded mr-2 hover:opacity-90 transition"
+                      className="btn btn-error"
                       onClick={() => setWithdrawModalShow(true)}
                     >
                       탈퇴

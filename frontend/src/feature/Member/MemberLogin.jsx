@@ -112,7 +112,7 @@ export function MemberLogin() {
 
                 {/* 회원가입 링크 */}
                 <div className="text-right mt-4 text-sm">
-                  <Link to="/signup" className="link link-hover text-gray-700 mr-2">
+                  <Link to="/signup" className="link link-hover text-gray-700">
                     회원가입
                   </Link>
                 </div>
