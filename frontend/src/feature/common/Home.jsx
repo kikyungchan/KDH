@@ -80,7 +80,6 @@ function Home() {
             className="hot-swiper"
           >
             {shuffledItems.map((item, idx) => {
-              console.log("item:", item);
               return (
                 <SwiperSlide key={idx}>
                   <div
@@ -89,6 +88,9 @@ function Home() {
                     style={{ cursor: "pointer" }}
                   >
                     <img src={item.thumbnailUrl} alt={item.productName} />
+                    <div className="hot-slide-text">
+                      첫구매 최대 2만원 할인!
+                    </div>
                   </div>
                 </SwiperSlide>
               );
