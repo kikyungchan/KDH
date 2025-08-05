@@ -164,7 +164,7 @@ export function ProductDetail() {
                 style={{
                   whiteSpace: "pre-line",
                   fontSize: "1rem",
-                  lineHeight: "1.6",
+                  lineHeight: "1.4",
                 }}
                 dangerouslySetInnerHTML={{ __html: product.info }}
               ></p>
@@ -290,7 +290,17 @@ export function ProductDetail() {
                 </div>
               ) : (
                 // 재고 있는 경우 기존 버튼들
-                <div style={{ marginTop: "2px", display: "flex", gap: "10px" }}>
+                <div
+                  style={{
+                    marginTop: "2px",
+                    display: "flex",
+                    width: "600px",
+                    margin: "0 auto",
+                    gap: "34px",
+                    padding: "0 33px",
+                    boxSizing: "border-box",
+                  }}
+                >
                   <Button
                     onClick={() =>
                       handleBuyButton({
@@ -305,9 +315,10 @@ export function ProductDetail() {
                     }
                     style={{
                       border: "3",
-                      width: "150px",
+                      width: "200px",
                       backgroundColor: "black",
                       color: "white",
+                      padding: "12px",
                     }}
                   >
                     구매하기
@@ -323,7 +334,7 @@ export function ProductDetail() {
                         setCartCount,
                       })
                     }
-                    style={{ border: "3", width: "150px" }}
+                    style={{ border: "3", width: "200px", padding: "12px" }}
                   >
                     장바구니
                   </Button>

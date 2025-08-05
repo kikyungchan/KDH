@@ -74,6 +74,7 @@
     color: #7f1d1d;
     padding: 3px 6px;
     font-weight: bold;
+    border-radius: 0;
 }
 
 .product-badges {
