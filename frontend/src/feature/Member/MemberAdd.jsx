@@ -369,7 +369,7 @@ export function MemberAdd() {
                           <button
                             type="button"
                             onClick={() => handleCheckLoginId()}
-                            className="btn btn-outline btn-sm btn-neutral mt-1"
+                            className="btn btn-outline btn-sm btn-neutral mt-1 mb-2"
                           >
                             아이디 중복 확인
                           </button>
@@ -382,7 +382,7 @@ export function MemberAdd() {
                           {/* 아이디 중복 관련 메세지 */}
                           {loginIdCheckMessage && (
                             <p style={{fontSize: "0.875rem"}}
-                               className={`mt-1 ${loginIdChecked ? "text-success" : "text-red-500"}`}>
+                               className={`${loginIdChecked ? "text-success" : "text-red-500"}`}>
 
                               {loginIdCheckMessage}
                             </p>
@@ -401,11 +401,12 @@ export function MemberAdd() {
                           type="password"
                           value={password}
                           placeholder="비밀번호"
-                          className="w-full rounded px-3 py-2 bg-gray-100 mb-2"
                           onChange={(e) => {
                             setPassword(e.target.value);
                           }}
-                          isInvalid={isSubmitted && !passwordValid}
+                          className={`w-full rounded px-3 py-2 bg-gray-100 mb-3 ${
+                            isSubmitted && !passwordValid ? "border-red-500" : "border-gray-300"
+                          }`}
                         />
                         {isSubmitted && !passwordValid && (
                           <p style={{color: "red", fontSize: "0.875rem"}}>
@@ -444,11 +445,12 @@ export function MemberAdd() {
                           value={name}
                           placeholder="이름"
                           autoComplete="name"
-                          className="w-full rounded px-3 py-2 bg-gray-100 mb-2"
                           onChange={(e) => {
                             setName(e.target.value);
                           }}
-                          isInvalid={isSubmitted && !nameValid}
+                          className={`w-full rounded px-3 py-2 bg-gray-100 mb-3 ${
+                            isSubmitted && !nameValid ? "border-red-500" : "border-gray-300"
+                          }`}
                         />
                         {isSubmitted && !nameValid && (
                           <p style={{color: "red", fontSize: "0.875rem"}}>
@@ -464,7 +466,7 @@ export function MemberAdd() {
                           type="date"
                           value={birthday}
                           autoComplete="bday"
-                          className="w-full rounded px-3 py-2 bg-gray-100 mb-2"
+                          className="w-full rounded px-3 py-2 bg-gray-100 mb-3"
                           onChange={(e) => {
                             const val = e.target.value;
                             setBirthday(val === "" ? getToday() : val);
@@ -482,11 +484,12 @@ export function MemberAdd() {
                           value={phone}
                           placeholder="전화번호"
                           autoComplete="tel"
-                          className="w-full rounded px-3 py-2 bg-gray-100 mb-2"
+                          className={`w-full rounded px-3 py-2 bg-gray-100 mb-3 ${
+                            isSubmitted && !phoneValid ? "border-red-500" : "border-gray-300"
+                          }`}
                           onChange={(e) => {
                             setPhone(e.target.value);
                           }}
-                          isInvalid={isSubmitted && !phoneValid}
                         />
                         {isSubmitted && !phoneValid && (
                           <p style={{color: "red", fontSize: "0.875rem"}}>
@@ -518,7 +521,8 @@ export function MemberAdd() {
                                 className="flex-1 rounded px-3 py-2 bg-gray-100 mb-2"
                               />
                               <button
-                                className="btn btn-outline btn-sm"
+                                type="button"
+                                className="btn btn-sm btn-ghost px-2 h-9 min-h-0 text-lg"
                                 onClick={() => setCustomDomain(false)}
                               >
                                 x
@@ -554,36 +558,39 @@ export function MemberAdd() {
                         {isSubmitted && !emailValid && (
                           <p style={{color: "red", fontSize: "0.875rem"}}>유효한 이메일 형식이 아닙니다.</p>
                         )}
-                        <button
-                          className="btn btn-outline btn-sm mt-2"
-                          onClick={handleEmailSendButton}
-                          disabled={
-                            emailId.trim() === "" ||
-                            !emailValid ||
-                            remainTime > 0 ||
-                            isSending ||
-                            authCompleted
-                          }
-                        >
-                          {isSending ? (
-                            <>
-                              <span className="loading loading-spinner loading-sm mr-2"/>
-                              전송 중...
-                            </>
-                          ) : (
-                            "인증번호 전송"
+                        <div className="flex items-center gap-3">
+                          <button
+                            type="button"
+                            className="btn btn-outline btn-sm mt-1 mb-2"
+                            onClick={handleEmailSendButton}
+                            disabled={
+                              emailId.trim() === "" ||
+                              !emailValid ||
+                              remainTime > 0 ||
+                              isSending ||
+                              authCompleted
+                            }
+                          >
+                            {isSending ? (
+                              <>
+                                <span className="loading loading-spinner loading-sm mr-2"/>
+                                전송 중...
+                              </>
+                            ) : (
+                              "인증번호 전송"
+                            )}
+                          </button>
+                          {remainTime > 0 && !authCompleted && (
+                            <p className="text-sm text-muted mt-1">
+                              인증번호 재전송까지 {remainTime}초 남음
+                            </p>
                           )}
-                        </button>
-                        {remainTime > 0 && !authCompleted && (
-                          <p className="text-sm text-muted mt-1">
-                            인증번호 재전송까지 {remainTime}초 남음
-                          </p>
-                        )}
-                        {authCompleted && (
-                          <p className="text-sm text-success mt-1">
-                            이메일 인증이 완료되었습니다.
-                          </p>
-                        )}
+                          {authCompleted && (
+                            <p className="text-sm text-info mt-1">
+                              이메일 인증이 완료되었습니다.
+                            </p>
+                          )}
+                        </div>
                       </form>
                     </div>
 
@@ -597,26 +604,29 @@ export function MemberAdd() {
                             value={authCode}
                             onChange={(e) => setAuthCode(e.target.value)}
                             placeholder="이메일로 전송된 인증번호를 입력하세요."
-                            className={`w-full rounded px-3 py-2 border ${authFailed ? "border-red-500" : "border-gray-300"}`}
+                            className={`w-full rounded px-3 mb-2 bg-gray-100 py-2 border ${authFailed ? "border-red-500" : "border-gray-300"}`}
                             disabled={authCompleted}
                             readOnly={authCompleted}
                           />
-                          <button
-                            className="btn btn-dark btn-sm mt-2"
-                            onClick={handleAuthCodeVerify}
-                            disabled={authCompleted}
-                          >
-                            인증번호 확인
-                          </button>
-                          {authFailed && (
-                            <p className="text-error text-sm mt-1">인증번호를 올바르게 입력하세요.</p>
-                          )}
+                          <div className="flex items-center gap-3">
+                            <button
+                              type="button"
+                              className="btn btn-dark btn-sm mt-2"
+                              onClick={handleAuthCodeVerify}
+                              disabled={authCompleted}
+                            >
+                              인증번호 확인
+                            </button>
+                            {authFailed && (
+                              <p className="text-error text-sm mt-1">인증번호를 올바르게 입력하세요.</p>
+                            )}
+                          </div>
                         </form>
                       </div>
                     )}
                     <div>
                       <form>
-                        <label className="fw-bold mt-2">주소</label>
+                        <label className="block font-semibold mb-1 mt-2">주소</label>
                         <input
                           type="text"
                           value={zipCode}
@@ -640,6 +650,7 @@ export function MemberAdd() {
                           onChange={(e) => setAddressDetail(e.target.value)}
                         />
                         <button
+                          type="button"
                           className="mt-2 btn btn-sm btn-outline btn-neutral"
                           onClick={handleSearchAddress}
                         >
@@ -647,24 +658,28 @@ export function MemberAdd() {
                         </button>
                       </form>
                     </div>
-                    <div className="d-flex justify-content-end mt-4">
+                    <div className="d-flex justify-content-end mt-2">
                       {privacyAgreed && (
                         <p className="text-success me-2">
                           개인정보 수집 및 이용에 동의 하셨습니다.
                         </p>
                       )}
-                      <Button
-                        variant={privacyAgreed ? "secondary" : "dark"}
+                      <button
+                        type="button"
+                        className={`mt-2 btn btn-outline ${
+                          privacyAgreed ? "btn-info" : "btn-neutral"
+                        }`}
                         disabled={privacyAgreed}
                         onClick={privacyModalShow}
                       >
                         {privacyAgreed ? "동의 완료" : "개인정보 수집 동의"}
-                      </Button>
+                      </button>
                     </div>
                     <div className="text-end mt-2">
-                      <Button
+                      <button
+                        type="button"
                         onClick={handleSignUpClick}
-                        variant="dark"
+                        className="mt-2 btn btn-outline btn-neutral"
                         disabled={disabled || isProcessing}
                       >
                         {isProcessing ? (
@@ -681,7 +696,7 @@ export function MemberAdd() {
                         ) : (
                           "회원 등록"
                         )}
-                      </Button>
+                      </button>
                     </div>
                   </Card.Body>
                 </Card>
