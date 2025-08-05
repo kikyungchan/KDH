@@ -55,11 +55,11 @@ export function ProductList() {
   };
 
   return (
-    <div id="product-list-container" className="product-list-container">
+    <div id="product-list-container" className="container">
       <div className="flex justify-between items-center mb-6">
-        <h2 className="text-xl font-bold pl-35">상품 목록</h2>
+        <h2 className="text-xl font-bold ">상품 목록</h2>
         <select
-          className="select select-sm w-52 mr-35"
+          className="select select-sm w-52 "
           value={sort}
           onChange={handleSortChange}
         >
