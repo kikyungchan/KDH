@@ -164,7 +164,8 @@ public class ProductService {
             }
         }
 
-        List<ProductDto> content = page.getContent().stream().map(product -> {
+        List<ProductDto> content = new ArrayList<>();
+        for (Product product : page.getContent()) {
             ProductDto dto = new ProductDto();
             dto.setId(product.getId());
             dto.setProductName(product.getProductName());
@@ -172,6 +173,7 @@ public class ProductService {
             dto.setQuantity(product.getQuantity());
             dto.setInsertedAt(product.getInsertedAt());
             dto.setHot(isHotProduct(product.getId()));
+
             if (!product.getThumbnails().isEmpty()) {
                 ProductThumbnail t = product.getThumbnails().get(0);
                 ThumbnailDto thumbDto = new ThumbnailDto();
@@ -179,8 +181,10 @@ public class ProductService {
                 thumbDto.setIsMain(Boolean.TRUE.equals(t.getIsMain()));
                 dto.setThumbnailPaths(List.of(thumbDto));
             }
-            return dto;
-        }).toList();
+
+            content.add(dto);
+        }
+
 
         int totalPages = page.getTotalPages();
         int rightPageNumber = ((pageNumber - 1) / 5 + 1) * 5;

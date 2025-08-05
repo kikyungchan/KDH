@@ -81,10 +81,10 @@ export function ProductList() {
               className="product-card"
               key={product.id}
             >
-              {product.imagePath && (
+              {product.thumbnailPaths?.length > 0 && (
                 <div className="product-image-wrapper mb-2">
                   <img
-                    src={product.imagePath[0]}
+                    src={product.thumbnailPaths[0].storedPath}
                     alt={product.productName}
                     className="product-image"
                   />
