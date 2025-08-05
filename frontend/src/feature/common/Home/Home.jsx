@@ -6,6 +6,7 @@ import { Autoplay } from "swiper/modules";
 import "swiper/css";
 import { useNavigate } from "react-router";
 import CategoryMenu from "./CategoryMenu.jsx";
+import BestProductSection from "./BestProductSection.jsx";
 
 function Home() {
   const navigate = useNavigate();
@@ -111,6 +112,7 @@ function Home() {
           </div>
         </section>
         <CategoryMenu />
+        <BestProductSection />
       </div>
     </>
   );
