@@ -104,9 +104,9 @@ export function ResetPassword() {
       <div className="flex justify-center items-start pt-10">
         <div className="w-full max-w-[400px]">
           <div className="p-6 shadow rounded-2xl bg-white">
-            <Row>
-              <Col>
-                <div>
+            <div className="w-full">
+
+            <div>
                   <h3 className="text-center text-xl font-bold mb-3">비밀번호 재설정</h3>
                   <label htmlFor="newPassword" className="block text-sm ml-1 mb-2">
                     비밀번호는 영문+숫자 조합, 8~20자 사이로 입력해주세요.
@@ -174,8 +174,7 @@ export function ResetPassword() {
                     </button>
                   </div>
                 </div>
-              </Col>
-            </Row>
+            </div>
           </div>
         </div>
       </div>

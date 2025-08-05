@@ -90,9 +90,9 @@ export function MemberDetail() {
       <div className="flex justify-center items-start pt-10">
         <div className="w-full max-w-[600px] mx-auto px-4">
           <div className="px-8 py-6 shadow rounded-2xl bg-white">
-            <Row>
-              <Col>
-                <h2 className="mb-6 text-center text-2xl font-bold">회원 정보</h2>
+            <div className="w-full">
+
+            <h2 className="mb-6 text-center text-2xl font-bold">회원 정보</h2>
                 <div className="space-y-4">
                   {/* 아이디 */}
                   <div className="flex items-center gap-4 mb-4">
@@ -195,7 +195,7 @@ export function MemberDetail() {
                     </button>
                   </div>
                 )}
-              </Col>
+            </div>
               <WithdrawModal
                 show={withdrawModalShow}
                 onClose={handleCloseWithdrawModal}
@@ -206,7 +206,6 @@ export function MemberDetail() {
                 handleWithdrawButtonClick={handleWithdrawButtonClick}
                 isWithdrawProcessing={isWithdrawProcessing}
               />
-            </Row>
           </div>
         </div>
       </div>

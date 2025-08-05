@@ -242,9 +242,9 @@ export function FindPassword() {
       <div className="flex justify-center items-start pt-10">
         <div className="w-full max-w-[400px]">
           <div className="p-6 shadow rounded-2xl bg-white">
-            <Row>
-              <Col>
-                <div>
+            <div className="w-full">
+
+            <div>
                   <h3 className="text-center text-xl font-bold mb-3">비밀번호 찾기</h3>
                   <label htmlFor="loginId" className="block text-sm ml-1 mb-2">
                     회원가입시 등록한 아이디를 입력해주세요.
@@ -396,8 +396,7 @@ export function FindPassword() {
                     </div>
                   </>
                 )}
-              </Col>
-            </Row>
+            </div>
           </div>
         </div>
       </div>

@@ -40,8 +40,7 @@ export function MemberList() {
       <div className="flex justify-center items-start pt-10">
         <div className="w-full max-w-[1200px] mx-auto px-4">
           <div className="px-8 py-6 shadow rounded-2xl bg-white">
-            <Row>
-              <Col>
+            <div className="w-full">
                 <h2 className="mb-6 text-center text-2xl font-bold">회원 목록</h2>
                 <table
                   hover
@@ -73,14 +72,13 @@ export function MemberList() {
                   ))}
                   </tbody>
                 </table>
-              </Col>
-            </Row>
+            </div>
           </div>
           {/* 페이지 네이션 */}
           <div className="mt-4 flex justify-center">
             <div className="join">
               <button
-                className="join-item btn btn-sm"
+                className="join-item btn"
                 disabled={pageInfo.currentPageNumber === 1}
                 onClick={() => handlePageNumberClick(1)}
               >
@@ -88,7 +86,7 @@ export function MemberList() {
               </button>
 
               <button
-                className="join-item btn btn-sm"
+                className="join-item btn"
                 disabled={pageInfo.leftPageNumber <= 1}
                 onClick={() =>
                   handlePageNumberClick(pageInfo.leftPageNumber - 10)
@@ -101,7 +99,7 @@ export function MemberList() {
                 <button
                   key={num}
                   onClick={() => handlePageNumberClick(num)}
-                  className={`join-item btn btn-sm ${
+                  className={`join-item btn ${
                     pageInfo.currentPageNumber === num ? "btn-active btn-neutral" : ""
                   }`}
                 >
@@ -110,7 +108,7 @@ export function MemberList() {
               ))}
 
               <button
-                className="join-item btn btn-sm"
+                className="join-item btn"
                 disabled={pageInfo.rightPageNumber >= pageInfo.totalPages}
                 onClick={() =>
                   handlePageNumberClick(pageInfo.rightPageNumber + 1)
@@ -120,7 +118,7 @@ export function MemberList() {
               </button>
 
               <button
-                className="join-item btn btn-sm"
+                className="join-item btn"
                 disabled={pageInfo.currentPageNumber === pageInfo.totalPages}
                 onClick={() => handlePageNumberClick(pageInfo.totalPages)}
               >

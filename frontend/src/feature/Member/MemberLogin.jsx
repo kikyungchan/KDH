@@ -65,9 +65,9 @@ export function MemberLogin() {
       <div className="flex justify-center items-start pt-10">
         <div className="w-full max-w-[400px]">
           <div className="p-6 shadow rounded-2xl bg-white">
-            <Row className="justify-content-center">
-              <Col>
-                <Link to="/" className="navbar-logo block text-center mb-6">
+            <div className="w-full justify-content-center">
+
+            <Link to="/" className="navbar-logo block text-center mb-6">
                   코데헌
                 </Link>
 
@@ -128,8 +128,7 @@ export function MemberLogin() {
                   </Link>
                 </div>
 
-              </Col>
-            </Row>
+            </div>
           </div>
         </div>
       </div>

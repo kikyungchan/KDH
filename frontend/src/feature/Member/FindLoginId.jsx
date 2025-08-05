@@ -154,9 +154,9 @@ export function FindLoginId() {
       <div className="flex justify-center items-start pt-10">
         <div className="w-full max-w-[400px]">
           <div className="p-6 shadow rounded-2xl bg-white">
-            <Row>
-              <Col>
-                <div>
+            <div className="w-full">
+
+            <div>
                   <h3 className="text-center text-xl font-bold mb-3">아이디 찾기</h3>
                   {!authCompleted && (
                     <div>
@@ -289,8 +289,7 @@ export function FindLoginId() {
                     </div>
                   </>
                 )}
-              </Col>
-            </Row>
+            </div>
           </div>
         </div>
       </div>

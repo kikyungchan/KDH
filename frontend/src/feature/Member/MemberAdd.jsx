@@ -332,9 +332,9 @@ export function MemberAdd() {
       <div className="flex justify-center">
         <div className="w-full max-w-[600px] mx-auto px-4 py-10">
           <div className="px-8 py-6 shadow rounded-2xl bg-white">
-            <Row>
-              <Col>
-                    <h2 className="mb-6 text-center text-2xl font-semibold">회원 등록</h2>
+            <div className="w-full">
+
+            <h2 className="mb-6 text-center text-2xl font-semibold">회원 등록</h2>
                     {/* 아이디 */}
                     <div className="flex items-start gap-6 mb-2">
                       <div className="w-full">
@@ -678,7 +678,7 @@ export function MemberAdd() {
                         )}
                       </button>
                     </div>
-              </Col>
+            </div>
               {/* 동의 모달 */
               }
               <PrivacyModal
@@ -686,7 +686,6 @@ export function MemberAdd() {
                 onClose={() => setShowPrivacyModal(false)}
                 onAgree={(agreed) => setPrivacyAgreed(agreed)}
               />
-            </Row>
           </div>
         </div>
       </div>
