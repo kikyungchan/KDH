@@ -6,14 +6,19 @@ import { Autoplay } from "swiper/modules";
 import "swiper/css";
 
 function Home() {
+  const [currentIndex, setCurrentIndex] = useState(1);
   const [hotItems, setHotItems] = useState([]);
-  const swiperRef = useRef(null); // ✅ Swiper 인스턴스 저장용
+  const [shuffledItems, setShuffledItems] = useState([]); // ✅ 고정 순서
+  const swiperRef = useRef(null);
 
   useEffect(() => {
     axios
       .get("/api/product/hot-random")
       .then((res) => {
-        setHotItems(res.data);
+        const sliced = res.data.slice(0, 10);
+        const shuffled = [...sliced].sort(() => Math.random() - 0.5);
+        setHotItems(sliced);
+        setShuffledItems(shuffled);
       })
       .catch((err) => console.error("HOT 상품 불러오기 실패:", err));
   }, []);
@@ -23,10 +28,10 @@ function Home() {
       <section className="main-visual-row">
         {/* 좌측 비주얼 */}
         <div className="main-visual-box">
-          {hotItems[0] && (
+          {shuffledItems[0] && (
             <>
               <img
-                src={hotItems[0].thumbnailUrl}
+                src={shuffledItems[0].thumbnailUrl}
                 alt="HOT 상품"
                 className="main-visual-img"
               />
@@ -55,25 +60,28 @@ function Home() {
           </button>
 
           <Swiper
-            onSwiper={(swiper) => (swiperRef.current = swiper)} // ✅ Swiper 인스턴스 참조
+            onSwiper={(swiper) => (swiperRef.current = swiper)}
+            onSlideChange={(swiper) => setCurrentIndex(swiper.realIndex + 1)}
             direction="horizontal"
             modules={[Autoplay]}
             autoplay={{ delay: 5000, disableOnInteraction: false }}
             slidesPerView={1}
-            loop={hotItems.length > 2}
+            loop={shuffledItems.length > 2}
             className="hot-swiper"
           >
-            {hotItems
-              .sort(() => Math.random() - 0.5)
-              .slice(0, 10)
-              .map((item, idx) => (
-                <SwiperSlide key={idx}>
-                  <div className="hot-thumbnail">
-                    <img src={item.thumbnailUrl} alt={item.productName} />
-                  </div>
-                </SwiperSlide>
-              ))}
+            {shuffledItems.map((item, idx) => (
+              <SwiperSlide key={idx}>
+                <div className="hot-thumbnail">
+                  <img src={item.thumbnailUrl} alt={item.productName} />
+                </div>
+              </SwiperSlide>
+            ))}
           </Swiper>
+
+          {/* 인덱스 표시 */}
+          <div className="slide-index-indicator">
+            {currentIndex} / {shuffledItems.length}
+          </div>
         </div>
       </section>
     </div>
