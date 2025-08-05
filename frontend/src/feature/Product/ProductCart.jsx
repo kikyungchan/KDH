@@ -327,9 +327,9 @@ function ProductCart(props) {
                 <p>어쩌구 저쩌구</p>
               </div>
             </div>
-
+            {/*<hr className="mt-4" />*/}
             {/* 주문 요약 */}
-            <div className="text-center py-6">
+            <div className="text-center py-12">
               <div className="text-xl font-bold">
                 {totalItemPrice.toLocaleString()}원 +{" "}
                 {shippingFee.toLocaleString()}원 ={" "}

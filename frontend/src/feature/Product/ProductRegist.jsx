@@ -101,7 +101,7 @@ export function ProductRegist() {
     <div className="container">
       <form onSubmit={handleSubmit}>
         <div className="product-regist-field">
-          <h2 style={{ fontSize: "2rem", fontWeight: "bold" }}>상품 등록</h2>
+          <h2 style={{ fontSize: "2rem" }}>상품 등록</h2>
           <label className="product-regist-label mt-3">상품명</label>
           <input
             className="product-regist-input"

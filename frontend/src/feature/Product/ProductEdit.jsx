@@ -120,9 +120,7 @@ export function ProductEdit() {
         }}
       >
         <div className="product-edit-field">
-          <h2 style={{ fontSize: "2rem", fontWeight: "bold" }}>
-            상품 정보수정
-          </h2>
+          <h2 style={{ fontSize: "2rem" }}>상품 정보수정</h2>
         </div>
 
         <div className="product-edit-field">

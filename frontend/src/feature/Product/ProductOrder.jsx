@@ -231,7 +231,7 @@ function Order(props) {
 
   return (
     <div className="container">
-      <h2>결제하기</h2>
+      <h2 style={{ fontSize: "2rem" }}>결제하기</h2>
 
       <div className="order-box" style={{ display: "flex", gap: "20px" }}>
         {/* 왼쪽: 주문 상품 목록 */}
