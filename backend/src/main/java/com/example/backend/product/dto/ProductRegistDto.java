@@ -1,26 +1,27 @@
 package com.example.backend.product.dto;
 
-import com.example.backend.product.entity.Product;
-import com.example.backend.product.entity.ProductImage;
 import lombok.Data;
+import org.springframework.web.multipart.MultipartFile;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 @Data
-public class ProductDto {
+public class ProductRegistDto {
     private Integer id;
     private String productName;
     private Integer price;
     private String category;
     private String info;
     private Integer quantity;
-    private LocalDateTime insertedAt;
     private String detailText;
-    private boolean hot;
-    private List<ThumbnailDto> thumbnailPaths;
-    private List<String> detailImagePaths;
 
-
+    // 옵션
     private List<ProductOptionDto> options;
+
+    // 썸네일
+    private List<MultipartFile> thumbnails;
+
+    // 본문 이미지들
+    private List<MultipartFile> detailImages;
+
 }

@@ -156,7 +156,8 @@ public class ProductController {
                                     @RequestParam String info,
                                     @RequestParam String options,
                                     @RequestParam String detailText,
-                                    @RequestParam("images") List<MultipartFile> images) {
+                                    @RequestParam("thumbnails") List<MultipartFile> thumbnails,
+                                    @RequestParam("detailImages") List<MultipartFile> detailImages) {
         ObjectMapper objectMapper = new ObjectMapper();
         List<ProductOptionDto> optionList;
         try {
@@ -165,14 +166,15 @@ public class ProductController {
         } catch (Exception e) {
             return ResponseEntity.badRequest().body("오류가 발생하였습니다.");
         }
-        ProductForm form = new ProductForm();
+        ProductRegistDto form = new ProductRegistDto();
         form.setProductName(productName);
         form.setPrice(price);
         form.setQuantity(quantity);
         form.setCategory(category);
         form.setInfo(info);
         form.setOptions(optionList);
-        form.setImages(images);
+        form.setThumbnails(thumbnails);
+        form.setDetailImages(detailImages);
         form.setDetailText(detailText);
 
         productService.add(form);

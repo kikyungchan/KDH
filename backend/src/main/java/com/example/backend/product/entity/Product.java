@@ -1,6 +1,5 @@
 package com.example.backend.product.entity;
 
-import com.example.backend.product.dto.ProductImage;
 import com.example.backend.product.dto.ProductOption;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -29,6 +28,8 @@ public class Product {
     @Column(insertable = false, updatable = false)
     private LocalDateTime insertedAt;
 
+    @OneToMany(mappedBy = "product", fetch = FetchType.LAZY)
+    private List<ProductThumbnail> thumbnails;
 
     //    orphanRemoval= 상품 삭제시 옵션도 함께 삭제
     @OneToMany(mappedBy = "product", orphanRemoval = true)

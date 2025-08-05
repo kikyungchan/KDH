@@ -1,6 +1,7 @@
 package com.example.backend.product.dto;
 
 import com.example.backend.product.entity.Cart;
+import com.example.backend.product.entity.ProductImage;
 import lombok.Data;
 
 import java.util.List;

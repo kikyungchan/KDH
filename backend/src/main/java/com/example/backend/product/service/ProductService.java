@@ -39,7 +39,7 @@ public class ProductService {
     private final OrderItemRepository orderItemRepository;
     private final GuestOrderRepository guestOrderRepository;
     private final ProductCommentRepository productCommentRepository;
-
+    private final ProductThumbnailRepository productThumbnailRepository;
 
     // url에서 key만 따오는 메소드
     private String extractS3Key(String url) {
@@ -47,49 +47,71 @@ public class ProductService {
         return url.substring(url.indexOf(".com/") + 5);
     }
 
-    public void add(ProductForm productForm) {
+    public void add(ProductRegistDto dto) {
         // 상품 저장
         Product product = new Product();
-        product.setProductName(productForm.getProductName());
-        product.setPrice(productForm.getPrice());
-        product.setCategory(productForm.getCategory());
-        product.setInfo(productForm.getInfo());
-        product.setQuantity(productForm.getQuantity());
-        product.setDetailText(productForm.getDetailText());
+        product.setProductName(dto.getProductName());
+        product.setPrice(dto.getPrice());
+        product.setCategory(dto.getCategory());
+        product.setInfo(dto.getInfo());
+        product.setQuantity(dto.getQuantity());
+        product.setDetailText(dto.getDetailText());
         productRepository.save(product);
 
         //옵션 저장
-        if (productForm.getOptions() != null && !productForm.getOptions().isEmpty()) {
+        if (dto.getOptions() != null && !dto.getOptions().isEmpty()) {
             List<ProductOption> optionList = new ArrayList<>();
-            for (ProductOptionDto dto : productForm.getOptions()) {
+            for (ProductOptionDto opt : dto.getOptions()) {
                 ProductOption option = new ProductOption();
-                option.setOptionName(dto.getOptionName());
-                option.setPrice(dto.getPrice());
+                option.setOptionName(opt.getOptionName());
+                option.setPrice(opt.getPrice());
                 option.setProduct(product);
                 optionList.add(option);
             }
             productOptionRepository.saveAll(optionList);
         }
-
-        // 이미지 저장
-        List<ProductImage> imageList = new ArrayList<>();
-
-        if (productForm.getImages() != null) {
-            for (MultipartFile file : productForm.getImages()) {
-                try {
-                    String s3Url = s3Uploader.upload(file, String.valueOf(product.getId()));
-                    ProductImage image = new ProductImage();
-                    image.setOriginalFileName(file.getOriginalFilename());
-                    image.setStoredPath(s3Url);
-                    image.setProduct(product);
-                    imageList.add(image);
-                } catch (IOException e) {
-                    throw new RuntimeException("업로드 실패 : " + e.getMessage(), e);
+// 썸네일 저장
+        List<ProductThumbnail> thumbnailList = new ArrayList<>();
+        if (dto.getThumbnails() != null) {
+            for (int i = 0; i < dto.getThumbnails().size(); i++) {
+                MultipartFile file = dto.getThumbnails().get(i);
+                if (!file.isEmpty()) {
+                    try {
+                        String s3Url = s3Uploader.upload(file, String.valueOf(product.getId()));
+                        ProductThumbnail thumb = new ProductThumbnail();
+                        thumb.setOriginalFileName(file.getOriginalFilename());
+                        thumb.setStoredPath(s3Url);
+                        thumb.setProduct(product);
+                        thumb.setIsMain(i == 0); // 첫 번째 이미지를 대표로 설정
+                        thumbnailList.add(thumb);
+                    } catch (IOException e) {
+                        throw new RuntimeException("썸네일 업로드 실패: " + e.getMessage(), e);
+                    }
                 }
             }
+            productThumbnailRepository.saveAll(thumbnailList);
         }
-        productImageRepository.saveAll(imageList);
+        // 본문 이미지 저장
+        List<ProductImage> imageList = new ArrayList<>();
+        if (dto.getDetailImages() != null) {
+            for (MultipartFile file : dto.getDetailImages()) {
+                if (!file.isEmpty()) {
+                    try {
+                        String s3Url = s3Uploader.upload(file, String.valueOf(product.getId()));
+                        ProductImage image = new ProductImage();
+                        image.setOriginalFileName(file.getOriginalFilename());
+                        image.setStoredPath(s3Url);
+                        image.setProduct(product);
+                        imageList.add(image);
+                    } catch (IOException e) {
+                        throw new RuntimeException("본문 이미지 업로드 실패: " + e.getMessage(), e);
+                    }
+                }
+            }
+            productImageRepository.saveAll(imageList);
+        }
     }
+
 
     public Map<String, Object> list(Integer pageNumber, String keyword, String sort, String category) {
         Page<Product> page;
@@ -150,8 +172,12 @@ public class ProductService {
             dto.setQuantity(product.getQuantity());
             dto.setInsertedAt(product.getInsertedAt());
             dto.setHot(isHotProduct(product.getId()));
-            if (!product.getImages().isEmpty()) {
-                dto.setImagePath(List.of(product.getImages().get(0).getStoredPath()));
+            if (!product.getThumbnails().isEmpty()) {
+                ProductThumbnail t = product.getThumbnails().get(0);
+                ThumbnailDto thumbDto = new ThumbnailDto();
+                thumbDto.setStoredPath(t.getStoredPath());
+                thumbDto.setIsMain(Boolean.TRUE.equals(t.getIsMain()));
+                dto.setThumbnailPaths(List.of(thumbDto));
             }
             return dto;
         }).toList();
@@ -189,22 +215,37 @@ public class ProductService {
         dto.setHot(isHotProduct(product.getId()));
         dto.setInsertedAt(product.getInsertedAt());
 
-        List<String> imagePaths = product.getImages().stream().map(ProductImage::getStoredPath).toList();
+        // 썸네일 목록
+        List<ThumbnailDto> thumbnailPaths = new ArrayList<>();
+        for (ProductThumbnail t : product.getThumbnails()) {
+            ThumbnailDto thumbDto = new ThumbnailDto();
+            thumbDto.setStoredPath(t.getStoredPath());
+            thumbDto.setIsMain(Boolean.TRUE.equals(t.getIsMain()));
+            thumbnailPaths.add(thumbDto);
+        }
+        dto.setThumbnailPaths(thumbnailPaths);
 
-        dto.setImagePath(imagePaths);
+// 본문 이미지 목록
+        List<String> detailImagePaths = new ArrayList<>();
+        for (ProductImage img : product.getImages()) {
+            detailImagePaths.add(img.getStoredPath());
+        }
+        dto.setDetailImagePaths(detailImagePaths);
 
-        //옵션리스트
-        List<ProductOptionDto> options = product.getOptions().stream()
-                .map(opt -> {
-                    ProductOptionDto option = new ProductOptionDto();
-                    option.setOptionName(opt.getOptionName());
-                    option.setPrice(opt.getPrice());
-                    option.setId(opt.getId());
-                    return option;
-                }).toList();
+// 옵션 목록
+        List<ProductOptionDto> options = new ArrayList<>();
+        for (ProductOption opt : product.getOptions()) {
+            ProductOptionDto optionDto = new ProductOptionDto();
+            optionDto.setId(opt.getId());
+            optionDto.setOptionName(opt.getOptionName());
+            optionDto.setPrice(opt.getPrice());
+            options.add(optionDto);
+        }
         dto.setOptions(options);
+
         return dto;
     }
+
 
     public void delete(Integer id) {
         Product product = productRepository.findById(id).orElseThrow();

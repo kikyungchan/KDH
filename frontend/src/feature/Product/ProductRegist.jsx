@@ -5,6 +5,11 @@ import axios from "axios";
 import { Container } from "react-bootstrap";
 
 export function ProductRegist() {
+  const [thumbnails, setThumbnails] = useState([]);
+  const [thumbnailPreview, setThumbnailPreview] = useState([]);
+
+  const [detailImages, setDetailImages] = useState([]);
+  const [detailPreview, setDetailPreview] = useState([]);
   const [previewImages, setPreviewImages] = useState([]); // 미리보기 URL
   const navigate = useNavigate();
   const [detailText, setDetailText] = useState("");
@@ -15,6 +20,38 @@ export function ProductRegist() {
   const [info, setInfo] = useState("");
   const [images, setImages] = useState([]);
   const [options, setOptions] = useState([]);
+
+  const handleThumbnailChange = (e) => {
+    const files = Array.from(e.target.files);
+    setThumbnails(files);
+    const previews = files.map((file) => URL.createObjectURL(file));
+    setThumbnailPreview(previews);
+  };
+
+  const handleDetailImageChange = (e) => {
+    const files = Array.from(e.target.files);
+    setDetailImages(files);
+    const previews = files.map((file) => URL.createObjectURL(file));
+    setDetailPreview(previews);
+  };
+
+  const handleRemoveThumbnail = (idx) => {
+    const newFiles = [...thumbnails];
+    const newPreviews = [...thumbnailPreview];
+    newFiles.splice(idx, 1);
+    newPreviews.splice(idx, 1);
+    setThumbnails(newFiles);
+    setThumbnailPreview(newPreviews);
+  };
+
+  const handleRemoveDetailImage = (idx) => {
+    const newFiles = [...detailImages];
+    const newPreviews = [...detailPreview];
+    newFiles.splice(idx, 1);
+    newPreviews.splice(idx, 1);
+    setDetailImages(newFiles);
+    setDetailPreview(newPreviews);
+  };
 
   function handleSubmit(e) {
     e.preventDefault();
@@ -38,8 +75,12 @@ export function ProductRegist() {
       alert("상세설명을 입력해주세요.");
       return;
     }
-    if (images.length === 0) {
-      alert("이미지를 한 장 이상 추가해주세요.");
+    if (thumbnails.length === 0) {
+      alert("썸네일이미지를 한 장 이상 추가해주세요.");
+      return;
+    }
+    if (detailImages.length === 0) {
+      alert("본문이미지를 한 장 이상 추가해주세요.");
       return;
     }
     const formData = new FormData();
@@ -50,8 +91,12 @@ export function ProductRegist() {
     formData.append("info", info);
     formData.append("options", JSON.stringify(options));
     formData.append("detailText", detailText);
-    images.forEach((file) => {
-      formData.append("images", file);
+    thumbnails.forEach((file) => {
+      formData.append("thumbnails", file);
+    });
+
+    detailImages.forEach((file) => {
+      formData.append("detailImages", file);
     });
 
     axios
@@ -65,8 +110,11 @@ export function ProductRegist() {
         setQuantity("");
         setCategory("");
         setInfo("");
-        setImages([]);
-        setPreviewImages([]);
+        setThumbnails([]);
+        setThumbnailPreview([]);
+        setDetailImages([]);
+        setDetailPreview([]);
+        setOptions([]);
         setDetailText("");
         navigate("/product/list");
       })
@@ -211,40 +259,85 @@ export function ProductRegist() {
         </div>
 
         {/*상품 파일선택*/}
+        {/* 썸네일 이미지 업로드 */}
         <div className="product-regist-field">
-          <label className="product-regist-label">상품 이미지</label>
+          <label className="product-regist-label">썸네일 이미지</label>
           <div className="product-regist-file-upload">
             <label
-              htmlFor="registFileInput"
+              htmlFor="thumbnailFileInput"
               className="product-regist-file-label"
             >
               파일 선택
             </label>
             <span className="product-regist-file-count">
-              파일 {images.length}개
+              파일 {thumbnails.length}개
             </span>
             <input
-              id="registFileInput"
+              id="thumbnailFileInput"
               type="file"
               multiple
               accept="image/*"
-              onChange={handleImageChange}
+              onChange={handleThumbnailChange}
               className="product-regist-file-input"
             />
           </div>
-          {previewImages.length > 0 && (
+          {thumbnailPreview.length > 0 && (
             <div className="product-regist-image-preview">
-              {previewImages.map((url, idx) => (
+              {thumbnailPreview.map((url, idx) => (
                 <div key={idx} className="product-regist-preview-box">
                   <img
                     src={url}
                     className="product-regist-preview-img"
-                    alt={`미리보기 ${idx + 1}`}
+                    alt={`썸네일 미리보기 ${idx + 1}`}
                   />
                   <button
                     type="button"
                     className="product-regist-image-remove-btn"
-                    onClick={() => handleRemoveImage(idx)}
+                    onClick={() => handleRemoveThumbnail(idx)}
+                  >
+                    ×
+                  </button>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+
+        {/* 본문 이미지 업로드 */}
+        <div className="product-regist-field">
+          <label className="product-regist-label">본문 이미지</label>
+          <div className="product-regist-file-upload">
+            <label
+              htmlFor="detailFileInput"
+              className="product-regist-file-label"
+            >
+              파일 선택
+            </label>
+            <span className="product-regist-file-count">
+              파일 {detailImages.length}개
+            </span>
+            <input
+              id="detailFileInput"
+              type="file"
+              multiple
+              accept="image/*"
+              onChange={handleDetailImageChange}
+              className="product-regist-file-input"
+            />
+          </div>
+          {detailPreview.length > 0 && (
+            <div className="product-regist-image-preview">
+              {detailPreview.map((url, idx) => (
+                <div key={idx} className="product-regist-preview-box">
+                  <img
+                    src={url}
+                    className="product-regist-preview-img"
+                    alt={`본문 미리보기 ${idx + 1}`}
+                  />
+                  <button
+                    type="button"
+                    className="product-regist-image-remove-btn"
+                    onClick={() => handleRemoveDetailImage(idx)}
                   >
                     ×
                   </button>

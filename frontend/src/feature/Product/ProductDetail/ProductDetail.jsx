@@ -69,8 +69,11 @@ export function ProductDetail() {
     navigate(`/product/edit?id=${id}`);
   }
 
-  const thumbnail = product.imagePath?.[0];
-  const detailImages = product.imagePath?.slice(1);
+  // 썸네일은 isMain == true 인 항목의 storedPath 사용
+  const thumbnail = product.thumbnailPaths?.find((t) => t.isMain)?.storedPath;
+
+  // 본문 이미지 배열
+  const detailImages = product.detailImagePaths ?? [];
 
   function handleQuestionButton() {
     setIsProcessing(true);
