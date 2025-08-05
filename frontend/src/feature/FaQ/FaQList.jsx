@@ -28,17 +28,27 @@ export function FaQList() {
   const [modalShow, setModalShow] = useState();
   const [title, setTitle] = useState();
   const [content, setContent] = useState();
-  const [category, setCategory] = useState();
+  const [category, setCategory] = useState(null);
   const [searchParams, setSearchParams] = useSearchParams("1");
   const radios = [
     { name: "상품목록", value: "1", fnc: handleQnaAddButtonClick },
     { name: "문의내역", value: "2", fnc: handleQnaListButtonClick },
     { name: "자주 묻는 질문", value: "3", fnc: handleFaQListButtonClick },
   ];
+  const catlist = [
+    { name: "전체", value: "0" },
+    { name: "주문/결제", value: "1" },
+    { name: "배송관련", value: "2" },
+    { name: "취소/환불", value: "3" },
+    { name: "반품/교환", value: "4" },
+    { name: "증빙서류발급", value: "5" },
+    { name: "로그인/회원정보", value: "6" },
+    { name: "서비스/기타", value: "7" },
+  ];
 
   useEffect(() => {
     axios
-      .get(`/api/faq/list`)
+      .get(`/api/faq/list?${searchParams}`)
       .then((res) => {
         setFaQList(res.data.faqList);
         setPageInfo(res.data.pageInfo);
@@ -135,14 +145,40 @@ export function FaQList() {
                 ))}
               </ButtonGroup>
             </div>
+            <div>
+              <nav className="pt-10 px-6 pb-0">
+                {catlist.map((cat, idx) => (
+                  <label for={cat.name}>
+                    <button
+                      id={cat.name}
+                      type="checkbox"
+                      className="btn btn-outline mx-1 rounded-full"
+                      onClick={""}
+                    >
+                      {/*  todo : 카테고리별 검색 기능 구현 */}
+
+                      {cat.name}
+                    </button>
+                  </label>
+                ))}
+              </nav>
+            </div>
             <br />
             {faqList.length > 0 ? (
               <>
                 {faqList.map((faq) => (
                   <div className="collapse collapse-plus bg-base-100 border border-base-300">
                     <input type="checkbox" name="faqlist" className="w-full" />
-                    <div className="collapse-title font-semibold">
-                      {faq.question}
+                    <div className="collapse-title font-semibold flex items-center">
+                      <span
+                        className="
+                      faq_question text-[#1B64DA]
+                      inline-block shadow-md border-1
+                      border-gray-300 px-2 py-1 rounded-full me-2"
+                      >
+                        Q
+                      </span>
+                      <span> {faq.question}</span>
                     </div>
                     <pre className="collapse-content text-sm whitespace-pre-wrap break-words">
                       {faq.answer}
@@ -218,26 +254,23 @@ export function FaQList() {
                 className="select"
                 onChange={(e) => setCategory(e.target.value)}
               >
-                <option disabled hidden selected>
+                <option hidden selected value="0">
                   카테고리를 선택해주세요
                 </option>
-                <option value="1">주문/결제</option>
-                <option value="2">배송관련</option>
-                <option value="3">취소/환불</option>
-                <option value="4">반품/교환</option>
-                <option value="5">증빙서류발급</option>
-                <option value="6">로그인/회원정보</option>
-                <option value="7">서비스/기타</option>
+                {catlist.map((cat, idx) => (
+                  <option value={cat.value}>{cat.name}</option>
+                ))}
               </select>
             </fieldset>
             <fieldset className="fieldset">
               <legend className="fieldset-legend">faq 질문</legend>
-              <textarea
-                className="textarea h-24 w-full"
+              <input
+                type="text"
+                className="input w-full"
                 placeholder="질문을 입력해주세요"
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
-              ></textarea>
+              ></input>
             </fieldset>
             <fieldset className="fieldset">
               <legend className="fieldset-legend">faq 답변</legend>

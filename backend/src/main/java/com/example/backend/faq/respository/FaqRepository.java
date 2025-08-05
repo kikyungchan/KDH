@@ -18,9 +18,10 @@ public interface FaqRepository extends JpaRepository<Faq, Integer> {
                                     q.createdAt,
                                     q.updatedAt)
                         FROM Faq q 
-                        WHERE q.question LIKE %:keyword%
-                           OR q.answer LIKE %:keyword%
+                        WHERE (q.question LIKE %:keyword%
+                           OR q.answer LIKE %:keyword%)
+                          AND (:category IS NULL OR q.category = :category) 
                         ORDER BY q.id DESC
             """)
-    Page<FaqListDto> findAllBy(String keyword, PageRequest of);
+    Page<FaqListDto> findAllBy(String keyword, Integer category, PageRequest of);
 }
