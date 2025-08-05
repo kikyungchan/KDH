@@ -371,7 +371,7 @@ export function MemberAdd() {
                           {/* 아이디 중복 관련 메세지 */}
                           {loginIdCheckMessage && (
                             <p style={{fontSize: "0.875rem"}}
-                               className={`${loginIdChecked ? "text-success" : "text-red-500"}`}>
+                               className={`${loginIdChecked ? "text-info" : "text-red-500"}`}>
 
                               {loginIdCheckMessage}
                             </p>
