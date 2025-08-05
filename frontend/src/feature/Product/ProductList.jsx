@@ -56,10 +56,10 @@ export function ProductList() {
 
   return (
     <div id="product-list-container" className="product-list-container">
-      <div className="max-w-[1600px] mx-auto w-full flex justify-between items-center mb-6 px-4">
-        <h2 className="text-xl font-bold">상품 목록</h2>
+      <div className="flex justify-between items-center mb-6">
+        <h2 className="text-xl font-bold pl-35">상품 목록</h2>
         <select
-          className="select select-sm w-52"
+          className="select select-sm w-52 mr-35"
           value={sort}
           onChange={handleSortChange}
         >
@@ -69,7 +69,6 @@ export function ProductList() {
           <option value="price_desc">가격 높은순</option>
         </select>
       </div>
-
       {products.length === 0 ? (
         <div className="text-center mt-10">검색 결과가 없습니다.</div>
       ) : (
