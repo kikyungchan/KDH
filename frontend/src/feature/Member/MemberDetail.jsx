@@ -96,7 +96,7 @@ export function MemberDetail() {
                 <div className="space-y-4">
                   {/* 아이디 */}
                   <div className="flex items-center gap-4 mb-4">
-                    <label htmlFor="loginId" className="label w-24  block mr-6">아이디</label>
+                    <label htmlFor="loginId" className="label w-24 font-semibold mr-6">아이디</label>
                     <input
                       type="text"
                       id="loginId"
@@ -108,7 +108,7 @@ export function MemberDetail() {
 
                   {/* 이름 */}
                   <div className="flex items-center gap-4 mb-4">
-                    <label htmlFor="name" className="label w-24 font-semibold block mr-6">이름</label>
+                    <label htmlFor="name" className="label w-24 font-semibold mr-6">이름</label>
                     <input
                       type="text"
                       id="name"
@@ -120,19 +120,19 @@ export function MemberDetail() {
 
                   {/* 생년월일 */}
                   <div className="flex items-center gap-4 mb-4">
-                    <label htmlFor="birthDate" className="label w-24 font-semibold block mr-6">생년월일</label>
+                    <label htmlFor="birthDate" className="label w-24 font-semibold mr-6">생년월일</label>
                     <input
                       type="text"
                       id="birthDate"
                       readOnly
                       value={member.birthday}
-                      className=" input input-borderedpx-3 py-2 ml-1"
+                      className=" input input-bordered px-3 py-2 ml-1"
                     />
                   </div>
 
                   {/* 전화번호 */}
                   <div className="flex items-center gap-4 mb-4">
-                    <label htmlFor="phone" className="label w-24 font-semibold block mr-6">전화번호</label>
+                    <label htmlFor="phone" className="label w-24 font-semibold mr-6">전화번호</label>
                     <input
                       type="text"
                       id="phone"
@@ -144,7 +144,7 @@ export function MemberDetail() {
 
                   {/* 이메일 */}
                   <div className="flex items-center gap-4 mb-4">
-                    <label htmlFor="email" className="label w-24 font-semibold block mr-6">이메일</label>
+                    <label htmlFor="email" className="label w-24 font-semibold mr-6">이메일</label>
                     <input
                       type="text"
                       id="email"
@@ -156,19 +156,18 @@ export function MemberDetail() {
 
                   {/* 주소 */}
                   <div className="flex items-start gap-4 mb-4">
-                    <label htmlFor="email" className="label w-24 font-semibold block mr-6">주소</label>
+                    <label htmlFor="email" className="label w-24 font-semibold mr-7">주소</label>
                     <div className="flex flex-col flex-1 gap-2">
                       <input
                         type="text"
                         readOnly
                         value={member.zipCode}
-                        className=" input input-bordered px-3 py-2 mb-2"/>
+                        className=" input input-bordered px-3 py-2"/>
                       <input
                         type="text"
                         readOnly
                         value={member.address}
-                        className=" input input-bordered px-3 py-2 mb-2"/>
-
+                        className=" input input-bordered px-3 py-2"/>
                       <input
                         type="text"
                         readOnly
