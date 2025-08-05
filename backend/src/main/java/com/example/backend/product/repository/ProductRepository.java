@@ -47,13 +47,13 @@ public interface ProductRepository extends JpaRepository<Product, Integer> {
 
     // 주간 주문량 10개이상 아이템 랜덤
     @EntityGraph(attributePaths = "images")
-    @Query("SELECT p FROM Product p WHERE p.id IN (" +
-           "SELECT oi.product.id FROM OrderItem oi " +
-           "WHERE oi.order.createdAt > :oneWeekAgo " +
-           "GROUP BY oi.product.id " +
-           "HAVING SUM(oi.quantity) >= 10" +
-           ") ORDER BY FUNCTION('RAND')")
-    List<Product> findHotProductsRandomLimit(LocalDateTime oneWeekAgo, PageRequest pageable);
+    @Query(value = "SELECT p FROM Product p WHERE p.id IN (" +
+                   "SELECT oi.product.id FROM OrderItem oi " +
+                   "WHERE oi.order.createdAt > :oneWeekAgo " +
+                   "GROUP BY oi.product.id " +
+                   "HAVING SUM(oi.quantity) >= 10" +
+                   ") ORDER BY FUNCTION('RAND')")
+    List<Product> findHotProductsRandomLimit(LocalDateTime oneWeekAgo, Pageable pageable);
 
     @Query("SELECT p FROM Product p WHERE p.category = :category AND " +
            "(LOWER(p.productName) LIKE LOWER(CONCAT('%', :keyword, '%')) " +

@@ -4,8 +4,10 @@ import axios from "axios";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay } from "swiper/modules";
 import "swiper/css";
+import { useNavigate } from "react-router";
 
 function Home() {
+  const navigate = useNavigate();
   const [leftVisual, setLeftVisual] = useState();
   const [currentIndex, setCurrentIndex] = useState(1);
   const [hotItems, setHotItems] = useState([]);
@@ -76,13 +78,20 @@ function Home() {
             loop={shuffledItems.length > 2}
             className="hot-swiper"
           >
-            {shuffledItems.map((item, idx) => (
-              <SwiperSlide key={idx}>
-                <div className="hot-thumbnail">
-                  <img src={item.thumbnailUrl} alt={item.productName} />
-                </div>
-              </SwiperSlide>
-            ))}
+            {shuffledItems.map((item, idx) => {
+              console.log("item:", item);
+              return (
+                <SwiperSlide key={idx}>
+                  <div
+                    className="hot-thumbnail"
+                    onClick={() => navigate(`/product/view?id=${item.id}`)}
+                    style={{ cursor: "pointer" }}
+                  >
+                    <img src={item.thumbnailUrl} alt={item.productName} />
+                  </div>
+                </SwiperSlide>
+              );
+            })}
           </Swiper>
 
           {/* 인덱스 표시 */}
