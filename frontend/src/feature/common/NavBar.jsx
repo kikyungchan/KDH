@@ -1,18 +1,16 @@
-import React, { useContext, useEffect, useRef, useState } from "react";
-import { Link, useNavigate } from "react-router";
-import { AuthenticationContext } from "./AuthenticationContextProvider.jsx";
-import {
-  FiChevronLeft,
-  FiSearch,
-  FiShoppingCart,
-  FiUser,
-} from "react-icons/fi";
+import React, {useContext, useEffect, useRef, useState} from "react";
+import {Link, useNavigate} from "react-router";
+import {AuthenticationContext} from "./AuthenticationContextProvider.jsx";
+import {FiChevronLeft, FiSearch, FiShoppingCart,} from "react-icons/fi";
 import "./Navbar.css";
-import { useCart } from "../Product/CartContext.jsx";
+import {useCart} from "../Product/CartContext.jsx";
+import {NavUserMenu} from "./NavUserMenu.jsx";
+
+NavUserMenu.propTypes = {};
 
 function NavBar(props) {
   const { cartCount } = useCart();
-  const { user, isAdmin } = useContext(AuthenticationContext);
+  const { user, isAdmin, logout } = useContext(AuthenticationContext);
   const [showSearch, setShowSearch] = useState(false);
   const searchRef = useRef(null);
   const iconRef = useRef(null);
@@ -73,9 +71,7 @@ function NavBar(props) {
             onClick={() => setShowSearch((prev) => !prev)}
             style={{ cursor: "pointer" }}
           />
-          <Link to={user ? `/member?id=${user.id}` : "/login"}>
-            <FiUser className="navbar-icon" />
-          </Link>
+          <NavUserMenu user={user} logout={logout} />
           <Link to="/product/cart" className="cart-icon-wrapper">
             <FiShoppingCart className="navbar-icon" />
             {cartCount > 0 && <span className="cart-badge">{cartCount}</span>}

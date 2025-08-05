@@ -117,7 +117,7 @@ export function MemberEdit() {
       .then(() => {
         navigate(`/member?id=${member.id}`);
       })
-      .catch((err) => {
+      .catch(() => {
         showAlert("비밀번호가 일치하지 않습니다.", "error");
         // alert("비밀번호가 일치하지 않습니다.");
       })

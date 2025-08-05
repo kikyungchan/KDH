@@ -27,7 +27,7 @@ export default function PrivacyModal({ show, onClose, onAgree }) {
       <div className="flex gap-2 justify-content-end">
         <button
           type="button"
-          className="btn btn-sm btn-neutral"
+          className="btn btn-sm btn-info"
           onClick={() => {
             onAgree(true); // 동의함
             onClose();
@@ -35,7 +35,7 @@ export default function PrivacyModal({ show, onClose, onAgree }) {
         >
           동의
         </button>
-        <button type="button" className="btn btn-sm btn-error" onClick={onClose}>
+        <button type="button" className="btn btn-sm btn-neutral" onClick={onClose}>
           닫기
         </button>
       </div>

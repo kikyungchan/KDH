@@ -2,7 +2,6 @@ import {useContext, useEffect, useState} from "react";
 import {useNavigate, useSearchParams} from "react-router";
 import axios from "axios";
 import {AuthenticationContext} from "../common/AuthenticationContextProvider.jsx";
-import WithDrawModal from "./Modal/WithDrawModal.jsx";
 import WithdrawModal from "./Modal/WithDrawModal.jsx";
 
 export function MemberDetail() {
@@ -27,7 +26,7 @@ export function MemberDetail() {
       .then((res) => {
         setMember(res.data);
       })
-      .catch((err) => {
+      .catch(() => {
       })
       .finally(() => {
       });
@@ -54,11 +53,11 @@ export function MemberDetail() {
       .delete(`/api/member`, {
         data: {id: member.id, oldPassword: oldPassword},
       })
-      .then((res) => {
+      .then(() => {
         navigate("/");
         logout();
       })
-      .catch((err) => {
+      .catch(() => {
         setPasswordError("비밀번호가 일치하지 않습니다");
       })
       .finally(() => {
