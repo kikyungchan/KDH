@@ -66,7 +66,7 @@ export function ProductOrderComplete() {
   }, []);
 
   return (
-    <div className="order-container">
+    <div className="container">
       <h2>주문 완료</h2>
       <p>
         <strong>

@@ -230,7 +230,7 @@ function Order(props) {
   }
 
   return (
-    <div className="order-container">
+    <div className="container">
       <h2>결제하기</h2>
 
       <div className="order-box" style={{ display: "flex", gap: "20px" }}>

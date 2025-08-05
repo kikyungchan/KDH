@@ -135,7 +135,7 @@ export function ProductEdit() {
   }
 
   return (
-    <Container>
+    <div className="container">
       <Row className="justify-content-center">
         <Col className="mb-3">
           <div className="product-edit-container">
@@ -265,6 +265,6 @@ export function ProductEdit() {
           </div>
         </Col>
       </Row>
-    </Container>
+    </div>
   );
 }

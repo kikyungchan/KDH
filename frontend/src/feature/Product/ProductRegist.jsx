@@ -98,8 +98,8 @@ export function ProductRegist() {
   }
 
   return (
-    <Container>
-      <form onSubmit={handleSubmit} className="product-regist-container">
+    <div className="container">
+      <form onSubmit={handleSubmit}>
         <div className="product-regist-field">
           <h2>상품 등록</h2>
           <label className="product-regist-label">상품명</label>
@@ -266,6 +266,6 @@ export function ProductRegist() {
           </button>
         </div>
       </form>
-    </Container>
+    </div>
   );
 }
