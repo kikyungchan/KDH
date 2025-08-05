@@ -1,0 +1,27 @@
+.main-visual {
+    margin-top: 20px;
+    margin-bottom: 60px;
+}
+
+.main-visual-box {
+    position: relative;
+    width: 100%;
+    height: 420px;
+    overflow: hidden;
+    border-radius: 12px;
+}
+
+.main-visual-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.main-visual-text {
+    position: absolute;
+    bottom: 20px;
+    left: 30px;
+    color: white;
+    text-shadow: 0 0 8px rgba(0, 0, 0, 0.6);
+}

@@ -26,8 +26,9 @@ import { ResetPassword } from "./feature/Member/ResetPassword.jsx";
 import { MemberLogout } from "./feature/Member/MemberLogout.jsx";
 import { ProductOrderComplete } from "./feature/Product/ProductOrderComplete.jsx";
 import { CartProvider } from "./feature/Product/CartContext.jsx";
-import MainPage from "./feature/common/MainPage.jsx";
-import MainSlide from "./feature/common/MainSlide.jsx";
+import Main from "./feature/common/Main.jsx";
+import ImageSlide from "./feature/common/ImageSlide.jsx";
+import Home from "./feature/common/Home.jsx";
 
 function App() {
   // const username = prompt("닉네임을 입력해 주세요");
@@ -36,9 +37,9 @@ function App() {
       <BrowserRouter>
         <CartProvider>
           <Routes>
-            <Route path="/" element={<MainPage />}>
-              {/*<Route index element={<coverSlide />} />*/}
-              <Route index element={<MainSlide />} />
+            <Route path="/" element={<Main />}>
+              <Route index element={<ImageSlide />} />
+              <Route path="/Home" element={<Home />} />
               <Route path="product/regist" element={<ProductRegist />} />
               <Route path="product/list" element={<ProductList />} />
               <Route path="product/view" element={<ProductDetail />} />

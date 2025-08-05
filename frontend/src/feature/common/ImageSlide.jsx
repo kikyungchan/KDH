@@ -5,9 +5,9 @@ import { Mousewheel, Pagination } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/autoplay";
 import "swiper/css/mousewheel";
-import "./MainSlide.css";
+import "./ImageSlide.css";
 
-function MainSlide() {
+function ImageSlide() {
   const [slides, setSlides] = useState([]);
   const swiperRef = useRef(null);
   const hasJustReachedEnd = useRef(false);
@@ -97,4 +97,4 @@ function MainSlide() {
   );
 }
 
-export default MainSlide;
+export default ImageSlide;

@@ -6,6 +6,9 @@ function NavLeft({ user, isAdmin, handleCategoryClick }) {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   return (
     <div className="navbar-left flex items-center gap-2">
+      <Link className="btn btn-ghost text-xl" to="/Home">
+        홈
+      </Link>
       <div
         className={`dropdown ${dropdownOpen ? "dropdown-open" : ""}`}
         onMouseEnter={() => setDropdownOpen(true)}
@@ -19,6 +22,7 @@ function NavLeft({ user, isAdmin, handleCategoryClick }) {
             모든상품
           </button>
         </Link>
+
         <ul
           tabIndex={0}
           className="menu dropdown-content z-[1000] p-2 shadow bg-base-100 rounded-box w-52"
