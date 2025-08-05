@@ -1,16 +1,7 @@
 import {
-  Button,
   Col,
-  FormControl,
-  FormGroup,
-  FormLabel,
-  FormText,
   Row,
   Spinner,
-  Form,
-  Container,
-  InputGroup,
-  Card,
 } from "react-bootstrap";
 import {useContext, useEffect, useState} from "react";
 import axios from "axios";
@@ -328,20 +319,25 @@ export function MemberAdd() {
 
   // 개인정보 수집 모달
   const privacyModalShow = () => {
+    const scrollY = window.scrollY;
     setShowPrivacyModal(true);
+
+    setTimeout(() => {
+      window.scrollTo({ top: scrollY });
+    }, 50);
   };
 
   return (
-    <div className="bg-gray-100 min-h-screen overflow-y-auto pt-10">
-      <div className="flex justify-center items-start min-h-screen pb-10">
-        <div className="w-full max-w-[600px] mx-auto px-4">
+    <div className="min-h-screen overflow-y-auto bg-gray-100">
+      <div className="flex justify-center">
+        <div className="w-full max-w-[600px] mx-auto px-4 py-10">
           <div className="px-8 py-6 shadow rounded-2xl bg-white">
             <Row>
               <Col>
                     <h2 className="mb-6 text-center text-2xl font-semibold">회원 등록</h2>
                     {/* 아이디 */}
                     <div className="flex items-start gap-6 mb-2">
-                      <form className="w-full">
+                      <div className="w-full">
                         <label className="block font-semibold mb-1">아이디</label>
                         <p className="text-sm text-muted mb-1">
                           아이디는 영문으로 시작하며 4~20자, 영문+숫자 조합만 가능합니다.
@@ -385,10 +381,9 @@ export function MemberAdd() {
                             </p>
                           )}
                         </div>
-                      </form>
+                      </div>
                     </div>
                     <div>
-                      <form>
                         <label className="block font-semibold mb-1">비밀번호</label>
                         <p className="text-sm text-muted mb-1">
                           비밀번호는 영문+숫자 조합, 8~20자 사이로
@@ -410,10 +405,8 @@ export function MemberAdd() {
                             유효한 비밀번호 형식이 아닙니다.
                           </p>
                         )}
-                      </form>
                     </div>
                     <div>
-                      <form>
                         <label className="block font-semibold mb-1">비밀번호 확인</label>
                         <input
                           type="password"
@@ -429,10 +422,8 @@ export function MemberAdd() {
                             비밀번호가 일치하지 않습니다.
                           </p>
                         )}
-                      </form>
                     </div>
                     <div>
-                      <form>
                         <label className="block font-semibold mb-1">이름</label>
                         <p className="text-sm text-muted mb-1">
                           이름은 한글 또는 영문 2~20자까지 입력 가능합니다.
@@ -454,10 +445,8 @@ export function MemberAdd() {
                             유효한 이름 형식이 아닙니다.
                           </p>
                         )}
-                      </form>
                     </div>
                     <div>
-                      <form>
                         <label className="block font-semibold mb-1">생년월일</label>
                         <input
                           type="date"
@@ -469,10 +458,8 @@ export function MemberAdd() {
                             setBirthday(val === "" ? getToday() : val);
                           }}
                         />
-                      </form>
                     </div>
                     <div>
-                      <form>
                         <label className="block font-semibold mb-1">전화번호</label>
                         <p className="text-sm text-muted mb-1">
                           하이픈(-)없이 숫자만 입력해주세요. (예: 01012345678)</p>
@@ -493,10 +480,8 @@ export function MemberAdd() {
                             유효한 전화번호 형식이 아닙니다.
                           </p>
                         )}
-                      </form>
                     </div>
                     <div>
-                      <form>
                         <label className="block font-semibold mb-1">이메일</label>
                         <p className="text-sm text-muted mb-1">
                           예: example@domain.com 형식의 이메일을 입력하세요.
@@ -519,7 +504,7 @@ export function MemberAdd() {
                               />
                               <button
                                 type="button"
-                                className="btn btn-sm btn-ghost px-2 h-9 min-h-0 text-lg"
+                                className="btn btn-sm btn-ghost px-2 h-9 min-h-0 text-lg mb-2"
                                 onClick={() => setCustomDomain(false)}
                               >
                                 x
@@ -588,13 +573,11 @@ export function MemberAdd() {
                             </p>
                           )}
                         </div>
-                      </form>
                     </div>
 
                     {/* 인증번호 입력 */}
                     {emailSent && (
                       <div>
-                        <form>
                           <label className="block font-semibold mb-1 mt-2">인증번호</label>
                           <input
                             type="text"
@@ -618,19 +601,26 @@ export function MemberAdd() {
                               <p className="text-error text-sm mt-1">인증번호를 올바르게 입력하세요.</p>
                             )}
                           </div>
-                        </form>
                       </div>
                     )}
                     <div>
-                      <form>
                         <label className="block font-semibold mb-1 mt-2">주소</label>
-                        <input
-                          type="text"
-                          value={zipCode}
-                          placeholder="우편번호"
-                          className="w-full rounded px-3 py-2 bg-gray-100 mb-2"
-                          readOnly
-                        />
+                        <div className="flex items-center gap-3">
+                          <input
+                            type="text"
+                            value={zipCode}
+                            placeholder="우편번호"
+                            className="w-full rounded px-3 py-2 bg-gray-100 mb-2"
+                            readOnly
+                          />
+                          <button
+                            type="button"
+                            className="btn btn-outline btn-neutral mb-2"
+                            onClick={handleSearchAddress}
+                          >
+                            주소 검색
+                          </button>
+                        </div>
                         <input
                           type="text"
                           value={address}
@@ -646,14 +636,7 @@ export function MemberAdd() {
                           className="w-full rounded px-3 py-2 bg-gray-100 mb-2"
                           onChange={(e) => setAddressDetail(e.target.value)}
                         />
-                        <button
-                          type="button"
-                          className="mt-2 btn btn-sm btn-outline btn-neutral"
-                          onClick={handleSearchAddress}
-                        >
-                          주소 검색
-                        </button>
-                      </form>
+
                     </div>
                     <div className="d-flex justify-content-end mt-2 items-center">
                       {privacyAgreed && (

@@ -3,10 +3,9 @@ import { Modal, Button } from "react-bootstrap";
 export default function PrivacyModal({ show, onClose, onAgree }) {
   if (!show) return null;
   return (
-    <div className="modal modal-open">
-      <div className="modal-box w-full max-w-lg">
-
-        <div className="flex justify-between items-center mb-3">
+    <div className="fixed inset-0 z-50 flex items-center justify-center">
+      <div className="bg-white rounded-xl shadow-lg w-full max-w-lg p-6">
+        <div className="flex justify-between items-center mb-4">
           <h3 className="text-lg font-bold">개인정보 수집 및 이용 동의</h3>
           <button className="btn btn-sm btn-circle" onClick={onClose}>
             ✕

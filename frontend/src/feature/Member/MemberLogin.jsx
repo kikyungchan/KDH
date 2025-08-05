@@ -10,7 +10,7 @@ import {
   FormText,
   Row,
 } from "react-bootstrap";
-import {useContext, useState} from "react";
+import React, {useContext, useState} from "react";
 import {useNavigate, Link} from "react-router";
 import axios from "axios";
 import {AuthenticationContext} from "../common/AuthenticationContextProvider.jsx";
@@ -67,6 +67,10 @@ export function MemberLogin() {
           <div className="p-6 shadow rounded-2xl bg-white">
             <Row className="justify-content-center">
               <Col>
+                <Link to="/" className="navbar-logo block text-center mb-6">
+                  코데헌
+                </Link>
+
                 <h3 className="text-center text-xl font-bold mb-6">로그인</h3>
 
                 <form onSubmit={handleLogInButtonClick}>

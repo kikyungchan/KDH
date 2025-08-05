@@ -12,3 +12,13 @@
 * {
     font-family: "Paperlogy";
 }
+
+html, body, #root {
+    height: 100%;
+}
+
+html.modal-open,
+body.modal-open {
+    overflow: auto !important; /* scroll 막히지 않게 */
+    scroll-behavior: auto !important; /* 튐 방지 */
+}
