@@ -1,10 +1,8 @@
 import NavBar from "./NavBar/NavBar.jsx";
-import { Outlet, useLocation } from "react-router";
+import { Outlet } from "react-router";
 import { useEffect } from "react";
 
 function Main() {
-  const location = useLocation();
-
   useEffect(() => {
     return () => {
       document.body.style.overflow = "auto"; // 페이지 떠날 땐 항상 복구

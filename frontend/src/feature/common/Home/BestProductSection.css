@@ -16,16 +16,15 @@
 }
 
 .best-product-rating {
-    font-size: 0.9rem;
-    color: #555;
-    margin-top: 4px;
-    border: 1px solid red; /* 확인용 */
+    font-size: 14px;
+    color: black;
+    margin-top: 5px;
 }
 
 
 .best-product-card {
     width: 350px;
-    height: 350px;
+    height: auto;
     gap: 1rem;
     /*border: 1px solid #ddd;*/
     border-radius: 12px;
