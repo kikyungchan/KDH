@@ -24,9 +24,18 @@ function Home() {
         // 좌측용 랜덤 하나
         const randomOne = sliced[Math.floor(Math.random() * sliced.length)];
         setLeftVisual(randomOne);
-
+        const messages = [
+          "첫구매 최대 2만원 할인!",
+          "인기상품 특가!",
+          "한정 수량 할인!",
+        ];
         // 우측용 무작위 순서
-        const shuffled = [...sliced].sort(() => Math.random() - 0.5);
+        const shuffled = [...sliced]
+          .sort(() => Math.random() - 0.5)
+          .map((item) => ({
+            ...item,
+            message: messages[Math.floor(Math.random() * messages.length)],
+          }));
         setShuffledItems(shuffled);
       })
       .catch((err) => console.error("HOT 상품 불러오기 실패:", err));
@@ -88,9 +97,7 @@ function Home() {
                     style={{ cursor: "pointer" }}
                   >
                     <img src={item.thumbnailUrl} alt={item.productName} />
-                    <div className="hot-slide-text">
-                      첫구매 최대 2만원 할인!
-                    </div>
+                    <div className="hot-slide-text">{item.message}</div>
                   </div>
                 </SwiperSlide>
               );
