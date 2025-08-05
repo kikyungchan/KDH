@@ -334,13 +334,10 @@ export function MemberAdd() {
   return (
     <div className="fixed inset-0 bg-gray-100 overflow-y-auto mt-10">
       <div className="flex justify-center items-start min-h-screen pt-10 pb-10">
-        <div className="w-full max-w-[600px]">
-          <div className="p-6 shadow rounded-2xl bg-white">
+        <div className="w-full max-w-[600px] mx-auto px-4">
+          <div className="px-8 py-6 shadow rounded-2xl bg-white">
             <Row>
               <Col>
-                <Card className="p-4 shadow rounded">
-                  <Card.Body>
-
                     <h2 className="mb-6 text-center text-2xl font-semibold">회원 등록</h2>
                     {/* 아이디 */}
                     <div className="flex items-start gap-6 mb-2">
@@ -658,9 +655,9 @@ export function MemberAdd() {
                         </button>
                       </form>
                     </div>
-                    <div className="d-flex justify-content-end mt-2">
+                    <div className="d-flex justify-content-end mt-2 items-center">
                       {privacyAgreed && (
-                        <p className="text-success me-2">
+                        <p className="text-info me-2">
                           개인정보 수집 및 이용에 동의 하셨습니다.
                         </p>
                       )}
@@ -698,8 +695,6 @@ export function MemberAdd() {
                         )}
                       </button>
                     </div>
-                  </Card.Body>
-                </Card>
               </Col>
               {/* 동의 모달 */
               }

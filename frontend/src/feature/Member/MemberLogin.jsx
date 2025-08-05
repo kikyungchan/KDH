@@ -10,19 +10,19 @@ import {
   FormText,
   Row,
 } from "react-bootstrap";
-import { useContext, useState } from "react";
-import { useNavigate, Link } from "react-router";
+import {useContext, useState} from "react";
+import {useNavigate, Link} from "react-router";
 import axios from "axios";
-import { AuthenticationContext } from "../common/AuthenticationContextProvider.jsx";
-import { useCart } from "../Product/CartContext.jsx";
+import {AuthenticationContext} from "../common/AuthenticationContextProvider.jsx";
+import {useCart} from "../Product/CartContext.jsx";
 import {useAlert} from "../common/AlertContext.jsx";
 
 export function MemberLogin() {
   const [loginId, setLoginId] = useState("");
   const [password, setPassword] = useState("");
-  const { login } = useContext(AuthenticationContext);
-  const { showAlert } = useAlert();
-  const { setCartCount } = useCart();
+  const {login} = useContext(AuthenticationContext);
+  const {showAlert} = useAlert();
+  const {setCartCount} = useCart();
 
   const navigate = useNavigate();
 
@@ -56,20 +56,15 @@ export function MemberLogin() {
       .catch((err) => {
         showAlert(err.response?.data?.message); // { type: 'error', text: '...' }
       })
-      .finally(() => {});
+      .finally(() => {
+      });
   }
 
   return (
-    <div style={{ backgroundColor: "#f8f9fa", minHeight: "100vh" }}>
-      <Container
-        fluid
-        className="d-flex justify-content-center align-items-center py-5"
-      >
-        <Card
-          style={{ width: "100%", maxWidth: "400px" }}
-          className="shadow p-4"
-        >
-          <Card.Body>
+    <div className="bg-gray-100 min-h-screen">
+      <div className="flex justify-center items-start pt-10">
+        <div className="w-full max-w-[400px]">
+          <div className="p-6 shadow rounded-2xl bg-white">
             <Row className="justify-content-center">
               <Col>
                 <h3 className="text-center text-xl font-bold mb-6">로그인</h3>
@@ -131,9 +126,9 @@ export function MemberLogin() {
 
               </Col>
             </Row>
-          </Card.Body>
-        </Card>
-      </Container>
+          </div>
+        </div>
+      </div>
     </div>
   );
 }

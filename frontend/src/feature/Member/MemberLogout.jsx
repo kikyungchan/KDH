@@ -1,5 +1,5 @@
 import { Spinner } from "react-bootstrap";
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect } from "react";
 import { useNavigate } from "react-router";
 import { AuthenticationContext } from "../common/AuthenticationContextProvider.jsx";
 import { useCart } from "../Product/CartContext.jsx";
@@ -18,5 +18,9 @@ export function MemberLogout() {
     console.log("로그아웃 되었습니다.");
     navigate("/");
   }, []);
-  return <Spinner />;
+  return (
+    <div className="flex justify-center items-center h-screen">
+      <span className="loading loading-spinner loading-lg text-neutral"></span>
+    </div>
+  );
 }

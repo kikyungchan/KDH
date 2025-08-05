@@ -87,7 +87,7 @@ export function MemberDetail() {
     <div className="bg-gray-100 min-h-screen">
       <div className="flex justify-center items-start pt-10">
         <div className="w-full max-w-[600px]">
-          <div className="p-6 shadow rounded-2xl bg-white">
+          <div className="px-8 py-6 shadow rounded-2xl bg-white">
               <Row>
                 <Col>
                   <h2 className="mb-6 text-center text-2xl font-semibold">회원 정보</h2>
