@@ -37,9 +37,9 @@ export default function PrivacyModal({ show, onClose, onAgree }) {
         >
           동의
         </button>
-        <Button type="button" className="btn btn-sm btn-error" onClick={onClose}>
+        <button type="button" className="btn btn-sm btn-error" onClick={onClose}>
           닫기
-        </Button>
+        </button>
       </div>
       </div>
     </div>

@@ -246,21 +246,22 @@ export function FindPassword() {
               <Col>
                 <div>
                   <h3 className="text-center text-xl font-bold mb-3">비밀번호 찾기</h3>
-                  <label className="block text-sm ml-1 mb-2">
+                  <label htmlFor="loginId" className="block text-sm ml-1 mb-2">
                     회원가입시 등록한 아이디를 입력해주세요.
                   </label>
                   <input
                     type="text"
+                    id="loginId"
                     value={loginId}
                     onChange={(e) => {
                       setLoginId(e.target.value);
                     }}
                     className="input input-bordered w-full"
                     placeholder="아이디"
-                    disabled={authCompleted }
+                    disabled={authCompleted}
                   />
                   <div className="flex justify-end items-center text-end mt-2 gap-2">
-                  {isLoginIdChecked && (
+                    {isLoginIdChecked && (
                       <p
                         style={{fontSize: "0.875rem"}}
                         className={loginIdExists ? "text-neutral" : "text-error"}
@@ -281,11 +282,12 @@ export function FindPassword() {
                 {loginIdExists && (
                   <>
                     <div className="form-control mb-4 mt-4">
-                      <label className="block text-sm ml-1 mb-2">
+                      <label htmlFor="email" className="block text-sm ml-1 mb-2">
                         회원가입시 등록한 이메일을 입력해주세요.
                       </label>
                       <input
                         type="text"
+                        id="email"
                         value={email}
                         onChange={(e) => {
                           setEmail(e.target.value);
@@ -321,13 +323,7 @@ export function FindPassword() {
                         >
                           {isSending ? (
                             <>
-                              <Spinner
-                                animation="border"
-                                size="sm"
-                                role="status"
-                                aria-hidden="true"
-                                className="me-2"
-                              />
+                              <span className="loading loading-spinner loading-sm mr-2"/>
                               전송 중...
                             </>
                           ) : (
@@ -341,16 +337,18 @@ export function FindPassword() {
                       <>
                         <hr/>
                         <div className="form-control mb-4 mt-4">
-                          <label className="block text-sm font-semibold mb-2">
+                          <label htmlFor="authCode" className="block text-sm font-semibold mb-2">
                             인증번호
                           </label>
                           <input
                             type="text"
                             value={authCode}
+                            id="authCode"
                             placeholder="인증번호"
-                            className="input input-bordered w-full"
                             onChange={(e) => setAuthCode(e.target.value)}
-                            isInvalid={authFailed}
+                            className={`input input-bordered w-full ${
+                              authFailed ? "border-red-500" : "border-gray-300"
+                            }`}
                             readOnly={authCompleted}
                             disabled={authCompleted}
                           />
@@ -380,20 +378,20 @@ export function FindPassword() {
                       <div>
                         <button
                           type="button"
-                          className="btn btn-sm btn-neutral mt-2 me-2"
+                          className="btn btn-sm btn-neutral mt-2 mr-2"
                           onClick={handleResetPasswordButton}
                         >
                           비밀번호 재설정
                         </button>
                       </div>
                       <div>
-                        <Button
+                        <button
                           type="button"
-                          className="btn btn-sm btn-neutral mt-2 me-2"
+                          className="btn btn-sm btn-neutral mt-2 mr-2"
                           onClick={() => navigate("/")}
                         >
                           돌아가기
-                        </Button>
+                        </button>
                       </div>
                     </div>
                   </>
