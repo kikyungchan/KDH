@@ -245,10 +245,7 @@ export function FindPassword() {
             <Row>
               <Col>
                 <div>
-                  <h3 className="text-center text-xl font-bold mb-3">비밀번호 찾기</h3>
-                  <label htmlFor="loginId" className="block text-sm ml-1 mb-2">
-                    회원가입시 등록한 아이디를 입력해주세요.
-                  </label>
+
                   <input
                     type="text"
                     id="loginId"
