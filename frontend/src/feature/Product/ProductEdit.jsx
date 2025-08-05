@@ -23,6 +23,7 @@ export function ProductEdit() {
     axios
       .get(`/api/product/view?id=${id}`)
       .then((res) => {
+        console.log(res.data);
         setForm({
           productName: res.data.productName,
           price: res.data.price,
