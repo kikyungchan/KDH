@@ -6,9 +6,10 @@ import { Autoplay } from "swiper/modules";
 import "swiper/css";
 
 function Home() {
+  const [leftVisual, setLeftVisual] = useState();
   const [currentIndex, setCurrentIndex] = useState(1);
   const [hotItems, setHotItems] = useState([]);
-  const [shuffledItems, setShuffledItems] = useState([]); // ✅ 고정 순서
+  const [shuffledItems, setShuffledItems] = useState([]);
   const swiperRef = useRef(null);
 
   useEffect(() => {
@@ -16,8 +17,14 @@ function Home() {
       .get("/api/product/hot-random")
       .then((res) => {
         const sliced = res.data.slice(0, 10);
-        const shuffled = [...sliced].sort(() => Math.random() - 0.5);
         setHotItems(sliced);
+
+        // 좌측용 랜덤 하나
+        const randomOne = sliced[Math.floor(Math.random() * sliced.length)];
+        setLeftVisual(randomOne);
+
+        // 우측용 무작위 순서
+        const shuffled = [...sliced].sort(() => Math.random() - 0.5);
         setShuffledItems(shuffled);
       })
       .catch((err) => console.error("HOT 상품 불러오기 실패:", err));
@@ -28,10 +35,10 @@ function Home() {
       <section className="main-visual-row">
         {/* 좌측 비주얼 */}
         <div className="main-visual-box">
-          {shuffledItems[0] && (
+          {leftVisual && (
             <>
               <img
-                src={shuffledItems[0].thumbnailUrl}
+                src={leftVisual.thumbnailUrl}
                 alt="HOT 상품"
                 className="main-visual-img"
               />
