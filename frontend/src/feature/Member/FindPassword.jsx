@@ -1,15 +1,4 @@
-import {
-  Button,
-  Card,
-  Col,
-  Container,
-  FormControl,
-  FormGroup,
-  FormLabel,
-  FormText,
-  Row,
-  Spinner,
-} from "react-bootstrap";
+
 import {useEffect, useState} from "react";
 import {useNavigate} from "react-router";
 import axios from "axios";

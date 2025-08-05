@@ -201,13 +201,7 @@ export function FindLoginId() {
                         >
                           {isSending ? (
                             <>
-                              <Spinner
-                                animation="border"
-                                size="sm"
-                                role="status"
-                                aria-hidden="true"
-                                className="me-2"
-                              />
+                              <span className="loading loading-spinner loading-sm mr-2"/>
                               전송 중...
                             </>
                           ) : (

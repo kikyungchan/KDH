@@ -1,15 +1,3 @@
-import {
-  Button,
-  Card,
-  Col,
-  Container,
-  Form,
-  FormControl,
-  FormGroup,
-  FormLabel,
-  FormText,
-  Row,
-} from "react-bootstrap";
 import React, {useContext, useState} from "react";
 import {useNavigate, Link} from "react-router";
 import axios from "axios";
@@ -127,7 +115,6 @@ export function MemberLogin() {
                     비밀번호 찾기
                   </Link>
                 </div>
-
             </div>
           </div>
         </div>

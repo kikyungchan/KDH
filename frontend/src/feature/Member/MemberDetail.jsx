@@ -1,16 +1,3 @@
-import {
-  Button,
-  Card,
-  Col,
-  Container,
-  FormControl,
-  FormGroup,
-  FormLabel,
-  FormText,
-  Modal,
-  Row,
-  Spinner,
-} from "react-bootstrap";
 import {useContext, useEffect, useState} from "react";
 import {useNavigate, useSearchParams} from "react-router";
 import axios from "axios";
@@ -51,7 +38,7 @@ export function MemberDetail() {
     return (
       <div>
         <div>
-          <Spinner/>
+          <span className="loading loading-spinner loading-sm mr-2"/>
         </div>
         회원 정보를 불러오는 중 . . .{" "}
       </div>

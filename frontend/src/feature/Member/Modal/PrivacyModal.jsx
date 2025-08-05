@@ -1,4 +1,3 @@
-import { Modal, Button } from "react-bootstrap";
 
 export default function PrivacyModal({ show, onClose, onAgree }) {
   if (!show) return null;

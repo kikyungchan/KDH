@@ -1,4 +1,3 @@
-import { Button, Modal, ModalTitle } from "react-bootstrap";
 
 export default function LeaveMemberEditModal({ show, onClose, onLeave }) {
   if (!show) return null; // 👈 이 줄이 핵심!

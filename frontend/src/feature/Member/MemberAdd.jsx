@@ -1,8 +1,4 @@
-import {
-  Col,
-  Row,
-  Spinner,
-} from "react-bootstrap";
+
 import {useContext, useEffect, useState} from "react";
 import axios from "axios";
 import {useNavigate} from "react-router";
@@ -664,13 +660,7 @@ export function MemberAdd() {
                       >
                         {isProcessing ? (
                           <>
-                            <Spinner
-                              animation="border"
-                              size="sm"
-                              role="status"
-                              aria-hidden="true"
-                              className="me-2"
-                            />
+                            <span className="loading loading-spinner loading-sm mr-2"/>
                             전송 중...
                           </>
                         ) : (

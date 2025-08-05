@@ -1,4 +1,3 @@
-import {Card, Col, Container, Pagination, Row, Table} from "react-bootstrap";
 import {useEffect, useState} from "react";
 import axios from "axios";
 import {useNavigate, useSearchParams} from "react-router";
@@ -17,7 +16,7 @@ export function MemberList() {
         setMemberList(res.data.memberList);
         setPageInfo(res.data.pageInfo);
       })
-      .catch((err) => {
+      .catch(() => {
       })
       .finally(() => {
       });

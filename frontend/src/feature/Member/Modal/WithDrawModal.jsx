@@ -1,12 +1,3 @@
-import {
-  Button,
-  FormControl,
-  FormGroup,
-  FormLabel,
-  FormText,
-  Modal,
-  Spinner,
-} from "react-bootstrap";
 
 export default function WithdrawModal({
   show,

@@ -1,4 +1,3 @@
-import { Spinner } from "react-bootstrap";
 import { useContext, useEffect } from "react";
 import { useNavigate } from "react-router";
 import { AuthenticationContext } from "../common/AuthenticationContextProvider.jsx";

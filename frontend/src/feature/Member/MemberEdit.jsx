@@ -1,17 +1,3 @@
-import {
-  Button,
-  Card,
-  Col,
-  Container,
-  FormControl,
-  FormGroup,
-  FormLabel,
-  FormText,
-  Modal,
-  ModalTitle,
-  Row,
-  Spinner,
-} from "react-bootstrap";
 import {useEffect, useState} from "react";
 import axios from "axios";
 import {useNavigate, useSearchParams} from "react-router";
@@ -83,7 +69,7 @@ export function MemberEdit() {
     return (
       <div>
         <div>
-          <Spinner/>
+          <span className="loading loading-spinner loading-sm mr-2"/>
         </div>
         회원 정보를 불러오는 중 . . .{" "}
       </div>
@@ -143,7 +129,7 @@ export function MemberEdit() {
   if (!member) {
     return (
       <div>
-        <Spinner/>
+        <span className="loading loading-spinner loading-sm mr-2"/>
         회원 정보를 불러오는 중...
       </div>
     );
