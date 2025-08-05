@@ -1,4 +1,4 @@
-import { Col, Container, Row } from "react-bootstrap";
+import { Col, Row } from "react-bootstrap";
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 import axios from "axios";
@@ -229,16 +229,18 @@ function ProductCart(props) {
   return (
     <>
       <div className="container">
-        <h2>장바구니</h2>
+        <h2 className="text-2xl font-bold mb-4">장바구니</h2>
+
         {cartItems.length === 0 ? (
-          <div className="text-center py-5">
-            <h4>장바구니가 비어있습니다.</h4>
+          <div className="text-center py-10">
+            <h4 className="text-lg font-semibold">장바구니가 비어있습니다.</h4>
             <p>원하는 상품을 장바구니에 담아보세요.</p>
           </div>
         ) : (
           <>
-            <Row className="align-items-center border-bottom py-2 fw-bold">
-              <Col xs="auto">
+            {/* 헤더 */}
+            <div className="grid grid-cols-12 font-bold border-b py-3 items-center">
+              <div className="col-span-1 flex justify-center">
                 <input
                   type="checkbox"
                   checked={
@@ -247,20 +249,20 @@ function ProductCart(props) {
                   }
                   onChange={handleSelectAllCheckboxChange}
                 />
-              </Col>
-              <Col>상품 정보</Col>
+              </div>
+              <div className="col-span-5">상품 정보</div>
+              <div className="col-span-2 text-center">수량</div>
+              <div className="col-span-2 text-center">가격</div>
+              <div className="col-span-2 text-center">총 금액</div>
+            </div>
 
-              <Col xs="2">수량</Col>
-              <Col xs="2">가격</Col>
-              <Col xs="2">총 금액</Col>
-            </Row>
+            {/* 장바구니 아이템들 */}
             {cartItems.map((item, index) => (
-              <Row
+              <div
                 key={index}
-                className="align-items-center border-bottom py-2"
+                className="grid grid-cols-12 items-center border-b py-4"
               >
-                {/*체크박스*/}
-                <Col xs="auto">
+                <div className="col-span-1 flex justify-center">
                   <input
                     type="checkbox"
                     checked={checkedIds.includes(index)}
@@ -268,104 +270,79 @@ function ProductCart(props) {
                       handleCheckboxChange(index, e.target.checked)
                     }
                   />
-                </Col>
+                </div>
 
-                {/* 이미지 + 상품명/옵션 */}
-                <Col>
-                  <div
-                    style={{
-                      display: "flex",
-                      alignItems: "center",
-                      gap: "12px",
-                    }}
-                  >
-                    <img
-                      src={item.imagePath}
-                      alt="상품이미지"
-                      onClick={() =>
-                        navigate(`/product/view?id=${item.productId}`)
-                      }
-                      style={{
-                        cursor: "pointer",
-                        width: "120px",
-                        height: "100px",
-                        objectFit: "cover",
-                      }}
-                    />
-                    <div style={{ display: "flex", flexDirection: "column" }}>
-                      <div style={{ fontWeight: "bold" }}>
-                        {item.productName}
-                      </div>
-                      <div style={{ fontSize: "0.85em", color: "#555" }}>
-                        {item.optionName}
-                      </div>
+                <div className="col-span-5 flex gap-4 items-center">
+                  <img
+                    src={item.imagePath}
+                    alt="상품이미지"
+                    onClick={() =>
+                      navigate(`/product/view?id=${item.productId}`)
+                    }
+                    className="w-28 h-24 object-cover cursor-pointer"
+                  />
+                  <div>
+                    <div className="font-bold">{item.productName}</div>
+                    <div className="text-sm text-gray-500">
+                      {item.optionName}
                     </div>
                   </div>
-                </Col>
+                </div>
 
-                {/* 수량 / 가격 / 총금액 */}
-                <Col xs="2">
+                <div className="col-span-2 text-center">
                   {item.quantity}개
                   <div className="mt-2">
                     <button
                       onClick={() => handleEditOption(item)}
-                      style={{
-                        padding: "4px 8px",
-                        fontSize: "0.85em",
-                        backgroundColor: "#eee",
-                        border: "1px solid #ccc",
-                        borderRadius: "4px",
-                        cursor: "pointer",
-                      }}
+                      className="btn btn-sm btn-outline"
                     >
                       옵션/수량 변경
                     </button>
                   </div>
-                </Col>
-                <Col xs="2">{item.price?.toLocaleString() || "-"}원</Col>
-                <Col xs="2">
+                </div>
+
+                <div className="col-span-2 text-center">
+                  {item.price?.toLocaleString() || "-"}원
+                </div>
+
+                <div className="col-span-2 text-center">
                   {item.price && item.quantity
                     ? (item.price * item.quantity).toLocaleString()
                     : "-"}
                   원
-                </Col>
-              </Row>
+                </div>
+              </div>
             ))}
-            <hr />
-            <div className="mt-1 d-flex gap-1 ">
-              <button onClick={handleDeleteSelected} style={{ height: "40px" }}>
+
+            {/* 선택 삭제 / 유의사항 */}
+            <div className="flex items-center gap-2 mt-4">
+              <button
+                onClick={handleDeleteSelected}
+                className="btn btn-outline"
+              >
                 선택 삭제
               </button>
-
-              <div
-                className="ms-auto"
-                style={{ textAlign: "right", fontSize: "0.8rem" }}
-              >
+              <div className="ms-auto text-right text-sm text-gray-500">
                 <p>배송시 문제생겨도 책임안집니다.</p>
                 <p>어쩌구 저쩌구</p>
               </div>
             </div>
 
-            <hr />
-            {/*  주문요약정보*/}
-            <div className="py-2 text-center">
-              <div style={{ fontSize: "1.5em", fontWeight: "bold" }}>
-                {totalItemPrice.toLocaleString()}원
-                <span style={{ margin: "0 10px" }}>+</span>
-                {shippingFee.toLocaleString()}원
-                <span style={{ margin: "0 10px" }}>=</span>
+            {/* 주문 요약 */}
+            <div className="text-center py-6">
+              <div className="text-xl font-bold">
+                {totalItemPrice.toLocaleString()}원 +{" "}
+                {shippingFee.toLocaleString()}원 ={" "}
                 {(totalItemPrice + shippingFee).toLocaleString()}원
               </div>
-              <div
-                className="text-secondary d-flex justify-content-center gap-5 mt-2"
-                style={{ fontSize: "0.9em" }}
-              >
+              <div className="text-sm text-gray-600 flex justify-center gap-8 mt-2">
                 <div>상품금액</div>
                 <div>배송비</div>
                 <div>총 주문금액</div>
               </div>
             </div>
-            <hr />
+
+            {/* 주문 버튼 */}
             <div className="text-center">
               <button onClick={handleOrderButton} className="btn btn-dark mt-2">
                 주문하기
@@ -441,7 +418,7 @@ function ProductCart(props) {
 
               {/* 수량 설정 */}
               <div className="mt-3 d-flex align-items-center">
-                <label>수량</label>
+                <label className="me-3">수량</label>
                 <button
                   onClick={() => setSelectedQuantity((q) => Math.max(1, q - 1))}
                 >
