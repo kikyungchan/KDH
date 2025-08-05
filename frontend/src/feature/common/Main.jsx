@@ -1,6 +1,7 @@
 import NavBar from "./NavBar/NavBar.jsx";
 import { Outlet } from "react-router";
 import { useEffect } from "react";
+import Footer from "./Footer/Footer.jsx";
 
 function Main() {
   useEffect(() => {
@@ -13,6 +14,7 @@ function Main() {
       <NavBar />
       <div style={{ paddingTop: "80px" }}></div>
       <Outlet />
+      <Footer />
     </>
   );
 }
