@@ -78,13 +78,13 @@ export function ProductDetail() {
   }
 
   return (
-    <Container>
+    <div className="container">
       <Row className="justify-content-center">
         <Col>
           <div
             style={{
               display: "flex",
-              gap: "100px",
+              gap: "56px",
               alignItems: "flex-start",
             }}
           >
@@ -96,52 +96,79 @@ export function ProductDetail() {
                 alt="썸네일 이미지"
               />
             )}
+
+            {/* 오른쪽: 텍스트 및 버튼들 */}
             <div style={{ flex: 1 }}>
-              <h2>
-                {product.productName}
-                {/* NEW 뱃지: 일주일 이내 등록된 상품 */}
-                {(() => {
-                  const insertedAt = new Date(product.insertedAt);
-                  const now = new Date();
-                  const diffInSeconds = (now - insertedAt) / 1000;
-                  const isNew = diffInSeconds <= 60 * 60 * 24 * 7;
-                  return isNew ? <span className="new-badge">NEW</span> : null;
-                })()}
+              {/* 상품명 + 공유/좋아요 아이콘 */}
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                  marginBottom: "1rem",
+                }}
+              >
+                <div
+                  style={{ display: "flex", alignItems: "center", gap: "10px" }}
+                >
+                  <h2 style={{ fontSize: "2rem", margin: 0 }}>
+                    {product.productName}
+                  </h2>
+                  {(() => {
+                    const insertedAt = new Date(product.insertedAt);
+                    const now = new Date();
+                    const diffInSeconds = (now - insertedAt) / 1000;
+                    const isNew = diffInSeconds <= 60 * 60 * 24 * 7;
+                    return isNew ? (
+                      <span className="new-badge">NEW</span>
+                    ) : null;
+                  })()}
+                  {product.hot && (
+                    <span
+                      className="badge hot-badge"
+                      style={{ fontSize: "12px" }}
+                    >
+                      HOT
+                    </span>
+                  )}
+                  {product.quantity === 0 && (
+                    <span className="sold-out-badge">SOLD OUT</span>
+                  )}
+                  {product.quantity > 0 && product.quantity < 5 && (
+                    <span className="low-stock-badge">
+                      🔥 {product.quantity}개 남음
+                    </span>
+                  )}
+                </div>
 
-                {product.hot && (
-                  <span
-                    style={{ fontSize: "12px" }}
-                    className="badge hot-badge"
-                  >
-                    HOT
-                  </span>
-                )}
+                <div
+                  style={{ display: "flex", alignItems: "center", gap: "16px" }}
+                >
+                  <RxShare1
+                    size={28}
+                    style={{ cursor: "pointer" }}
+                    onClick={() => setShowShareModal(true)}
+                    title="공유하기"
+                  />
+                  <LikeButton size={32} productId={product.id} />
+                </div>
+              </div>
 
-                {/* 품절 뱃지 */}
-                {product.quantity === 0 && (
-                  <span className="sold-out-badge">SOLD OUT</span>
-                )}
+              {/* 가격 */}
+              <p style={{ fontSize: "1.25rem", fontWeight: "500" }}>
+                {product.price.toLocaleString()}원
+              </p>
 
-                {/* 재고 부족 뱃지 */}
-                {product.quantity > 0 && product.quantity < 5 && (
-                  <span className="low-stock-badge">
-                    🔥 {product.quantity}개 남음
-                  </span>
-                )}
-                {/* 공유 아이콘 버튼 */}
-                <RxShare1
-                  size={25}
-                  style={{ cursor: "pointer", marginLeft: "70px" }}
-                  onClick={() => setShowShareModal(true)}
-                  title="공유하기"
-                />
-                <LikeButton productId={product.id} />
-              </h2>
-              <p>{product.price.toLocaleString()}원</p>
+              {/* 상세 설명 */}
               <p
-                style={{ whiteSpace: "pre-line", fontSize: "12px" }}
+                style={{
+                  whiteSpace: "pre-line",
+                  fontSize: "1rem",
+                  lineHeight: "1.6",
+                }}
                 dangerouslySetInnerHTML={{ __html: product.info }}
               ></p>
+
               <hr />
 
               {/*옵션선택 드롭다운*/}
@@ -335,7 +362,8 @@ export function ProductDetail() {
                   key={index}
                   src={path}
                   alt={`상세 이미지 ${index + 1}`}
-                  className="product-detail-image"
+                  className="product-detail
+                  -image"
                 />
               ))}
             </div>
@@ -430,6 +458,6 @@ export function ProductDetail() {
         shareUrl={window.location.href}
         productName={product.productName}
       />
-    </Container>
+    </div>
   );
 }

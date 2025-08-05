@@ -4,7 +4,7 @@ import axios from "axios";
 import { GoHeart, GoHeartFill } from "react-icons/go";
 import { useNavigate } from "react-router";
 
-function LikeButton({ productId }) {
+function LikeButton({ productId, size = 40 }) {
   const [liked, setLiked] = useState(false);
   const [likeCount, setLikeCount] = useState(0);
   const navigate = useNavigate();
@@ -41,10 +41,19 @@ function LikeButton({ productId }) {
   return (
     <span
       onClick={handleToggleLike}
-      style={{ cursor: "pointer", marginLeft: "20px" }}
+      style={{
+        cursor: "pointer",
+        display: "inline-flex",
+        alignItems: "center",
+        gap: "6px",
+      }}
     >
-      {liked ? <GoHeartFill color="black" /> : <GoHeart />}
-      <span style={{ marginLeft: "5px" }}>{likeCount}</span>
+      {liked ? (
+        <GoHeartFill size={size} color="black" />
+      ) : (
+        <GoHeart size={size} />
+      )}
+      <span style={{ fontSize: "1.5rem" }}>{likeCount}</span>
     </span>
   );
 }
