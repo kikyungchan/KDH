@@ -29,6 +29,7 @@ export function FaQList() {
   const [title, setTitle] = useState();
   const [content, setContent] = useState();
   const [category, setCategory] = useState(null);
+  const [searchCategory, setsearchCategory] = useState("");
   const [searchParams, setSearchParams] = useSearchParams("1");
   const radios = [
     { name: "상품목록", value: "1", fnc: handleQnaAddButtonClick },
@@ -36,14 +37,14 @@ export function FaQList() {
     { name: "자주 묻는 질문", value: "3", fnc: handleFaQListButtonClick },
   ];
   const catlist = [
-    { name: "전체", value: "0" },
-    { name: "주문/결제", value: "1" },
-    { name: "배송관련", value: "2" },
-    { name: "취소/환불", value: "3" },
-    { name: "반품/교환", value: "4" },
-    { name: "증빙서류발급", value: "5" },
-    { name: "로그인/회원정보", value: "6" },
-    { name: "서비스/기타", value: "7" },
+    { name: "전체", value: 0 },
+    { name: "주문/결제", value: 1 },
+    { name: "배송관련", value: 2 },
+    { name: "취소/환불", value: 3 },
+    { name: "반품/교환", value: 4 },
+    { name: "증빙서류발급", value: 5 },
+    { name: "로그인/회원정보", value: 6 },
+    { name: "서비스/기타", value: 7 },
   ];
 
   useEffect(() => {
@@ -52,18 +53,20 @@ export function FaQList() {
       .then((res) => {
         setFaQList(res.data.faqList);
         setPageInfo(res.data.pageInfo);
-        console.log("data", res.data);
-        console.log("faqList", faqList);
+        // console.log("data : ", res.data);
+        setsearchCategory(searchParams.get("c") || 0);
+        // searchParams.set("c", searchCategory);
+        // const newSearchParams = new URLSearchParams();
+        // newSearchParams.set("c", searchCategory);
+        // newSearchParams.set("P", PAGE);
+        // newSearchParams.set("q", );
+        // setSearchParams(newSearchParams);
       })
       .catch((err) => {
         console.log(err.data);
       })
       .finally(() => {});
-    console.log("user : ", user);
-    console.log("user is null : ", user == null);
-    console.log("isAdmin1 : ", isAdmin && true);
-    console.log("isAdmin2 : ", user !== null && isAdmin);
-  }, []);
+  }, [searchParams]);
 
   const pageNumbers = [];
   if (pageInfo) {
@@ -76,6 +79,14 @@ export function FaQList() {
     const nextSearchParams = new URLSearchParams(searchParams);
     nextSearchParams.set("p", pageNumber);
     setSearchParams(nextSearchParams);
+  }
+
+  function handleCategoryButtonClick(value) {
+    // window.location = `/faq/list?c=${value}`;
+    const categorySearchParams = new URLSearchParams(searchParams);
+    categorySearchParams.set("c", value);
+    categorySearchParams.set("p", 1);
+    setSearchParams(categorySearchParams);
   }
 
   function handleQnaAddButtonClick() {
@@ -123,12 +134,85 @@ export function FaQList() {
       });
   }
 
+  // todo : add 유효성 검사 필요함
+
   return (
     <>
       <Row className="justify-content-center">
         <Col md={8} lg={9} className="mt-5">
           <div className="container">
             <h2 className="mb-4">자주 묻는 질문</h2>
+            <h2 className="text-2xl font-bold mb-4">무엇을 도와드릴까요?</h2>
+            <div>
+              <ul>
+                <li className="mb-2 py-0.7">
+                  <a
+                    href="/faq/list?c=2&#배송은+얼마나+걸리나요?"
+                    className="flex items-center text-blue-600 hover:underline"
+                  >
+                    <span className="bg-blue-100 text-blue-600 rounded-full w-5 h-5 flex items-center justify-center mr-2 text-xs font-bold">
+                      Q
+                    </span>
+                    배송은 얼마나 걸리나요?
+                  </a>
+                </li>
+                <li className="mb-2 py-0.7">
+                  <a
+                    href="/faq/list?c=3&#주문+취소는+어떻게+하나요"
+                    className="flex items-center text-blue-600 hover:underline"
+                  >
+                    <span className="bg-blue-100 text-blue-600 rounded-full w-5 h-5 flex items-center justify-center mr-2 text-xs font-bold">
+                      Q
+                    </span>
+                    주문 취소는 어떻게 하나요?
+                  </a>
+                </li>
+                <li className="mb-2 py-0.7">
+                  <a
+                    href="/faq/list?c=7&#제품의+자세한+정보는+어떻게+알+수+있나요"
+                    className="flex items-center text-blue-600 hover:underline"
+                  >
+                    <span className="bg-blue-100 text-blue-600 rounded-full w-5 h-5 flex items-center justify-center mr-2 text-xs font-bold">
+                      Q
+                    </span>
+                    제품의 자세한 정보를 알고 싶어요.
+                  </a>
+                </li>
+                <li className="mb-2 py-0.7">
+                  <a
+                    href="/faq/list?c=4&#제품이+불량입니다.+반품+혹은+교환은+어떻게+하나요"
+                    className="flex items-center text-blue-600 hover:underline"
+                  >
+                    <span className="bg-blue-100 text-blue-600 rounded-full w-5 h-5 flex items-center justify-center mr-2 text-xs font-bold">
+                      Q
+                    </span>
+                    제품이 불량일 때는?
+                  </a>
+                </li>
+                <li className="mb-2 py-0.7">
+                  <a
+                    href="/faq/list?c=6&#카카오+계정으로+로그인+하면+&amp;#39;이미+카카오로+가입하신+이메일입니다&amp;#39;+라고+나오는데+어떻게+해야+하나요"
+                    className="flex items-center text-blue-600 hover:underline"
+                  >
+                    <span className="bg-blue-100 text-blue-600 rounded-full w-5 h-5 flex items-center justify-center mr-2 text-xs font-bold">
+                      Q
+                    </span>
+                    카카오 계정으로 로그인하면 이미 가입되었다고 합니다.
+                  </a>
+                </li>
+              </ul>
+              <div className="flex space-x-2">
+                <button className="btn btn-default btn-outline shadow-md">
+                  1:1 상담하기
+                </button>
+                <a href="/contacts/new" className="btn btn-outline">
+                  이메일 문의하기
+                </a>
+                <button className="btn btn-outline">
+                  이메일 주소 복사하기
+                </button>
+              </div>
+            </div>
             <div>
               <ButtonGroup>
                 {radios.map((radio, idx) => (
@@ -148,15 +232,16 @@ export function FaQList() {
             <div>
               <nav className="pt-10 px-6 pb-0">
                 {catlist.map((cat, idx) => (
-                  <label for={cat.name}>
+                  <label for={cat.name} key={cat.name}>
                     <button
                       id={cat.name}
                       type="checkbox"
-                      className="btn btn-outline mx-1 rounded-full"
-                      onClick={""}
+                      className={`btn btn-primary mx-1 rounded-full
+                      ${searchCategory == cat.value ? "" : "btn-outline"}`}
+                      // onClick={() => setsearchCategory(cat.value)}
+                      onClick={() => handleCategoryButtonClick(cat.value)}
                     >
                       {/*  todo : 카테고리별 검색 기능 구현 */}
-
                       {cat.name}
                     </button>
                   </label>
@@ -168,14 +253,14 @@ export function FaQList() {
               <>
                 {faqList.map((faq) => (
                   <div className="collapse collapse-plus bg-base-100 border border-base-300">
-                    <input type="checkbox" name="faqlist" className="w-full" />
+                    <input
+                      id={faq.question}
+                      type="checkbox"
+                      name="faqlist"
+                      className="w-full"
+                    />
                     <div className="collapse-title font-semibold flex items-center">
-                      <span
-                        className="
-                      faq_question text-[#1B64DA]
-                      inline-block shadow-md border-1
-                      border-gray-300 px-2 py-1 rounded-full me-2"
-                      >
+                      <span className="bg-blue-100 text-blue-600 rounded-full w-5 h-5 flex items-center justify-center mr-2 text-xs font-bold">
                         Q
                       </span>
                       <span> {faq.question}</span>

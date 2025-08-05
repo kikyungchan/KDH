@@ -25,6 +25,10 @@ public class FaqController {
             @RequestParam(value = "c", required = false) Integer category,
             @RequestParam(value = "p", defaultValue = "1") Integer pageNumber) {
 
+        if (category != null && category == 0) {
+            category = null;
+        }
+
 
         return faqService.list(keyword, category, pageNumber);
     }
