@@ -104,20 +104,15 @@ function NavBar(props) {
             user={user}
             iconRef={iconRef}
             onSearchToggle={() => setShowSearch((prev) => !prev)}
+            showSearch={showSearch}
+            setShowSearch={setShowSearch}
+            keyword={keyword}
+            setKeyword={setKeyword}
+            searchRef={searchRef}
+            navigate={navigate}
           />
         </div>
       </nav>
-      {/* 돋보기 눌렀을떄 나오는 검색창 */}
-      <SearchBar
-        showSearch={showSearch}
-        setShowSearch={setShowSearch}
-        keyword={keyword}
-        setKeyword={setKeyword}
-        searchRef={searchRef}
-        iconRef={iconRef}
-        navigate={navigate}
-      />
-
       {/* 모바일 메뉴 드롭다운 */}
       {isMobileMenuOpen && (
         <div className="mobile-menu" ref={menuRef}>

@@ -13,7 +13,7 @@ function SearchBar({
   return (
     <div
       ref={searchRef}
-      className={`search-bar-wrapper ${showSearch ? "active" : ""}`}
+      className={`search-bar-popup ${showSearch ? "active" : ""}`}
     >
       <FiChevronLeft
         className="search-close-icon"

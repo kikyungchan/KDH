@@ -1,10 +1,21 @@
 import React from "react";
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
 import { FiSearch, FiUser, FiShoppingCart } from "react-icons/fi";
 import { useCart } from "../../Product/CartContext.jsx";
+import SearchBar from "./SearchBar.jsx";
 
-function NavRight({ user, iconRef, onSearchToggle }) {
+function NavRight({
+  user,
+  iconRef,
+  onSearchToggle,
+  showSearch,
+  setShowSearch,
+  keyword,
+  setKeyword,
+  searchRef,
+}) {
   const { cartCount } = useCart();
+  const navigate = useNavigate();
 
   return (
     <div className="navbar-right">
@@ -14,6 +25,15 @@ function NavRight({ user, iconRef, onSearchToggle }) {
           className="navbar-icon"
           onClick={onSearchToggle}
           style={{ cursor: "pointer" }}
+        />
+        <SearchBar
+          showSearch={showSearch}
+          setShowSearch={setShowSearch}
+          keyword={keyword}
+          setKeyword={setKeyword}
+          searchRef={searchRef}
+          iconRef={iconRef}
+          navigate={navigate}
         />
         <Link to={user ? `/member?id=${user.id}` : "/login"}>
           <FiUser className="navbar-icon" />
