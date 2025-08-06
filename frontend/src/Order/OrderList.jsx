@@ -27,7 +27,7 @@ export function OrderList() {
   return (
     <div className="bg-gray-100 min-h-screen">
       <div className="flex justify-center items-start pt-10">
-        <div className="w-full max-w-[800px] mx-auto px-4">
+        <div className="w-full max-w-[600px] mx-auto px-4">
           <div className="px-8 py-6 shadow rounded-2xl bg-white">
             <div>
               <h2 className="mb-6 text-center text-2xl font-semibold">주문 목록</h2>
