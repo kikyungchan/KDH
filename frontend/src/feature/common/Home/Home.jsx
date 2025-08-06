@@ -10,26 +10,30 @@ import BestProductSection from "./BestProductSection.jsx";
 
 function Home() {
   const navigate = useNavigate();
-  const [leftVisual, setLeftVisual] = useState();
+  const [leftVisual, setLeftVisual] = useState(null);
   const [currentIndex, setCurrentIndex] = useState(1);
   const [shuffledItems, setShuffledItems] = useState([]);
   const swiperRef = useRef(null);
 
   useEffect(() => {
+    // 좌측배너
+    axios
+      .get("/api/product/main-thumbnail-random")
+      .then((res) => {
+        setLeftVisual(res.data);
+      })
+      .catch((err) => console.error("좌측 비주얼 로딩 실패:", err));
+
+    // 우측배너
     axios
       .get("/api/product/hot-random")
       .then((res) => {
         const sliced = res.data.slice(0, 10);
-
-        // 좌측용 랜덤 하나
-        const randomOne = sliced[Math.floor(Math.random() * sliced.length)];
-        setLeftVisual(randomOne);
         const messages = [
           "첫구매 최대 2만원 할인!",
           "인기상품 특가!",
           "한정 수량 할인!",
         ];
-        // 우측용 무작위 순서
         const shuffled = [...sliced]
           .sort(() => Math.random() - 0.5)
           .map((item) => ({
@@ -46,11 +50,11 @@ function Home() {
       <div className="container">
         <section className="main-visual-row">
           {/* 좌측 비주얼 */}
-          <div className="main-visual-box">
-            {leftVisual && (
+          {leftVisual && (
+            <div className="main-visual-box">
               <>
                 <img
-                  src={leftVisual.thumbnailUrl}
+                  src={leftVisual.storedPath}
                   onClick={() => navigate(`/product/view?id=${leftVisual.id}`)}
                   alt="HOT 상품"
                   className="main-visual-img"
@@ -60,8 +64,8 @@ function Home() {
                   <p>by. KDH 쇼핑몰</p>
                 </div>
               </>
-            )}
-          </div>
+            </div>
+          )}
 
           {/* 우측 HOT 슬라이드 */}
           <div className="hot-items-carousel">

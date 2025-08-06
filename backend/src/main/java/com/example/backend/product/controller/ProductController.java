@@ -5,8 +5,10 @@ import com.example.backend.member.repository.MemberRepository;
 import com.example.backend.product.dto.*;
 import com.example.backend.product.entity.GuestOrder;
 import com.example.backend.product.entity.Product;
+import com.example.backend.product.entity.ProductThumbnail;
 import com.example.backend.product.repository.GuestOrderRepository;
 import com.example.backend.product.repository.ProductRepository;
+import com.example.backend.product.repository.ProductThumbnailRepository;
 import com.example.backend.product.service.ProductService;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -35,6 +37,7 @@ public class ProductController {
     private final MemberRepository memberRepository;
     private final GuestOrderRepository guestOrderRepository;
     private final ProductRepository productRepository;
+    private final ProductThumbnailRepository productThumbnailRepository;
 
     public class OrderTokenGenerator {
         private static final SecureRandom random = new SecureRandom();
@@ -197,6 +200,20 @@ public class ProductController {
             result.add(dto);
         }
         return ResponseEntity.ok(result);
+    }
+
+    @GetMapping("/main-thumbnail-random")
+    public ResponseEntity<ThumbnailDto> getRandomMainThumbnail() {
+        List<ProductThumbnail> mainThumbnails = productThumbnailRepository.findByIsMainTrue();
+        if (mainThumbnails.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+
+        ProductThumbnail randomThumbnail = mainThumbnails.get(new SecureRandom().nextInt(mainThumbnails.size()));
+        ThumbnailDto dto = new ThumbnailDto();
+        dto.setStoredPath(randomThumbnail.getStoredPath());
+        dto.setIsMain(true);
+        return ResponseEntity.ok(dto);
     }
 
     @GetMapping("/best")
