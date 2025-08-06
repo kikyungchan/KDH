@@ -38,9 +38,6 @@ function NavRight({
           style={{ cursor: "pointer" }}
         />
         <NavUserMenu user={user} logout={logout} isAdmin={isAdmin} />
-        <Link to={user ? `/member?id=${user.id}` : "/login"}>
-          <FiUser className="navbar-icon" />
-        </Link>
         <Link to="/product/cart" className="cart-icon-wrapper">
           <FiShoppingCart className="navbar-icon" />
           {cartCount > 0 && <span className="cart-badge">{cartCount}</span>}

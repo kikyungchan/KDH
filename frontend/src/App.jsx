@@ -26,60 +26,59 @@ import { ResetPassword } from "./feature/Member/ResetPassword.jsx";
 import { MemberLogout } from "./feature/Member/MemberLogout.jsx";
 import { ProductOrderComplete } from "./feature/Product/ProductOrderComplete.jsx";
 import { CartProvider } from "./feature/Product/CartContext.jsx";
-import MainPage from "./feature/common/MainPage.jsx";
 import Main from "./feature/common/Main.jsx";
 import ImageSlide from "./feature/common/CoverImageSlide/ImageSlide.jsx";
 import Home from "./feature/common/Home/Home.jsx";
-import {AlertProvider} from "./feature/common/AlertContext.jsx";
-import {OrderList} from "./Order/OrderList.jsx";
-import {OrderDetail} from "./Order/OrderDetail.jsx";
+import { AlertProvider } from "./feature/common/AlertContext.jsx";
+import { OrderList } from "./Order/OrderList.jsx";
+import { OrderDetail } from "./Order/OrderDetail.jsx";
 
 function App() {
   // const username = prompt("닉네임을 입력해 주세요");
   return (
     <AlertProvider>
-    <AuthenticationContextProvider>
-      <BrowserRouter>
-        <CartProvider>
-          <Routes>
-            <Route path="/" element={<Main />}>
-              <Route index element={<ImageSlide />} />
-              <Route path="/Home" element={<Home />} />
-              <Route path="product/regist" element={<ProductRegist />} />
-              <Route path="product/list" element={<ProductList />} />
-              <Route path="product/view" element={<ProductDetail />} />
-              <Route path="product/edit" element={<ProductEdit />} />
-              <Route path="product/order" element={<ProductOrder />} />
-              <Route path="product/cart" element={<ProductCart />} />
-              <Route
-                path="product/order/complete"
-                element={<ProductOrderComplete />}
-              />
-              <Route path="/product/order/list" element={<OrderList/>}/>
-              <Route path="/product/order/detail" element={<OrderDetail/>}/>
-              <Route path="/member/edit" element={<MemberEdit />} />
-              <Route path="/member/list" element={<MemberList />} />
-              <Route path="/member" element={<MemberDetail />} />
-              <Route path="/signup" element={<MemberAdd />} />
-              <Route path="/login" element={<MemberLogin />} />
-              <Route path="/logout" element={<MemberLogout />} />
-              <Route path="/find/id" element={<FindLoginId />} />
-              <Route path="/find/password" element={<FindPassword />} />
-              <Route path="/reset-password" element={<ResetPassword />} />
-              <Route path="/qna/addAns" element={<AnsAdd />} />
-              <Route path="/qna/add/:id" element={<QnaAdd />} />
-              <Route path="/qna/list" element={<QnaList />} />
-              <Route path="/qna/view" element={<QnaView />} />
-              <Route path="/faq/list" element={<FaQList />} />
-              <Route path="chat/chatting" element={<Chat />} />
-              <Route path="pay/Checkout" element={<CheckoutPage />} />
-              <Route path="pay/success" element={<SuccessPage />} />
-              <Route path="pay/fail" element={<FailPage />} />
-            </Route>
-          </Routes>
-        </CartProvider>
-      </BrowserRouter>
-    </AuthenticationContextProvider>
+      <AuthenticationContextProvider>
+        <BrowserRouter>
+          <CartProvider>
+            <Routes>
+              <Route path="/" element={<Main />}>
+                <Route index element={<ImageSlide />} />
+                <Route path="/Home" element={<Home />} />
+                <Route path="product/regist" element={<ProductRegist />} />
+                <Route path="product/list" element={<ProductList />} />
+                <Route path="product/view" element={<ProductDetail />} />
+                <Route path="product/edit" element={<ProductEdit />} />
+                <Route path="product/order" element={<ProductOrder />} />
+                <Route path="product/cart" element={<ProductCart />} />
+                <Route
+                  path="product/order/complete"
+                  element={<ProductOrderComplete />}
+                />
+                <Route path="/product/order/list" element={<OrderList />} />
+                <Route path="/product/order/detail" element={<OrderDetail />} />
+                <Route path="/member/edit" element={<MemberEdit />} />
+                <Route path="/member/list" element={<MemberList />} />
+                <Route path="/member" element={<MemberDetail />} />
+                <Route path="/signup" element={<MemberAdd />} />
+                <Route path="/login" element={<MemberLogin />} />
+                <Route path="/logout" element={<MemberLogout />} />
+                <Route path="/find/id" element={<FindLoginId />} />
+                <Route path="/find/password" element={<FindPassword />} />
+                <Route path="/reset-password" element={<ResetPassword />} />
+                <Route path="/qna/addAns" element={<AnsAdd />} />
+                <Route path="/qna/add/:id" element={<QnaAdd />} />
+                <Route path="/qna/list" element={<QnaList />} />
+                <Route path="/qna/view" element={<QnaView />} />
+                <Route path="/faq/list" element={<FaQList />} />
+                <Route path="chat/chatting" element={<Chat />} />
+                <Route path="pay/Checkout" element={<CheckoutPage />} />
+                <Route path="pay/success" element={<SuccessPage />} />
+                <Route path="pay/fail" element={<FailPage />} />
+              </Route>
+            </Routes>
+          </CartProvider>
+        </BrowserRouter>
+      </AuthenticationContextProvider>
     </AlertProvider>
   );
 }
