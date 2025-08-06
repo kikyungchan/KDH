@@ -75,12 +75,6 @@ export function FaQList() {
     }
   }
 
-  function handlePageNumberClick(pageNumber) {
-    const nextSearchParams = new URLSearchParams(searchParams);
-    nextSearchParams.set("p", pageNumber);
-    setSearchParams(nextSearchParams);
-  }
-
   function handleCategoryButtonClick(value) {
     // window.location = `/faq/list?c=${value}`;
     const categorySearchParams = new URLSearchParams(searchParams);
@@ -290,57 +284,26 @@ export function FaQList() {
                 작성된 글이 없습니다. <br />새 글을 작성해 보세요.
               </p>
             )}
-          </div>
-          <br />
-          <div>
-            {/*todo : 관리자인지 여부 확인*/}
-            {isAdmin && (
-              // <Button className="btn-primary" onClick={setModalShow}>
-              //   등록하기
-              // </Button>
-              <button
-                className="btn btn-accent"
-                onClick={() =>
-                  document.getElementById("my_modal_1").showModal()
-                }
-              >
-                등록하기
-              </button>
-            )}
+            <br />
+            <div>
+              {/*todo : 관리자인지 여부 확인*/}
+              {isAdmin && (
+                // <Button className="btn-primary" onClick={setModalShow}>
+                //   등록하기
+                // </Button>
+                <button
+                  className="btn btn-accent"
+                  onClick={() =>
+                    document.getElementById("my_modal_1").showModal()
+                  }
+                >
+                  등록하기
+                </button>
+              )}
+            </div>
           </div>
         </Col>
         {/*  todo : admin 확인되면 modal 띄워서 자주 묻는 질문 CUD 할 수 있게 기능 추가*/}
-
-        {/*<Modal show={modalShow}>
-          <Modal.Header>
-            <Modal.Title>FaQ 등록</Modal.Title>
-          </Modal.Header>
-          <Modal.Body>
-            <FormGroup controlId="title">
-              <FormLabel>faq 질문</FormLabel>
-              <FormControl
-                value={title}
-                onChange={(e) => setTitle(e.target.value)}
-              ></FormControl>
-            </FormGroup>
-            <FormGroup controlId="content">
-              <FormLabel>faq 답변</FormLabel>
-              <FormControl
-                as="textarea"
-                value={content}
-                onChange={(e) => setContent(e.target.value)}
-              ></FormControl>
-            </FormGroup>
-          </Modal.Body>
-          <Modal.Footer>
-            <Button variant="outline-dark" onClick={() => setModalShow(false)}>
-              취소
-            </Button>
-            <Button variant="primary" onClick={handleSaveButtonClick}>
-              등록
-            </Button>
-          </Modal.Footer>
-        </Modal>*/}
 
         <dialog id="my_modal_1" className="modal">
           <div className="modal-box">
@@ -394,60 +357,6 @@ export function FaQList() {
           </div>
         </dialog>
       </Row>
-      <div className="my-3 flex justify-center">
-        <div className="join">
-          {/* First Page */}
-          <button
-            className="join-item btn"
-            disabled={pageInfo.currentPageNumber === 1}
-            onClick={() => handlePageNumberClick(1)}
-          >
-            «
-          </button>
-
-          {/* Previous Page */}
-          <button
-            className="join-item btn"
-            disabled={pageInfo.leftPageNumber <= 1}
-            onClick={() => handlePageNumberClick(pageInfo.leftPageNumber - 10)}
-          >
-            ‹
-          </button>
-
-          {/* Page Numbers */}
-          {pageNumbers.map((pageNumber) => (
-            <button
-              key={pageNumber}
-              className={
-                pageInfo.currentPageNumber === pageNumber
-                  ? "join-item btn btn-active"
-                  : "join-item btn"
-              }
-              onClick={() => handlePageNumberClick(pageNumber)}
-            >
-              {pageNumber}
-            </button>
-          ))}
-
-          {/* Next Page */}
-          <button
-            className="join-item btn"
-            disabled={pageInfo.rightPageNumber >= pageInfo.totalPages}
-            onClick={() => handlePageNumberClick(pageInfo.rightPageNumber + 1)}
-          >
-            ›
-          </button>
-
-          {/* Last Page */}
-          <button
-            className="join-item btn"
-            disabled={pageInfo.currentPageNumber === pageInfo.totalPages}
-            onClick={() => handlePageNumberClick(pageInfo.totalPages)}
-          >
-            »
-          </button>
-        </div>
-      </div>
     </>
   );
 }
