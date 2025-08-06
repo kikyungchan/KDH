@@ -6,7 +6,6 @@ export function OrderList() {
   const [orderList, setOrderList] = useState([]);
   const [page, setPage] = useState(0);
   const [totalPages, setTotalPages] = useState(1);
-  const [orderItems, setOrderItems] = useState([]);
   const [isProcessing, setIsProcessing] = useState(true);
   const navigate = useNavigate();
 
@@ -31,7 +30,7 @@ export function OrderList() {
       <div className="flex justify-center items-start pt-10">
         <div className="w-full max-w-[600px] mx-auto px-4">
           <div className="px-8 py-6 shadow rounded-2xl bg-white">
-            <div className="mb-6">
+            <div className="mb-8">
               <h2 className="mb-6 text-center text-2xl font-bold">주문 목록</h2>
               <br/>
               <div className="flex justify-content-between text-lg font-semibold">
@@ -75,9 +74,7 @@ export function OrderList() {
                       </div>
                     )}
                   </div>
-                  <br/>
-                  <hr/>
-                  <br/>
+                  <hr className="border-t border-gray-300 my-4" />
                 </Fragment>
               ))
             )}

@@ -55,7 +55,7 @@ function App() {
                   element={<ProductOrderComplete />}
                 />
                 <Route path="/product/order/list" element={<OrderList />} />
-                <Route path="/product/order/detail" element={<OrderDetail />} />
+                <Route path="/product/order/detail/:orderToken" element={<OrderDetail />} />
                 <Route path="/member/edit" element={<MemberEdit />} />
                 <Route path="/member/list" element={<MemberList />} />
                 <Route path="/member" element={<MemberDetail />} />
