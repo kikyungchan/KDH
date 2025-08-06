@@ -1,0 +1,58 @@
+.best-product-section {
+    margin-top: 50px;
+    padding: 0 1rem;
+}
+
+.best-title {
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin-bottom: 2rem;
+}
+
+.best-product-list {
+    display: flex;
+    gap: 24px;
+    overflow-x: auto;
+
+}
+
+.best-product-rating {
+    font-size: 14px;
+    color: black;
+    margin-top: 5px;
+}
+
+
+.best-product-card {
+    width: 350px;
+    height: auto;
+    gap: 1rem;
+    /*border: 1px solid #ddd;*/
+    border-radius: 12px;
+    overflow: hidden;
+    /*background-color: black;*/
+    cursor: pointer;
+    padding: 10px;
+    flex-shrink: 0;
+    border: 1px solid;
+}
+
+.best-product-img {
+    width: 100%;
+    height: 270px;
+    object-fit: cover;
+    border-radius: 8px;
+}
+
+.best-product-name {
+    margin-top: 10px;
+    font-size: 1.1rem;
+    font-weight: 500;
+}
+
+.best-product-price {
+    font-size: 1.1rem;
+    font-weight: bold;
+    margin-top: 4px;
+    color: #111;
+}

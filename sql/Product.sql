@@ -1,32 +1,35 @@
-# 상품 테이블
+#
+상품 테이블
 CREATE TABLE product
 (
     id           INT AUTO_INCREMENT NOT NULL,
-    product_name VARCHAR(500)       NOT NULL,
-    price        INT                NOT NULL,
-    category     VARCHAR(255)       NOT NULL,
-    info         VARCHAR(10000)     NULL,
-    quantity     INT                NOT NULL,
-    inserted_at  datetime           NOT NULL DEFAULT NOW(),
+    product_name VARCHAR(500) NOT NULL,
+    price        INT          NOT NULL,
+    category     VARCHAR(255) NOT NULL,
+    info         VARCHAR(10000) NULL,
+    quantity     INT          NOT NULL,
+    inserted_at  datetime     NOT NULL DEFAULT NOW(),
     CONSTRAINT pk_product PRIMARY KEY (id)
 );
 ALTER TABLE product
     MODIFY price INT NOT NULL;
 
-#상품 이미지를저장할 테이블
+#상품
+이미지를저장할 테이블
 CREATE TABLE product_image
 (
     id                 INT AUTO_INCREMENT NOT NULL,
-    stored_path        VARCHAR(500)       NOT NULL,
-    original_file_name VARCHAR(500)       NOT NULL,
-    product_id         INT                NOT NULL,
+    stored_path        VARCHAR(500) NOT NULL,
+    original_file_name VARCHAR(500) NOT NULL,
+    product_id         INT          NOT NULL,
     CONSTRAINT pk_productimage PRIMARY KEY (id)
 );
 
 ALTER TABLE product_image
     ADD CONSTRAINT FK_PRODUCTIMAGE_ON_PRODUCT FOREIGN KEY (product_id) REFERENCES product (id);
 
-# 페이징용더미데이터복사
+#
+페이징용더미데이터복사
 INSERT INTO product (product_name, price, category, info, quantity)
 SELECT CONCAT(product_name), price, category, info, quantity
 FROM product;
@@ -35,9 +38,9 @@ FROM product;
 CREATE TABLE product_option
 (
     id          INT AUTO_INCREMENT NOT NULL,
-    option_name VARCHAR(255)       NOT NULL,
-    price       INT                NOT NULL,
-    product_id  INT                NOT NULL,
+    option_name VARCHAR(255) NOT NULL,
+    price       INT          NOT NULL,
+    product_id  INT          NOT NULL,
     CONSTRAINT pk_product_option PRIMARY KEY (id)
 );
 
@@ -48,27 +51,30 @@ ALTER TABLE product_option
     MODIFY COLUMN id INT NOT NULL AUTO_INCREMENT;
 
 
-# 장바구니 테이블
+#
+장바구니 테이블
 CREATE TABLE cart
 (
     id          INT AUTO_INCREMENT NOT NULL,
-    product_id  INT                NOT NULL,
-    option_id   INT                NOT NULL,
-    quantity    INT                NOT NULL,
-    inserted_at datetime           NOT NULL DEFAULT NOW(),
+    product_id  INT      NOT NULL,
+    option_id   INT      NOT NULL,
+    quantity    INT      NOT NULL,
+    inserted_at datetime NOT NULL DEFAULT NOW(),
     CONSTRAINT pk_cart PRIMARY KEY (id)
 );
 ALTER TABLE cart
     MODIFY COLUMN option_id INT NULL;
 
-# 외래키
+#
+외래키
 ALTER TABLE cart
     ADD CONSTRAINT FK_CART_ON_OPTION FOREIGN KEY (option_id) REFERENCES product_option (id);
 
 ALTER TABLE cart
     ADD CONSTRAINT FK_CART_ON_PRODUCT FOREIGN KEY (product_id) REFERENCES product (id);
 
-# order(주문정보) 테이블
+#
+order(주문정보) 테이블
 CREATE TABLE orders
 (
     id               INT AUTO_INCREMENT PRIMARY KEY,
@@ -88,13 +94,14 @@ ALTER TABLE orders
 ALTER TABLE orders
     ADD COLUMN address_detail VARCHAR(255);
 ALTER TABLE orders
-    ADD COLUMN login_id    VARCHAR(30) NOT NULL,
+    ADD COLUMN login_id VARCHAR(30) NOT NULL,
     ADD COLUMN member_name VARCHAR(50) NOT NULL;
 ALTER TABLE orders
     ADD COLUMN product_name VARCHAR(255),
     ADD COLUMN option_name  VARCHAR(255);
 
-# 비회원 주문정보 테이블
+#
+비회원 주문정보 테이블
 CREATE TABLE guest_orders
 (
     id                INT PRIMARY KEY AUTO_INCREMENT,
@@ -121,7 +128,8 @@ ALTER TABLE guest_orders
 
 
 
-# order_item(주문상세)
+#
+order_item(주문상세)
 # price: 주문 시점의 옵션 가격 (가격 변경 이력 보존용)
 # 외래키로 orders, product, product_option 참조
 CREATE TABLE order_item
@@ -151,21 +159,23 @@ ALTER TABLE order_item
 ALTER TABLE product
     ADD detail_text VARCHAR(5000) NULL;
 
-# 리뷰 테이블
+#
+리뷰 테이블
 CREATE TABLE product_comment
 (
     id         INT AUTO_INCREMENT NOT NULL,
-    product_id INT                NULL,
-    member_id  INT                NULL,
-    content    TEXT               NOT NULL,
-    created_at datetime           NULL,
+    product_id INT NULL,
+    member_id  INT NULL,
+    content    TEXT NOT NULL,
+    created_at datetime NULL,
     CONSTRAINT pk_product_comment PRIMARY KEY (id)
 );
 
 ALTER TABLE product_comment
     MODIFY created_at datetime null default now();
 
-# 리뷰테이블에 별점칼럼 추가
+#
+리뷰테이블에 별점칼럼 추가
 ALTER TABLE product_comment
     ADD COLUMN rating INT NOT NULL;
 
@@ -173,17 +183,19 @@ ALTER TABLE orders
     ADD COLUMN product_id INT;
 
 ALTER TABLE orders
-    DROP COLUMN product_id;
+DROP
+COLUMN product_id;
 
 ALTER TABLE orders
     ADD COLUMN created_at DATETIME NOT NULL DEFAULT NOW();
 
-# 좋아요 테이블
+#
+좋아요 테이블
 CREATE TABLE product_like
 (
     id         INT AUTO_INCREMENT NOT NULL,
-    member_id  INT                NULL,
-    product_id INT                NULL,
+    member_id  INT NULL,
+    product_id INT NULL,
     CONSTRAINT pk_product_like PRIMARY KEY (id)
 );
 
@@ -195,3 +207,20 @@ ALTER TABLE product_like
 
 ALTER TABLE product_like
     ADD CONSTRAINT FK_PRODUCT_LIKE_ON_PRODUCT FOREIGN KEY (product_id) REFERENCES product (id);
+
+CREATE TABLE product_thumbnail
+(
+    id                 INT AUTO_INCREMENT NOT NULL,
+    stored_path        VARCHAR(1000) NOT NULL,
+    original_file_name VARCHAR(1000) NOT NULL,
+    product_id         INT           NOT NULL,
+    is_main            BOOLEAN       NOT NULL DEFAULT FALSE,
+    PRIMARY KEY (id),
+    CONSTRAINT fk_product_thumbnail_product
+        FOREIGN KEY (product_id)
+            REFERENCES product (id)
+            ON DELETE CASCADE
+);
+
+ALTER TABLE product_thumbnail
+    ADD CONSTRAINT FK_PRODUCT_THUMBNAIL_ON_PRODUCT FOREIGN KEY (product_id) REFERENCES product (id);

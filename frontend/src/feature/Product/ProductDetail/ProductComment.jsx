@@ -198,8 +198,18 @@ function ReviewSection({ productId, onReviewChange }) {
               ></textarea>
 
               <div style={{ marginTop: "8px" }}>
-                <button onClick={() => submitEdit(c.id)}>저장</button>
-                <button onClick={() => setEditTargetId(null)}>취소</button>
+                <button
+                  className="btn btn-sm btn-outline"
+                  onClick={() => submitEdit(c.id)}
+                >
+                  저장
+                </button>
+                <button
+                  className="btn btn-sm btn-outline"
+                  onClick={() => setEditTargetId(null)}
+                >
+                  취소
+                </button>
               </div>
             </>
           ) : (
@@ -223,8 +233,18 @@ function ReviewSection({ productId, onReviewChange }) {
 
               {c.memberId === currentUserId && (
                 <div style={{ marginTop: "5px" }}>
-                  <button onClick={() => handleEdit(c)}>수정</button>
-                  <button onClick={() => handleDelete(c.id)}>삭제</button>
+                  <button
+                    className="btn btn-sm btn-outline"
+                    onClick={() => handleEdit(c)}
+                  >
+                    수정
+                  </button>
+                  <button
+                    className="btn btn-sm btn-outline"
+                    onClick={() => handleDelete(c.id)}
+                  >
+                    삭제
+                  </button>
                 </div>
               )}
               <hr />

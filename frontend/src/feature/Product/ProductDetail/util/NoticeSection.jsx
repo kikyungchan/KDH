@@ -8,12 +8,14 @@ function NoticeSection({ style }) {
         display: "flex",
         justifyContent: "center",
         width: "100%",
-        fontSize: "13px",
+        fontSize: "15px",
         ...style,
       }}
     >
       <div style={{ marginTop: "35px", width: "75%" }}>
-        <h2 className="mt-5">NOTICE</h2>
+        <h2 className="mt-3" style={{ fontSize: "1.8rem", fontWeight: "bold" }}>
+          NOTICE
+        </h2>
         <Row>
           <Col>
             {noticeData.sections.map((section, idx) => (

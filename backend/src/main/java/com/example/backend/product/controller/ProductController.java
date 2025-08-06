@@ -143,8 +143,9 @@ public class ProductController {
     @GetMapping("/list")
     public ResponseEntity<?> list(@RequestParam(defaultValue = "1") Integer page,
                                   @RequestParam(required = false) String keyword,
-                                  @RequestParam(required = false) String sort) {
-        return ResponseEntity.ok(productService.list(page, keyword, sort));
+                                  @RequestParam(required = false) String sort,
+                                  @RequestParam(required = false) String category) {
+        return ResponseEntity.ok(productService.list(page, keyword, sort, category));
     }
 
     @PostMapping(value = "/regist", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
@@ -155,7 +156,8 @@ public class ProductController {
                                     @RequestParam String info,
                                     @RequestParam String options,
                                     @RequestParam String detailText,
-                                    @RequestParam("images") List<MultipartFile> images) {
+                                    @RequestParam("thumbnails") List<MultipartFile> thumbnails,
+                                    @RequestParam("detailImages") List<MultipartFile> detailImages) {
         ObjectMapper objectMapper = new ObjectMapper();
         List<ProductOptionDto> optionList;
         try {
@@ -164,14 +166,15 @@ public class ProductController {
         } catch (Exception e) {
             return ResponseEntity.badRequest().body("오류가 발생하였습니다.");
         }
-        ProductForm form = new ProductForm();
+        ProductRegistDto form = new ProductRegistDto();
         form.setProductName(productName);
         form.setPrice(price);
         form.setQuantity(quantity);
         form.setCategory(category);
         form.setInfo(info);
         form.setOptions(optionList);
-        form.setImages(images);
+        form.setThumbnails(thumbnails);
+        form.setDetailImages(detailImages);
         form.setDetailText(detailText);
 
         productService.add(form);
@@ -192,4 +195,9 @@ public class ProductController {
         return ResponseEntity.ok(result);
     }
 
+    @GetMapping("/best")
+    public ResponseEntity<List<ProductBestDto>> getTopProducts() {
+        List<ProductBestDto> topProducts = productService.getTopSellingProducts();
+        return ResponseEntity.ok(topProducts);
+    }
 }

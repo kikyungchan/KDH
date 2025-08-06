@@ -1,0 +1,146 @@
+/*메인 비주얼 박*/
+.main-visual {
+    margin-top: 20px;
+    margin-bottom: 60px;
+}
+
+.main-visual-row {
+    display: flex;
+    width: 100%;
+    gap: 16px;
+    margin-top: 20px;
+    margin-bottom: 60px;
+    align-items: stretch;
+}
+
+.main-visual-box {
+    position: relative;
+    width: 70%;
+    height: 600px;
+    overflow: hidden;
+    border-radius: 6px;
+    border: 1px solid black;
+}
+
+.main-visual-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    cursor: pointer;
+    transition: transform 0.2s ease;
+}
+
+.main-visual-img:hover {
+    transform: scale(1.05); /* 확대 효과 */
+}
+
+.main-visual-text {
+    font-size: 1.2rem;
+    position: absolute;
+    bottom: 20px;
+    left: 30px;
+    color: white;
+    text-shadow: 0 0 8px rgba(0, 0, 0, 0.6);
+}
+
+/* 우측 HOT 슬라이드 영역 */
+.hot-items-carousel {
+    width: 30%;
+    height: 600px; /* 왼쪽 메인 비주얼 박스 높이에 맞춤 */
+    position: relative;
+    overflow: hidden;
+    border: 1px solid black;
+    border-radius: 6px;
+}
+
+/* Swiper 구성요소들 높이 맞춰줌 */
+.hot-items-carousel .swiper,
+.hot-items-carousel .swiper-wrapper,
+.hot-items-carousel .swiper-slide {
+    height: 100%;
+}
+
+/* 슬라이드 안 썸네일 이미지 */
+.hot-thumbnail {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    border-radius: 6px;
+    overflow: hidden;
+    cursor: pointer;
+}
+
+.hot-thumbnail img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.2s ease;
+    display: block;
+    border-radius: 6px;
+}
+
+.hot-thumbnail:hover img {
+    transform: scale(1.05);
+}
+
+/* 서브비주얼박스 좌우측 버튼*/
+.custom-nav-btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 20;
+    background-color: rgba(255, 255, 255, 0.9);
+    border: none;
+    width: 32px;
+    height: 32px;
+    border-radius: 9999px;
+    font-size: 18px;
+    font-weight: bold;
+    cursor: pointer;
+    opacity: 0;
+    pointer-events: none;
+    transition: all 0.3s ease;
+}
+
+/* hover 시 나타남 */
+.hot-items-carousel:hover .custom-nav-btn {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.custom-nav-btn.left {
+    left: 8px;
+}
+
+.custom-nav-btn.right {
+    right: 8px;
+}
+
+.slide-index-indicator {
+    position: absolute;
+    bottom: 12px;
+    right: 10px;
+    font-size: 0.85rem;
+    background: rgba(0, 0, 0, 0.6);
+    color: white;
+    padding: 4px 8px;
+    border-radius: 4px;
+    z-index: 10;
+}
+
+.hot-slide-text {
+    position: absolute;
+    top: 10px;
+    left: 16px;
+    color: white;
+    background: rgba(0, 0, 0, 0.5);
+    padding: 8px 12px;
+    border-radius: 4px;
+    font-size: 1rem;
+    font-weight: 600;
+    z-index: 10;
+    text-shadow: 0 1px 4px rgba(0, 0, 0, 0.7);
+}
+
+

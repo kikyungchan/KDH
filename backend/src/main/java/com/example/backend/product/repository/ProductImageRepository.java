@@ -1,6 +1,6 @@
 package com.example.backend.product.repository;
 
-import com.example.backend.product.dto.ProductImage;
+import com.example.backend.product.entity.ProductImage;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 

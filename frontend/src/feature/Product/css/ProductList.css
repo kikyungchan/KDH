@@ -1,84 +1,80 @@
-/* ProductList.css */
 .product-list-container {
+    max-width: 1600px;
+    width: 100%;
+    margin: 0 auto;
     padding: 2rem;
 }
 
-.product-grid {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 1.5rem;
-    justify-content: flex-start;
+#product-list-container .product-grid {
+    display: grid;
+    gap: 2rem;
+    justify-content: center;
 }
 
 .product-card {
+    width: 400px;
+    height: auto;
     text-decoration: none;
     color: inherit;
     display: block;
-    width: 180px; /* 카드 너비 고정 */
-    padding: 0;
-    border: none;
-    box-shadow: none;
 }
 
 .product-image-wrapper {
-    /*width: 100%;*/
-    /*height: 200px; !* 이미지 영역 높이 고정 *!*/
-    /*overflow: hidden;*/
-    /*display: flex;*/
-    /*align-items: center;*/
-    /*justify-content: center;*/
-    /*background-color: rgba(255, 255, 19, 0.56);*/
     width: 100%;
-    height: 200px;
+    height: 320px; /* ← 이미지 높이 크게 */
     overflow: hidden;
     display: flex;
     align-items: center;
     justify-content: center;
 }
 
-.product-card:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-}
-
-/* 이미지 자체 */
 .product-image {
-    height: 100%;
     width: 100%;
-    object-fit: contain;
+    height: 100%;
+    object-fit: cover;
 }
 
-/* 상품정보 */
 .product-info-wrapper {
     text-align: center;
     padding: 10px 0;
     min-height: 100px;
-    /*display: flex;*/
-    flex-direction: column;
-    justify-content: flex-start;
 }
 
-/* 상품명 */
 .product-name {
     font-weight: bold;
     margin-bottom: 4px;
     color: #333;
 }
 
-/* 가격 */
 .product-price {
     font-size: 15px;
     color: #555;
     margin-bottom: 4px;
 }
 
-/* SOLD OUT 뱃지 - 가격 아래 표시 */
 .sold-out-badge {
     font-size: 11px;
     background-color: #444;
     color: #fff;
     padding: 3px 6px;
     display: inline-block;
+}
+
+.new-badge {
+    font-size: 11px;
+    background-color: #a7f3d0;
+    color: #065f46;
+    padding: 3px 6px;
+    font-weight: bold;
+}
+
+.hot-badge {
+    font-size: 11px;
+    background-color: #f87171;
+    color: #7f1d1d;
+    padding: 3px 6px;
+    font-weight: bold;
+    border-radius: 0;
 }
 
 .product-badges {
@@ -88,22 +84,21 @@
     margin-top: 4px;
 }
 
-.new-badge {
-    font-size: 11px;
-    background-color: #a7f3d0; /* 스카이그린 */
-    color: #065f46;
-    padding: 3px 6px;
-    font-weight: bold;
-    display: inline-block;
+
+@media (max-width: 767px) {
+    #product-list-container .product-grid {
+        grid-template-columns: repeat(1, 400px);
+    }
 }
 
-.hot-badge {
-    font-size: 11px;
-    background-color: #f87171; /* 연한 빨강 */
-    color: #7f1d1d; /* 진한 빨강 */
-    padding: 3px 6px;
-    font-weight: bold;
-    display: inline-block;
+@media (min-width: 768px) {
+    #product-list-container .product-grid {
+        grid-template-columns: repeat(2, 400px);
+    }
 }
 
-
+@media (min-width: 1024px) {
+    #product-list-container .product-grid {
+        grid-template-columns: repeat(4, 300px);
+    }
+}

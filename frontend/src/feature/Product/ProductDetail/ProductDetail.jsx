@@ -26,8 +26,8 @@ export function ProductDetail() {
   const { setCartCount } = useCart();
   const [reviewChanged, setReviewChanged] = useState(false);
   const [showCartConfirmModal, setShowCartConfirmModal] = useState(false);
-  const [cartItems, setCartItems] = useState([]);
   const [showModal, setShowModal] = useState(false);
+  const [cartItems, setCartItems] = useState([]);
   const [selectedOption, setSelectedOption] = useState(null);
   const [quantity, setQuantity] = useState(1);
   const [product, setProduct] = useState(null);
@@ -69,8 +69,11 @@ export function ProductDetail() {
     navigate(`/product/edit?id=${id}`);
   }
 
-  const thumbnail = product.imagePath?.[0];
-  const detailImages = product.imagePath?.slice(1);
+  // 썸네일은 isMain == true 인 항목의 storedPath 사용
+  const thumbnail = product.thumbnailPaths?.find((t) => t.isMain)?.storedPath;
+
+  // 본문 이미지 배열
+  const detailImages = product.detailImagePaths ?? [];
 
   function handleQuestionButton() {
     setIsProcessing(true);
@@ -78,13 +81,13 @@ export function ProductDetail() {
   }
 
   return (
-    <Container>
+    <div className="container">
       <Row className="justify-content-center">
         <Col>
           <div
             style={{
               display: "flex",
-              gap: "100px",
+              gap: "56px",
               alignItems: "flex-start",
             }}
           >
@@ -96,52 +99,80 @@ export function ProductDetail() {
                 alt="썸네일 이미지"
               />
             )}
+
+            {/* 오른쪽: 텍스트 및 버튼들 */}
             <div style={{ flex: 1 }}>
-              <h2>
-                {product.productName}
-                {/* NEW 뱃지: 일주일 이내 등록된 상품 */}
-                {(() => {
-                  const insertedAt = new Date(product.insertedAt);
-                  const now = new Date();
-                  const diffInSeconds = (now - insertedAt) / 1000;
-                  const isNew = diffInSeconds <= 60 * 60 * 24 * 7;
-                  return isNew ? <span className="new-badge">NEW</span> : null;
-                })()}
+              {/* 상품명 + 공유/좋아요 아이콘 */}
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                  marginBottom: "1rem",
+                  paddingRight: "30px",
+                }}
+              >
+                <div
+                  style={{ display: "flex", alignItems: "center", gap: "10px" }}
+                >
+                  <h2 style={{ fontSize: "2rem", margin: 0 }}>
+                    {product.productName}
+                  </h2>
+                  {(() => {
+                    const insertedAt = new Date(product.insertedAt);
+                    const now = new Date();
+                    const diffInSeconds = (now - insertedAt) / 1000;
+                    const isNew = diffInSeconds <= 60 * 60 * 24 * 7;
+                    return isNew ? (
+                      <span className="new-badge">NEW</span>
+                    ) : null;
+                  })()}
+                  {product.hot && (
+                    <span
+                      className="badge hot-badge"
+                      style={{ fontSize: "12px" }}
+                    >
+                      HOT
+                    </span>
+                  )}
+                  {product.quantity === 0 && (
+                    <span className="sold-out-badge">SOLD OUT</span>
+                  )}
+                  {product.quantity > 0 && product.quantity < 5 && (
+                    <span className="low-stock-badge">
+                      🔥 {product.quantity}개 남음
+                    </span>
+                  )}
+                </div>
 
-                {product.hot && (
-                  <span
-                    style={{ fontSize: "12px" }}
-                    className="badge hot-badge"
-                  >
-                    HOT
-                  </span>
-                )}
+                <div
+                  style={{ display: "flex", alignItems: "center", gap: "16px" }}
+                >
+                  <RxShare1
+                    size={28}
+                    style={{ cursor: "pointer" }}
+                    onClick={() => setShowShareModal(true)}
+                    title="공유하기"
+                  />
+                  <LikeButton size={32} productId={product.id} />
+                </div>
+              </div>
 
-                {/* 품절 뱃지 */}
-                {product.quantity === 0 && (
-                  <span className="sold-out-badge">SOLD OUT</span>
-                )}
+              {/* 가격 */}
+              <p style={{ fontSize: "1.25rem", fontWeight: "500" }}>
+                {product.price.toLocaleString()}원
+              </p>
 
-                {/* 재고 부족 뱃지 */}
-                {product.quantity > 0 && product.quantity < 5 && (
-                  <span className="low-stock-badge">
-                    🔥 {product.quantity}개 남음
-                  </span>
-                )}
-                {/* 공유 아이콘 버튼 */}
-                <RxShare1
-                  size={25}
-                  style={{ cursor: "pointer", marginLeft: "70px" }}
-                  onClick={() => setShowShareModal(true)}
-                  title="공유하기"
-                />
-                <LikeButton productId={product.id} />
-              </h2>
-              <p>{product.price.toLocaleString()}원</p>
+              {/* 상세 설명 */}
               <p
-                style={{ whiteSpace: "pre-line", fontSize: "12px" }}
+                style={{
+                  whiteSpace: "pre-line",
+                  fontSize: "1rem",
+                  lineHeight: "1.4",
+                }}
                 dangerouslySetInnerHTML={{ __html: product.info }}
               ></p>
+
               <hr />
 
               {/*옵션선택 드롭다운*/}
@@ -241,7 +272,8 @@ export function ProductDetail() {
                   </div>
                 </>
               )}
-
+              {/*가격이랑 버튼사이 여백주기*/}
+              <div className="mt-3"></div>
               {/*버튼*/}
               {product.quantity === 0 ? (
                 // 품절 상태일 경우
@@ -263,29 +295,40 @@ export function ProductDetail() {
                 </div>
               ) : (
                 // 재고 있는 경우 기존 버튼들
-                <div style={{ marginTop: "2px", display: "flex", gap: "10px" }}>
-                  <button
+                <div
+                  style={{
+                    marginTop: "2px",
+                    display: "flex",
+                    width: "500px",
+                    margin: "0 auto",
+                    gap: "34px",
+                    padding: "0 33px",
+                    boxSizing: "border-box",
+                  }}
+                >
+                  <Button
                     onClick={() =>
                       handleBuyButton({
                         product,
                         selectedOption,
                         quantity,
                         thumbnail,
-                        setCartItems,
                         setShowCartConfirmModal,
                         navigate,
+                        setCartItems,
                       })
                     }
                     style={{
                       border: "3",
-                      width: "150px",
+                      width: "200px",
                       backgroundColor: "black",
                       color: "white",
+                      padding: "12px",
                     }}
                   >
                     구매하기
-                  </button>
-                  <button
+                  </Button>
+                  <Button
                     onClick={() =>
                       handleCartButton({
                         product,
@@ -296,10 +339,10 @@ export function ProductDetail() {
                         setCartCount,
                       })
                     }
-                    style={{ border: "3", width: "150px" }}
+                    style={{ border: "3", width: "200px", padding: "12px" }}
                   >
                     장바구니
-                  </button>
+                  </Button>
                 </div>
               )}
               <br />
@@ -325,8 +368,9 @@ export function ProductDetail() {
           <hr />
           {/* 본문영역 */}
           <div style={{ marginTop: "50px" }}>
-            {/*본문영역에 텍스트?*/}
+            {/*본문영역에 텍스트*/}
             {/*<div>{product.detailText}</div>*/}
+
             <div
               style={{ display: "flex", flexDirection: "column", gap: "15px" }}
             >
@@ -340,7 +384,7 @@ export function ProductDetail() {
               ))}
             </div>
             <NoticeSection />
-            <hr style={{ marginTop: "75px" }} />
+            <hr style={{ marginTop: "50px" }} />
             <ReviewStats
               productId={product.id}
               refreshTrigger={reviewChanged}
@@ -430,6 +474,6 @@ export function ProductDetail() {
         shareUrl={window.location.href}
         productName={product.productName}
       />
-    </Container>
+    </div>
   );
 }

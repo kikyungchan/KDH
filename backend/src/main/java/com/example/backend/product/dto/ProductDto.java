@@ -1,5 +1,7 @@
 package com.example.backend.product.dto;
 
+import com.example.backend.product.entity.Product;
+import com.example.backend.product.entity.ProductImage;
 import lombok.Data;
 
 import java.time.LocalDateTime;
@@ -16,10 +18,9 @@ public class ProductDto {
     private LocalDateTime insertedAt;
     private String detailText;
     private boolean hot;
+    private List<ThumbnailDto> thumbnailPaths;
+    private List<String> detailImagePaths;
 
 
     private List<ProductOptionDto> options;
-    private List<String> imagePath;
-
-
 }

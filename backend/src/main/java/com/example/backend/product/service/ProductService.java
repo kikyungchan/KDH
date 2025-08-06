@@ -38,7 +38,8 @@ public class ProductService {
     private final OrderRepository orderRepository;
     private final OrderItemRepository orderItemRepository;
     private final GuestOrderRepository guestOrderRepository;
-
+    private final ProductCommentRepository productCommentRepository;
+    private final ProductThumbnailRepository productThumbnailRepository;
 
     // url에서 key만 따오는 메소드
     private String extractS3Key(String url) {
@@ -46,90 +47,125 @@ public class ProductService {
         return url.substring(url.indexOf(".com/") + 5);
     }
 
-    public void add(ProductForm productForm) {
+    public void add(ProductRegistDto dto) {
         // 상품 저장
         Product product = new Product();
-        product.setProductName(productForm.getProductName());
-        product.setPrice(productForm.getPrice());
-        product.setCategory(productForm.getCategory());
-        product.setInfo(productForm.getInfo());
-        product.setQuantity(productForm.getQuantity());
-        product.setDetailText(productForm.getDetailText());
+        product.setProductName(dto.getProductName());
+        product.setPrice(dto.getPrice());
+        product.setCategory(dto.getCategory());
+        product.setInfo(dto.getInfo());
+        product.setQuantity(dto.getQuantity());
+        product.setDetailText(dto.getDetailText());
         productRepository.save(product);
 
         //옵션 저장
-        if (productForm.getOptions() != null && !productForm.getOptions().isEmpty()) {
+        if (dto.getOptions() != null && !dto.getOptions().isEmpty()) {
             List<ProductOption> optionList = new ArrayList<>();
-            for (ProductOptionDto dto : productForm.getOptions()) {
+            for (ProductOptionDto opt : dto.getOptions()) {
                 ProductOption option = new ProductOption();
-                option.setOptionName(dto.getOptionName());
-                option.setPrice(dto.getPrice());
+                option.setOptionName(opt.getOptionName());
+                option.setPrice(opt.getPrice());
                 option.setProduct(product);
                 optionList.add(option);
             }
             productOptionRepository.saveAll(optionList);
         }
-
-        // 이미지 저장
+// 썸네일 저장
+        List<ProductThumbnail> thumbnailList = new ArrayList<>();
+        if (dto.getThumbnails() != null) {
+            for (int i = 0; i < dto.getThumbnails().size(); i++) {
+                MultipartFile file = dto.getThumbnails().get(i);
+                if (!file.isEmpty()) {
+                    try {
+                        String s3Url = s3Uploader.upload(file, String.valueOf(product.getId()));
+                        ProductThumbnail thumb = new ProductThumbnail();
+                        thumb.setOriginalFileName(file.getOriginalFilename());
+                        thumb.setStoredPath(s3Url);
+                        thumb.setProduct(product);
+                        thumb.setIsMain(i == 0); // 첫 번째 이미지를 대표로 설정
+                        thumbnailList.add(thumb);
+                    } catch (IOException e) {
+                        throw new RuntimeException("썸네일 업로드 실패: " + e.getMessage(), e);
+                    }
+                }
+            }
+            productThumbnailRepository.saveAll(thumbnailList);
+        }
+        // 본문 이미지 저장
         List<ProductImage> imageList = new ArrayList<>();
+        if (dto.getDetailImages() != null) {
+            for (MultipartFile file : dto.getDetailImages()) {
+                if (!file.isEmpty()) {
+                    try {
+                        String s3Url = s3Uploader.upload(file, String.valueOf(product.getId()));
+                        ProductImage image = new ProductImage();
+                        image.setOriginalFileName(file.getOriginalFilename());
+                        image.setStoredPath(s3Url);
+                        image.setProduct(product);
+                        imageList.add(image);
+                    } catch (IOException e) {
+                        throw new RuntimeException("본문 이미지 업로드 실패: " + e.getMessage(), e);
+                    }
+                }
+            }
+            productImageRepository.saveAll(imageList);
+        }
+    }
 
-        if (productForm.getImages() != null) {
-            for (MultipartFile file : productForm.getImages()) {
-                try {
-                    String s3Url = s3Uploader.upload(file, String.valueOf(product.getId()));
-                    ProductImage image = new ProductImage();
-                    image.setOriginalFileName(file.getOriginalFilename());
-                    image.setStoredPath(s3Url);
-                    image.setProduct(product);
-                    imageList.add(image);
-                } catch (IOException e) {
-                    throw new RuntimeException("업로드 실패 : " + e.getMessage(), e);
+
+    public Map<String, Object> list(Integer pageNumber, String keyword, String sort, String category) {
+        Page<Product> page;
+        Pageable pageable;
+
+        // 기본 페이지네이션
+        Sort sortOption;
+        switch (sort) {
+            case "price_asc":
+                sortOption = Sort.by(Sort.Direction.ASC, "price");
+                break;
+            case "price_desc":
+                sortOption = Sort.by(Sort.Direction.DESC, "price");
+                break;
+            default:
+                sortOption = Sort.by(Sort.Direction.DESC, "id"); // 최신순
+        }
+        pageable = PageRequest.of(pageNumber - 1, 16, sortOption);
+
+        boolean hasKeyword = keyword != null && !keyword.trim().isEmpty();
+        boolean hasCategory = category != null && !category.trim().isEmpty();
+
+        if ("popular".equals(sort)) {
+            if (hasCategory) {
+                if (hasKeyword) {
+                    page = productRepository.findByCategoryAndKeywordOrderByPopularity(category, keyword, pageable);
+                } else {
+                    page = productRepository.findByCategoryOrderByPopularity(category, pageable);
+                }
+            } else {
+                if (hasKeyword) {
+                    page = productRepository.findByKeywordOrderByPopularity(keyword, pageable);
+                } else {
+                    page = productRepository.findAllOrderByPopularity(pageable);
+                }
+            }
+        } else {
+            if (hasCategory) {
+                if (hasKeyword) {
+                    page = productRepository.findByCategoryAndKeyword(category, keyword, pageable);
+                } else {
+                    page = productRepository.findByCategory(category, pageable);
+                }
+            } else {
+                if (hasKeyword) {
+                    page = productRepository.findByKeyword(keyword, pageable);
+                } else {
+                    page = productRepository.findAll(pageable);
                 }
             }
         }
-        productImageRepository.saveAll(imageList);
-    }
 
-    public Map<String, Object> list(Integer pageNumber, String keyword, String sort) {
-        Page<Product> page;
-
-        Pageable pageable = PageRequest.of(pageNumber - 1, 15);
-        if ("popular".equals(sort)) {
-            if (keyword != null && !keyword.trim().isEmpty()) {
-                page = productRepository.findByKeywordOrderByPopularity(keyword, pageable);
-            } else {
-                page = productRepository.findAllOrderByPopularity(pageable);
-            }
-        } else {
-
-            Sort sortOption;
-            switch (sort) {
-                case "price_asc":
-                    sortOption = Sort.by(Sort.Direction.ASC, "price");
-                    break;
-                case "price_desc":
-                    sortOption = Sort.by(Sort.Direction.DESC, "price");
-                    break;
-                // ASC 오름차순 0-9 -> ㄱ-ㅎ 순
-                case "category":
-                    sortOption = Sort.by(Sort.Direction.ASC, "category");
-                    break;
-                default:
-                    sortOption = Sort.by(Sort.Direction.DESC, "id"); // 최신순
-
-            }
-            pageable = PageRequest.of(pageNumber - 1, 15, sortOption);
-            // 정렬 조건
-            // 키워드확인
-            if (keyword != null && !keyword.trim().isEmpty()) {
-                page = productRepository.findByKeyword(keyword, pageable);
-            } else {
-                page = productRepository.findAll(pageable);
-            }
-        }
-
-
-        List<ProductDto> content = page.getContent().stream().map(product -> {
+        List<ProductDto> content = new ArrayList<>();
+        for (Product product : page.getContent()) {
             ProductDto dto = new ProductDto();
             dto.setId(product.getId());
             dto.setProductName(product.getProductName());
@@ -137,11 +173,18 @@ public class ProductService {
             dto.setQuantity(product.getQuantity());
             dto.setInsertedAt(product.getInsertedAt());
             dto.setHot(isHotProduct(product.getId()));
-            if (!product.getImages().isEmpty()) {
-                dto.setImagePath(List.of(product.getImages().get(0).getStoredPath()));
+
+            if (!product.getThumbnails().isEmpty()) {
+                ProductThumbnail t = product.getThumbnails().get(0);
+                ThumbnailDto thumbDto = new ThumbnailDto();
+                thumbDto.setStoredPath(t.getStoredPath());
+                thumbDto.setIsMain(Boolean.TRUE.equals(t.getIsMain()));
+                dto.setThumbnailPaths(List.of(thumbDto));
             }
-            return dto;
-        }).toList();
+
+            content.add(dto);
+        }
+
 
         int totalPages = page.getTotalPages();
         int rightPageNumber = ((pageNumber - 1) / 5 + 1) * 5;
@@ -162,6 +205,7 @@ public class ProductService {
         );
     }
 
+
     public ProductDto view(Integer id) {
         Product product = productRepository.findById(id).get();
         ProductDto dto = new ProductDto();
@@ -175,22 +219,37 @@ public class ProductService {
         dto.setHot(isHotProduct(product.getId()));
         dto.setInsertedAt(product.getInsertedAt());
 
-        List<String> imagePaths = product.getImages().stream().map(ProductImage::getStoredPath).toList();
+        // 썸네일 목록
+        List<ThumbnailDto> thumbnailPaths = new ArrayList<>();
+        for (ProductThumbnail t : product.getThumbnails()) {
+            ThumbnailDto thumbDto = new ThumbnailDto();
+            thumbDto.setStoredPath(t.getStoredPath());
+            thumbDto.setIsMain(Boolean.TRUE.equals(t.getIsMain()));
+            thumbnailPaths.add(thumbDto);
+        }
+        dto.setThumbnailPaths(thumbnailPaths);
 
-        dto.setImagePath(imagePaths);
+// 본문 이미지 목록
+        List<String> detailImagePaths = new ArrayList<>();
+        for (ProductImage img : product.getImages()) {
+            detailImagePaths.add(img.getStoredPath());
+        }
+        dto.setDetailImagePaths(detailImagePaths);
 
-        //옵션리스트
-        List<ProductOptionDto> options = product.getOptions().stream()
-                .map(opt -> {
-                    ProductOptionDto option = new ProductOptionDto();
-                    option.setOptionName(opt.getOptionName());
-                    option.setPrice(opt.getPrice());
-                    option.setId(opt.getId());
-                    return option;
-                }).toList();
+// 옵션 목록
+        List<ProductOptionDto> options = new ArrayList<>();
+        for (ProductOption opt : product.getOptions()) {
+            ProductOptionDto optionDto = new ProductOptionDto();
+            optionDto.setId(opt.getId());
+            optionDto.setOptionName(opt.getOptionName());
+            optionDto.setPrice(opt.getPrice());
+            options.add(optionDto);
+        }
         dto.setOptions(options);
+
         return dto;
     }
+
 
     public void delete(Integer id) {
         Product product = productRepository.findById(id).orElseThrow();
@@ -293,6 +352,19 @@ public class ProductService {
             orderItemRepository.save(item);
         }
         return orderToken;
+    }
+
+    public List<ProductBestDto> getTopSellingProducts() {
+        Pageable pageable = PageRequest.of(0, 3);
+        List<Product> topProducts = productRepository.findTopSellingProducts(pageable);
+        List<ProductBestDto> result = new ArrayList<>();
+        for (Product product : topProducts) {
+            Double avg = productCommentRepository.getAverageRating(product.getId());
+            Integer cnt = productCommentRepository.getReviewCount(product.getId());
+            ProductBestDto dto = ProductBestDto.from(product, avg, cnt);
+            result.add(dto);
+        }
+        return result;
     }
 
     public MemberDto getmemberinfo(String auth) {

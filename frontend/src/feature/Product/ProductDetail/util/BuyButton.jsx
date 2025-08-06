@@ -1,52 +1,43 @@
-import { Modal } from "react-bootstrap";
+import { useEffect, useRef } from "react";
 
 function BuyButton({ show, onHide, onOnlyBuy, onMoveToCart }) {
+  const dialogRef = useRef();
+
+  useEffect(() => {
+    if (show) {
+      dialogRef.current?.showModal();
+    } else {
+      dialogRef.current?.close();
+    }
+  }, [show]);
+
   return (
-    <Modal show={show} onHide={onHide} centered>
-      <Modal.Body
-        className="text-center d-flex justify-content-center align-items-center"
-        style={{ height: "130px", fontSize: "14px", padding: "0" }}
-      >
-        <p style={{ marginBottom: "0", fontSize: "16px" }}>
-          장바구니에 담긴 상품도 함께 구매하시겠습니까?
-        </p>
-      </Modal.Body>
-      <div
-        style={{
-          display: "flex",
-          borderTop: "1px solid #ddd",
-          borderBottomLeftRadius: "10px",
-          borderBottomRightRadius: "10px",
-          overflow: "hidden",
-        }}
-      >
-        <button
-          onClick={onOnlyBuy}
-          style={{
-            flex: 1,
-            padding: "12px 0",
-            border: "none",
-            background: "white",
-            fontWeight: "bold",
-            borderRight: "1px solid #ddd",
-          }}
-        >
-          아니요
-        </button>
-        <button
-          onClick={onMoveToCart}
-          style={{
-            flex: 1,
-            padding: "12px 0",
-            border: "none",
-            background: "white",
-            fontWeight: "bold",
-          }}
-        >
-          장바구니로 이동
-        </button>
+    <dialog ref={dialogRef} className="modal">
+      <div className="modal-box p-0">
+        <div className="flex flex-col items-center justify-center py-8">
+          <p className="text-lg font-semibold mb-2">
+            장바구니에 담긴 상품도 함께 구매하시겠습니까?
+          </p>
+        </div>
+        <div className="flex border-t border-gray-200">
+          <button
+            onClick={onOnlyBuy}
+            className="flex-1 py-3 text-sm font-bold border-r border-gray-200"
+          >
+            아니요
+          </button>
+          <button
+            onClick={onMoveToCart}
+            className="flex-1 py-3 text-sm font-bold"
+          >
+            장바구니로 이동
+          </button>
+        </div>
       </div>
-    </Modal>
+      <form method="dialog" className="modal-backdrop">
+        <button onClick={onHide}>닫기</button>
+      </form>
+    </dialog>
   );
 }
 

@@ -1,0 +1,239 @@
+.navbar-container {
+    position: fixed;
+    max-width: 1256px;
+    margin: 0 auto;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+    background-color: white;
+}
+
+.navbar-left {
+    font-size: 24px;
+    display: none;
+}
+
+.navbar-icons {
+    display: flex;
+    gap: 1.5rem;
+    font-size: 1.4rem;
+    align-items: center;
+    /*margin-right: 10rem;*/
+}
+
+.navbar-icon {
+    display: flex;
+    align-items: center;
+    color: black;
+    cursor: pointer;
+    position: relative;
+}
+
+.navbar-inner {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 80px;
+    max-width: 1600px;
+    margin: 0 auto;
+    padding: 0 1rem; /* = px-4 */
+    width: 100%;
+}
+
+.navbar-logo {
+    font-size: 40px;
+    font-weight: bold;
+    text-decoration: none;
+    margin-right: 3rem;
+    /*margin-right: 1.8rem;*/
+    /*margin-left: 10rem;*/
+
+}
+
+.navbar-right {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 1rem;
+    flex: 1;
+}
+
+.navbar-container,
+.navbar-left {
+    overflow: visible !important; /* 잘리는 현상 방지 */
+}
+
+/*장바구니 뱃지용*/
+.cart-icon-wrapper {
+    position: relative;
+}
+
+.search-bar-popup {
+    position: absolute;
+    top: 100%;
+    transform: translateY(-50%);
+    right: 0%;
+    display: none;
+    align-items: center;
+    background: #f1f1f1;
+    border-radius: 20px;
+    padding: 4px 12px;
+    gap: 8px;
+    z-index: 1000;
+    width: 250px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+.search-bar-popup.active {
+    display: flex;
+}
+
+.search-input {
+    flex: 1;
+    border: none;
+    outline: none;
+    background: transparent;
+    font-size: 1rem;
+}
+
+.search-close-icon {
+    cursor: pointer;
+    color: #555;
+    font-size: 1.2rem;
+}
+
+.cart-icon-wrapper {
+    position: relative;
+}
+
+
+.cart-badge {
+    position: absolute;
+    top: -6px;
+    right: -6px;
+    background-color: red;
+    color: white;
+    font-size: 10px;
+    padding: 2px 6px;
+    border-radius: 9999px;
+    font-weight: bold;
+    line-height: 1;
+    z-index: 10;
+}
+
+/* 햄버거 아이콘 기본 숨김 */
+.hamburger-icon {
+    display: none;
+    font-size: 1.6rem;
+    cursor: pointer;
+    color: black;
+}
+
+
+/* 모바일 메뉴 드롭다운 */
+.mobile-menu {
+    position: absolute;
+    top: 80px;
+    left: 0;
+    right: 0;
+    background-color: white;
+    z-index: 999;
+    display: flex;
+    flex-direction: column;
+    padding: 1rem 2rem;
+    gap: 1rem;
+    border-top: 1px solid #ccc;
+}
+
+.mobile-category-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    align-items: flex-start;
+    margin-top: 0.5rem;
+}
+
+
+/* 드롭다운 메뉴 스타일 */
+.dropdown {
+    position: relative;
+}
+
+.dropdown-title {
+    position: relative;
+    cursor: pointer;
+}
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    flex-direction: column;
+    background-color: white;
+    border: 1px solid #ccc;
+    min-width: 140px;
+    z-index: 1000;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.dropdown-content a {
+    padding: 0.5rem 1rem;
+    text-decoration: none;
+    color: black;
+    white-space: nowrap;
+}
+
+.dropdown-content a:hover {
+    background-color: #f0f0f0;
+}
+
+.dropdown:hover .dropdown-content {
+    display: flex;
+}
+
+/* 모바일 레이아웃용 설정 */
+@media (max-width: 767px) {
+    .hamburger-icon {
+        display: block;
+        order: -1; /* 햄버거를 맨 앞쪽으로 */
+    }
+
+    .navbar-center {
+        position: absolute;
+        left: 50%;
+        transform: translateX(-50%);
+    }
+
+    .navbar-left {
+        display: none !important;
+        flex-wrap: nowrap;
+    }
+}
+
+/*  sm (~767) */
+@media (min-width: 768px) {
+    .navbar-left {
+        display: flex;
+        gap: 0.9rem;
+        font-size: 1.2rem;
+
+    }
+}
+
+/*  md (768~1023) */
+@media (min-width: 769px) {
+    .navbar-container {
+        display: flex;
+        font-size: 1rem;
+    }
+}
+
+/* lg (1024~) */
+@media (min-width: 1024px) {
+    .navbar-left {
+        gap: 2.7rem;
+        font-size: 1.4rem;
+    }
+}
