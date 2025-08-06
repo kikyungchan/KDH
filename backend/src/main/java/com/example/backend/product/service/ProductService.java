@@ -70,7 +70,7 @@ public class ProductService {
             }
             productOptionRepository.saveAll(optionList);
         }
-// 썸네일 저장
+        // 썸네일 저장
         List<ProductThumbnail> thumbnailList = new ArrayList<>();
         if (dto.getThumbnails() != null) {
             for (int i = 0; i < dto.getThumbnails().size(); i++) {
@@ -300,16 +300,32 @@ public class ProductService {
             }
             productImageRepository.saveAll(imageList);
 
-            // 기존 썸네일 삭제
-            if (dto.getDeletedThumbnails() != null) {
-                for (String path : dto.getDeletedThumbnails()) {
-                    s3Uploader.delete(extractS3Key(path));
-                    productThumbnailRepository.deleteByStoredPath(path);
+        }
+        // 기존 썸네일 삭제
+        if (dto.getDeletedThumbnails() != null) {
+            for (String path : dto.getDeletedThumbnails()) {
+                s3Uploader.delete(extractS3Key(path));
+                productThumbnailRepository.deleteByStoredPath(path);
+            }
+        }
+
+        // 새 썸네일 저장
+        if (dto.getNewThumbnails() != null) {
+            List<ProductThumbnail> thumbnailList = new ArrayList<>();
+            for (MultipartFile file : dto.getNewThumbnails()) {
+                try {
+                    String s3Url = s3Uploader.upload(file, "thumbnails/" + product.getId());
+                    ProductThumbnail thumbnail = new ProductThumbnail();
+                    thumbnail.setOriginalFileName(file.getOriginalFilename());
+                    thumbnail.setStoredPath(s3Url);
+                    thumbnail.setProduct(product);
+                    thumbnail.setIsMain(false);
+                    thumbnailList.add(thumbnail);
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
                 }
             }
-
-            // 새 썸네일 저장
-
+            productThumbnailRepository.saveAll(thumbnailList);
         }
     }
 

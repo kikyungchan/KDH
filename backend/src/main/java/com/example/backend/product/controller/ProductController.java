@@ -107,7 +107,7 @@ public class ProductController {
         return ResponseEntity.ok(Map.of("orderToken", orderToken));
     }
 
-    @PutMapping(value = "/edit", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @PostMapping(value = "/edit", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public void editProduct(@RequestParam Integer id,
                             @RequestParam String productName,
                             @RequestParam Integer price,
@@ -115,7 +115,9 @@ public class ProductController {
                             @RequestParam String info,
                             @RequestParam Integer quantity,
                             @RequestParam(required = false) List<String> deletedImages,
-                            @RequestPart(required = false) List<MultipartFile> newImages
+                            @RequestParam(required = false) List<MultipartFile> newImages,
+                            @RequestParam(required = false) List<String> deletedThumbnails,
+                            @RequestParam(required = false) List<MultipartFile> newThumbnails
     ) {
         ProductEditDto dto = new ProductEditDto();
         dto.setProductName(productName);
@@ -125,6 +127,8 @@ public class ProductController {
         dto.setQuantity(quantity);
         dto.setDeletedImages(deletedImages);
         dto.setNewImages(newImages);
+        dto.setDeletedThumbnails(deletedThumbnails);
+        dto.setNewThumbnails(newThumbnails);
 
         productService.edit(id, dto);
     }
