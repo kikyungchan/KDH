@@ -18,8 +18,8 @@ public class OrderService {
     private final OrderRepository orderRepository;
 
 
-    public Page<OrderDto> getOrdersByUsersLoginId(String loginId, Pageable pageable) {
-        Page<Order> orders = orderRepository.findByMember_LoginId(loginId, pageable);
+    public Page<OrderDto> getOrdersByUsersLoginId(Integer memberId, Pageable pageable) {
+        Page<Order> orders = orderRepository.findByMember_Id(memberId, pageable);
 
         return orders.map(this::convertToDto);
     }

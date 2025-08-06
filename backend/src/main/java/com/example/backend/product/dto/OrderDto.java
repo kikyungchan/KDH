@@ -3,6 +3,7 @@ package com.example.backend.product.dto;
 import lombok.Data;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Data
 public class OrderDto {
@@ -27,4 +28,5 @@ public class OrderDto {
 
     private String status;
 
+    private List<OrderItemDto> orderItems;
 }

@@ -13,10 +13,12 @@ export function OrderList() {
   useEffect(() => {
     axios.get(`/api/product/order/list?page=${page}`)
       .then((res) => {
+        console.log("📦 주문 목록 불러오기 성공:", res.data);
         setOrderList(res.data.content);
         setTotalPages(res.data.totalPages);
       })
       .catch((err) => {
+        console.error("❌ 주문 목록 불러오기 실패:", err);
       })
       .finally(() => {
       })

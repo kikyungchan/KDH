@@ -216,6 +216,8 @@ public class ProductController {
                                                size = 5,
                                                sort = "orderDate",
                                                direction = Sort.Direction.DESC) Pageable pageable) {
-        return orderService.getOrdersByUsersLoginId(authentication.getName(), pageable);
+        System.out.println("✅ 로그인 ID: " + authentication.getName());
+        Integer memberId = Integer.parseInt(authentication.getName());
+        return orderService.getOrdersByUsersLoginId(memberId, pageable);
     }
 }
