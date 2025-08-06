@@ -16,7 +16,6 @@ import Search from "./SearchBar.jsx";
 import "bootstrap/dist/css/bootstrap-grid.min.css";
 import SearchBar from "./SearchBar.jsx";
 
-
 function NavBar(props) {
   const [showMobileCategory, setShowMobileCategory] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -102,7 +101,7 @@ function NavBar(props) {
           <NavLeft handleCategoryClick={handleCategoryClick} />
           {/* 오른쪽 아이콘 */}
           <NavRight
-            user={user}
+            // user={user}
             iconRef={iconRef}
             onSearchToggle={() => setShowSearch((prev) => !prev)}
             showSearch={showSearch}

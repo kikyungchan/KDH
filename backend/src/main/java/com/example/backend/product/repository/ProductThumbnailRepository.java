@@ -4,4 +4,5 @@ import com.example.backend.product.entity.ProductThumbnail;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface ProductThumbnailRepository extends JpaRepository<ProductThumbnail, Integer> {
+    void deleteByStoredPath(String storedPath);
 }

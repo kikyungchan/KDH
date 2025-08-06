@@ -14,4 +14,7 @@ public class ProductEditDto {
     private Integer quantity;
     private List<MultipartFile> newImages;
     private List<String> deletedImages;
+
+    private List<String> deletedThumbnails;
+    private List<MultipartFile> newThumbnails;
 }

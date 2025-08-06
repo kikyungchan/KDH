@@ -274,14 +274,14 @@ public class ProductService {
         product.setInfo(dto.getInfo());
         product.setQuantity(dto.getQuantity());
 
-        // 삭제 처리
+        // 본문이미지 삭제
         if (dto.getDeletedImages() != null) {
             for (String path : dto.getDeletedImages()) {
                 s3Uploader.delete(extractS3Key(path));
                 productImageRepository.deleteByStoredPath(path);
             }
         }
-        // 파일 저장
+        // 본문이미지 저장
         if (dto.getNewImages() != null) {
             List<ProductImage> imageList = new ArrayList<>();
 
@@ -299,6 +299,17 @@ public class ProductService {
                 }
             }
             productImageRepository.saveAll(imageList);
+
+            // 기존 썸네일 삭제
+            if (dto.getDeletedThumbnails() != null) {
+                for (String path : dto.getDeletedThumbnails()) {
+                    s3Uploader.delete(extractS3Key(path));
+                    productThumbnailRepository.deleteByStoredPath(path);
+                }
+            }
+
+            // 새 썸네일 저장
+
         }
     }
 
