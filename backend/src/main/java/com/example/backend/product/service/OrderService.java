@@ -19,7 +19,7 @@ public class OrderService {
 
 
     public Page<OrderDto> getOrdersByUsersLoginId(String loginId, Pageable pageable) {
-        Page<Order> orders = orderRepository.findByLoginId(loginId, pageable);
+        Page<Order> orders = orderRepository.findByMember_LoginId(loginId, pageable);
 
         return orders.map(this::convertToDto);
     }

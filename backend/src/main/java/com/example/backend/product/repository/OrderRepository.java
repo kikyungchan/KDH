@@ -7,7 +7,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface OrderRepository extends JpaRepository<Order, Integer> {
 
-    default Page<Order> findByLoginId(String loginId, Pageable pageable) {
-        return null;
-    }
+    Page<Order> findByMember_LoginId(String loginId, Pageable pageable);
 }
