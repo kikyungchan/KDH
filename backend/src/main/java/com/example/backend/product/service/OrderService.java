@@ -23,7 +23,8 @@ public class OrderService {
 
     public Page<OrderDto> getOrdersByUsersLoginId(Integer memberId, Pageable pageable) {
         Page<Order> orders = orderRepository.findByMember_Id(memberId, pageable);
-
+        System.out.println("⏬ Order 개수: " + orders.getContent().size());
+        orders.forEach(o -> System.out.println("📦 OrderToken: " + o.getOrderToken() + ", ID: " + o.getId()));
         return orders.map(this::convertToDto);
     }
 
@@ -39,19 +40,20 @@ public class OrderService {
         if (order.getTotalPrice() != null && !order.getOrderItems().isEmpty()) {
             OrderItem firstItem = order.getOrderItems().get(0);
 
-            if(firstItem.getProduct() != null){
+            if (firstItem.getProduct() != null) {
                 dto.setImageUrl(null);
             }
         }
 
-        List<OrderItemDto> itemDtos = order.getOrderItems().stream().map(item -> {
-            OrderItemDto itemDto = new OrderItemDto();
-            itemDto.setProductName(item.getProduct().getProductName());
-            itemDto.setQuantity(item.getQuantity());
-            itemDto.setProductOption(item.getOrder().getOptionName());
-            itemDto.setPrice(item.getPrice());
-            return itemDto;
-        }).toList();
+        List<OrderItemDto> itemDtos = order.getOrderItems().stream()
+                .map(item -> {
+                    OrderItemDto itemDto = new OrderItemDto();
+                    itemDto.setProductName(item.getProduct().getProductName());
+                    itemDto.setQuantity(item.getQuantity());
+                    itemDto.setProductOption(item.getOrder().getOptionName());
+                    itemDto.setPrice(item.getPrice());
+                    return itemDto;
+                }).toList();
 
 
         dto.setOrderItems(itemDtos);
