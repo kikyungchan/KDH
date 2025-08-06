@@ -5,7 +5,7 @@ import {useNavigate} from "react-router";
 import {AuthenticationContext} from "../common/AuthenticationContextProvider.jsx";
 import PrivacyModal from "./Modal/PrivacyModal.jsx";
 
-export function MemberAdd() {
+export function MemberSignup() {
   // 입력 항목 정규식
   const loginIdRegEx = /^[A-Za-z][A-Za-z0-9]{3,19}$/;
   const emailRegEx =

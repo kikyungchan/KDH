@@ -54,67 +54,72 @@ export function MemberLogin() {
         <div className="w-full max-w-[400px]">
           <div className="p-6 shadow rounded-2xl bg-white">
             <div className="w-full justify-content-center">
+              <Link to="/" className="navbar-logo w-full block text-center mb-6">
+                코데헌
+              </Link>
+              <h3 className="text-center text-xl font-bold mb-6">로그인</h3>
 
-            <Link to="/" className="navbar-logo block text-center mb-6">
-                  코데헌
+              <form onSubmit={handleLogInButtonClick}>
+                {/* 아이디 */}
+                <div className="form-control mb-4">
+                  <label htmlFor="loginId" className="block text-sm font-semibold mb-2">
+                    아이디
+                  </label>
+                  <input
+                    id="loginId"
+                    type="text"
+                    value={loginId}
+                    onChange={(e) => setLoginId(e.target.value)}
+                    className="input input-bordered w-full"
+                  />
+                </div>
+
+                {/* 비밀번호 */}
+                <div className="form-control mb-4">
+                  <label htmlFor="password" className="block text-sm font-semibold mb-2">
+                    비밀번호
+                  </label>
+                  <input
+                    id="password"
+                    type="password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    className="input input-bordered w-full"
+                  />
+                </div>
+
+                {/* 로그인 버튼 */}
+                <div className="mt-4">
+                  <button type="submit" className="btn btn-neutral w-full font-bold py-2">
+                    로그인
+                  </button>
+                </div>
+              </form>
+
+              {/* 회원가입 링크 */}
+              <div className="text-right mt-4 text-sm">
+                <Link to="/signup" className="link link-hover text-gray-700">
+                  회원가입
                 </Link>
+              </div>
 
-                <h3 className="text-center text-xl font-bold mb-6">로그인</h3>
+              {/* 아이디/비밀번호 찾기 링크 */}
+              <div className="text-right mt-2 text-sm">
+                <Link to="/find/id" className="link link-hover text-gray-700">
+                  아이디 찾기
+                </Link>
+                <span className="mx-2 text-gray-400">/</span>
+                <Link to="/find/password" className="link link-hover text-gray-700">
+                  비밀번호 찾기
+                </Link>
+              </div>
 
-                <form onSubmit={handleLogInButtonClick}>
-                  {/* 아이디 */}
-                  <div className="form-control mb-4">
-                    <label htmlFor="loginId" className="block text-sm font-semibold mb-2">
-                      아이디
-                    </label>
-                    <input
-                      id="loginId"
-                      type="text"
-                      value={loginId}
-                      onChange={(e) => setLoginId(e.target.value)}
-                      className="input input-bordered w-full"
-                    />
-                  </div>
-
-                  {/* 비밀번호 */}
-                  <div className="form-control mb-4">
-                    <label htmlFor="password" className="block text-sm font-semibold mb-2">
-                      비밀번호
-                    </label>
-                    <input
-                      id="password"
-                      type="password"
-                      value={password}
-                      onChange={(e) => setPassword(e.target.value)}
-                      className="input input-bordered w-full"
-                    />
-                  </div>
-
-                  {/* 로그인 버튼 */}
-                  <div className="mt-4">
-                    <button type="submit" className="btn btn-neutral w-full font-bold py-2">
-                      로그인
-                    </button>
-                  </div>
-                </form>
-
-                {/* 회원가입 링크 */}
-                <div className="text-right mt-4 text-sm">
-                  <Link to="/signup" className="link link-hover text-gray-700">
-                    회원가입
-                  </Link>
-                </div>
-
-                {/* 아이디/비밀번호 찾기 링크 */}
-                <div className="text-right mt-2 text-sm">
-                  <Link to="/find/id" className="link link-hover text-gray-700">
-                    아이디 찾기
-                  </Link>
-                  <span className="mx-2 text-gray-400">/</span>
-                  <Link to="/find/password" className="link link-hover text-gray-700">
-                    비밀번호 찾기
-                  </Link>
-                </div>
+              {/* 비회원 주문 조회 */}
+              <div className="text-right mt-2 text-sm">
+                <Link to="/find/id" className="link link-hover text-gray-700">
+                  비회원 주문 조회
+                </Link>
+              </div>
             </div>
           </div>
         </div>

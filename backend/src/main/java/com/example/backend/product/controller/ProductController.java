@@ -7,18 +7,25 @@ import com.example.backend.product.entity.GuestOrder;
 import com.example.backend.product.entity.Product;
 import com.example.backend.product.repository.GuestOrderRepository;
 import com.example.backend.product.repository.ProductRepository;
+import com.example.backend.product.service.OrderService;
 import com.example.backend.product.service.ProductService;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.jaxb.SpringDataJaxb;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.awt.print.Pageable;
 import java.security.SecureRandom;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -31,6 +38,7 @@ import java.util.Map;
 public class ProductController {
 
     private final ProductService productService;
+    private final OrderService orderService;
     private final JwtDecoder jwtDecoder;
     private final MemberRepository memberRepository;
     private final GuestOrderRepository guestOrderRepository;
@@ -199,5 +207,12 @@ public class ProductController {
     public ResponseEntity<List<ProductBestDto>> getTopProducts() {
         List<ProductBestDto> topProducts = productService.getTopSellingProducts();
         return ResponseEntity.ok(topProducts);
+    }
+
+    // 주문 조회
+    @GetMapping("/order/list")
+    public Page<OrderDto> getOrderList(Authentication authentication,
+                                       @PageableDefault(sort = "orderDate", direction = Sort.Direction.DESC) Pageable pageable) {
+        return orderService.getOrdersByUsersLoginId(authentication.getName(), pageable);
     }
 }

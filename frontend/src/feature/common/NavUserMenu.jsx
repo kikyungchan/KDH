@@ -8,7 +8,7 @@ export function NavUserMenu({user, logout, isAdmin}) {
         <FiUser className="text-2xl text-black"/>
       </div>
       <ul tabIndex={0}
-          className="menu dropdown-content mt-3 z-[999]
+          className="menu dropdown-content z-[999]
           text-lg
            p-2 shadow bg-white text-black rounded-box w-52">
         {user ? (
@@ -28,7 +28,7 @@ export function NavUserMenu({user, logout, isAdmin}) {
               </li>
             )}
             <li>
-              <button onClick={logout}>로그아웃</button>
+              <Link to="/logout">로그아웃</Link>
             </li>
           </>
         ) : (

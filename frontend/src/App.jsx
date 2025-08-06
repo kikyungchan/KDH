@@ -4,7 +4,7 @@ import { ProductList } from "./feature/Product/ProductList.jsx";
 import { ProductDetail } from "./feature/Product/ProductDetail/ProductDetail.jsx";
 import { ProductEdit } from "./feature/Product/ProductEdit.jsx";
 import { MemberList } from "./feature/Member/MemberList.jsx";
-import { MemberAdd } from "./feature/Member/MemberAdd.jsx";
+import { MemberSignup } from "./feature/Member/MemberSignup.jsx";
 import { MemberDetail } from "./feature/Member/MemberDetail.jsx";
 import { MemberEdit } from "./feature/Member/MemberEdit.jsx";
 import { MemberLogin } from "./feature/Member/MemberLogin.jsx";
@@ -59,7 +59,7 @@ function App() {
                 <Route path="/member/edit" element={<MemberEdit />} />
                 <Route path="/member/list" element={<MemberList />} />
                 <Route path="/member" element={<MemberDetail />} />
-                <Route path="/signup" element={<MemberAdd />} />
+                <Route path="/signup" element={<MemberSignup />} />
                 <Route path="/login" element={<MemberLogin />} />
                 <Route path="/logout" element={<MemberLogout />} />
                 <Route path="/find/id" element={<FindLoginId />} />
