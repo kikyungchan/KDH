@@ -212,7 +212,10 @@ public class ProductController {
     // 주문 조회
     @GetMapping("/order/list")
     public Page<OrderDto> getOrderList(Authentication authentication,
-                                       @PageableDefault(sort = "orderDate", direction = Sort.Direction.DESC) Pageable pageable) {
+                                       @PageableDefault(
+                                               size = 5,
+                                               sort = "orderDate",
+                                               direction = Sort.Direction.DESC) Pageable pageable) {
         return orderService.getOrdersByUsersLoginId(authentication.getName(), pageable);
     }
 }

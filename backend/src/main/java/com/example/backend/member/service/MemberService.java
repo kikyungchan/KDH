@@ -69,9 +69,6 @@ public class MemberService {
         Integer leftPageNumber = rightPageNumber - 9;
         rightPageNumber = Math.min(rightPageNumber, totalPages);
         leftPageNumber = Math.max(leftPageNumber, 1);
-        System.out.println("totalPages = " + totalPages);
-        System.out.println("rightPageNumber = " + rightPageNumber);
-        System.out.println("leftPageNumber = " + leftPageNumber);
 
         var pageInfo = Map.of(
                 "totalPages", totalPages,
@@ -80,8 +77,6 @@ public class MemberService {
                 "currentPageNumber", pageNumber
         );
 
-        System.out.println("pageNumber = " + pageNumber);
-        System.out.println("page result = " + memberListDtoPage.getContent());
         return Map.of("pageInfo", pageInfo,
                 "memberList", memberListDtoPage.getContent());
 

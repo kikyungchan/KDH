@@ -108,7 +108,6 @@ public class MemberController {
     @GetMapping("/list")
     @PreAuthorize("hasAuthority('admin')")
     public Map<String, Object> memberList(@RequestParam(value = "page", defaultValue = "1") Integer pageNumber) {
-        System.out.println("success");
         return memberService.list(pageNumber);
     }
 

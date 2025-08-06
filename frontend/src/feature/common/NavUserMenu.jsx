@@ -24,7 +24,7 @@ export function NavUserMenu({user, logout, isAdmin}) {
             )}
             {!isAdmin && (
               <li>
-                <Link to="/orders">주문 내역</Link>
+                <Link to="/product/order/list">주문 내역</Link>
               </li>
             )}
             <li>

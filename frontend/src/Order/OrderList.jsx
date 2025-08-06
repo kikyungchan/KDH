@@ -13,7 +13,7 @@ export function OrderList() {
     axios.get(`/api/product/order/list?page=${page}`)
       .then((res) => {
         setOrderList(res.data.content);
-        setPage(res.data.totalPages);
+        setTotalPages(res.data.totalPages);
       })
       .catch((err) => {
       })
@@ -30,28 +30,41 @@ export function OrderList() {
               <h2 className="mb-6 text-center text-2xl font-semibold">주문 목록</h2>
             </div>
             <div>
-              {orderList.map((order, index) => (
+              {orderList.map((order) => (
                 <>
-                  <div key={index}>
+                  <div key={order.orderId}>
                     <div>
                       {order.orderDate} | {order.orderToken}
                     </div>
-                    {order.orderItems.map((item) => (
+                    {order.orderItems.map((item, index) => (
                       <>
-                        <div>
-                          <div>{item.productName}</div>
+                        <div key={index}>
                           <div>
-                            옵션: {order.optionName || "기본"} / 수량: {item.quantity}
+                            <div>{item.productName}</div>
+                            <div>
+                              옵션: {order.optionName || "기본"} / 수량: {item.quantity}
+                            </div>
                           </div>
-                        </div>
-                        <div>
-                          {item.price.toLocaleString()} 원
+                          <div>
+                            {item.price.toLocaleString()} 원
+                          </div>
                         </div>
                       </>
                     ))}
                     <div>{order.totalPrice.toLocaleString()}원</div>
                   </div>
                 </>
+              ))}
+            </div>
+            <div className="flex justify-center gap-2 mt-6">
+              {Array.from({length: totalPages}, (_, i) => (
+                <button
+                  key={i}
+                  className={`btn btn-sm ${i === page ? 'btn-neutral' : 'btn-outline'}`}
+                  onClick={() => setPage(i)}
+                >
+                  {i + 1}
+                </button>
               ))}
             </div>
 
