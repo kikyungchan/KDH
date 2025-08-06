@@ -23,7 +23,9 @@ function Home() {
         setLeftVisual(res.data);
       })
       .catch((err) => console.error("좌측 비주얼 로딩 실패:", err));
+  }, []);
 
+  useEffect(() => {
     // 우측배너
     axios
       .get("/api/product/hot-random")
