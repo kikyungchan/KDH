@@ -26,13 +26,18 @@ import { ResetPassword } from "./feature/Member/ResetPassword.jsx";
 import { MemberLogout } from "./feature/Member/MemberLogout.jsx";
 import { ProductOrderComplete } from "./feature/Product/ProductOrderComplete.jsx";
 import { CartProvider } from "./feature/Product/CartContext.jsx";
+import MainPage from "./feature/common/MainPage.jsx";
 import Main from "./feature/common/Main.jsx";
 import ImageSlide from "./feature/common/CoverImageSlide/ImageSlide.jsx";
 import Home from "./feature/common/Home/Home.jsx";
+import {AlertProvider} from "./feature/common/AlertContext.jsx";
+import {OrderList} from "./Order/OrderList.jsx";
+import {OrderDetail} from "./Order/OrderDetail.jsx";
 
 function App() {
   // const username = prompt("닉네임을 입력해 주세요");
   return (
+    <AlertProvider>
     <AuthenticationContextProvider>
       <BrowserRouter>
         <CartProvider>
@@ -50,6 +55,8 @@ function App() {
                 path="product/order/complete"
                 element={<ProductOrderComplete />}
               />
+              <Route path="/product/order/list" element={<OrderList/>}/>
+              <Route path="/product/order/detail" element={<OrderDetail/>}/>
               <Route path="/member/edit" element={<MemberEdit />} />
               <Route path="/member/list" element={<MemberList />} />
               <Route path="/member" element={<MemberDetail />} />
@@ -73,6 +80,7 @@ function App() {
         </CartProvider>
       </BrowserRouter>
     </AuthenticationContextProvider>
+    </AlertProvider>
   );
 }
 

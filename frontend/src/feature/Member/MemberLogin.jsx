@@ -1,27 +1,18 @@
-import {
-  Button,
-  Card,
-  Col,
-  Container,
-  Form,
-  FormControl,
-  FormGroup,
-  FormLabel,
-  FormText,
-  Row,
-} from "react-bootstrap";
-import { useContext, useState } from "react";
-import { useNavigate, Link } from "react-router";
+import React, {useContext, useState} from "react";
+import {useNavigate, Link} from "react-router";
 import axios from "axios";
-import { AuthenticationContext } from "../common/AuthenticationContextProvider.jsx";
-import { useCart } from "../Product/CartContext.jsx";
+import {AuthenticationContext} from "../common/AuthenticationContextProvider.jsx";
+import {useCart} from "../Product/CartContext.jsx";
+import {useAlert} from "../common/AlertContext.jsx";
 
 export function MemberLogin() {
   const [loginId, setLoginId] = useState("");
   const [password, setPassword] = useState("");
-  const { login } = useContext(AuthenticationContext);
+  const {login} = useContext(AuthenticationContext);
+  const {showAlert} = useAlert();
+  const {setCartCount} = useCart();
+
   const navigate = useNavigate();
-  const { setCartCount } = useCart();
 
   function handleLogInButtonClick(e) {
     e.preventDefault(); // form submit 기본 동작 방지(리로드 X)
@@ -51,80 +42,83 @@ export function MemberLogin() {
         navigate("/");
       })
       .catch((err) => {
-        alert(err.response.data.message.text);
-        console.log(err.response.data.message);
+        showAlert(err.response?.data?.message); // { type: 'error', text: '...' }
       })
-      .finally(() => {});
+      .finally(() => {
+      });
   }
 
   return (
-    <div style={{ backgroundColor: "#f8f9fa", minHeight: "100vh" }}>
-      <Container
-        fluid
-        className="d-flex justify-content-center align-items-center py-5"
-      >
-        <Card
-          style={{ width: "100%", maxWidth: "400px" }}
-          className="shadow p-4"
-        >
-          <Card.Body>
-            <Row className="justify-content-center">
-              <Col>
-                <h3 className="text-center mb-4">로그인</h3>
-                <Form onSubmit={handleLogInButtonClick}>
-                  <FormGroup controlId="loginId1" className="mb-3">
-                    <FormLabel>아이디</FormLabel>
-                    <FormControl
+    <div className="bg-gray-100 min-h-screen">
+      <div className="flex justify-center items-start pt-10">
+        <div className="w-full max-w-[400px]">
+          <div className="p-6 shadow rounded-2xl bg-white">
+            <div className="w-full justify-content-center">
+
+            <Link to="/" className="navbar-logo block text-center mb-6">
+                  코데헌
+                </Link>
+
+                <h3 className="text-center text-xl font-bold mb-6">로그인</h3>
+
+                <form onSubmit={handleLogInButtonClick}>
+                  {/* 아이디 */}
+                  <div className="form-control mb-4">
+                    <label htmlFor="loginId" className="block text-sm font-semibold mb-2">
+                      아이디
+                    </label>
+                    <input
+                      id="loginId"
+                      type="text"
                       value={loginId}
                       onChange={(e) => setLoginId(e.target.value)}
+                      className="input input-bordered w-full"
                     />
-                  </FormGroup>
-                  <FormGroup controlId="password1" className="mb-3">
-                    <FormLabel>비밀번호</FormLabel>
-                    <FormControl
+                  </div>
+
+                  {/* 비밀번호 */}
+                  <div className="form-control mb-4">
+                    <label htmlFor="password" className="block text-sm font-semibold mb-2">
+                      비밀번호
+                    </label>
+                    <input
+                      id="password"
                       type="password"
                       value={password}
                       onChange={(e) => setPassword(e.target.value)}
+                      className="input input-bordered w-full"
                     />
-                  </FormGroup>
-                  <div className="text-center mt-3">
-                    <Button
-                      variant="dark"
-                      type="submit"
-                      className="w-100 py-2 fw-bold"
-                    >
-                      로그인
-                    </Button>
                   </div>
-                </Form>
-                <div className="text-end mt-3" style={{ fontSize: "0.85rem" }}>
-                  <Link
-                    to="/signup"
-                    className="text-decoration-none text-dark me-2"
-                  >
+
+                  {/* 로그인 버튼 */}
+                  <div className="mt-4">
+                    <button type="submit" className="btn btn-neutral w-full font-bold py-2">
+                      로그인
+                    </button>
+                  </div>
+                </form>
+
+                {/* 회원가입 링크 */}
+                <div className="text-right mt-4 text-sm">
+                  <Link to="/signup" className="link link-hover text-gray-700">
                     회원가입
                   </Link>
                 </div>
-                <div className="text-end mt-2" style={{ fontSize: "0.85rem" }}>
-                  <Link
-                    to="/find/id"
-                    className="text-decoration-none text-dark"
-                  >
+
+                {/* 아이디/비밀번호 찾기 링크 */}
+                <div className="text-right mt-2 text-sm">
+                  <Link to="/find/id" className="link link-hover text-gray-700">
                     아이디 찾기
                   </Link>
-                  <span className="mx-2 text-muted">/</span>
-                  <Link
-                    to="/find/password"
-                    className="text-decoration-none text-dark me-2"
-                  >
+                  <span className="mx-2 text-gray-400">/</span>
+                  <Link to="/find/password" className="link link-hover text-gray-700">
                     비밀번호 찾기
                   </Link>
                 </div>
-              </Col>
-            </Row>
-          </Card.Body>
-        </Card>
-      </Container>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   );
 }

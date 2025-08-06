@@ -1,21 +1,7 @@
-import {
-  Button,
-  Card,
-  Col,
-  Container,
-  FormControl,
-  FormGroup,
-  FormLabel,
-  FormText,
-  Modal,
-  Row,
-  Spinner,
-} from "react-bootstrap";
-import { useContext, useEffect, useState } from "react";
-import { useNavigate, useSearchParams } from "react-router";
+import {useContext, useEffect, useState} from "react";
+import {useNavigate, useSearchParams} from "react-router";
 import axios from "axios";
-import { AuthenticationContext } from "../common/AuthenticationContextProvider.jsx";
-import WithDrawModal from "./Modal/WithDrawModal.jsx";
+import {AuthenticationContext} from "../common/AuthenticationContextProvider.jsx";
 import WithdrawModal from "./Modal/WithDrawModal.jsx";
 
 export function MemberDetail() {
@@ -31,7 +17,7 @@ export function MemberDetail() {
 
   const navigate = useNavigate();
 
-  const { logout, hasAccess } = useContext(AuthenticationContext);
+  const {logout, hasAccess} = useContext(AuthenticationContext);
 
   // 회원 정보 조회
   useEffect(() => {
@@ -40,8 +26,10 @@ export function MemberDetail() {
       .then((res) => {
         setMember(res.data);
       })
-      .catch((err) => {})
-      .finally(() => {});
+      .catch(() => {
+      })
+      .finally(() => {
+      });
   }, [memberParams]);
 
   // 회원 정보 없을때 (ex: null)
@@ -49,7 +37,7 @@ export function MemberDetail() {
     return (
       <div>
         <div>
-          <Spinner />
+          <span className="loading loading-spinner loading-sm mr-2"/>
         </div>
         회원 정보를 불러오는 중 . . .{" "}
       </div>
@@ -63,13 +51,13 @@ export function MemberDetail() {
 
     axios
       .delete(`/api/member`, {
-        data: { id: member.id, oldPassword: oldPassword },
+        data: {id: member.id, oldPassword: oldPassword},
       })
-      .then((res) => {
+      .then(() => {
         navigate("/");
         logout();
       })
-      .catch((err) => {
+      .catch(() => {
         setPasswordError("비밀번호가 일치하지 않습니다");
       })
       .finally(() => {
@@ -84,88 +72,129 @@ export function MemberDetail() {
   }
 
   return (
-    <div style={{ backgroundColor: "#f8f9fa", minHeight: "100vh" }}>
-      <Container
-        className="d-flex justify-content-center align-items-center"
-        style={{ paddingTop: "40px" }}
-      >
-        <div style={{ width: "100%", maxWidth: "600px" }}>
-          <Card className="p-4 shadow rounded">
-            <Card.Body>
-              <Row>
-                <Col>
-                  <h2 className="mb-4 text-center">회원 정보</h2>
-                  <div>
-                    <FormGroup controlId="loginId1" className="mb-2">
-                      <FormLabel className="fw-semibold">아이디</FormLabel>
-                      <FormControl readOnly value={member.loginId} />
-                    </FormGroup>
+    <div className="bg-gray-100 min-h-screen">
+      <div className="flex justify-center items-start pt-10">
+        <div className="w-full max-w-[600px] mx-auto px-4">
+          <div className="px-8 py-6 shadow rounded-2xl bg-white">
+            <div className="w-full">
+
+            <h2 className="mb-6 text-center text-2xl font-bold">회원 정보</h2>
+                <div className="space-y-4">
+                  {/* 아이디 */}
+                  <div className="flex items-center gap-4 mb-4">
+                    <label htmlFor="loginId" className="label w-24 font-semibold mr-6">아이디</label>
+                    <input
+                      type="text"
+                      id="loginId"
+                      readOnly
+                      value={member.loginId}
+                      className=" input input-bordered px-3 py-2 ml-1"
+                    />
                   </div>
-                  <div>
-                    <FormGroup controlId="name1" className="mb-2">
-                      <FormLabel className="fw-semibold">이름</FormLabel>
-                      <FormControl readOnly value={member.name} />
-                    </FormGroup>
+
+                  {/* 이름 */}
+                  <div className="flex items-center gap-4 mb-4">
+                    <label htmlFor="name" className="label w-24 font-semibold mr-6">이름</label>
+                    <input
+                      type="text"
+                      id="name"
+                      readOnly
+                      value={member.name}
+                      className=" input input-bordered px-3 py-2 ml-1"
+                    />
                   </div>
-                  <div>
-                    <FormGroup controlId="birthday1" className="mb-2">
-                      <FormLabel className="fw-semibold">생년월일</FormLabel>
-                      <FormControl readOnly value={member.birthday} />
-                    </FormGroup>
+
+                  {/* 생년월일 */}
+                  <div className="flex items-center gap-4 mb-4">
+                    <label htmlFor="birthDate" className="label w-24 font-semibold mr-6">생년월일</label>
+                    <input
+                      type="text"
+                      id="birthDate"
+                      readOnly
+                      value={member.birthday}
+                      className=" input input-bordered px-3 py-2 ml-1"
+                    />
                   </div>
-                  <div>
-                    <FormGroup controlId="phone1" className="mb-2">
-                      <FormLabel className="fw-semibold">전화번호</FormLabel>
-                      <FormControl readOnly value={member.phone} />
-                    </FormGroup>
+
+                  {/* 전화번호 */}
+                  <div className="flex items-center gap-4 mb-4">
+                    <label htmlFor="phone" className="label w-24 font-semibold mr-6">전화번호</label>
+                    <input
+                      type="text"
+                      id="phone"
+                      readOnly
+                      value={member.phone}
+                      className="input input-bordered px-3 py-2 ml-1"
+                    />
                   </div>
-                  <div>
-                    <FormGroup controlId="email1" className="mb-2">
-                      <FormLabel className="fw-semibold">이메일</FormLabel>
-                      <FormControl readOnly value={member.email} />
-                    </FormGroup>
+
+                  {/* 이메일 */}
+                  <div className="flex items-center gap-4 mb-4">
+                    <label htmlFor="email" className="label w-24 font-semibold mr-6">이메일</label>
+                    <input
+                      type="text"
+                      id="email"
+                      readOnly
+                      value={member.email}
+                      className="input input-bordered px-3 py-2 ml-1"
+                    />
                   </div>
-                  <div>
-                    <FormGroup controlId="address1" className="mb-2">
-                      <FormLabel className="fw-semibold">주소</FormLabel>
-                      <FormControl readOnly value={member.zipCode} />
-                      <FormControl readOnly value={member.address} />
-                      <FormControl readOnly value={member.addressDetail} />
-                    </FormGroup>
-                  </div>
-                  {hasAccess(member.loginId) && (
-                    <div className="text-end">
-                      <Button
-                        className="me-2"
-                        variant="dark"
-                        onClick={() => navigate(`/member/edit?id=${member.id}`)}
-                      >
-                        수정
-                      </Button>
-                      <Button
-                        variant="danger"
-                        onClick={() => setWithdrawModalShow(true)}
-                      >
-                        탈퇴
-                      </Button>
+
+                  {/* 주소 */}
+                  <div className="flex items-start gap-4 mb-4">
+                    <label htmlFor="email" className="label w-24 font-semibold mr-7">주소</label>
+                    <div className="flex flex-col flex-1 gap-2">
+                      <input
+                        type="text"
+                        readOnly
+                        value={member.zipCode}
+                        className=" input input-bordered px-3 py-2"/>
+                      <input
+                        type="text"
+                        readOnly
+                        value={member.address}
+                        className=" input input-bordered px-3 py-2"/>
+                      <input
+                        type="text"
+                        readOnly
+                        value={member.addressDetail}
+                        className=" input input-bordered px-3 py-2"/>
+
                     </div>
-                  )}
-                </Col>
-                <WithdrawModal
-                  show={withdrawModalShow}
-                  onClose={handleCloseWithdrawModal}
-                  oldPassword={oldPassword}
-                  setOldPassword={setOldPassword}
-                  passwordError={passwordError}
-                  setPasswordError={setPasswordError}
-                  handleWithdrawButtonClick={handleWithdrawButtonClick}
-                  isWithdrawProcessing={isWithdrawProcessing}
-                />
-              </Row>
-            </Card.Body>
-          </Card>
+                  </div>
+                </div>
+
+                {/* 버튼 */}
+                {hasAccess(member.loginId) && (
+                  <div className="flex space-x-2 justify-content-end mt-10">
+                    <button
+                      className="btn btn-info"
+                      onClick={() => navigate(`/member/edit?id=${member.id}`)}
+                    >
+                      수정
+                    </button>
+                    <button
+                      className="btn btn-error"
+                      onClick={() => setWithdrawModalShow(true)}
+                    >
+                      탈퇴
+                    </button>
+                  </div>
+                )}
+            </div>
+              <WithdrawModal
+                show={withdrawModalShow}
+                onClose={handleCloseWithdrawModal}
+                oldPassword={oldPassword}
+                setOldPassword={setOldPassword}
+                passwordError={passwordError}
+                setPasswordError={setPasswordError}
+                handleWithdrawButtonClick={handleWithdrawButtonClick}
+                isWithdrawProcessing={isWithdrawProcessing}
+              />
+          </div>
         </div>
-      </Container>
+      </div>
     </div>
   );
 }

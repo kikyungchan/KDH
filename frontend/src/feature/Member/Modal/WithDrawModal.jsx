@@ -1,12 +1,3 @@
-import {
-  Button,
-  FormControl,
-  FormGroup,
-  FormLabel,
-  FormText,
-  Modal,
-  Spinner,
-} from "react-bootstrap";
 
 export default function WithdrawModal({
   show,
@@ -17,57 +8,69 @@ export default function WithdrawModal({
   handleWithdrawButtonClick,
   isWithdrawProcessing,
 }) {
+  if (!show) return null;
+
   return (
-    <Modal show={show} onHide={onClose}>
-      <Modal.Header closeButton>
-        <Modal.Title>회원 탈퇴 확인</Modal.Title>
-      </Modal.Header>
-      <Modal.Body>
-        <p className="mb-3" style={{ fontSize: "13px" }}>
+    <div className="modal modal-open">
+      <div className="modal-box w-full max-w-md">
+        {/* 모달 헤더 */}
+        <div className="flex justify-between items-center mb-2">
+          <h3 className="text-lg font-bold">회원 탈퇴 확인</h3>
+          <button className="btn btn-sm btn-circle" onClick={onClose}>
+            ✕
+          </button>
+        </div>
+
+        {/* 설명 */}
+        <p className="text-sm text-gray-600 mb-4">
           정말 탈퇴하시겠습니까? 탈퇴를 위해 비밀번호를 입력해주세요.
         </p>
-        <FormGroup>
-          <FormLabel>비밀번호</FormLabel>
-          <FormControl
-            id="withdraw-password"
-            type="password"
-            value={oldPassword}
-            onChange={(e) => {
-              setOldPassword(e.target.value);
-            }}
-            autoFocus
-            isInvalid={!!passwordError}
-          />
-          {passwordError && (
-            <FormText className="text-danger">{passwordError}</FormText>
-          )}
-        </FormGroup>
-      </Modal.Body>
-      <Modal.Footer>
-        <Button variant="dark" onClick={onClose}>
-          취소
-        </Button>
-        <Button
-          onClick={handleWithdrawButtonClick}
-          variant="danger"
-          disabled={!oldPassword || isWithdrawProcessing}
-        >
-          {isWithdrawProcessing ? (
-            <>
-              <Spinner
-                animation="border"
-                size="sm"
-                role="status"
-                aria-hidden="true"
-                className="me-2"
-              />
-              전송 중...
-            </>
-          ) : (
-            "탈퇴"
-          )}
-        </Button>
-      </Modal.Footer>
-    </Modal>
+
+        {/* 비밀번호 입력란 */}
+        <div className="flex items-start gap-6 mb-4">
+          {/* 왼쪽 라벨 */}
+          <label
+            htmlFor="withdraw-password"
+            className="w-24 pt-2 font-semibold text-sm text-gray-700"
+          >
+            비밀번호
+          </label>
+
+          {/* 오른쪽 input + 에러 */}
+          <div className="flex flex-col flex-1">
+            <input
+              id="withdraw-password"
+              type="password"
+              className={`input input-bordered ${
+                passwordError ? "input-error" : ""
+              }`}
+              value={oldPassword}
+              onChange={(e) => setOldPassword(e.target.value)}
+              autoFocus
+            />
+            {passwordError && (
+              <span className="text-error text-sm mt-1">{passwordError}</span>
+            )}
+          </div>
+        </div>
+
+        {/* 버튼 영역 */}
+        <div className="modal-action">
+          <button
+            className="btn btn-error"
+            onClick={handleWithdrawButtonClick}
+            disabled={!oldPassword || isWithdrawProcessing}
+          >
+            {isWithdrawProcessing && (
+              <span className="loading loading-spinner loading-sm mr-2" />
+            )}
+            탈퇴
+          </button>
+          <button className="btn btn-neutral" onClick={onClose}>
+            취소
+          </button>
+        </div>
+      </div>
+    </div>
   );
 }
