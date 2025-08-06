@@ -20,15 +20,17 @@ public class FaqController {
     private final FaqService faqService;
 
     @GetMapping("list")
-    @PreAuthorize("isAuthenticated()")
     public Map<String, Object> getAllFaqs(
             @RequestParam(value = "q", defaultValue = "") String keyword,
-            @RequestParam(value = "p", defaultValue = "1") Integer pageNumber,
-            Authentication authentication) {
+            @RequestParam(value = "c", required = false) Integer category,
+            @RequestParam(value = "p", defaultValue = "1") Integer pageNumber) {
 
-        faqService.hasPermission(authentication);
+        if (category != null && category == 0) {
+            category = null;
+        }
 
-        return faqService.list(keyword, pageNumber);
+
+        return faqService.list(keyword, category, pageNumber);
     }
 
     @PostMapping("add")

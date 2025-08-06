@@ -18,3 +18,8 @@
     margin: 0 auto;
     padding: 30px 60px;
 }
+
+td, tr, th {
+    text-align: center;
+}
+

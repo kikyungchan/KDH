@@ -31,9 +31,9 @@ public class FaqService {
         }
     }
 
-    public Map<String, Object> list(String keyword, Integer pageNumber) {
+    public Map<String, Object> list(String keyword, Integer category, Integer pageNumber) {
         Page<FaqListDto> faqListDtoPage
-                = faqRepository.findAllBy(keyword, PageRequest.of(pageNumber - 1, 10));
+                = faqRepository.findAllBy(keyword, category, PageRequest.of(pageNumber - 1, 5));
 
         int totalPages = faqListDtoPage.getTotalPages(); // 마지막 페이지
         int rightPageNumber = ((pageNumber - 1) / 10 + 1) * 10;
@@ -57,7 +57,7 @@ public class FaqService {
             return false;
         }
 
-        if (dto.getAnswer() == null || dto.getAnswer().trim().isBlank()) {
+        if (dto.getAnswer() == null || dto.getAnswer().isBlank()) {
             return false;
         }
 
@@ -73,7 +73,7 @@ public class FaqService {
 
         Member user = memberRepository.findById(Integer.valueOf(authentication.getName())).get();
         faq.setUser(user);
-        
+
         faqRepository.save(faq);
     }
 }

@@ -135,30 +135,25 @@ export function QnaAdd() {
 
   return (
     <Row className="justify-content-center">
-      <Col md={8} lg={6} className="mt-5">
+      <Col md={8} lg={9} className="mt-5">
         <div className="container">
           <h2 className="mb-4">1:1 상담 문의</h2>
           <div>
             {/*<Button disabled={true}>상담문의</Button>*/}
             {/*<Button>상담내역</Button>*/}
+
             <ButtonGroup>
               {radios.map((radio, idx) => (
-                <ToggleButton
+                <input
                   key={idx}
-                  id={`radio-${idx}`}
+                  className="btn btn-outline"
                   type="radio"
-                  variant={"outline-primary"}
-                  name="radio"
+                  name="바로가기"
+                  aria-label={radio.name}
                   value={radio.value}
-                  checked={radioValue === radio.value}
-                  onChange={(e) => setRadioValue(e.currentTarget.value)}
-                  onClick={
-                    // radio.value === "2" ? handleQnalistButtonClick : null
-                    radio.fnc
-                  }
-                >
-                  {radio.name}
-                </ToggleButton>
+                  checked={idx === 0}
+                  onClick={radio.fnc}
+                />
               ))}
             </ButtonGroup>
           </div>
@@ -166,12 +161,11 @@ export function QnaAdd() {
           <div className="row">
             <div ref={categoryRef}>
               {/*<div>*/}
-
-              <FormGroup className="mb-3" controlId="category1">
-                <FormLabel>상담유형</FormLabel>
-                <Form.Select
-                  className="form-select"
-                  aria-label="Default select example"
+              <fieldset className="fieldset category1">
+                <legend className="fieldset-legend">상담유형</legend>
+                <select
+                  defaultValue="Pick a browser"
+                  className="select"
                   onChange={(e) => setCategory(e.target.value)}
                 >
                   <option selected disabled hidden>
@@ -183,8 +177,9 @@ export function QnaAdd() {
                   <option value="4">설정 관련</option>
                   <option value="5">반품·교환 관련</option>
                   <option value="6">기타 문의</option>
-                </Form.Select>
-              </FormGroup>
+                </select>
+              </fieldset>
+              <br />
             </div>
             <br />
             <div>

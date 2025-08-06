@@ -1,0 +1,19 @@
+@font-face {
+    font-family: 'Cafe24Ohsquareair';
+    src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_2202@1.0/Cafe24Ohsquareair.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+
+/*h2 {*/
+/*    font-size: 10px;*/
+/*}*/
+
+.faq-title {
+
+}
+
+.faq_question {
+    font-family: "Cafe24Ohsquareair";
+    font-size: 14px;
+}

@@ -18,6 +18,7 @@ import { useContext, useEffect, useState } from "react";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { AuthenticationContext } from "../common/AuthenticationContextProvider.jsx";
+import "./faqList.css";
 
 export function FaQList() {
   const { user, isAdmin } = useContext(AuthenticationContext);
@@ -27,31 +28,45 @@ export function FaQList() {
   const [modalShow, setModalShow] = useState();
   const [title, setTitle] = useState();
   const [content, setContent] = useState();
+  const [category, setCategory] = useState(null);
+  const [searchCategory, setsearchCategory] = useState("");
   const [searchParams, setSearchParams] = useSearchParams("1");
   const radios = [
     { name: "상품목록", value: "1", fnc: handleQnaAddButtonClick },
     { name: "문의내역", value: "2", fnc: handleQnaListButtonClick },
     { name: "자주 묻는 질문", value: "3", fnc: handleFaQListButtonClick },
   ];
+  const catlist = [
+    { name: "전체", value: 0 },
+    { name: "주문/결제", value: 1 },
+    { name: "배송관련", value: 2 },
+    { name: "취소/환불", value: 3 },
+    { name: "반품/교환", value: 4 },
+    { name: "증빙서류발급", value: 5 },
+    { name: "로그인/회원정보", value: 6 },
+    { name: "서비스/기타", value: 7 },
+  ];
 
   useEffect(() => {
     axios
-      .get(`/api/faq/list`)
+      .get(`/api/faq/list?${searchParams}`)
       .then((res) => {
         setFaQList(res.data.faqList);
         setPageInfo(res.data.pageInfo);
-        console.log("data", res.data);
-        console.log("faqList", faqList);
+        // console.log("data : ", res.data);
+        setsearchCategory(searchParams.get("c") || 0);
+        // searchParams.set("c", searchCategory);
+        // const newSearchParams = new URLSearchParams();
+        // newSearchParams.set("c", searchCategory);
+        // newSearchParams.set("P", PAGE);
+        // newSearchParams.set("q", );
+        // setSearchParams(newSearchParams);
       })
       .catch((err) => {
         console.log(err.data);
       })
       .finally(() => {});
-    console.log("user : ", user);
-    console.log("user is null : ", user == null);
-    console.log("isAdmin1 : ", isAdmin && true);
-    console.log("isAdmin2 : ", user !== null && isAdmin);
-  }, []);
+  }, [searchParams]);
 
   const pageNumbers = [];
   if (pageInfo) {
@@ -60,10 +75,12 @@ export function FaQList() {
     }
   }
 
-  function handlePageNumberClick(pageNumber) {
-    const nextSearchParams = new URLSearchParams(searchParams);
-    nextSearchParams.set("p", pageNumber);
-    setSearchParams(nextSearchParams);
+  function handleCategoryButtonClick(value) {
+    // window.location = `/faq/list?c=${value}`;
+    const categorySearchParams = new URLSearchParams(searchParams);
+    categorySearchParams.set("c", value);
+    categorySearchParams.set("p", 1);
+    setSearchParams(categorySearchParams);
   }
 
   function handleQnaAddButtonClick() {
@@ -80,14 +97,16 @@ export function FaQList() {
 
   // useState 안전장치
   if (!faqList) {
-    return <Spinner />;
+    return <span className="loading loading-spinner"></span>;
   }
 
+  // todo : 백엔드도 text형으로 바꾸기
   function handleSaveButtonClick() {
     axios
       .post("/api/faq/add", {
         question: title,
         answer: content,
+        category: category,
       })
       .then((res) => {
         console.log("success");
@@ -95,6 +114,7 @@ export function FaQList() {
         if (message) {
           toast(message.text, { type: message.type });
         }
+        window.location.reload();
       })
       .catch((err) => {
         console.log("err");
@@ -108,127 +128,234 @@ export function FaQList() {
       });
   }
 
+  // todo : add 유효성 검사 필요함
+
   return (
     <>
       <Row className="justify-content-center">
-        <Col md={8} lg={6} className="mt-5">
+        <Col md={12} lg={9} className="mt-5">
           <div className="container">
-            <h2 className="mb-4">자주 묻는 질문</h2>
+            {/*<h2 className="mb-4">자주 묻는 질문</h2>*/}
+            <section className="bg-white lg:py-12">
+              <div className="lg:flex">
+                <div className="mb-8 lg:w-1/2 w-full">
+                  <h2 className="text-2xl font-bold my-4">
+                    무엇을 도와드릴까요?
+                  </h2>
+                  <ul>
+                    <li className="mb-2 py-1">
+                      <a
+                        href="/faq/list?c=2&#배송은+얼마나+걸리나요?"
+                        className="flex items-center text-[#1B64DA] hover:underline"
+                      >
+                        <span className="bg-blue-100 text-[#1B64DA] rounded-full w-5 h-5 flex items-center justify-center mr-2 text-xs font-bold">
+                          Q
+                        </span>
+                        배송은 얼마나 걸리나요?
+                      </a>
+                    </li>
+                    <li className="mb-2 py-1">
+                      <a
+                        href="/faq/list?c=3&#주문+취소는+어떻게+하나요"
+                        className="flex items-center text-[#1B64DA] hover:underline"
+                      >
+                        <span className="bg-blue-100 text-[#1B64DA] rounded-full w-5 h-5 flex items-center justify-center mr-2 text-xs font-bold">
+                          Q
+                        </span>
+                        주문 취소는 어떻게 하나요?
+                      </a>
+                    </li>
+                    <li className="mb-2 py-1">
+                      <a
+                        href="/faq/list?c=7&#제품의+자세한+정보는+어떻게+알+수+있나요"
+                        className="flex items-center text-[#1B64DA] hover:underline"
+                      >
+                        <span className="bg-blue-100 text-[#1B64DA] rounded-full w-5 h-5 flex items-center justify-center mr-2 text-xs font-bold">
+                          Q
+                        </span>
+                        제품의 자세한 정보를 알고 싶어요.
+                      </a>
+                    </li>
+                    <li className="mb-2 py-1">
+                      <a
+                        href="/faq/list?c=4&#제품이+불량입니다.+반품+혹은+교환은+어떻게+하나요"
+                        className="flex items-center text-blue-600 hover:underline"
+                      >
+                        <span className="bg-blue-100 text-blue-600 rounded-full w-5 h-5 flex items-center justify-center mr-2 text-xs font-bold">
+                          Q
+                        </span>
+                        제품이 불량일 때는?
+                      </a>
+                    </li>
+                    <li className="mb-2 py-1">
+                      <a
+                        href="/faq/list?c=6&#카카오+계정으로+로그인+하면+&amp;#39;이미+카카오로+가입하신+이메일입니다&amp;#39;+라고+나오는데+어떻게+해야+하나요"
+                        className="flex items-center text-blue-600 hover:underline"
+                      >
+                        <span className="bg-blue-100 text-blue-600 rounded-full w-5 h-5 flex items-center justify-center mr-2 text-xs font-bold">
+                          Q
+                        </span>
+                        카카오 계정으로 로그인하면 이미 가입되었다고 합니다.
+                      </a>
+                    </li>
+                  </ul>
+                </div>
+                <div className="lg:w-1/2 w-full lg:flex space-x-2 ml-auto">
+                  {/*<button className="btn btn-default btn-outline shadow-md">
+                    1:1 상담하기
+                  </button>
+                  <a href="/contacts/new" className="btn btn-outline">
+                    이메일 문의하기
+                  </a>
+                  <button className="btn btn-outline">
+                    이메일 주소 복사하기
+                  </button>*/}
+                  <div className="p-4 bg-gray-100 rounded-2xl mx-auto">
+                    <h2 className="text-xl font-bold mb-2.5">고객센터</h2>
+                    <ol className="list-disc  list-outside pl-5 space-y-2 text-gray-700">
+                      <li>평일: 전체 문의 상담</li>
+                      <li>토요일, 공휴일: 오늘의집 직접배송 주문건 상담</li>
+                      <li>일요일: 휴무</li>
+                    </ol>
+                    <ButtonGroup className="mt-22 ">
+                      {radios.map((radio, idx) => (
+                        <input
+                          key={idx}
+                          className="btn btn-outline mx-2 my-1
+                          btn-block lg:w-auto lg:my-auto"
+                          type="radio"
+                          name="바로가기"
+                          aria-label={radio.name}
+                          value={radio.value}
+                          checked={idx === 2}
+                          onClick={radio.fnc}
+                        />
+                      ))}
+                    </ButtonGroup>
+                  </div>
+                </div>
+              </div>
+            </section>
+
             <div>
-              <ButtonGroup>
-                {radios.map((radio, idx) => (
-                  <ToggleButton
-                    key={idx}
-                    id={`radio-${idx}`}
-                    type="radio"
-                    variant="outline-primary"
-                    name="radio"
-                    value={radio.value}
-                    checked={idx === 2}
-                    onClick={radio.fnc}
-                  >
-                    {radio.name}
-                  </ToggleButton>
+              <nav className="pt-10 px-6 pb-0">
+                {catlist.map((cat, idx) => (
+                  <label for={cat.name} key={cat.name}>
+                    <button
+                      id={cat.name}
+                      type="checkbox"
+                      className={`btn btn-primary m-1 rounded-full
+                      ${searchCategory == cat.value ? "" : "btn-outline"}`}
+                      // onClick={() => setsearchCategory(cat.value)}
+                      onClick={() => handleCategoryButtonClick(cat.value)}
+                    >
+                      {/*  todo : 카테고리별 검색 기능 구현 */}
+                      {cat.name}
+                    </button>
+                  </label>
                 ))}
-              </ButtonGroup>
+              </nav>
             </div>
             <br />
             {faqList.length > 0 ? (
-              <Accordion>
+              <>
                 {faqList.map((faq) => (
-                  <Accordion.Item eventKey="0" flush>
-                    <Accordion.Header>
-                      <h6>{faq.question}</h6>
-                    </Accordion.Header>
-                    <Accordion.Body>
-                      <p>{faq.answer}</p>
-                    </Accordion.Body>
-                  </Accordion.Item>
+                  <div className="collapse collapse-plus bg-base-100 border border-base-300">
+                    <input
+                      id={faq.question}
+                      type="checkbox"
+                      name="faqlist"
+                      className="w-full"
+                    />
+                    <div className="collapse-title font-semibold flex items-center">
+                      <span className="bg-blue-100 text-blue-600 rounded-full w-5 h-5 flex items-center justify-center mr-2 text-xs font-bold">
+                        Q
+                      </span>
+                      <span> {faq.question}</span>
+                    </div>
+                    <pre className="collapse-content text-sm whitespace-pre-wrap break-words">
+                      {faq.answer}
+                    </pre>
+                  </div>
                 ))}
-              </Accordion>
+              </>
             ) : (
               <p>
                 작성된 글이 없습니다. <br />새 글을 작성해 보세요.
               </p>
             )}
-          </div>
-          <br />
-          <div>
-            {/*todo : 관리자인지 여부 확인*/}
-            {isAdmin && (
-              <Button className="btn-primary" onClick={setModalShow}>
-                등록하기
-              </Button>
-            )}
+            <br />
+            <div>
+              {/*todo : 관리자인지 여부 확인*/}
+              {isAdmin && (
+                // <Button className="btn-primary" onClick={setModalShow}>
+                //   등록하기
+                // </Button>
+                <button
+                  className="btn btn-accent"
+                  onClick={() =>
+                    document.getElementById("my_modal_1").showModal()
+                  }
+                >
+                  등록하기
+                </button>
+              )}
+            </div>
           </div>
         </Col>
         {/*  todo : admin 확인되면 modal 띄워서 자주 묻는 질문 CUD 할 수 있게 기능 추가*/}
 
-        <Modal show={modalShow}>
-          <Modal.Header>
-            <Modal.Title>FaQ 등록</Modal.Title>
-          </Modal.Header>
-          <Modal.Body>
-            <FormGroup controlId="title">
-              <FormLabel>faq 질문</FormLabel>
-              <FormControl
+        <dialog id="my_modal_1" className="modal">
+          <div className="modal-box">
+            <h3 className="font-bold text-lg">FaQ 등록</h3>
+            <br />
+            <fieldset className="fieldset">
+              <legend className="fieldset-legend">카테고리</legend>
+              <select
+                defaultValue="Pick a browser"
+                className="select"
+                onChange={(e) => setCategory(e.target.value)}
+              >
+                <option hidden selected value="0">
+                  카테고리를 선택해주세요
+                </option>
+                {catlist.map((cat, idx) => (
+                  <option value={cat.value}>{cat.name}</option>
+                ))}
+              </select>
+            </fieldset>
+            <fieldset className="fieldset">
+              <legend className="fieldset-legend">faq 질문</legend>
+              <input
+                type="text"
+                className="input w-full"
+                placeholder="질문을 입력해주세요"
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
-              ></FormControl>
-            </FormGroup>
-            <FormGroup controlId="content">
-              <FormLabel>faq 답변</FormLabel>
-              <FormControl
-                as="textarea"
+              ></input>
+            </fieldset>
+            <fieldset className="fieldset">
+              <legend className="fieldset-legend">faq 답변</legend>
+              <textarea
+                className="textarea h-24 w-full"
+                placeholder="답변을 입력해주세요"
                 value={content}
                 onChange={(e) => setContent(e.target.value)}
-              ></FormControl>
-            </FormGroup>
-          </Modal.Body>
-          <Modal.Footer>
-            <Button variant="outline-dark" onClick={() => setModalShow(false)}>
-              취소
-            </Button>
-            <Button variant="primary" onClick={handleSaveButtonClick}>
-              등록
-            </Button>
-          </Modal.Footer>
-        </Modal>
-      </Row>
-      <Row className="my-3">
-        <Col>
-          <Pagination className="justify-content-center">
-            <Pagination.First
-              disabled={pageInfo.currentPageNumber === 1}
-              onClick={() => handlePageNumberClick(1)}
-            ></Pagination.First>
-            <Pagination.Prev
-              disabled={pageInfo.leftPageNumber <= 1}
-              onClick={() =>
-                handlePageNumberClick(pageInfo.leftPageNumber - 10)
-              }
-            ></Pagination.Prev>
-            {pageNumbers.map((pageNumber) => (
-              <Pagination.Item
-                key={pageNumber}
-                onClick={() => handlePageNumberClick(pageNumber)}
-                active={pageInfo.currentPageNumber === pageNumber}
+              ></textarea>
+            </fieldset>
+            <div className="modal-action">
+              <button
+                className="btn mx-1 btn-accent"
+                onClick={handleSaveButtonClick}
               >
-                {pageNumber}
-              </Pagination.Item>
-            ))}
-            <Pagination.Next
-              disabled={pageInfo.rightPageNumber >= pageInfo.totalPages}
-              onClick={() =>
-                handlePageNumberClick(pageInfo.rightPageNumber + 1)
-              }
-            ></Pagination.Next>
-            <Pagination.Last
-              disabled={pageInfo.currentPageNumber === pageInfo.totalPages}
-              onClick={() => handlePageNumberClick(pageInfo.totalPages)}
-            ></Pagination.Last>
-          </Pagination>
-        </Col>
+                등록
+              </button>
+              <form method="dialog">
+                <button className="btn mx-1 btn-default">취소</button>
+              </form>
+            </div>
+          </div>
+        </dialog>
       </Row>
     </>
   );

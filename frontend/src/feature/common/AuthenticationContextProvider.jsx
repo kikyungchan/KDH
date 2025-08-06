@@ -36,6 +36,8 @@ export function AuthenticationContextProvider({ children }) {
       axios
         .get("/api/member?id=" + payload.sub)
         .then((res) => {
+          // console.log("data", res.data);
+          // console.log("user", res.data.name);
           setUser({
             id: res.data.id,
             loginId: res.data.loginId,
@@ -76,11 +78,12 @@ export function AuthenticationContextProvider({ children }) {
 
   // isAdmin
   const isAdmin = Array.isArray(user?.roles) && user.roles.includes("admin");
-  
+
   return (
     <AuthenticationContext
       value={{
         user: user,
+        // name: user.name,
         login: login,
         logout: logout,
         hasAccess: hasAccess,
