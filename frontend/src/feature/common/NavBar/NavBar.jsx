@@ -16,6 +16,7 @@ import Search from "./SearchBar.jsx";
 import "bootstrap/dist/css/bootstrap-grid.min.css";
 import SearchBar from "./SearchBar.jsx";
 
+
 function NavBar(props) {
   const [showMobileCategory, setShowMobileCategory] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);

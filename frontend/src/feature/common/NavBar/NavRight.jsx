@@ -1,11 +1,14 @@
-import React from "react";
+import React, { useContext } from "react";
 import { Link, useNavigate } from "react-router";
 import { FiSearch, FiUser, FiShoppingCart } from "react-icons/fi";
 import { useCart } from "../../Product/CartContext.jsx";
 import SearchBar from "./SearchBar.jsx";
+import { NavUserMenu } from "../NavUserMenu.jsx";
+import { AuthenticationContext } from "../AuthenticationContextProvider.jsx";
+
+NavUserMenu.propTypes = {};
 
 function NavRight({
-  user,
   iconRef,
   showSearch,
   setShowSearch,
@@ -15,6 +18,7 @@ function NavRight({
   searchRef,
 }) {
   const { cartCount } = useCart();
+  const { user, isAdmin, logout } = useContext(AuthenticationContext);
   const navigate = useNavigate();
 
   const handleSearchClick = () => {
@@ -33,6 +37,7 @@ function NavRight({
           onClick={() => onSearchToggle()}
           style={{ cursor: "pointer" }}
         />
+        <NavUserMenu user={user} logout={logout} isAdmin={isAdmin} />
         <Link to={user ? `/member?id=${user.id}` : "/login"}>
           <FiUser className="navbar-icon" />
         </Link>
