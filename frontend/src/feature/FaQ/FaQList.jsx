@@ -13,7 +13,7 @@ import {
   Table,
   ToggleButton,
 } from "react-bootstrap";
-import { useNavigate, useSearchParams } from "react-router";
+import { Link, useNavigate, useSearchParams } from "react-router";
 import { useContext, useEffect, useState } from "react";
 import axios from "axios";
 import { toast } from "react-toastify";
@@ -32,9 +32,9 @@ export function FaQList() {
   const [searchCategory, setsearchCategory] = useState("");
   const [searchParams, setSearchParams] = useSearchParams("1");
   const radios = [
-    { name: "상품목록", value: "1", fnc: handleQnaAddButtonClick },
-    { name: "문의내역", value: "2", fnc: handleQnaListButtonClick },
-    { name: "자주 묻는 질문", value: "3", fnc: handleFaQListButtonClick },
+    { name: "1:1 문의하기", value: "1", path: "/chat/chatting" },
+    { name: "문의내역", value: "2", path: "/qna/list" },
+    { name: "자주 묻는 질문", value: "3", path: "/faq/list" },
   ];
   const catlist = [
     { name: "전체", value: 0 },
@@ -83,24 +83,11 @@ export function FaQList() {
     setSearchParams(categorySearchParams);
   }
 
-  function handleQnaAddButtonClick() {
-    navigate("/product/list");
-  }
-
-  function handleQnaListButtonClick() {
-    navigate("/qna/list");
-  }
-
-  function handleFaQListButtonClick() {
-    navigate("/faq/list");
-  }
-
   // useState 안전장치
   if (!faqList) {
     return <span className="loading loading-spinner"></span>;
   }
 
-  // todo : 백엔드도 text형으로 바꾸기
   function handleSaveButtonClick() {
     axios
       .post("/api/faq/add", {
@@ -219,17 +206,16 @@ export function FaQList() {
                     </ol>
                     <ButtonGroup className="mt-22 ">
                       {radios.map((radio, idx) => (
-                        <input
+                        <Link
                           key={idx}
-                          className="btn btn-outline mx-2 my-1
-                          btn-block lg:w-auto lg:my-auto"
-                          type="radio"
-                          name="바로가기"
-                          aria-label={radio.name}
-                          value={radio.value}
-                          checked={idx === 2}
-                          onClick={radio.fnc}
-                        />
+                          className={`btn ${idx === 2 ? "btn-primary" : "btn-outline"}
+                           mx-2 my-1
+                          btn-block lg:w-auto lg:my-auto`}
+                          // onClick={radio.fnc}
+                          to={radio.path}
+                        >
+                          {radio.name}
+                        </Link>
                       ))}
                     </ButtonGroup>
                   </div>
