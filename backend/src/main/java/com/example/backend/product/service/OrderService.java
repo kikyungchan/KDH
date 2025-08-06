@@ -1,6 +1,7 @@
 package com.example.backend.product.service;
 
 import com.example.backend.product.dto.OrderDto;
+import com.example.backend.product.dto.OrderItemDto;
 import com.example.backend.product.entity.Order;
 import com.example.backend.product.entity.OrderItem;
 import com.example.backend.product.repository.OrderRepository;
@@ -9,6 +10,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @Service
 @Transactional
@@ -33,6 +36,7 @@ public class OrderService {
         dto.setProductName(order.getProductName());
         dto.setOptionName(order.getOptionName());
         dto.setTotalPrice(order.getTotalPrice());
+        dto.setStatus("구매 확정");
 
         if (order.getTotalPrice() != null && !order.getOrderItems().isEmpty()) {
             OrderItem firstItem = order.getOrderItems().get(0);
@@ -42,8 +46,16 @@ public class OrderService {
                 dto.setImageUrl(null);
             }
         }
+        List<OrderItemDto> itemDtos = order.getOrderItems().stream().map(item -> {
+            OrderItemDto itemDto = new OrderItemDto();
+            itemDto.setProductName(item.getProduct().getProductName());
+            itemDto.setQuantity(item.getQuantity());
+            itemDto.setProductOption(item.getOrder().getOptionName());
+            itemDto.setPrice(item.getPrice());
+            return itemDto;
+        }).toList();
+        dto.setOrderItems(itemDtos);
 
-        dto.setStatus("구매 확정");
         return dto;
     }
 }
