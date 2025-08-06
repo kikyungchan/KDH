@@ -8,7 +8,7 @@ import com.example.backend.product.dto.CartResponseDto;
 import com.example.backend.product.dto.CartUpdateRequest;
 import com.example.backend.product.entity.Cart;
 import com.example.backend.product.entity.Product;
-import com.example.backend.product.dto.ProductOption;
+import com.example.backend.product.entity.ProductOption;
 import com.example.backend.product.repository.CartRepository;
 import com.example.backend.product.repository.ProductOptionRepository;
 import com.example.backend.product.repository.ProductRepository;
