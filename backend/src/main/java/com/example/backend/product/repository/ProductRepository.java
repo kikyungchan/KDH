@@ -44,16 +44,7 @@ public interface ProductRepository extends JpaRepository<Product, Integer> {
             """)
     Page<Product> findByKeywordOrderByPopularity(String keyword, Pageable pageable);
 
-    // 주간 주문량 10개이상 아이템 랜덤
-//    @EntityGraph(attributePaths = "images")
-//    @Query(value = "SELECT p FROM Product p WHERE p.id IN (" +
-//                   "SELECT oi.product.id FROM OrderItem oi " +
-//                   "WHERE oi.order.createdAt > :oneWeekAgo " +
-//                   "GROUP BY oi.product.id " +
-//                   "HAVING SUM(oi.quantity) >= 10" +
-//                   ") ORDER BY FUNCTION('RAND')")
-//    List<Product> findHotProductsRandomLimit(LocalDateTime oneWeekAgo, Pageable pageable);
-
+    //우측 배너 주간판매량 10개이상 아이템 랜덤으로 최대 10개 까지
     @Query("""
                 SELECT new com.example.backend.product.dto.ProductMainSlideDto(
                     p.id, p.productName, p.price, t.storedPath
@@ -102,7 +93,7 @@ public interface ProductRepository extends JpaRepository<Product, Integer> {
             """)
     Page<Product> findByCategoryAndKeywordOrderByPopularity(@Param("category") String category, @Param("keyword") String keyword, Pageable pageable);
 
-    //    누적판매량기준
+    //    누적판매량 제일 많은 아이템 3개
     @Query("""
                 SELECT p FROM Product p
                 LEFT JOIN OrderItem oi ON oi.product = p

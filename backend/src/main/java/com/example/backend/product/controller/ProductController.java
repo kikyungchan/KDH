@@ -189,6 +189,8 @@ public class ProductController {
         return ResponseEntity.ok().build();
     }
 
+
+    // 우측배너
     @GetMapping("/hot-random")
     public ResponseEntity<List<ProductMainSlideDto>> getRandomHotProducts() {
         LocalDateTime oneWeekAgo = LocalDateTime.now().minusDays(7);
@@ -197,7 +199,7 @@ public class ProductController {
         return ResponseEntity.ok(result);
     }
 
-
+    //좌측배너 썸네일이미지 주간판매량 10개이상 아이템 랜덤 1개
     @GetMapping("/main-thumbnail-random")
     public ResponseEntity<ThumbnailDto> getRandomMainThumbnail() {
         List<ProductThumbnail> mainThumbnails = productThumbnailRepository.findByIsMainTrue();
@@ -212,6 +214,7 @@ public class ProductController {
         return ResponseEntity.ok(dto);
     }
 
+    // 누적판매량 제일 많은 아이템 3개
     @GetMapping("/best")
     public ResponseEntity<List<ProductBestDto>> getTopProducts() {
         List<ProductBestDto> topProducts = productService.getTopSellingProducts();

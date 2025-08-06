@@ -8,5 +8,6 @@ import java.util.List;
 public interface ProductThumbnailRepository extends JpaRepository<ProductThumbnail, Integer> {
     void deleteByStoredPath(String storedPath);
 
+    //좌측배너
     List<ProductThumbnail> findByIsMainTrue();
 }
