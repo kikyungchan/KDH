@@ -224,3 +224,7 @@ CREATE TABLE product_thumbnail
 
 ALTER TABLE product_thumbnail
     ADD CONSTRAINT FK_PRODUCT_THUMBNAIL_ON_PRODUCT FOREIGN KEY (product_id) REFERENCES product (id);
+
+SELECT * FROM product_thumbnail
+WHERE is_main = true;
+
