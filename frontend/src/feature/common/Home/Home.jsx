@@ -7,23 +7,13 @@ import "swiper/css";
 import { useNavigate } from "react-router";
 import CategoryMenu from "./CategoryMenu.jsx";
 import BestProductSection from "./BestProductSection.jsx";
+import LeftVisual from "./LeftVisual.jsx";
 
 function Home() {
   const navigate = useNavigate();
-  const [leftVisual, setLeftVisual] = useState(null);
   const [currentIndex, setCurrentIndex] = useState(1);
   const [shuffledItems, setShuffledItems] = useState([]);
   const swiperRef = useRef(null);
-
-  useEffect(() => {
-    // 좌측배너
-    axios
-      .get("/api/product/main-thumbnail-random")
-      .then((res) => {
-        setLeftVisual(res.data);
-      })
-      .catch((err) => console.error("좌측 비주얼 로딩 실패:", err));
-  }, []);
 
   useEffect(() => {
     // 우측배너
@@ -51,23 +41,7 @@ function Home() {
     <>
       <div className="container">
         <section className="main-visual-row">
-          {/* 좌측 비주얼 */}
-          {leftVisual && (
-            <div className="main-visual-box">
-              <>
-                <img
-                  src={leftVisual.storedPath}
-                  onClick={() => navigate(`/product/view?id=${leftVisual.id}`)}
-                  alt="HOT 상품"
-                  className="main-visual-img"
-                />
-                <div className="main-visual-text">
-                  <h2>보는 맛까지 잡은 나의 요거트볼 모음 🍓</h2>
-                  <p>by. KDH 쇼핑몰</p>
-                </div>
-              </>
-            </div>
-          )}
+          <LeftVisual />
 
           {/* 우측 HOT 슬라이드 */}
           <div className="hot-items-carousel">
