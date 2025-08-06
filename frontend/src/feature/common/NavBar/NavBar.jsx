@@ -93,7 +93,7 @@ function NavBar(props) {
             onClick={() => setIsMobileMenuOpen((prev) => !prev)}
           />
           <div className="navbar-center">
-            <Link to="/" className="navbar-logo">
+            <Link to="/Home" className="navbar-logo">
               코데헌
             </Link>
           </div>
