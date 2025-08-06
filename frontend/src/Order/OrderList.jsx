@@ -1,4 +1,4 @@
-import {useEffect, useState} from "react";
+import {Fragment, useEffect, useState} from "react";
 import {useNavigate} from "react-router";
 import axios from "axios";
 
@@ -29,36 +29,41 @@ export function OrderList() {
       <div className="flex justify-center items-start pt-10">
         <div className="w-full max-w-[600px] mx-auto px-4">
           <div className="px-8 py-6 shadow rounded-2xl bg-white">
-            <div>
-              <h2 className="mb-6 text-center text-2xl font-semibold">주문 목록</h2>
+            <div className="mb-6">
+              <h2 className="mb-6 text-center text-2xl font-bold">주문 목록</h2>
+              <br/>
+              <div className="flex justify-content-between text-lg font-semibold">
+                <div>주문일자</div>
+                <div>주문번호</div>
+              </div>
             </div>
-            <div>
-              {orderList.map((order) => (
-                <>
-                  <div key={order.orderId}>
-                    <div>
-                      {order.orderDate} | {order.orderToken}
-                    </div>
-                    {order.orderItems.map((item, index) => (
-                      <>
-                        <div key={index}>
-                          <div>
-                            <div>{item.productName}</div>
-                            <div>
-                              옵션: {order.optionName || "기본"} / 수량: {item.quantity}
-                            </div>
-                          </div>
-                          <div>
-                            {item.price.toLocaleString()} 원
-                          </div>
-                        </div>
-                      </>
-                    ))}
-                    <div>{order.totalPrice.toLocaleString()}원</div>
+            {orderList.map((order) => (
+              <Fragment key={order.orderId}>
+                <div>
+                  <div className="flex justify-content-between mb-4">
+                    <div>{order.orderDate}</div>
+                    <div>{order.orderToken}</div>
                   </div>
-                </>
-              ))}
-            </div>
+
+                  {order.orderItems.map((item, index) => (
+                    <div key={`${order.orderId}-${index}`}>
+                      <div className="mb-1">상품명: {item.productName}</div>
+                      <div className="text-sm mb-1">옵션: {order.optionName || "기본"} / {item.quantity}개 </div>
+                      <div>{item.price.toLocaleString()} 원</div>
+                    </div>
+                  ))}
+
+                  {order.totalPrice != null && (
+                    <div className="text-right font-semibold">
+                      총 결제금액: {order.totalPrice.toLocaleString()}원
+                    </div>
+                  )}
+                </div>
+                <br/>
+                <hr/>
+                <br/>
+              </Fragment>
+            ))}
             <div className="flex justify-center gap-2 mt-6">
               {Array.from({length: totalPages}, (_, i) => (
                 <button
@@ -70,7 +75,6 @@ export function OrderList() {
                 </button>
               ))}
             </div>
-
           </div>
         </div>
       </div>

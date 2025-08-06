@@ -16,12 +16,6 @@ public class OrderDto {
 
     private String memberName;
 
-    private String productName;
-
-    private String optionName;
-
-    private Integer quantity;
-
     private Integer totalPrice;
 
     private String imageUrl;

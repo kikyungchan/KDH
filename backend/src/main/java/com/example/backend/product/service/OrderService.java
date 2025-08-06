@@ -33,19 +33,17 @@ public class OrderService {
         dto.setOrderToken(order.getOrderToken());
         dto.setOrderDate(order.getOrderDate());
         dto.setMemberName(order.getMemberName());
-        dto.setProductName(order.getProductName());
-        dto.setOptionName(order.getOptionName());
         dto.setTotalPrice(order.getTotalPrice());
         dto.setStatus("구매 확정");
 
         if (order.getTotalPrice() != null && !order.getOrderItems().isEmpty()) {
             OrderItem firstItem = order.getOrderItems().get(0);
-            dto.setQuantity(firstItem.getQuantity());
 
             if(firstItem.getProduct() != null){
                 dto.setImageUrl(null);
             }
         }
+
         List<OrderItemDto> itemDtos = order.getOrderItems().stream().map(item -> {
             OrderItemDto itemDto = new OrderItemDto();
             itemDto.setProductName(item.getProduct().getProductName());
@@ -54,8 +52,9 @@ public class OrderService {
             itemDto.setPrice(item.getPrice());
             return itemDto;
         }).toList();
-        dto.setOrderItems(itemDtos);
 
+
+        dto.setOrderItems(itemDtos);
         return dto;
     }
 }
