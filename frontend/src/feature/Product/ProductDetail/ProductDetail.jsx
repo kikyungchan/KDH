@@ -75,7 +75,9 @@ export function ProductDetail() {
   }
 
   // 썸네일은 isMain == true 인 항목의 storedPath 사용
-  const thumbnail = product.thumbnailPaths?.find((t) => t.isMain)?.storedPath;
+  const thumbnail =
+    product.thumbnailPaths?.find((t) => t.isMain)?.storedPath ??
+    product.thumbnailPaths?.[0]?.storedPath;
 
   // 본문 이미지 배열
   const detailImages = product.detailImagePaths ?? [];

@@ -63,9 +63,12 @@ public class ProductCartService {
     }
 
     public List<CartResponseDto> getCartList(Integer memberId) {
+        System.out.println("[getCartList] memberId = " + memberId);
         List<Cart> carts = cartRepository.findByMemberId(memberId);
+        System.out.println("[getCartList] carts.size = " + carts.size());
         List<CartResponseDto> result = new ArrayList<>();
         for (Cart cart : carts) {
+            System.out.println("[getCartList] Cart: " + cart.getId()); // ✅ 얘 찍히는지 확인
             result.add(new CartResponseDto(cart));
         }
         return result;

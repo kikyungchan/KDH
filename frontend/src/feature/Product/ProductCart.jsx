@@ -274,7 +274,7 @@ function ProductCart(props) {
 
                 <div className="col-span-5 flex gap-4 items-center">
                   <img
-                    src={item.imagePath}
+                    src={item.imagePath || "/default.jpg"}
                     alt="상품이미지"
                     onClick={() =>
                       navigate(`/product/view?id=${item.productId}`)

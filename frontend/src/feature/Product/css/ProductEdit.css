@@ -114,11 +114,6 @@
     display: none;
 }
 
-.product-edit-file-count {
-    font-size: 14px;
-    color: #333;
-}
-
 /* 상품 카드, 상세, 썸네일 일관화 */
 .product-card {
     display: block;

@@ -213,9 +213,6 @@ export function ProductEdit() {
                 >
                   ×
                 </button>
-                {path.isMain && (
-                  <div className="product-edit-thumbnail-badge">대표이미지</div>
-                )}
               </div>
             ))}
             {/* 새 썸네일 미리보기 */}
@@ -242,9 +239,6 @@ export function ProductEdit() {
           <label htmlFor="thumbnailInput" className="product-edit-file-label">
             파일 선택
           </label>
-          <span className="product-edit-file-count">
-            파일 {newThumbnails.length}개
-          </span>
           <input
             id="thumbnailInput"
             type="file"
@@ -320,9 +314,7 @@ export function ProductEdit() {
             <label htmlFor="bodyImageInput" className="product-edit-file-label">
               이미지 추가
             </label>
-            <span className="product-edit-file-count">
-              파일 {newImages.length}개
-            </span>
+
             <input
               id="bodyImageInput"
               type="file"

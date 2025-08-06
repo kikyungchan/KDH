@@ -40,6 +40,7 @@ public class ProductService {
     private final GuestOrderRepository guestOrderRepository;
     private final ProductCommentRepository productCommentRepository;
     private final ProductThumbnailRepository productThumbnailRepository;
+    private final CartRepository cartRepository;
 
     // url에서 key만 따오는 메소드
     private String extractS3Key(String url) {
@@ -253,7 +254,16 @@ public class ProductService {
 
     public void delete(Integer id) {
         Product product = productRepository.findById(id).orElseThrow();
-
+        List<Cart> carts = cartRepository.findByProduct(product);
+        for (Cart cart : carts) {
+            cartRepository.delete(cart);
+        }
+// 썸네일 이미지 삭제
+        List<ProductThumbnail> thumbnails = product.getThumbnails();
+        for (ProductThumbnail thumb : thumbnails) {
+            s3Uploader.delete(extractS3Key(thumb.getStoredPath())); // S3에서 삭제
+            productThumbnailRepository.delete(thumb); // DB에서 삭제
+        }
         // 상품에 연결된 이미지 전체 삭제 (S3 + DB)
         List<ProductImage> images = product.getImages();
         for (ProductImage image : images) {
