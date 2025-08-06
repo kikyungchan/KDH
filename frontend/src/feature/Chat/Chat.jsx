@@ -15,45 +15,57 @@ export function Chat() {
   const [text, setText] = useState(""); // 보낼 텍스트
   const [msgs, setMsgs] = useState([]); // 주고 받은 메시지들
   const clientRef = useRef(null); // STOMP 인스턴스 담아 둘 상자
+  const [count, setCount] = useState(0);
+  const effectRan = useRef(false);
 
   useEffect(() => {
     console.log("chat user : ", user);
     console.log("username : ", user?.name);
     if (user?.name) {
-      console.log("name2 : ", user.name);
-      // const name = prompt("닉네임을 입력해 주세요").trim();
-      // console.log("name : ", user);
+      // 두번 실행 막기
+      if (user?.name && !effectRan.current) {
+        console.log("name2 : ", user.name);
+        setCount(count + 1);
+        console.log("count : ", count);
 
-      const client = new Client({
-        webSocketFactory: () => new SockJS(WS_PATH), // SockJS 연결
-        debug: (str) => console.log("[STOMP]", str),
-        reconnectDelay: 5000, // 끊기면 5초후 재연결
-        connectHeaders: {
-          username: user.name,
-        },
-      });
-      client.onConnect = (frame) => {
-        // 연결 성공 시
-        console.log("연결됨!", frame);
-        client.subscribe(SUBSCRIBE_DEST, (message) => {
-          console.log("받음");
-          console.log("message", message);
-          // 서버의 json 메시지를 파싱해서 msgs 배열에 추가
-          setMsgs((prev) => [...prev, JSON.parse(message.body)]);
-          // const msg = JSON.parse(message);
-          // setMsgs((prev) => [...prev, msg]);
+        const client = new Client({
+          // webSocketFactory: () => new SockJS(WS_PATH), // SockJS 연결
+          webSocketFactory: () => {
+            const token = localStorage.getItem("token");
+            console.log("token : ", token);
+            console.log("WS_PATH : ", WS_PATH);
+            const url = token
+              ? `${WS_PATH}?Authorization=Bearer%20${token}`
+              : WS_PATH;
+            return new SockJS(url);
+          },
+          debug: (str) => console.log("[STOMP]", str),
+          reconnectDelay: 5000, // 끊기면 5초후 재연결
+          connectHeaders: {
+            username: user.name,
+          },
         });
-      };
+        client.onConnect = (frame) => {
+          // 연결 성공 시
+          console.log("연결됨!", frame);
+          client.subscribe(SUBSCRIBE_DEST, (message) => {
+            // console.log("받음");
 
-      // 연결 활성화(connect 시도)
-      client.activate();
-      // 훅 박에서도 쓰기 위해 ref에 저장
-      clientRef.current = client;
+            // 서버의 json 메시지를 파싱해서 msgs 배열에 추가
+            setMsgs((prev) => [...prev, JSON.parse(message.body)]);
+          });
+        };
 
-      // 언마운트 될 때
-      return () => {
-        client.deactivate(); //연결 해제
-      };
+        // 연결 활성화(connect 시도)
+        client.activate();
+        // 훅 박에서도 쓰기 위해 ref에 저장
+        clientRef.current = client;
+
+        // 언마운트 될 때
+        return () => {
+          client.deactivate(); //연결 해제
+        };
+      }
     }
   }, [user]);
 
@@ -66,6 +78,7 @@ export function Chat() {
       destination: SEND_DEST,
       body: JSON.stringify(chatMsg),
     });
+    // setMsgs((prev) => [...prev, chatMsg]);
     setText(""); // 입력창 초기화
   };
 
@@ -90,27 +103,15 @@ export function Chat() {
                 marginBottom: 10,
               }}
             >
+              <div className="chat chat-start"></div>
+              <div className="chat chat-end"></div>
               {msgs.map((m, i) => (
-                <>
-                  <div
-                    className={`chat chat-${user.name == m.from ? "end" : "start"}`}
-                  >
-                    <div className="chat-image avatar">
-                      <div className="w-10 rounded-full">
-                        <img
-                          alt="Tailwind CSS chat bubble component"
-                          src="https://img.daisyui.com/images/profile/demo/kenobee@192.webp"
-                        />
-                      </div>
-                    </div>
-                    <div className="chat-header">
-                      {m.from}님
-                      <time className="text-xs opacity-50">12:45</time>
-                    </div>
-                    <div className="chat-bubble">{m.message}</div>
-                    {/*<div className="chat-footer opacity-50">Delivered</di>v*/}
-                  </div>
-                </>
+                <div
+                  key={i}
+                  className={`chat chat-${user.name == m.from ? "end" : "start"}`}
+                >
+                  <div className="chat-bubble">{m.message}</div>
+                </div>
               ))}
             </div>
             <div>
@@ -132,7 +133,20 @@ export function Chat() {
               onKeyPress={(e) => e.key === "Enter" && sendMessage()}
               style={{ width: "40%", marginRight: 10 }}
             />
-            <button onClick={sendMessage}>전송</button>
+            <button
+              className={"btn btn-outline btn-primary"}
+              onClick={sendMessage}
+            >
+              전송
+            </button>
+            {clientRef.current && (
+              <button
+                className={"btn btn-outline btn-primary"}
+                onClick={() => clientRef.current.deactivate()}
+              >
+                연결 해제
+              </button>
+            )}
           </div>
         </Col>
       </Row>

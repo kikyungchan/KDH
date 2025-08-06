@@ -4,6 +4,7 @@ import com.example.backend.chat.dto.ChatForm;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
+import org.springframework.messaging.simp.annotation.SendToUser;
 import org.springframework.stereotype.Controller;
 
 import java.security.Principal;
@@ -21,15 +22,14 @@ public class ChatController {
 
 
     @MessageMapping("/chat/private")
-    public void sendPrivateMessage(ChatForm msg, Principal principal) {
-//        System.out.println("principal " + principal);
-        System.out.println("principal " + principal.getName());
-        System.out.println("msg " + msg);
+    @SendToUser("/queue/messages")
+    public ChatForm sendPrivateMessage(ChatForm msg, Principal principal) {
         template.convertAndSendToUser(
                 msg.getTo(),                // 받는 사용자 ID
                 "/queue/messages",          // 구독 경로
                 msg                         // 메시지 payload
         );
+        return msg;
     }
 
 
