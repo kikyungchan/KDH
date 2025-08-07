@@ -226,6 +226,7 @@ public class ProductController {
 
         System.out.println("🔍 받은 orderToken: [" + orderToken + "]");
 
+
         String token = authHeader.replace("Bearer ", "");
         Jwt decode = jwtDecoder.decode(token);
         Integer memberId = Integer.parseInt(decode.getSubject());

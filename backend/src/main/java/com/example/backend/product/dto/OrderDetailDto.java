@@ -40,9 +40,6 @@ public class OrderDetailDto {
         this.addressDetail = order.getAddressDetail();
         this.memo = order.getMemo();
 
-        this.orderItems = order.getOrderItems()
-                .stream()
-                .map(OrderItemDto::new)
-                .collect(Collectors.toList());
+        this.orderItems = allItems;
     }
 }

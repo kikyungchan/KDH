@@ -5,11 +5,14 @@ import {useParams} from "react-router";
 export function OrderDetail() {
   const {orderToken} = useParams();
   const [order, setOrder] = useState(null);
+  const [orderDetail, setOrderDetail] = useState(null);
 
   useEffect(() => {
     axios.get(`/api/product/order/detail/${orderToken}`)
       .then((res) => {
         setOrder(res.data);
+        console.log("✅ 주문 상세 DTO:", res.data);
+        console.log("📦 상품 목록:", res.data.orderItems);
       })
       .catch((err) => {
         console.error("❌ 주문 상세 불러오기 실패", err.response?.status, err.response?.data);
@@ -18,6 +21,10 @@ export function OrderDetail() {
       });
   }, [orderToken]);
 
+  // useEffect(() => {
+  //   console.log("✅ 주문 상세 DTO:", orderDetail);
+  //   console.log("📦 상품 목록:", orderDetail.orderItems);
+  // }, [orderDetail]);
 
   if (!order) {
     return <div className="text-center pt-10 text-gray-500">주문 정보를 불러오는 중...</div>;
@@ -65,7 +72,9 @@ export function OrderDetail() {
                       <div className="text-sm text-gray-600">옵션: {item.productOption}</div>
                       <div className="text-sm">수량: {item.quantity}</div>
                       <div className="text-sm">가격: {item.price.toLocaleString()}원</div>
+                      <br/>
                     </div>
+
                   ))}
                 </div>
               </div>
