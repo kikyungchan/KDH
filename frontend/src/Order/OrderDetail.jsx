@@ -34,7 +34,7 @@ export function OrderDetail() {
               <h2 className="mb-6 text-center text-2xl font-bold">주문 상세</h2>
               <br/>
               <div>
-                <div>주문일자{order.orderDate}</div>
+                <div>주문일자 {new Date(order.orderDate).toLocaleDateString()}</div>
                 <div className="text-sm">주문번호</div>
               </div>
               <hr className="border-t border-gray-300 my-3"/>
@@ -45,8 +45,17 @@ export function OrderDetail() {
               </div>
               <hr className="border-t border-gray-300 my-3"/>
               <div>
-                <div>주문 상품 @개</div>
-                <div>상품 내역</div>
+                <div>주문 상품 {order.orderItems.length}개</div>
+                <div>
+                  {order.orderItems.map((item, index) => (
+                  <div key={index} className="p-3 border rounded-lg bg-gray-50">
+                    <div className="font-semibold text-lg">{item.productName}</div>
+                    <div className="text-sm text-gray-600">옵션: {item.productOption}</div>
+                    <div className="text-sm">수량: {item.quantity}</div>
+                    <div className="text-sm">가격: {item.price.toLocaleString()}원</div>
+                  </div>
+                ))}
+                </div>
               </div>
               <hr className="border-t border-gray-300 my-3"/>
               <div>

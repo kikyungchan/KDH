@@ -59,17 +59,16 @@ public class OrderService {
     }
 
     public OrderDetailDto getOrderDetail(String orderToken, Integer memberId) {
-        Optional<Order> optionalOrder = orderRepository.findByOrderToken(orderToken);
+        List<Order> orders = orderRepository.findAllByOrderToken(orderToken);
 
-        if (optionalOrder.isEmpty()) {
-            System.out.println("❌ 주문 토큰으로 주문을 찾을 수 없습니다: " + orderToken);
+        if (orders.isEmpty()) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "주문을 찾을 수 없습니다.");
         }
 
-        Order order = optionalOrder.get();
+        // ✅ 첫 번째 Order만 사용 (임시 조치)
+        Order order = orders.get(0);
 
         if (!order.getMember().getId().equals(memberId)) {
-            System.out.println("❌ 회원 ID 불일치: 요청자 ID = " + memberId + ", 주문자 ID = " + order.getMember().getId());
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "본인의 주문만 조회할 수 있습니다.");
         }
 

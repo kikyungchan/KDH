@@ -48,7 +48,7 @@ export function OrderList() {
                   <div>
                     <div className="mb-4">
                     <div className="flex justify-content-between mb-2">
-                      <div>{order.orderDate}</div>
+                      <div>{new Date(order.orderDate).toLocaleDateString()}</div>
                       <div
                         className="cursor-pointer not-hover:underline"
                         onClick={() => navigate(`/product/order/detail/${order.orderToken}`)}

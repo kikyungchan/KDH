@@ -5,10 +5,12 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface OrderRepository extends JpaRepository<Order, Integer> {
     Page<Order> findByMember_Id(Integer memberId, Pageable pageable);
 
-    Optional<Order> findByOrderToken(String orderToken);
+    List<Order> findAllByOrderToken(String orderToken);
+
 }
