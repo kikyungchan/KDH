@@ -33,6 +33,15 @@ public class OrderItem {
     @JoinColumn(name = "option_id", nullable = true)
     private ProductOption option;
 
+    @Column(name = "product_name")
+    private String productName;
+
+    @Column(name = "option_name")
+    private String optionName;
+
+    @Column(name = "total_price")
+    private Integer totalPrice;
+
     @Column(name = "quantity", nullable = false)
     private Integer quantity;
 

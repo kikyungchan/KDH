@@ -228,3 +228,8 @@ ALTER TABLE product_thumbnail
 SELECT * FROM product_thumbnail
 WHERE is_main = true;
 
+ALTER TABLE prj4.order_item
+ADD COLUMN product_name VARCHAR(255),
+ADD COLUMN option_name VARCHAR(255),
+ADD COLUMN total_price INT;
+
