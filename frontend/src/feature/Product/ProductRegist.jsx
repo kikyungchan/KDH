@@ -2,7 +2,6 @@ import { useNavigate } from "react-router";
 import "./css/ProductRegist.css";
 import { useState } from "react";
 import axios from "axios";
-import { Container } from "react-bootstrap";
 
 export function ProductRegist() {
   const [thumbnails, setThumbnails] = useState([]);
