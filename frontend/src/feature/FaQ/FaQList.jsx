@@ -217,7 +217,7 @@ export function FaQList() {
                       <li>토요일, 공휴일: 오늘의집 직접배송 주문건 상담</li>
                       <li>일요일: 휴무</li>
                     </ol>
-                    <ButtonGroup className="mt-22 flex-wrap flex justify-between">
+                    <ButtonGroup className="mt-10 flex-wrap flex justify-between">
                       {radios.map((radio, idx) => (
                         <Link
                           key={idx}
@@ -358,7 +358,12 @@ export function FaQList() {
                   등록
                 </button>
                 <form method="dialog">
-                  <button className="btn mx-1 btn-default">취소</button>
+                  <button
+                    className="btn mx-1 btn-default"
+                    onClick={() => setModalShow(false)}
+                  >
+                    취소
+                  </button>
                 </form>
                 <button
                   className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2"
