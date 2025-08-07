@@ -41,7 +41,7 @@ public class QuestionController {
 
         System.out.println("keyword : " + keyword);
         System.out.println("pageNumber : " + pageNumber);
-        return questionService.list(keyword, pageNumber);
+        return questionService.list(keyword, pageNumber, authentication);
     }
 
     @GetMapping("view")
