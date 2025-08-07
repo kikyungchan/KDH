@@ -15,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Transactional
@@ -58,13 +59,21 @@ public class OrderService {
     }
 
     public OrderDetailDto getOrderDetail(String orderToken, Integer memberId) {
-        Order order = orderRepository.findByOrderToken(orderToken)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "주문을 찾을 수 없습니다."));
+        Optional<Order> optionalOrder = orderRepository.findByOrderToken(orderToken);
+
+        if (optionalOrder.isEmpty()) {
+            System.out.println("❌ 주문 토큰으로 주문을 찾을 수 없습니다: " + orderToken);
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "주문을 찾을 수 없습니다.");
+        }
+
+        Order order = optionalOrder.get();
 
         if (!order.getMember().getId().equals(memberId)) {
+            System.out.println("❌ 회원 ID 불일치: 요청자 ID = " + memberId + ", 주문자 ID = " + order.getMember().getId());
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "본인의 주문만 조회할 수 있습니다.");
         }
 
+        System.out.println("✅ 주문 상세 조회 성공: " + orderToken);
         return new OrderDetailDto(order);
     }
 }

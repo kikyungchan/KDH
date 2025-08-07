@@ -16,8 +16,10 @@ public class OrderItemDto {
 
     // ✅ 생성자 추가!
     public OrderItemDto(OrderItem item) {
-        this.productName = item.getProduct().getName();
-        this.productOption = item.getOption();
+        this.productName = item.getProduct().getProductName();
+        this.productOption = item.getOption() != null
+                ? item.getOption().getOptionName()
+                : "기본"; // 옵션이 없을 경우 대비
         this.quantity = item.getQuantity();
         this.price = item.getPrice();
     }

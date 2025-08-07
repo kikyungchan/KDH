@@ -60,7 +60,8 @@ ALTER TABLE member
     ADD address_detail VARCHAR(255) NULL;
 
 
-SELECT * FROM orders o
-JOIN member m ON o.member_id = m.id
-WHERE m.login_id = 'nu0044';
+
+
+SELECT * FROM orders WHERE order_token = '2519205415054585';
+
 

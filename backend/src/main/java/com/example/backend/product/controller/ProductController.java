@@ -220,9 +220,11 @@ public class ProductController {
     }
 
     // 주문 상세 조회
-    @GetMapping("/order/detail")
+    @GetMapping("/order/detail/{orderToken}")
     private ResponseEntity<OrderDetailDto> getOrderDetail(@PathVariable String orderToken,
                                                           @RequestHeader("Authorization") String authHeader) {
+
+        System.out.println("🔍 받은 orderToken: [" + orderToken + "]");
 
         String token = authHeader.replace("Bearer ", "");
         Jwt decode = jwtDecoder.decode(token);

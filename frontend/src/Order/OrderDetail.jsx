@@ -7,16 +7,22 @@ export function OrderDetail() {
   const [order, setOrder] = useState(null);
 
   useEffect(() => {
-    axios.get(`/api/product/order/detail${orderToken}`)
+    axios.get(`/api/product/order/detail/${orderToken}`)
       .then((res) => {
         setOrder(res.data);
       })
       .catch((err) => {
-        console.log("주문 상세 불러오기 실패");
+        console.error("❌ 주문 상세 불러오기 실패", err.response?.status, err.response?.data);
       })
       .finally(() => {
       });
   }, [orderToken]);
+
+
+  if (!order) {
+    return <div className="text-center pt-10 text-gray-500">주문 정보를 불러오는 중...</div>;
+  }
+
 
 
   return (
