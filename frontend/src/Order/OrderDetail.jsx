@@ -8,7 +8,7 @@ export function OrderDetail() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    axios.get(`/api/product/order/detail/${orderToken}`)
+    axios.get(`/api/order/detail/${orderToken}`)
       .then((res) => {
         setOrder(res.data);
       })

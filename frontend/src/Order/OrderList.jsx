@@ -11,7 +11,7 @@ export function OrderList() {
 
   useEffect(() => {
     setIsProcessing(true);
-    axios.get(`/api/product/order/list?page=${page}`)
+    axios.get(`/api/order/list?page=${page}`)
       .then((res) => {
         setOrderList(res.data.content);
         setTotalPages(res.data.totalPages);
