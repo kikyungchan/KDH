@@ -8,6 +8,7 @@ import com.example.backend.product.entity.OrderItem;
 import com.example.backend.product.repository.OrderRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -27,38 +28,52 @@ public class OrderService {
 
 
     public Page<OrderDto> getOrdersByUsersLoginId(Integer memberId, Pageable pageable) {
-        Page<Order> orders = orderRepository.findByMember_Id(memberId, pageable);
-        System.out.println("⏬ Order 개수: " + orders.getContent().size());
-        orders.forEach(o -> System.out.println("📦 OrderToken: " + o.getOrderToken() + ", ID: " + o.getId()));
-        return orders.map(this::convertToDto);
-    }
+        // 전체 orderToken 리스트
+        try {
+            List<String> allTokens = orderRepository.findDistinctOrderTokensByMemberId(memberId);
 
-    private OrderDto convertToDto(Order order) {
-        OrderDto dto = new OrderDto();
-        dto.setOrderId(order.getId());
-        dto.setOrderToken(order.getOrderToken());
-        dto.setOrderDate(order.getOrderDate());
-        dto.setMemberName(order.getMemberName());
-        dto.setTotalPrice(order.getTotalPrice());
-        dto.setStatus("구매 확정");
+            // 페이징 처리 수동 적용 (subList)
+            int start = (int) pageable.getOffset();
+            int end = Math.min((start + pageable.getPageSize()), allTokens.size());
 
-        if (order.getTotalPrice() != null && !order.getOrderItems().isEmpty()) {
-            OrderItem firstItem = order.getOrderItems().get(0);
+            List<String> pageTokens = allTokens.subList(start, end);
 
-            if (firstItem.getProduct() != null) {
-                dto.setImageUrl(null);
+            List<OrderDto> dtoList = new ArrayList<>();
+
+            for (String token : pageTokens) {
+                List<Order> orders = orderRepository.findAllByOrderToken(token);
+
+                if (!orders.isEmpty()) {
+                    Order representative = orders.get(0); // 임의 대표
+                    List<OrderItemDto> allItems = orders.stream()
+                            .flatMap(o -> o.getOrderItems().stream())
+                            .map(OrderItemDto::new)
+                            .toList();
+
+                    OrderDto dto = new OrderDto();
+                    dto.setOrderToken(token);
+                    dto.setOrderDate(representative.getCreatedAt());
+                    dto.setMemberName(representative.getMember().getName());
+                    dto.setTotalPrice(
+                            allItems.stream().mapToInt(OrderItemDto::getPrice).sum()
+                    );
+                    dto.setOrderItems(allItems);
+                    dto.setStatus("구매 확정");
+
+                    dtoList.add(dto);
+                }
             }
+
+            return new PageImpl<>(dtoList, pageable, allTokens.size());
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new RuntimeException("❌ 주문 목록 조회 중 예외 발생", e);
         }
-
-        List<OrderItemDto> itemDtos = order.getOrderItems().stream()
-                .map(OrderItemDto::new) // ✅ 생성자 방식
-                .toList();
-
-
-        dto.setOrderItems(itemDtos);
-        return dto;
     }
 
+
+
+    // 주문 상세 조회
     public OrderDetailDto getOrderDetail(String orderToken, Integer memberId) {
         List<Order> orders = orderRepository.findAllByOrderToken(orderToken);
 
@@ -80,17 +95,6 @@ public class OrderService {
             for (OrderItem item : order.getOrderItems()) {
                 allItems.add(new OrderItemDto(item));
             }
-        }
-
-        System.out.println("✅ 주문 상세 조회 성공: " + orderToken);
-        System.out.println("🟨 전체 주문 개수: " + orders.size());
-        System.out.println("📦 전체 상품 수: " + allItems.size());
-
-        for (OrderItemDto itemDto : allItems) {
-            System.out.println("🔹 상품명: " + itemDto.getProductName());
-            System.out.println("   옵션: " + itemDto.getProductOption());
-            System.out.println("   수량: " + itemDto.getQuantity());
-            System.out.println("   가격: " + itemDto.getPrice());
         }
 
         // ✅ 대표 주문 정보와 모든 상품으로 DTO 생성
