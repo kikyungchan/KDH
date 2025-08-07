@@ -69,7 +69,8 @@ export function OrderDetail() {
                     <div key={index} className="flex gap-3">
                       <div>
                         <img src={item.thumbnailUrl || "/default.png"}
-                             alt={item.productName} />
+                             alt={item.productName}
+                             className="w-32 h-32"/>
                       </div>
                       <div>
                         <div className="font-semibold text-lg">{item.productName}</div>
