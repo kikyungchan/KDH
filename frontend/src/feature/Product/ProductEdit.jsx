@@ -13,8 +13,6 @@ export function ProductEdit() {
 
   // 본문이미지
   const [detailImagePaths, setDetailImagePaths] = useState([]);
-  const [deletedDetails, setDeletedDetails] = useState([]);
-  const [newDetails, setNewDetails] = useState([]);
 
   const [newImages, setNewImages] = useState([]);
   const [previewImages, setPreviewImages] = useState([]);
