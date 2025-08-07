@@ -45,24 +45,29 @@ export function OrderList() {
                 <Fragment key={order.orderId}>
                   <div>
                     <div className="mb-4">
-                    <div className="flex justify-content-between mb-2">
-                      <div>{new Date(order.orderDate).toLocaleDateString()}</div>
-                      <div
-                        className="cursor-pointer not-hover:underline"
-                        onClick={() => navigate(`/product/order/detail/${order.orderToken}`)}
-                      >
-                        주문상세
+                      <div className="flex justify-content-between mb-2">
+                        <div>{new Date(order.orderDate).toLocaleDateString()}</div>
+                        <div
+                          className="cursor-pointer not-hover:underline"
+                          onClick={() => navigate(`/product/order/detail/${order.orderToken}`)}
+                        >
+                          주문상세
+                        </div>
                       </div>
-                    </div>
                       <div className="text-sm text-gray-700">
                         주문번호 : {order.orderToken}
                       </div>
-                  </div>
+                    </div>
                     {order.orderItems.map((item, index) => (
-                      <div key={`${order.orderId}-${index}`}>
-                        <div className="mb-1">상품명: {item.productName}</div>
-                        <div className="text-sm mb-1">옵션: {item.productOption || "기본"} / {item.quantity}개</div>
-                        <div>{item.price.toLocaleString()} 원</div>
+                      <div key={`${order.orderId}-${index}`} className="flex gap-3">
+                        <div>
+                          <img src={item.thumbnail} alt={item.productName}/>
+                        </div>
+                        <div>
+                          <div className="mb-1">상품명: {item.productName}</div>
+                          <div className="text-sm mb-1">옵션: {item.productOption || "기본"} / {item.quantity}개</div>
+                          <div>{item.price.toLocaleString()} 원</div>
+                        </div>
                         <br/>
                       </div>
                     ))}
@@ -73,7 +78,7 @@ export function OrderList() {
                       </div>
                     )}
                   </div>
-                  <hr className="border-t border-gray-300 my-4" />
+                  <hr className="border-t border-gray-300 my-4"/>
                 </Fragment>
               ))
             )}
