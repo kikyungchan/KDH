@@ -106,6 +106,7 @@ export function QnaList() {
                     value={radio.value}
                     checked={idx === 1}
                     onClick={radio.fnc}
+                    onChange={(e) => e.target.value}
                   />
                 ))}
               </ButtonGroup>
