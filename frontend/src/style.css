@@ -28,3 +28,10 @@ td, tr, th {
     text-align: center;
 }
 
+.modal.modal-open {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    z-index: 9999
+}
