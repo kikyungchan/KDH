@@ -24,7 +24,6 @@ export function OrderDetail() {
   }
 
 
-
   return (
     <div className="bg-gray-100 min-h-screen">
       <div className="flex justify-center items-start pt-10">
@@ -34,34 +33,40 @@ export function OrderDetail() {
               <h2 className="mb-6 text-center text-2xl font-bold">주문 상세</h2>
               <br/>
               <div>
-                <div>주문일자 {new Date(order.orderDate).toLocaleDateString()}</div>
-                <div className="text-sm">주문번호</div>
+                <div>주문일자 : {new Date(order.orderDate).toLocaleDateString()}</div>
+                <div className="text-sm">주문번호 : {order.orderToken}</div>
               </div>
               <hr className="border-t border-gray-300 my-3"/>
               <div>
-                <div>이름</div>
-                <div>주소</div>
-                <div>핸드폰번호</div>
+                <div>이름 : {order.memberName}</div>
+                <div>
+                  <div>
+                    우편번호 : {order.zipcode}
+                    주소 : {order.shippingAddress}
+                    상세주소 : {order.addressDetail}
+                  </div>
+                </div>
+                <div>핸드폰번호 : {order.phone}</div>
               </div>
               <hr className="border-t border-gray-300 my-3"/>
               <div>
                 <div>주문 상품 {order.orderItems.length}개</div>
                 <div>
                   {order.orderItems.map((item, index) => (
-                  <div key={index} className="p-3 border rounded-lg bg-gray-50">
-                    <div className="font-semibold text-lg">{item.productName}</div>
-                    <div className="text-sm text-gray-600">옵션: {item.productOption}</div>
-                    <div className="text-sm">수량: {item.quantity}</div>
-                    <div className="text-sm">가격: {item.price.toLocaleString()}원</div>
-                  </div>
-                ))}
+                    <div key={index}>
+                      <div className="font-semibold text-lg">{item.productName}</div>
+                      <div className="text-sm text-gray-600">옵션: {item.productOption}</div>
+                      <div className="text-sm">수량: {item.quantity}</div>
+                      <div className="text-sm">가격: {item.price.toLocaleString()}원</div>
+                    </div>
+                  ))}
                 </div>
               </div>
               <hr className="border-t border-gray-300 my-3"/>
               <div>
                 <div>결제정보</div>
                 <div>결제수단</div>
-                <div>총 금액</div>
+                <div>총 금액 : {order.totalPrice}</div>
               </div>
 
             </div>
