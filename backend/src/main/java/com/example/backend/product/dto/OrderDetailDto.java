@@ -33,7 +33,9 @@ public class OrderDetailDto {
         this.orderDate = order.getCreatedAt();
         this.memberName = order.getMember().getName();
         this.phone = order.getMember().getPhone();
-        this.totalPrice = order.getTotalPrice();
+        this.totalPrice = allItems.stream()
+                .mapToInt(item -> item.getPrice() * item.getQuantity())
+                .sum();
 
         this.shippingAddress = order.getShippingAddress();
         this.zipcode = order.getZipcode();
