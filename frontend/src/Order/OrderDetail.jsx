@@ -62,14 +62,19 @@ export function OrderDetail() {
               </div>
               <hr className="border-t border-gray-300 my-3"/>
               <div>
-                <div>주문 상품 {order.orderItems.length}개</div>
+                <div className="mb-2">주문 상품 {order.orderItems.length}개</div>
                 <div>
                   {order.orderItems.map((item, index) => (
-                    <div key={index}>
-                      <div className="font-semibold text-lg">{item.productName}</div>
-                      <div className="text-sm text-gray-600">옵션: {item.productOption}</div>
-                      <div className="text-sm">수량: {item.quantity}</div>
-                      <div className="text-sm">가격: {item.price.toLocaleString()}원</div>
+                    <div key={index} className="flex gap-2">
+                      <div>
+                        <img src={item.thumbnail} alt={item.productName} />
+                      </div>
+                      <div>
+                        <div className="font-semibold text-lg">{item.productName}</div>
+                        <div className="text-sm text-gray-600">옵션: {item.productOption}</div>
+                        <div className="text-sm">수량: {item.quantity}</div>
+                        <div className="text-sm">가격: {item.price.toLocaleString()}원</div>
+                      </div>
                       <br/>
                     </div>
 
