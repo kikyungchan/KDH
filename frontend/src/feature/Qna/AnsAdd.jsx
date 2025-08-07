@@ -47,7 +47,7 @@ export function AnsAdd() {
   }, []);
 
   if (!question) {
-    return <Spinner />;
+    return <span className="loading loading-spinner"></span>;
   }
 
   function handleAnswerButtonClick() {
