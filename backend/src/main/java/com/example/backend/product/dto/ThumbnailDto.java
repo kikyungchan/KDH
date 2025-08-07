@@ -6,4 +6,5 @@ import lombok.Data;
 public class ThumbnailDto {
     private String storedPath;
     private Boolean isMain;
+    private Integer productId;
 }

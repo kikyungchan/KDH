@@ -236,16 +236,26 @@ public class ProductController {
     @GetMapping("/main-thumbnail-random")
     public ResponseEntity<ThumbnailDto> getRandomMainThumbnail() {
         List<ProductThumbnail> mainThumbnails = productThumbnailRepository.findByIsMainTrue();
+
         if (mainThumbnails.isEmpty()) {
             return ResponseEntity.notFound().build();
         }
 
         ProductThumbnail randomThumbnail = mainThumbnails.get(new SecureRandom().nextInt(mainThumbnails.size()));
+        Product linkedProduct = randomThumbnail.getProduct(); //연관된 상품 꺼냄
+
+        if (linkedProduct == null || linkedProduct.getId() == null) {
+            return ResponseEntity.badRequest().build();
+        }
+
         ThumbnailDto dto = new ThumbnailDto();
         dto.setStoredPath(randomThumbnail.getStoredPath());
         dto.setIsMain(true);
+        dto.setProductId(linkedProduct.getId()); // productId 세팅
+
         return ResponseEntity.ok(dto);
     }
+
 
     // 누적판매량 제일 많은 아이템 3개
     @GetMapping("/best")

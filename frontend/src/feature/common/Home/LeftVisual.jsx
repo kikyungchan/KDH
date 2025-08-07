@@ -36,7 +36,7 @@ function LeftVisual() {
     <div className="main-visual-box">
       <img
         src={data.storedPath}
-        onClick={() => navigate(`/product/view?id=${data.id}`)}
+        onClick={() => navigate(`/product/view?id=${data.productId}`)}
         alt="HOT 상품"
         className="main-visual-img"
         style={{
