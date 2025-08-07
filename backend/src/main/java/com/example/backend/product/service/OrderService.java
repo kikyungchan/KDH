@@ -1,22 +1,29 @@
 package com.example.backend.product.service;
 
+import com.example.backend.product.dto.order.GuestLookupRequest;
 import com.example.backend.product.dto.order.OrderDetailDto;
 import com.example.backend.product.dto.order.OrderDto;
 import com.example.backend.product.dto.order.OrderItemDto;
+import com.example.backend.product.entity.GuestOrder;
 import com.example.backend.product.entity.Order;
 import com.example.backend.product.entity.OrderItem;
+import com.example.backend.product.repository.GuestOrderRepository;
 import com.example.backend.product.repository.OrderRepository;
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.Optional;
 
 @Service
 @Transactional
@@ -24,6 +31,7 @@ import java.util.List;
 public class OrderService {
 
     private final OrderRepository orderRepository;
+    private final GuestOrderRepository guestOrderRepository;
 
 
     public Page<OrderDto> getOrdersByUsersLoginId(Integer memberId, Pageable pageable) {
@@ -95,5 +103,21 @@ public class OrderService {
 
         // ✅ 대표 주문 정보와 모든 상품으로 DTO 생성
         return new OrderDetailDto(representativeOrder, allItems);
+    }
+
+    public void verifyGuestOrder(GuestLookupRequest request, HttpSession session) {
+        Optional<GuestOrder> guestOrder = guestOrderRepository.findByGuestOrderToken(request.getGuestOrderToken());
+
+        if (guestOrder.isEmpty()) {
+            throw new NoSuchElementException("주문을 찾을 수 없습니다.");
+        }
+
+        GuestOrder order = guestOrder.get();
+
+        if (!order.getGuestName().equals(request.getGuestName()) ||
+            !order.getGuestPhone().equals(request.getGuestPhone())) {
+            throw new SecurityException("주문자 정보가 일치하지 않습니다");
+        }
+        session.setAttribute("guestOrderToken", order.getGuestOrderToken());
     }
 }

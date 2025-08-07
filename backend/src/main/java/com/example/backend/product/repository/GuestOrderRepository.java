@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.time.LocalDateTime;
+import java.util.Optional;
 
 public interface GuestOrderRepository extends JpaRepository<GuestOrder, Integer> {
 
@@ -16,4 +17,7 @@ public interface GuestOrderRepository extends JpaRepository<GuestOrder, Integer>
               AND created_at > :since
             """, nativeQuery = true)
     Integer getWeeklySales(@Param("productId") Integer productId, @Param("since") LocalDateTime since);
+
+
+    Optional<GuestOrder> findByGuestOrderToken(String guestOrderToken);
 }
