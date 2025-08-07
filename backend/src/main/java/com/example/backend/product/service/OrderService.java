@@ -1,5 +1,6 @@
 package com.example.backend.product.service;
 
+import com.example.backend.product.dto.OrderDetailDto;
 import com.example.backend.product.dto.OrderDto;
 import com.example.backend.product.dto.OrderItemDto;
 import com.example.backend.product.entity.Order;
@@ -8,8 +9,10 @@ import com.example.backend.product.repository.OrderRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
@@ -46,17 +49,22 @@ public class OrderService {
         }
 
         List<OrderItemDto> itemDtos = order.getOrderItems().stream()
-                .map(item -> {
-                    OrderItemDto itemDto = new OrderItemDto();
-                    itemDto.setProductName(item.getProduct().getProductName());
-                    itemDto.setQuantity(item.getQuantity());
-                    itemDto.setProductOption(item.getOrder().getOptionName());
-                    itemDto.setPrice(item.getPrice());
-                    return itemDto;
-                }).toList();
+                .map(OrderItemDto::new) // ✅ 생성자 방식
+                .toList();
 
 
         dto.setOrderItems(itemDtos);
         return dto;
+    }
+
+    public OrderDetailDto getOrderDetail(String orderToken, Integer memberId) {
+        Order order = orderRepository.findByOrderToken(orderToken)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "주문을 찾을 수 없습니다."));
+
+        if (!order.getMember().getId().equals(memberId)) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "본인의 주문만 조회할 수 있습니다.");
+        }
+
+        return new OrderDetailDto(order);
     }
 }
