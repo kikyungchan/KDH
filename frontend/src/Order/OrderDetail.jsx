@@ -11,8 +11,6 @@ export function OrderDetail() {
     axios.get(`/api/product/order/detail/${orderToken}`)
       .then((res) => {
         setOrder(res.data);
-        console.log("✅ 주문 상세 DTO:", res.data);
-        console.log("📦 상품 목록:", res.data.orderItems);
       })
       .catch((err) => {
         console.error("❌ 주문 상세 불러오기 실패", err.response?.status, err.response?.data);

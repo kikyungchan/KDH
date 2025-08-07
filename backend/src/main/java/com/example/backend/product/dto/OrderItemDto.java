@@ -14,7 +14,9 @@ public class OrderItemDto {
 
     private Integer price;
 
-    // ✅ 생성자 추가!
+    private String thumbnailUrl;
+
+    // 생성자
     public OrderItemDto(OrderItem item) {
         this.productName = item.getProduct().getProductName();
         this.productOption = item.getOption() != null
@@ -22,6 +24,9 @@ public class OrderItemDto {
                 : "기본"; // 옵션이 없을 경우 대비
         this.quantity = item.getQuantity();
         this.price = item.getPrice();
+        this.thumbnailUrl = item.getProduct().getThumbnails().isEmpty()
+                ? null
+                : item.getProduct().getThumbnails().get(0).getStoredPath();
     }
 
 
