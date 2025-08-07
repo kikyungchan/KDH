@@ -29,7 +29,6 @@ public class OrderService {
 
     public Page<OrderDto> getOrdersByUsersLoginId(Integer memberId, Pageable pageable) {
         // 전체 orderToken 리스트
-        try {
             List<String> allTokens = orderRepository.findDistinctOrderTokensByMemberId(memberId);
 
             // 페이징 처리 수동 적용 (subList)
@@ -51,6 +50,7 @@ public class OrderService {
                             .toList();
 
                     OrderDto dto = new OrderDto();
+                    dto.setOrderId(representative.getId());
                     dto.setOrderToken(token);
                     dto.setOrderDate(representative.getCreatedAt());
                     dto.setMemberName(representative.getMember().getName());
@@ -63,12 +63,7 @@ public class OrderService {
                     dtoList.add(dto);
                 }
             }
-
             return new PageImpl<>(dtoList, pageable, allTokens.size());
-        } catch (Exception e) {
-            e.printStackTrace();
-            throw new RuntimeException("❌ 주문 목록 조회 중 예외 발생", e);
-        }
     }
 
 
