@@ -7,6 +7,8 @@ import lombok.ToString;
 import org.hibernate.annotations.ColumnDefault;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @Setter
@@ -69,5 +71,8 @@ public class GuestOrder {
     @ColumnDefault("current_timestamp()")
     @Column(name = "created_at", insertable = false, updatable = false)
     private LocalDateTime createdAt;
+
+    @OneToMany(mappedBy = "guestOrder", cascade = CascadeType.ALL)
+    private List<GuestOrderItem> items = new ArrayList<>();
 
 }

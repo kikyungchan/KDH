@@ -344,9 +344,9 @@ public class ProductService {
         String token = auth.replace("Bearer ", "");
         Jwt decoded = jwtDecoder.decode(token);
         Integer memberId = Integer.parseInt(decoded.getSubject());
-        Member member = memberRepository.findById(memberId).orElseThrow();
+        Member member = memberRepository.findById(memberId).get();
 
-        // 🔹 주문 1건만 생성
+        // 주문 1건만 생성
         Order order = new Order();
         order.setMember(member);
         order.setOrderToken(orderToken);
@@ -365,9 +365,9 @@ public class ProductService {
         List<OrderItem> itemList = new ArrayList<>();
 
         for (OrderRequest req : reqList) {
-            Product product = productRepository.findById(req.getProductId()).orElseThrow();
+            Product product = productRepository.findById(req.getProductId()).get();
 
-            // 🔹 재고 차감
+            // 재고 차감
             product.setQuantity(product.getQuantity() - req.getQuantity());
 
             OrderItem item = new OrderItem();
@@ -379,7 +379,7 @@ public class ProductService {
             item.setTotalPrice(req.getQuantity() * req.getPrice());
 
             if (req.getOptionId() != null) {
-                ProductOption option = productOptionRepository.findById(req.getOptionId()).orElseThrow();
+                ProductOption option = productOptionRepository.findById(req.getOptionId()).get();
                 item.setOption(option);
                 item.setOptionName(option.getOptionName());
             }
@@ -389,9 +389,9 @@ public class ProductService {
         }
 
         order.setTotalPrice(totalOrderPrice);
-        order.setOrderItems(itemList); // 양방향 연관관계 설정 (optional)
+        order.setOrderItems(itemList);
 
-        orderRepository.save(order); // cascade로 orderItem도 함께 저장됨
+        orderRepository.save(order); // orderItem도 함께 저장됨
 
         return orderToken;
     }
