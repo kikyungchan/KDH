@@ -11,7 +11,7 @@ export function OrderDetail() {
     axios.get(`/api/product/order/detail/${orderToken}`)
       .then((res) => {
         setOrder(res.data);
-        console.log("주문 정보 + " + res.data);
+        console.log("주문 정보 + ", res.data);
       })
       .catch((err) => {
         console.error("❌ 주문 상세 불러오기 실패", err.response?.status, err.response?.data);
@@ -68,7 +68,8 @@ export function OrderDetail() {
                   {order.orderItems.map((item, index) => (
                     <div key={index} className="flex gap-3">
                       <div>
-                        <img src={item.thumbnail} alt={item.productName} />
+                        <img src={item.thumbnailUrl || "/default.png"}
+                             alt={item.productName} />
                       </div>
                       <div>
                         <div className="font-semibold text-lg">{item.productName}</div>
