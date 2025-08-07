@@ -343,53 +343,59 @@ public class ProductService {
         String orderToken = ProductController.OrderTokenGenerator.generateToken();
         String token = auth.replace("Bearer ", "");
         Jwt decoded = jwtDecoder.decode(token);
-        String memberIdStr = decoded.getSubject();
-        Integer memberId = Integer.parseInt(memberIdStr);
-        Member member = memberRepository.findById(memberId).get();
+        Integer memberId = Integer.parseInt(decoded.getSubject());
+        Member member = memberRepository.findById(memberId).orElseThrow();
 
+        // 🔹 주문 1건만 생성
+        Order order = new Order();
+        order.setMember(member);
+        order.setOrderToken(orderToken);
+        order.setLoginId(member.getLoginId());
+        order.setPhone(member.getPhone());
+        order.setMemberName(member.getName());
+
+        // 첫 요청 기준 공통 배송정보 설정
+        OrderRequest first = reqList.get(0);
+        order.setMemo(first.getMemo());
+        order.setShippingAddress(first.getShippingAddress());
+        order.setZipcode(first.getZipcode());
+        order.setAddressDetail(first.getAddressDetail());
+
+        int totalOrderPrice = 0;
+        List<OrderItem> itemList = new ArrayList<>();
 
         for (OrderRequest req : reqList) {
-            Product product = productRepository.findById(Integer.valueOf(req.getProductId())).get();
-            // 재고 차감
+            Product product = productRepository.findById(req.getProductId()).orElseThrow();
 
-
+            // 🔹 재고 차감
             product.setQuantity(product.getQuantity() - req.getQuantity());
-
-            Order order = new Order();
-            order.setMember(member);
-            order.setMemo(req.getMemo());
-            order.setProductName(product.getProductName());
-            order.setLoginId(member.getLoginId());
-            order.setPhone(member.getPhone());
-            order.setMemberName(member.getName());
-            order.setShippingAddress(req.getShippingAddress());
-            order.setOrderToken(orderToken);
-            order.setAddressDetail(req.getAddressDetail());
-            order.setZipcode(req.getZipcode());
-            order.setTotalPrice(req.getPrice() * req.getQuantity());
-
-            if (req.getOptionId() != null) {
-                ProductOption option = productOptionRepository.findById(req.getOptionId()).get();
-                order.setOptionName(option.getOptionName());
-            }
-
-            orderRepository.save(order);
 
             OrderItem item = new OrderItem();
             item.setOrder(order);
             item.setProduct(product);
+            item.setProductName(product.getProductName());
             item.setQuantity(req.getQuantity());
             item.setPrice(req.getPrice());
+            item.setTotalPrice(req.getQuantity() * req.getPrice());
 
             if (req.getOptionId() != null) {
-                ProductOption option = productOptionRepository.findById(req.getOptionId()).get();
+                ProductOption option = productOptionRepository.findById(req.getOptionId()).orElseThrow();
                 item.setOption(option);
+                item.setOptionName(option.getOptionName());
             }
 
-            orderItemRepository.save(item);
+            totalOrderPrice += item.getTotalPrice();
+            itemList.add(item);
         }
+
+        order.setTotalPrice(totalOrderPrice);
+        order.setOrderItems(itemList); // 양방향 연관관계 설정 (optional)
+
+        orderRepository.save(order); // cascade로 orderItem도 함께 저장됨
+
         return orderToken;
     }
+
 
     public List<ProductBestDto> getTopSellingProducts() {
         Pageable pageable = PageRequest.of(0, 3);
