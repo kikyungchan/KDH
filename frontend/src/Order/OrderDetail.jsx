@@ -1,11 +1,12 @@
 import {useEffect, useState} from "react";
 import axios from "axios";
-import {useParams} from "react-router";
+import {useNavigate, useParams} from "react-router";
 
 export function OrderDetail() {
   const {orderToken} = useParams();
   const [order, setOrder] = useState(null);
   const [orderDetail, setOrderDetail] = useState(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     axios.get(`/api/product/order/detail/${orderToken}`)
@@ -90,7 +91,12 @@ export function OrderDetail() {
                 <div>결제수단</div>
                 <div>총 금액 : {order.totalPrice}</div>
               </div>
-
+              <div className="text-end">
+                <button className="btn btn-outline btn-neutral"
+                onClick={() => {navigate("/product/order/list")}}>
+                  목록으로
+                </button>
+              </div>
             </div>
           </div>
         </div>
