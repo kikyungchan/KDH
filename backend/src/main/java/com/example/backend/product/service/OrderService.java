@@ -49,13 +49,15 @@ public class OrderService {
                             .map(OrderItemDto::new)
                             .toList();
 
-                    OrderDto dto = new OrderDto();
+                    OrderDto dto = new OrderDto(representative);
                     dto.setOrderId(representative.getId());
                     dto.setOrderToken(token);
                     dto.setOrderDate(representative.getCreatedAt());
                     dto.setMemberName(representative.getMember().getName());
                     dto.setTotalPrice(
-                            allItems.stream().mapToInt(OrderItemDto::getPrice).sum()
+                            allItems.stream()
+                                    .mapToInt(item -> item.getPrice() * item.getQuantity())
+                                    .sum()
                     );
                     dto.setOrderItems(allItems);
                     dto.setStatus("구매 확정");

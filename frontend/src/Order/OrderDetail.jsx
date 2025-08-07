@@ -67,7 +67,7 @@ export function OrderDetail() {
                 <div>
                   {order.orderItems.map((item, index) => (
                     <div key={index} className="flex gap-3">
-                      <div>
+                      <div className="mb-2">
                         <img src={item.thumbnailUrl || "/default.png"}
                              alt={item.productName}
                              className="w-32 h-32"/>

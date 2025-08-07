@@ -27,7 +27,7 @@ public class OrderDetailDto {
 
     private List<OrderItemDto> orderItems;
 
-    // ✅ 생성자 추가
+    // 생성자
     public OrderDetailDto(Order order, List<OrderItemDto> allItems) {
         this.orderToken = order.getOrderToken();
         this.orderDate = order.getCreatedAt();

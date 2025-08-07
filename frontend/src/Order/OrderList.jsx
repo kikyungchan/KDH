@@ -60,11 +60,10 @@ export function OrderList() {
                     </div>
                     {order.orderItems.map((item, index) => (
                       <div key={`${order.orderId}-${index}`} className="flex gap-3">
-                        <div>
+                        <div className="mb-2">
                           <img src={item.thumbnailUrl || "/default.png"}
                                alt={item.productName}
                                className="w-32 h-32"/>
-                          <br/>
                         </div>
                         <div>
                           <div className="mb-1">상품명: {item.productName}</div>

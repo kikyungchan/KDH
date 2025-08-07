@@ -1,9 +1,12 @@
 package com.example.backend.product.dto;
 
+import com.example.backend.product.entity.Order;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Data
 public class OrderDto {
@@ -23,4 +26,24 @@ public class OrderDto {
     private String status;
 
     private List<OrderItemDto> orderItems;
+
+    public OrderDto(Order order) {
+        this.orderId = order.getId();
+        this.orderToken = order.getOrderToken();
+        this.orderDate = order.getCreatedAt();
+        this.memberName = order.getMember().getName();
+        this.orderItems = order.getOrderItems().stream()
+                .map(OrderItemDto::new)
+                .collect(Collectors.toList());
+
+        this.totalPrice = order.getOrderItems().stream()
+                .mapToInt(item -> item.getPrice() * item.getQuantity())
+                .sum();
+
+        this.imageUrl = order.getOrderItems().isEmpty()
+                ? null
+                : order.getOrderItems().get(0).getProduct().getThumbnails().isEmpty()
+                ? null
+                : order.getOrderItems().get(0).getProduct().getThumbnails().get(0).getStoredPath();
+    }
 }
