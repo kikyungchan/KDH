@@ -39,6 +39,9 @@ export function NavUserMenu({user, logout, isAdmin}) {
             <li>
               <Link to="/signup">회원가입</Link>
             </li>
+            <li>
+              <Link to="/order/guest-order">비회원 주문조회</Link>
+            </li>
           </>
         )}
       </ul>
