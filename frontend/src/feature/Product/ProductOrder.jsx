@@ -43,6 +43,13 @@ function Order(props) {
         })
         .catch((err) => {});
     }
+    window.addEventListener("message", (event) => {
+      // if (event.origin !== "https://yourdomain.com") return;
+      if (event.data?.type === "PAY_SUCCESS") {
+        // 원하는 처리
+        console.log("팝업에서 데이터 받음!", event.data);
+      }
+    });
   }, []);
 
   if (!state || items.length === 0) {
