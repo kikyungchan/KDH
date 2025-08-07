@@ -3,6 +3,7 @@ import { Client } from "@stomp/stompjs";
 import SockJS from "sockjs-client";
 import { AuthenticationContext } from "../common/AuthenticationContextProvider.jsx";
 import { Col, Row } from "react-bootstrap";
+import { v4 as uuidv4 } from "uuid";
 
 const WS_URL = "http://localhost:8080/ws-chat";
 const WS_PATH = "/ws-chat";
@@ -17,6 +18,7 @@ export function Chat() {
   const clientRef = useRef(null); // STOMP 인스턴스 담아 둘 상자
   const [count, setCount] = useState(0);
   const effectRan = useRef(false);
+  const roomId = uuidv4();
 
   useEffect(() => {
     console.log("chat user : ", user);
@@ -49,10 +51,18 @@ export function Chat() {
           // 연결 성공 시
           console.log("연결됨!", frame);
           client.subscribe(SUBSCRIBE_DEST, (message) => {
-            // console.log("받음");
-
             // 서버의 json 메시지를 파싱해서 msgs 배열에 추가
             setMsgs((prev) => [...prev, JSON.parse(message.body)]);
+          });
+
+          client.publish({
+            destination: "/app/chat/enter", // 서버의 MessageMapping 경로
+            body: JSON.stringify({
+              from: user.name, // 내 이름
+              roomId: roomId, // 방 id (props, params 등에서 받아와야 함)
+              type: "ENTER", // 필요하다면 type도 함께
+              // 필요하면 다른 필드도 추가
+            }),
           });
         };
 
@@ -63,11 +73,35 @@ export function Chat() {
 
         // 언마운트 될 때
         return () => {
+          if (client && client.connected) {
+            client.publish({
+              destination: "/app/chat/leave", // 서버 MessageMapping 경로
+              body: JSON.stringify({
+                from: user.name,
+                roomId: roomId,
+                type: "LEAVE", // 서버 DTO와 맞추기!
+              }),
+            });
+          }
           client.deactivate(); //연결 해제
         };
       }
     }
   }, [user]);
+
+  function handleChattingOutClick() {
+    if (clientRef.current && clientRef.current.connected) {
+      clientRef.current.publish({
+        destination: "/app/chat/leave", // 서버 MessageMapping 경로
+        body: JSON.stringify({
+          from: user.name,
+          roomId: roomId,
+          type: "LEAVE", // 서버 DTO와 맞추기!
+        }),
+      });
+    }
+    clientRef.current.deactivate(); //연결 해제
+  }
 
   const sendMessage = () => {
     if (!text.trim()) return; // 값 업승면 그냥 반환
@@ -94,31 +128,24 @@ export function Chat() {
             <h2>1:1 상담 ({user.name})</h2>
 
             {/*채팅 로그*/}
-            <div
-              style={{
-                border: "1px solid #ddd",
-                padding: 10,
-                height: 300,
-                overflowY: "auto",
-                marginBottom: 10,
-              }}
-            >
-              <div className="chat chat-start"></div>
-              <div className="chat chat-end"></div>
-              {msgs.map((m, i) => (
-                <div
-                  key={i}
-                  className={`chat chat-${user.name == m.from ? "end" : "start"}`}
-                >
-                  <div className="chat-bubble">{m.message}</div>
-                </div>
-              ))}
-            </div>
-            <div>
-              <span>
-                테스트 하시려면 해당 창이랑 새 창 모두 상대방 아이디에 guest22
-                입력 후 테스트 하시면 됩니다
-              </span>
+            <div className="border rounded-lg border-gray-200  h-150 overflow-y-auto mb-2.5">
+              <div className="chat chat-head border-b p-2.5 border-gray-200">
+                <h2>1:1 상담 서비스</h2>
+              </div>
+              <div className="chat chat-main p-2.5 ">
+                {/*더미 div*/}
+                {/*삭제 x */}
+                <div className="chat chat-start"></div>
+                <div className="chat chat-end"></div>
+                {msgs.map((m, i) => (
+                  <div
+                    key={i}
+                    className={`chat chat-${user.name == m.from ? "end" : "start"}`}
+                  >
+                    <div className="chat-bubble">{m.message}</div>
+                  </div>
+                ))}
+              </div>
             </div>
             <input
               placeholder="상대방 아이디"
@@ -142,7 +169,7 @@ export function Chat() {
             {clientRef.current && (
               <button
                 className={"btn btn-outline btn-primary"}
-                onClick={() => clientRef.current.deactivate()}
+                onClick={() => handleChattingOutClick()}
               >
                 연결 해제
               </button>

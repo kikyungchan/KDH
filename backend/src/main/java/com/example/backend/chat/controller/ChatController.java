@@ -39,4 +39,22 @@ public class ChatController {
         // 받은 메시지를 그대로 /topic/public 구독자 모두에게 전송
         return msg;
     }*/
+
+    @MessageMapping("/chat/enter")
+    public void enter(ChatForm message) {
+        message.setMessage(message.getFrom() + "님이 입장했습니다.");
+        message.setType(ChatForm.MessageType.ENTER);
+        System.out.println("채팅이 연결되었습니다");
+        System.out.println("message = " + message);
+        template.convertAndSend("/topic/chat/" + message.getRoomId(), message);
+    }
+
+    @MessageMapping("/chat/leave")
+    public void leave(ChatForm message) {
+        message.setMessage(message.getFrom() + "님이 퇴장했습니다.");
+        message.setType(ChatForm.MessageType.LEAVE);
+        System.out.println("채팅이 연결해제되었습니다");
+        System.out.println("message = " + message);
+        template.convertAndSend("/topic/chat/" + message.getRoomId(), message);
+    }
 }
