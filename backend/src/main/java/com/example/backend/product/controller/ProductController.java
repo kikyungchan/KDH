@@ -78,6 +78,12 @@ public class ProductController {
         List<GuestOrderItem> itemList = new ArrayList<>();
 
         for (GuestOrderRequestDto dto : dtoList) {
+            System.out.println("➡ 옵션 ID: " + dto.getOptionId());
+            System.out.println("➡ 옵션 이름: " + dto.getOptionName());
+            System.out.println("➡ 옵션 ID: " + dto.getOptionId());
+            System.out.println("➡ 옵션 이름: " + dto.getOptionName());
+            System.out.println("➡ 옵션 ID: " + dto.getOptionId());
+            System.out.println("➡ 옵션 이름: " + dto.getOptionName());
             Product product = productRepository.findById(dto.getProductId())
                     .orElseThrow(() -> new RuntimeException("상품이 존재하지 않습니다."));
 
@@ -100,6 +106,10 @@ public class ProductController {
 
             if (dto.getOptionId() != null) {
                 ProductOption option = productOptionRepository.findById(dto.getOptionId()).orElse(null);
+                System.out.println("🔍 DB에서 조회한 옵션: " + option);
+                System.out.println("🔍 DB에서 조회한 옵션: " + option);
+                System.out.println("🔍 DB에서 조회한 옵션: " + option);
+                System.out.println("🔍 DB에서 조회한 옵션: " + option);
                 item.setOption(option);
                 item.setOptionName(option != null ? option.getOptionName() : null);
             }
@@ -109,9 +119,9 @@ public class ProductController {
         }
 
         order.setTotalPrice(totalOrderPrice);
-        order.setItems(itemList); // 양방향 관계 설정
+        order.setItems(itemList);
 
-        guestOrderRepository.save(order); // cascade로 item도 같이 저장됨
+        guestOrderRepository.save(order); // 로 item도 같이 저장됨
 
         return ResponseEntity.ok(Map.of(
                 "guestOrderToken", order.getGuestOrderToken()
