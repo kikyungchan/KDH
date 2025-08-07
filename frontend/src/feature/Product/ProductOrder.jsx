@@ -127,6 +127,14 @@ function Order(props) {
         })
         .then((res) => {
           setCartCount(res.data);
+          /*return new Promise((resolve) => {
+            const checkoutWindow = window.open(
+              "/pay/Checkout", // 새 창에서 열 주소
+              "_blank", // 새 창
+              "width=600,height=800",
+            );
+            console.log("checkoutWindow", checkoutWindow);
+          });*/
         })
         .then((res) => {
           alert("주문이 완료되었습니다.");
@@ -433,6 +441,19 @@ function Order(props) {
         </button>
         <button onClick={handleCancelButton} className="order-button cancel">
           취소
+        </button>
+        <button
+          className={"btn btn-primary"}
+          onClick={() => {
+            const checkoutWindow = window.open(
+              "/pay/Checkout", // 새 창에서 열 주소
+              "_blank", // 새 창
+              "width=600,height=800",
+            );
+            console.log(checkoutWindow);
+          }}
+        >
+          토스 페이먼츠
         </button>
       </div>
     </div>
