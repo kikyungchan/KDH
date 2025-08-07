@@ -1,8 +1,8 @@
 package com.example.backend.product.service;
 
-import com.example.backend.product.dto.OrderDetailDto;
-import com.example.backend.product.dto.OrderDto;
-import com.example.backend.product.dto.OrderItemDto;
+import com.example.backend.product.dto.order.OrderDetailDto;
+import com.example.backend.product.dto.order.OrderDto;
+import com.example.backend.product.dto.order.OrderItemDto;
 import com.example.backend.product.entity.Order;
 import com.example.backend.product.entity.OrderItem;
 import com.example.backend.product.repository.OrderRepository;
@@ -17,7 +17,6 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @Transactional

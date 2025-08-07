@@ -1,4 +1,4 @@
-package com.example.backend.product.dto;
+package com.example.backend.product.dto.order;
 
 import com.example.backend.product.entity.Order;
 
@@ -6,7 +6,6 @@ import lombok.Data;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Data
 public class OrderDetailDto {

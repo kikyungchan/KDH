@@ -1,8 +1,7 @@
-package com.example.backend.product.dto;
+package com.example.backend.product.dto.order;
 
 import com.example.backend.product.entity.Order;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 import java.util.List;

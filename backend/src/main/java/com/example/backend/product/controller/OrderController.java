@@ -1,8 +1,8 @@
 package com.example.backend.product.controller;
 
 import com.example.backend.member.repository.MemberRepository;
-import com.example.backend.product.dto.OrderDetailDto;
-import com.example.backend.product.dto.OrderDto;
+import com.example.backend.product.dto.order.OrderDetailDto;
+import com.example.backend.product.dto.order.OrderDto;
 import com.example.backend.product.service.OrderService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -13,7 +13,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.security.oauth2.jwt.JwtDecoder;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 @RequiredArgsConstructor
@@ -49,4 +48,7 @@ public class OrderController {
         OrderDetailDto dto = orderService.getOrderDetail(orderToken, memberId);
         return ResponseEntity.ok(dto);
     }
+
+    // 비회원 주문 조회
+
 }
