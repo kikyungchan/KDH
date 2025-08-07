@@ -39,14 +39,21 @@ export function OrderDetail() {
               <hr className="border-t border-gray-300 my-3"/>
               <div>
                 <div>이름 : {order.memberName}</div>
+                <div>연락처 : {order.phone}</div>
                 <div>
                   <div>
                     우편번호 : {order.zipcode}
+                  </div>
+                  <div>
                     주소 : {order.shippingAddress}
+                  </div>
+                  <div>
                     상세주소 : {order.addressDetail}
                   </div>
+                  <div>
+                    배송메모 : {order.memo}
+                  </div>
                 </div>
-                <div>핸드폰번호 : {order.phone}</div>
               </div>
               <hr className="border-t border-gray-300 my-3"/>
               <div>

@@ -28,7 +28,7 @@ public class OrderDetailDto {
     private List<OrderItemDto> orderItems;
 
     // ✅ 생성자 추가
-    public OrderDetailDto(Order order) {
+    public OrderDetailDto(Order order, List<OrderItemDto> allItems) {
         this.orderToken = order.getOrderToken();
         this.orderDate = order.getCreatedAt();
         this.memberName = order.getMember().getName();
@@ -40,7 +40,8 @@ public class OrderDetailDto {
         this.addressDetail = order.getAddressDetail();
         this.memo = order.getMemo();
 
-        this.orderItems = order.getOrderItems().stream()
+        this.orderItems = order.getOrderItems()
+                .stream()
                 .map(OrderItemDto::new)
                 .collect(Collectors.toList());
     }

@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -61,18 +62,38 @@ public class OrderService {
     public OrderDetailDto getOrderDetail(String orderToken, Integer memberId) {
         List<Order> orders = orderRepository.findAllByOrderToken(orderToken);
 
+
         if (orders.isEmpty()) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "주문을 찾을 수 없습니다.");
         }
 
         // ✅ 첫 번째 Order만 사용 (임시 조치)
-        Order order = orders.get(0);
+        Order representativeOrder = orders.get(0);
 
-        if (!order.getMember().getId().equals(memberId)) {
+        if (!representativeOrder.getMember().getId().equals(memberId)) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "본인의 주문만 조회할 수 있습니다.");
         }
 
+        // ✅ 모든 주문의 아이템을 통합
+        List<OrderItemDto> allItems = new ArrayList<>();
+        for (Order order : orders) {
+            for (OrderItem item : order.getOrderItems()) {
+                allItems.add(new OrderItemDto(item));
+            }
+        }
+
         System.out.println("✅ 주문 상세 조회 성공: " + orderToken);
-        return new OrderDetailDto(order);
+        System.out.println("🟨 전체 주문 개수: " + orders.size());
+        System.out.println("📦 전체 상품 수: " + allItems.size());
+
+        for (OrderItemDto itemDto : allItems) {
+            System.out.println("🔹 상품명: " + itemDto.getProductName());
+            System.out.println("   옵션: " + itemDto.getProductOption());
+            System.out.println("   수량: " + itemDto.getQuantity());
+            System.out.println("   가격: " + itemDto.getPrice());
+        }
+
+        // ✅ 대표 주문 정보와 모든 상품으로 DTO 생성
+        return new OrderDetailDto(representativeOrder, allItems);
     }
 }
