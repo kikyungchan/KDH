@@ -50,7 +50,7 @@ export function OrderList() {
                         <div>{new Date(order.orderDate).toLocaleDateString()}</div>
                         <div
                           className="cursor-pointer not-hover:underline"
-                          onClick={() => navigate(`/product/order/detail/${order.orderToken}`)}
+                          onClick={() => navigate(`/order/detail/${order.orderToken}`)}
                         >
                           주문상세
                         </div>
