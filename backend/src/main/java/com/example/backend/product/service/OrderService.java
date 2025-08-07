@@ -120,4 +120,16 @@ public class OrderService {
         }
         session.setAttribute("guestOrderToken", order.getGuestOrderToken());
     }
+
+    public GuestOrder getGuestOrderDetail(HttpSession session) {
+
+        String token = (String) session.getAttribute("guestOrderToken");
+
+        if (token == null) {
+            throw new SecurityException("인증 정보가 없습니다");
+        }
+
+        return guestOrderRepository.findByGuestOrderToken(token)
+                .orElseThrow(() -> new NoSuchElementException("주문을 찾을 수 없습니다."));
+    }
 }

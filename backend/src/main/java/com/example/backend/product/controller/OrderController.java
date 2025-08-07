@@ -72,6 +72,16 @@ public class OrderController {
         }
     }
 
-
+    @GetMapping("/guest-order/detail")
+    public ResponseEntity<OrderDetailDto> getGuestOrderDetail(HttpSession session) {
+        try {
+            GuestOrder guestOrder = orderService.getGuestOrderDetail(session);
+            return ResponseEntity.ok(guestOrder);
+        } catch (SecurityException e) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(e.getMessage());
+        } catch (NoSuchElementException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        }
+    }
 
 }
