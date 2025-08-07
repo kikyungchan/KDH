@@ -54,7 +54,7 @@ export function MemberLogin() {
         <div className="w-full max-w-[400px]">
           <div className="p-6 shadow rounded-2xl bg-white">
             <div className="w-full justify-content-center">
-              <Link to="/" className="navbar-logo w-full block text-center mb-6">
+              <Link to="/home" className="navbar-logo w-full block text-center mb-6">
                 코데헌
               </Link>
               <h3 className="text-center text-xl font-bold mb-6">로그인</h3>
