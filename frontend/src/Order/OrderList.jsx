@@ -14,6 +14,7 @@ export function OrderList() {
     axios.get(`/api/product/order/list?page=${page}`)
       .then((res) => {
         setOrderList(res.data.content);
+        setTotalPages(res.data.totalPages);
       })
       .catch((err) => {
         console.error("❌ 주문 목록 불러오기 실패:", err);

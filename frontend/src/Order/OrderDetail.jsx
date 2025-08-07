@@ -5,7 +5,6 @@ import {useNavigate, useParams} from "react-router";
 export function OrderDetail() {
   const {orderToken} = useParams();
   const [order, setOrder] = useState(null);
-  const [orderDetail, setOrderDetail] = useState(null);
   const navigate = useNavigate();
 
   useEffect(() => {
