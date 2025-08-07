@@ -217,12 +217,12 @@ export function FaQList() {
                       <li>토요일, 공휴일: 오늘의집 직접배송 주문건 상담</li>
                       <li>일요일: 휴무</li>
                     </ol>
-                    <ButtonGroup className="mt-22 ">
+                    <ButtonGroup className="mt-22 flex-wrap flex justify-between">
                       {radios.map((radio, idx) => (
                         <Link
                           key={idx}
-                          className={`btn ${idx === 2 ? "btn-primary" : "btn-outline"}
-                           mx-2 my-1
+                          className={`btn w-full py-2  ${idx === 2 ? "btn-primary lg:w-full block mx-0" : "btn-outline px-[clamp(16px,calc(9vw-60px),90px)]"}
+                           my-1
                           btn-block lg:w-auto lg:my-auto`}
                           // onClick={radio.fnc}
                           to={radio.path}
