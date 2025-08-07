@@ -13,8 +13,9 @@ import java.util.Optional;
 public interface OrderRepository extends JpaRepository<Order, Integer> {
     Page<Order> findByMember_Id(Integer memberId, Pageable pageable);
 
-    @Query("SELECT DISTINCT o.orderToken FROM Order o WHERE o.member.id = :memberId")
+    @Query("SELECT DISTINCT o.orderToken FROM Order o WHERE o.member.id = :memberId ORDER BY o.createdAt DESC")
     List<String> findDistinctOrderTokensByMemberId(@Param("memberId") Integer memberId);
+
 
     List<Order> findAllByOrderToken(String orderToken);
 
