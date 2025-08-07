@@ -65,6 +65,7 @@ export function MemberEdit() {
       .finally(() => {
       });
   }, [memberParams]);
+
   if (!member) {
     return (
       <div>

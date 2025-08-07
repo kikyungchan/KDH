@@ -1,5 +1,5 @@
-import { Link, useSearchParams } from "react-router";
-import { useEffect, useState } from "react";
+import {Link, useSearchParams} from "react-router";
+import {useEffect, useState} from "react";
 import axios from "axios";
 import "./css/ProductList.css";
 
@@ -11,8 +11,11 @@ export function ProductList() {
   const [sort, setSort] = useState("recent");
   const keyword = searchParams.get("keyword") || "";
   const category = searchParams.get("category") || "";
+  // 로딩시
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
+    setLoading(true);
     axios
       .get(
         `/api/product/list?page=${pageParam}${keyword ? `&keyword=${keyword}` : ""}${category ? `&category=${category}` : ""}${sort ? `&sort=${sort}` : ""}`,
@@ -23,7 +26,8 @@ export function ProductList() {
       })
       .catch((err) => {
         console.log(err.message);
-      });
+      })
+      .finally(() => setLoading(false));
   }, [pageParam, keyword, sort, category]);
 
   const handlePageClick = (page) => {
@@ -57,7 +61,7 @@ export function ProductList() {
   return (
     <div id="product-list-container" className="w-full pt-3 px-90">
       <div className="flex justify-between items-center mb-6">
-        <h2 className="text-xl" style={{ fontSize: "2rem" }}>
+        <h2 className="text-xl" style={{fontSize: "2rem"}}>
           상품 목록
         </h2>
         <select
@@ -71,7 +75,12 @@ export function ProductList() {
           <option value="price_desc">가격 높은순</option>
         </select>
       </div>
-      {products.length === 0 ? (
+      {loading ? (
+        <div className="flex justify-center items-center my-12 text-gray-500">
+          <span className="loading loading-spinner loading-sm mr-2"/>
+          페이지 로딩 중...
+        </div>
+      ) : products.length === 0 ? (
         <div className="text-center mt-10">검색 결과가 없습니다.</div>
       ) : (
         <div className="product-grid mb-10">
