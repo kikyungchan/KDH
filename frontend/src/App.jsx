@@ -1,37 +1,39 @@
-import { BrowserRouter, Route, Routes } from "react-router";
-import { ProductRegist } from "./feature/Product/ProductRegist.jsx";
-import { ProductList } from "./feature/Product/ProductList.jsx";
-import { ProductDetail } from "./feature/Product/ProductDetail/ProductDetail.jsx";
-import { ProductEdit } from "./feature/Product/ProductEdit.jsx";
-import { MemberList } from "./feature/Member/MemberList.jsx";
-import { MemberSignup } from "./feature/Member/MemberSignup.jsx";
-import { MemberDetail } from "./feature/Member/MemberDetail.jsx";
-import { MemberEdit } from "./feature/Member/MemberEdit.jsx";
-import { MemberLogin } from "./feature/Member/MemberLogin.jsx";
-import { AuthenticationContextProvider } from "./feature/common/AuthenticationContextProvider.jsx";
+import {BrowserRouter, Route, Routes} from "react-router";
+import {ProductRegist} from "./feature/Product/ProductRegist.jsx";
+import {ProductList} from "./feature/Product/ProductList.jsx";
+import {ProductDetail} from "./feature/Product/ProductDetail/ProductDetail.jsx";
+import {ProductEdit} from "./feature/Product/ProductEdit.jsx";
+import {MemberList} from "./feature/Member/MemberList.jsx";
+import {MemberSignup} from "./feature/Member/MemberSignup.jsx";
+import {MemberDetail} from "./feature/Member/MemberDetail.jsx";
+import {MemberEdit} from "./feature/Member/MemberEdit.jsx";
+import {MemberLogin} from "./feature/Member/MemberLogin.jsx";
+import {AuthenticationContextProvider} from "./feature/common/AuthenticationContextProvider.jsx";
 import ProductOrder from "./feature/Product/ProductOrder.jsx";
 import ProductCart from "./feature/Product/ProductCart.jsx";
-import { Chat } from "./feature/Chat/Chat.jsx";
-import { QnaAdd } from "./feature/Qna/QnaAdd.jsx";
-import { QnaList } from "./feature/Qna/QnaList.jsx";
-import { QnaView } from "./feature/Qna/QnaView.jsx";
-import { AnsAdd } from "./feature/Qna/AnsAdd.jsx";
-import { FaQList } from "./feature/FaQ/FaQList.jsx";
-import { CheckoutPage } from "./feature/tossPayments/Checkout.jsx";
-import { FailPage } from "./feature/tossPayments/Fail.jsx";
-import { SuccessPage } from "./feature/tossPayments/Success.jsx";
-import { FindLoginId } from "./feature/Member/FindLoginId.jsx";
-import { FindPassword } from "./feature/Member/FindPassword.jsx";
-import { ResetPassword } from "./feature/Member/ResetPassword.jsx";
-import { MemberLogout } from "./feature/Member/MemberLogout.jsx";
-import { ProductOrderComplete } from "./feature/Product/ProductOrderComplete.jsx";
-import { CartProvider } from "./feature/Product/CartContext.jsx";
+import {Chat} from "./feature/Chat/Chat.jsx";
+import {QnaAdd} from "./feature/Qna/QnaAdd.jsx";
+import {QnaList} from "./feature/Qna/QnaList.jsx";
+import {QnaView} from "./feature/Qna/QnaView.jsx";
+import {AnsAdd} from "./feature/Qna/AnsAdd.jsx";
+import {FaQList} from "./feature/FaQ/FaQList.jsx";
+import {CheckoutPage} from "./feature/tossPayments/Checkout.jsx";
+import {FailPage} from "./feature/tossPayments/Fail.jsx";
+import {SuccessPage} from "./feature/tossPayments/Success.jsx";
+import {FindLoginId} from "./feature/Member/FindLoginId.jsx";
+import {FindPassword} from "./feature/Member/FindPassword.jsx";
+import {ResetPassword} from "./feature/Member/ResetPassword.jsx";
+import {MemberLogout} from "./feature/Member/MemberLogout.jsx";
+import {ProductOrderComplete} from "./feature/Product/ProductOrderComplete.jsx";
+import {CartProvider} from "./feature/Product/CartContext.jsx";
 import Main from "./feature/common/Main.jsx";
 import ImageSlide from "./feature/common/CoverImageSlide/ImageSlide.jsx";
 import Home from "./feature/common/Home/Home.jsx";
-import { AlertProvider } from "./feature/common/AlertContext.jsx";
-import { OrderList } from "./Order/OrderList.jsx";
-import { OrderDetail } from "./Order/OrderDetail.jsx";
+import {AlertProvider} from "./feature/common/AlertContext.jsx";
+import {OrderList} from "./Order/OrderList.jsx";
+import {OrderDetail} from "./Order/OrderDetail.jsx";
+import {GuestOrder} from "./Order/GuestOrder.jsx";
+import {GuestOrderDetail} from "./Order/GuestOrderDetail.jsx";
 
 function App() {
   // const username = prompt("닉네임을 입력해 주세요");
@@ -56,6 +58,8 @@ function App() {
                 />
                 <Route path="/product/order/list" element={<OrderList />} />
                 <Route path="/product/order/detail/:orderToken" element={<OrderDetail />} />
+                <Route path="/product/guest-order/" element={<GuestOrder />} />
+                <Route path="/product/guest-order/detail/:orderToken" element={<GuestOrderDetail />} />
                 <Route path="/member/edit" element={<MemberEdit />} />
                 <Route path="/member/list" element={<MemberList />} />
                 <Route path="/member" element={<MemberDetail />} />
