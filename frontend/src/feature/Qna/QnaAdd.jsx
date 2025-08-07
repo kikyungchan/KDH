@@ -38,6 +38,15 @@ export function QnaAdd() {
   ];
   let params = useParams();
   const navigate = useNavigate();
+  const categoryList = {
+    1: { value: "주문/결제" },
+    2: { value: "배송관련" },
+    3: { value: "취소/환불" },
+    4: { value: "반품/교환" },
+    5: { value: "증빙서류발급" },
+    6: { value: "로그인/회원정보" },
+    7: { value: "서비스/기타" },
+  };
 
   useEffect(() => {}, [category]);
 
@@ -199,12 +208,13 @@ export function QnaAdd() {
                   <br />
                   <br />
                   {/*상품명*/}
-                  <FormControl
-                    // style={{ width: 50 }}
+                  <input
+                    type="text"
+                    className="input input-bordered w-full"
                     placeholder={productName}
-                    disabled={true}
+                    disabled
                   />
-                  <h5 className="text-end fw-bold text-danger">
+                  <h5 className="text-right font-bold text-red-600">
                     {/* toLocaleString() : 세자리수마다 쉼표로 보기 쉽게 표현*/}
                     {productPrice && productPrice.toLocaleString()}원
                   </h5>
@@ -214,28 +224,44 @@ export function QnaAdd() {
             <br />
             <br />
             <div ref={titleRef}>
-              <FormGroup>
+              {/*<FormGroup>
                 <FormLabel>제목</FormLabel>
                 <FormControl
                   value={title}
                   placeholder="제목을 입력해 주세요"
                   onChange={(e) => setTitle(e.target.value)}
                 />
-              </FormGroup>
+              </FormGroup>*/}
+              <div className="form-control w-full mb-4">
+                <label className="label">
+                  <span className="label-text">제목</span>
+                </label>
+                <input
+                  type="text"
+                  className="input input-bordered w-full"
+                  value={title}
+                  placeholder="제목을 입력해 주세요"
+                  onChange={(e) => setTitle(e.target.value)}
+                />
+              </div>
             </div>
-            <div>
-              <br />
-            </div>
+            <div></div>
             <div ref={contentRef}>
-              <FormGroup className="mb-3" controlId="content1">
-                <FormLabel>문의 내용</FormLabel>
-                <FormControl
-                  as="textarea"
+              <div className="form-control w-full mb-3">
+                {/* form-control: DaisyUI 폼 래퍼, mb-3: 아래 여백 */}
+                <label className="label">
+                  <span className="label-text">문의 내용</span>
+                  {/* label-text: DaisyUI 스타일 라벨 */}
+                </label>
+                <textarea
+                  className="textarea textarea-bordered w-full"
                   rows={6}
                   value={content}
                   onChange={(e) => setContent(e.target.value)}
+                  // textarea, textarea-bordered: DaisyUI 스타일 적용
+                  // w-full: 가로 100% (부모 기준)
                 />
-              </FormGroup>
+              </div>
             </div>
             <br />
 
