@@ -264,3 +264,15 @@ ALTER TABLE guest_orders
     CHANGE postal_code zipcode VARCHAR(20);
 
 
+ALTER TABLE orders
+    DROP COLUMN product_name,
+    DROP COLUMN option_name;
+
+
+ALTER TABLE guest_orders
+    DROP COLUMN product_id,
+    DROP COLUMN product_name,
+    DROP COLUMN option_id,
+    DROP COLUMN option_name,
+    DROP COLUMN quantity,
+    DROP COLUMN price;

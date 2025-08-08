@@ -42,24 +42,6 @@ public class GuestOrder {
     @Column(name = "zipcode", length = 20)
     private String zipcode;
 
-    @Column(name = "product_id")
-    private Integer productId;
-
-    @Column(name = "product_name")
-    private String productName;
-
-    @Column(name = "option_id")
-    private Integer optionId;
-
-    @Column(name = "option_name")
-    private String optionName;
-
-    @Column(name = "quantity")
-    private Integer quantity;
-
-    @Column(name = "price")
-    private Integer price;
-
     private Integer totalPrice;
 
     @Column(name = "memo")
