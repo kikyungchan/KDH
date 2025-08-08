@@ -275,21 +275,68 @@ export function ProductDetail() {
                 </div>
               )}
               {user !== null && isAdmin && (
-                <div className="admin-buttons">
-                  <Button className="btn-secondary" onClick={handleEditButton}>
-                    수정
-                  </Button>
-                  <Button className="btn-danger" onClick={handleDeleteButton}>
-                    삭제
-                  </Button>
-                  <Button
-                    className="btn-primary"
-                    onClick={handleQuestionButton}
-                    disabled={isProcessing}
-                  >
-                    문의하기
-                  </Button>
-                </div>
+                <>
+                  <div className="admin-buttons">
+                    <Button
+                      className="btn-secondary"
+                      onClick={handleEditButton}
+                    >
+                      수정
+                    </Button>
+                    <Button className="btn-danger" onClick={handleDeleteButton}>
+                      삭제
+                    </Button>
+                    <Button
+                      className="btn-primary"
+                      onClick={handleQuestionButton}
+                      disabled={isProcessing}
+                    >
+                      문의하기
+                    </Button>
+                  </div>
+                  {/*
+    todo : faq 페이지, 추천해주는 질문 몇개를 골라서 3개 이상 답하도록
+
+      <div>
+        <h2>QnA</h2>
+
+        <div>
+          \
+          todo : 질문자 아이디나 닉네임 공개할지 여부를 정하고 이후 결정
+          <div>
+            <img
+              src=""
+              alt=""
+              style={{ width: "50px", height: "50px", backgroundColor: "#ccc" }}
+            />
+            <span>질문자 이름(DB 연결 예정)</span>
+          </div>
+
+          <div>
+            <h5>
+              <span>Q : </span> 상품 무게가 어느 정도 되나요? (질문 제목)
+            </h5>
+            <p>A : </p>
+            <textarea
+              style={{
+                width: "100%",
+                height: "100px",
+                resize: "none",
+                overflow: "hidden",
+                border: "1px solid #ffffff",
+                borderRadius: "20px",
+              }}
+              readOnly
+              value="네 고객님, 상품 무게가 어느 정도 나가는지에 대해 질문 주셨는데요,
+              Lorem ipsum dolor sit amet, consectetur adipisicing elit. Alias
+              aliquid animi autem beatae deleniti eum incidunt labore nisi
+              officia quibusdam quo reiciendis sed suscipit, temporibus
+              voluptate? Mollitia nam obcaecati perferendis."
+            />
+          </div>
+        </div>
+      </div>*/}
+                </>
               )}
             </div>
           </div>
