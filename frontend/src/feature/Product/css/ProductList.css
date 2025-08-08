@@ -103,3 +103,17 @@
         grid-template-columns: repeat(4, 300px);
     }
 }
+
+.sort-wrapper-mobile {
+    display: none;
+}
+
+@media (max-width: 1023px) {
+    .sort-wrapper-pc {
+        display: none;
+    }
+
+    .sort-wrapper-mobile {
+        display: block;
+    }
+}
