@@ -197,7 +197,7 @@ public class ProductController {
                                     @RequestParam String options,
                                     @RequestParam String detailText,
                                     @RequestParam("thumbnails") List<MultipartFile> thumbnails,
-                                    @RequestParam("detailImages") List<MultipartFile> detailImages) {
+                                    @RequestParam(value = "detailImages", required = false) List<MultipartFile> detailImages) {
         ObjectMapper objectMapper = new ObjectMapper();
         List<ProductOptionDto> optionList;
         try {
