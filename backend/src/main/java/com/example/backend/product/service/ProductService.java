@@ -423,6 +423,7 @@ public class ProductService {
         dto.setPhone(member.getPhone());
         dto.setZipCode(member.getZipcode());
         dto.setAddressDetail(member.getAddressDetail());
+        dto.setEmail(member.getEmail());
 
         return dto;
 
