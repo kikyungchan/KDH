@@ -42,6 +42,18 @@ function NavLeft({ user, isAdmin, handleCategoryClick }) {
           <li>
             <button onClick={() => handleCategoryClick("hat")}>모자</button>
           </li>
+          <li>
+            <button onClick={() => handleCategoryClick("bag")}>가방</button>
+          </li>
+          <li>
+            <button onClick={() => handleCategoryClick("shoes")}>신발</button>
+          </li>
+          <li>
+            <button onClick={() => handleCategoryClick("socks")}>양말</button>
+          </li>
+          <li>
+            <button onClick={() => handleCategoryClick("belt")}>벨트</button>
+          </li>
         </ul>
       </div>
 

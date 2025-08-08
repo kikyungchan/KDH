@@ -3,14 +3,14 @@ import "./CategoryMenu.css";
 import { useNavigate } from "react-router";
 
 const categories = [
-  { name: "모자", value: "hat", image: "/CategoryImage/hat.png" },
   { name: "겉옷", value: "outer", image: "/CategoryImage/outer.png" },
   { name: "상의", value: "top", image: "/CategoryImage/top.png" },
   { name: "하의", value: "bottom", image: "/CategoryImage/bottom.png" },
+  { name: "모자", value: "hat", image: "/CategoryImage/hat.png" },
+  { name: "가방", value: "bag", image: "/CategoryImage/bag.png" },
   { name: "신발", value: "shoes", image: "/CategoryImage/shoes.png" },
-  { name: "가방", value: "shoes", image: "/CategoryImage/bag.png" },
-  { name: "양말", value: "shoes", image: "/CategoryImage/socks.png" },
-  { name: "벨트", value: "shoes", image: "/CategoryImage/belt.png" },
+  { name: "양말", value: "socks", image: "/CategoryImage/socks.png" },
+  { name: "벨트", value: "belt", image: "/CategoryImage/belt.png" },
 ];
 
 function CategoryMenu() {
