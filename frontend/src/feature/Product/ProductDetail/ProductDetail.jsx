@@ -295,6 +295,7 @@ export function ProductDetail() {
           </div>
         </div>
 
+        <hr className="mt-5" />
         <div className="product-body-section">
           <div className="detail-images-container">
             {detailImages?.map((path, index) => (

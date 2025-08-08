@@ -101,7 +101,6 @@ export function ProductEdit() {
     newImages.forEach((file) => {
       formData.append("newImages", file);
     });
-    console.log("newThumbnails", formData.getAll("newThumbnails"));
     axios
       .post(`/api/product/edit`, formData, {
         headers: { "Content-Type": "multipart/form-data" },
