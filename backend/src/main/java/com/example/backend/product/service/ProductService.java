@@ -130,7 +130,7 @@ public class ProductService {
             default:
                 sortOption = Sort.by(Sort.Direction.DESC, "id"); // 최신순
         }
-        pageable = PageRequest.of(pageNumber - 1, 16, sortOption);
+        pageable = PageRequest.of(pageNumber - 1, 15, sortOption);
 
         boolean hasKeyword = keyword != null && !keyword.trim().isEmpty();
         boolean hasCategory = category != null && !category.trim().isEmpty();
