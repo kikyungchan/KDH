@@ -17,11 +17,22 @@ public class ProductBestDto {
         dto.setId(product.getId());
         dto.setProductName(product.getProductName());
         dto.setPrice(product.getPrice());
-        dto.setThumbnailUrl(
-                product.getImages().isEmpty() ? "/default.jpg" : product.getImages().get(0).getStoredPath()
-        );
+
+        String thumbnailUrl = "/default.jpg";
+        if (product.getThumbnails() != null) {
+            for (var thumb : product.getThumbnails()) {
+                if (Boolean.TRUE.equals(thumb.getIsMain())) {
+                    thumbnailUrl = thumb.getStoredPath();
+                    break;
+                }
+            }
+        }
+        dto.setThumbnailUrl(thumbnailUrl);
+
         dto.setAverageRating(avgRating);
         dto.setReviewCount(reviewCnt);
         return dto;
     }
+
+
 }

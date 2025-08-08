@@ -2,8 +2,10 @@ package com.example.backend.product.dto;
 
 import com.example.backend.product.entity.Product;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
+@NoArgsConstructor
 public class ProductMainSlideDto {
     private Integer id;
     private String productName;
@@ -21,5 +23,12 @@ public class ProductMainSlideDto {
             dto.setThumbnailUrl("/default.jpg");
         }
         return dto;
+    }
+
+    public ProductMainSlideDto(Integer id, String productName, Integer price, String thumbnailUrl) {
+        this.id = id;
+        this.productName = productName;
+        this.price = price;
+        this.thumbnailUrl = thumbnailUrl;
     }
 }

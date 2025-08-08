@@ -22,6 +22,7 @@ import { RxShare1 } from "react-icons/rx";
 import LikeButton from "./util/LikeButton.jsx";
 
 export function ProductDetail() {
+  const [selectedThumbnail, setSelectedThumbnail] = useState(null);
   const [showShareModal, setShowShareModal] = useState(false);
   const { setCartCount } = useCart();
   const [reviewChanged, setReviewChanged] = useState(false);
@@ -41,6 +42,10 @@ export function ProductDetail() {
       .get(`/api/product/view?id=${id}`)
       .then((res) => {
         setProduct(res.data);
+        const firstThumb = res.data.thumbnailPaths?.[0];
+        if (firstThumb) {
+          setSelectedThumbnail(firstThumb.storedPath);
+        }
       })
       .catch((err) => {
         console.log(err);
@@ -70,7 +75,9 @@ export function ProductDetail() {
   }
 
   // 썸네일은 isMain == true 인 항목의 storedPath 사용
-  const thumbnail = product.thumbnailPaths?.find((t) => t.isMain)?.storedPath;
+  const thumbnail =
+    product.thumbnailPaths?.find((t) => t.isMain)?.storedPath ??
+    product.thumbnailPaths?.[0]?.storedPath;
 
   // 본문 이미지 배열
   const detailImages = product.detailImagePaths ?? [];
@@ -91,14 +98,42 @@ export function ProductDetail() {
               alignItems: "flex-start",
             }}
           >
-            {/* 썸네일 이미지 */}
-            {thumbnail && (
-              <img
-                className="product-thumbnail"
-                src={thumbnail}
-                alt="썸네일 이미지"
-              />
-            )}
+            {/* 왼쪽: 썸네일 영역 */}
+            <div
+              style={{ display: "flex", flexDirection: "column", gap: "16px" }}
+            >
+              {/* 대표 썸네일 */}
+              {selectedThumbnail && (
+                <img
+                  className="product-thumbnail"
+                  src={selectedThumbnail}
+                  alt="대표 썸네일"
+                />
+              )}
+
+              {/* 작은 썸네일 리스트 */}
+              <div style={{ display: "flex", gap: "10px" }}>
+                {product.thumbnailPaths?.map((thumb, idx) => (
+                  <img
+                    key={idx}
+                    src={thumb.storedPath}
+                    alt={`썸네일 ${idx + 1}`}
+                    style={{
+                      width: "80px",
+                      height: "80px",
+                      objectFit: "cover",
+                      border:
+                        selectedThumbnail === thumb.storedPath
+                          ? "2px solid black"
+                          : "1px solid #ccc",
+                      cursor: "pointer",
+                      borderRadius: "4px",
+                    }}
+                    onClick={() => setSelectedThumbnail(thumb.storedPath)}
+                  />
+                ))}
+              </div>
+            </div>
 
             {/* 오른쪽: 텍스트 및 버튼들 */}
             <div style={{ flex: 1 }}>
@@ -365,7 +400,7 @@ export function ProductDetail() {
               </div>
             </div>
           </div>
-          <hr />
+          <hr style={{ marginTop: "20px" }} />
           {/* 본문영역 */}
           <div style={{ marginTop: "50px" }}>
             {/*본문영역에 텍스트*/}

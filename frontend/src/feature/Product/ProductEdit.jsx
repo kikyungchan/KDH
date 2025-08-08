@@ -4,10 +4,19 @@ import axios from "axios";
 import "./css/ProductEdit.css";
 
 export function ProductEdit() {
+  // 썸네일이미지
+  const [thumbnailPaths, setThumbnailPaths] = useState([]);
+  const [deletedThumbnails, setDeletedThumbnails] = useState([]);
+  const [newThumbnails, setNewThumbnails] = useState([]);
+  // 새 썸네일 미리보기
+  const [previewThumbnails, setPreviewThumbnails] = useState([]);
+
+  // 본문이미지
+  const [detailImagePaths, setDetailImagePaths] = useState([]);
+
   const [newImages, setNewImages] = useState([]);
   const [previewImages, setPreviewImages] = useState([]);
   const [deletedImagePaths, setDeletedImagePaths] = useState([]);
-  const [imagePaths, setImagePaths] = useState([]);
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const id = searchParams.get("id");
@@ -23,15 +32,18 @@ export function ProductEdit() {
     axios
       .get(`/api/product/view?id=${id}`)
       .then((res) => {
-        console.log(res.data);
+        const data = res.data;
         setForm({
-          productName: res.data.productName,
-          price: res.data.price,
-          category: res.data.category,
-          info: res.data.info,
-          quantity: res.data.quantity,
+          productName: data.productName,
+          price: data.price,
+          category: data.category,
+          info: data.info,
+          quantity: data.quantity,
         });
-        setImagePaths(res.data.imagePath || []);
+        // 썸네일 이미지 목록
+        setThumbnailPaths(data.thumbnailPaths || []);
+        // 본문 이미지 목록
+        setDetailImagePaths(data.detailImagePaths || []);
       })
       .catch((err) => console.error(err));
   }, [id]);
@@ -61,10 +73,7 @@ export function ProductEdit() {
       alert("상세설명을 입력해주세요.");
       return;
     }
-    if (imagePaths.length + newImages.length === 0) {
-      alert("최소 1장의 이미지를 등록해주세요.");
-      return;
-    }
+
     const formData = new FormData();
     formData.append("productName", form.productName);
     formData.append("price", form.price);
@@ -73,16 +82,28 @@ export function ProductEdit() {
     formData.append("quantity", form.quantity);
     formData.append("id", id);
 
+    // 썸네일 삭제 목록
+    deletedThumbnails.forEach((path) => {
+      formData.append("deletedThumbnails", path);
+    });
+
+    // 썸네일 새 이미지
+    newThumbnails.forEach((file) => {
+      formData.append("newThumbnails", file);
+    });
+
+    // 본문 삭제 목록
     deletedImagePaths.forEach((path) => {
       formData.append("deletedImages", path);
     });
 
+    // 본문 새 이미지
     newImages.forEach((file) => {
       formData.append("newImages", file);
     });
-
+    console.log("newThumbnails", formData.getAll("newThumbnails"));
     axios
-      .put(`/api/product/edit`, formData, {
+      .post(`/api/product/edit`, formData, {
         headers: { "Content-Type": "multipart/form-data" },
       })
       .then(() => {
@@ -94,22 +115,9 @@ export function ProductEdit() {
       });
   }
 
-  function handleRemoveNewImage(index) {
-    setPreviewImages((prev) => prev.filter((_, i) => i !== index));
-    setNewImages((prev) => prev.filter((_, i) => i !== index));
-  }
-
-  function handleAddImages(e) {
-    const files = Array.from(e.target.files);
-    setNewImages((prev) => [...prev, ...files]);
-    const newPreviews = files.map((file) => URL.createObjectURL(file));
-    setPreviewImages((prev) => [...prev, ...newPreviews]);
-  }
-
-  function handleImageDelete(index) {
-    const deleted = imagePaths[index];
-    setDeletedImagePaths((prev) => [...prev, deleted]);
-    setImagePaths((prev) => prev.filter((_, i) => i !== index));
+  function handleRemoveNewThumbnail(index) {
+    setPreviewThumbnails((prev) => prev.filter((_, i) => i !== index));
+    setNewThumbnails((prev) => prev.filter((_, i) => i !== index));
   }
 
   return (
@@ -179,21 +187,44 @@ export function ProductEdit() {
           />
         </div>
 
-        {/* 기존 이미지 */}
+        {/* 썸네일 이미지 변경 */}
         <div className="product-edit-field">
-          <label className="product-edit-label">기존 이미지</label>
+          <label className="product-edit-label">썸네일 이미지 변경</label>
           <div className="product-edit-image-box">
-            {imagePaths.map((path, idx) => (
+            {/* 기존 썸네일 */}
+            {thumbnailPaths.map((path, idx) => (
               <div key={idx} className="product-edit-image-wrapper">
                 <img
-                  src={path}
-                  alt={`기존 이미지 ${idx + 1}`}
+                  src={path.storedPath}
+                  alt={`썸네일 ${idx + 1}`}
                   className="product-edit-image"
                 />
                 <button
                   type="button"
                   className="product-edit-button-delete"
-                  onClick={() => handleImageDelete(idx)}
+                  onClick={() => {
+                    setDeletedThumbnails((prev) => [...prev, path.storedPath]);
+                    setThumbnailPaths((prev) =>
+                      prev.filter((_, i) => i !== idx),
+                    );
+                  }}
+                >
+                  ×
+                </button>
+              </div>
+            ))}
+            {/* 새 썸네일 미리보기 */}
+            {previewThumbnails.map((url, idx) => (
+              <div key={`new-${idx}`} className="product-edit-image-wrapper">
+                <img
+                  src={url}
+                  alt={`썸네일 미리보기 ${idx + 1}`}
+                  className="product-edit-image"
+                />
+                <button
+                  type="button"
+                  className="product-edit-button-delete"
+                  onClick={() => handleRemoveNewThumbnail(idx)}
                 >
                   ×
                 </button>
@@ -201,46 +232,101 @@ export function ProductEdit() {
             ))}
           </div>
         </div>
+        {/* 썸네일 추가 업로드 */}
+        <div className="product-edit-file-upload">
+          <label htmlFor="thumbnailInput" className="product-edit-file-label">
+            파일 선택
+          </label>
+          <input
+            id="thumbnailInput"
+            type="file"
+            multiple
+            accept="image/*"
+            onChange={(e) => {
+              const files = Array.from(e.target.files);
+              setNewThumbnails((prev) => [...prev, ...files]);
+              const previews = files.map((file) => URL.createObjectURL(file));
+              setPreviewThumbnails((prev) => [...prev, ...previews]);
+            }}
+            className="product-edit-file-input"
+          />
+        </div>
 
-        {/* 새 이미지 추가 */}
+        {/* 본문 이미지 변경 */}
         <div className="product-edit-field">
-          <label className="product-edit-label">새 이미지 추가</label>
+          <label className="product-edit-label">본문 이미지 변경</label>
+          <div className="product-edit-image-box">
+            {detailImagePaths.map((path, idx) => (
+              <div key={idx} className="product-edit-image-wrapper">
+                <img
+                  src={path}
+                  alt={`본문 이미지 ${idx + 1}`}
+                  className="product-edit-image"
+                />
+                <button
+                  type="button"
+                  className="product-edit-button-delete"
+                  onClick={() => {
+                    setDeletedImagePaths((prev) => [...prev, path]);
+                    setDetailImagePaths((prev) =>
+                      prev.filter((_, i) => i !== idx),
+                    );
+                  }}
+                >
+                  ×
+                </button>
+              </div>
+            ))}
+            {/* 미리보기 */}
+            {previewImages.length > 0 && (
+              <div className="product-edit-preview-box">
+                {previewImages.map((url, idx) => (
+                  <div key={idx} className="product-edit-image-wrapper">
+                    <img
+                      src={url}
+                      className="product-edit-preview"
+                      alt={`미리보기 ${idx + 1}`}
+                    />
+                    <button
+                      type="button"
+                      className="product-edit-button-delete"
+                      onClick={() => {
+                        setPreviewImages((prev) =>
+                          prev.filter((_, i) => i !== idx),
+                        );
+                        setNewImages((prev) =>
+                          prev.filter((_, i) => i !== idx),
+                        );
+                      }}
+                    >
+                      ×
+                    </button>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+
+          {/* 본문 이미지 새로 추가 */}
           <div className="product-edit-file-upload">
-            <label htmlFor="fileInput" className="product-edit-file-label">
-              파일 선택
+            <label htmlFor="bodyImageInput" className="product-edit-file-label">
+              이미지 추가
             </label>
-            <span className="product-edit-file-count">
-              파일 {newImages.length}개
-            </span>
+
             <input
-              id="fileInput"
+              id="bodyImageInput"
               type="file"
               multiple
               accept="image/*"
-              onChange={handleAddImages}
+              onChange={(e) => {
+                const files = Array.from(e.target.files);
+                setNewImages((prev) => [...prev, ...files]);
+                const previews = files.map((file) => URL.createObjectURL(file));
+                setPreviewImages((prev) => [...prev, ...previews]);
+              }}
               className="product-edit-file-input"
             />
           </div>
-          {previewImages.length > 0 && (
-            <div className="product-edit-preview-box">
-              {previewImages.map((url, idx) => (
-                <div key={idx} className="product-edit-image-wrapper">
-                  <img
-                    src={url}
-                    className="product-edit-preview"
-                    alt={`미리보기 ${idx + 1}`}
-                  />
-                  <button
-                    type="button"
-                    className="product-edit-button-delete"
-                    onClick={() => handleRemoveNewImage(idx)}
-                  >
-                    ×
-                  </button>
-                </div>
-              ))}
-            </div>
-          )}
         </div>
 
         <div className="product-edit-submit-btns">

@@ -3,34 +3,29 @@ package com.example.backend.product.entity;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
-import lombok.ToString;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
 @Getter
 @Setter
-@ToString
 @Entity
-@Table(name = "order_item", schema = "prj4")
-public class OrderItem {
+@Table(name = "guest_order_item", schema = "prj4")
+public class GuestOrderItem {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", nullable = false)
     private Integer id;
 
-    @ManyToOne(optional = true)
-    @OnDelete(action = OnDeleteAction.CASCADE)
-    @JoinColumn(name = "order_id", nullable = true)
-    private Order order;
-
     @ManyToOne(optional = false)
+    @JoinColumn(name = "guest_order_id", nullable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
-    @JoinColumn(name = "product_id", nullable = false)
+    private GuestOrder guestOrder;
+
+    @ManyToOne
+    @JoinColumn(name = "product_id")
     private Product product;
 
-    @ManyToOne(optional = true)
-    @OnDelete(action = OnDeleteAction.CASCADE)
-    @JoinColumn(name = "option_id", nullable = true)
+    @ManyToOne
+    @JoinColumn(name = "option_id")
     private ProductOption option;
 
     @Column(name = "product_name")
@@ -39,13 +34,12 @@ public class OrderItem {
     @Column(name = "option_name")
     private String optionName;
 
-    @Column(name = "total_price")
-    private Integer totalPrice;
-
     @Column(name = "quantity", nullable = false)
     private Integer quantity;
 
     @Column(name = "price", nullable = false)
     private Integer price;
 
+    @Column(name = "total_price", nullable = false)
+    private Integer totalPrice;
 }

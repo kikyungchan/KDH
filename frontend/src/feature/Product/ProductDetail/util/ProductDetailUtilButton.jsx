@@ -262,7 +262,6 @@ export function handleBuyCurrentProductOnly({
   }
 
   setShowCartConfirmModal(false);
-
   navigate("/product/order", {
     state: {
       productId: product.id,

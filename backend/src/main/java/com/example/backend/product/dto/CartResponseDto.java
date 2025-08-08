@@ -2,6 +2,7 @@ package com.example.backend.product.dto;
 
 import com.example.backend.product.entity.Cart;
 import com.example.backend.product.entity.ProductImage;
+import com.example.backend.product.entity.ProductThumbnail;
 import lombok.Data;
 
 import java.util.List;
@@ -40,11 +41,17 @@ public class CartResponseDto {
 
         this.totalPrice = this.price * this.quantity;
 
-        //썸네일
-        List<ProductImage> images = cart.getProduct().getImages();
-        this.imagePath = images != null && !images.isEmpty() ? images.get(0).getStoredPath() : null;
+        //  썸네일: ProductThumbnail 중 첫 번째 항목
+        List<ProductThumbnail> thumbnails = cart.getProduct().getThumbnails();
+        if (thumbnails != null && !thumbnails.isEmpty()) {
+            this.imagePath = thumbnails.get(0).getStoredPath();
+            System.out.println("[CartResponseDto] " + productName + " 썸네일: " + this.imagePath);
+        } else {
+            this.imagePath = "/default.jpg";
+            System.out.println("[CartResponseDto] " + productName + " 썸네일 없음 → 기본 이미지 세팅");
+        }
 
-        // ✅ 옵션 목록 설정
+        //  옵션 목록 설정
         this.options = cart.getProduct().getOptions().stream().map(opt -> {
             ProductOptionDto dto = new ProductOptionDto();
             dto.setId(opt.getId());

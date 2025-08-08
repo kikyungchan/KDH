@@ -8,7 +8,7 @@ import com.example.backend.product.dto.CartResponseDto;
 import com.example.backend.product.dto.CartUpdateRequest;
 import com.example.backend.product.entity.Cart;
 import com.example.backend.product.entity.Product;
-import com.example.backend.product.dto.ProductOption;
+import com.example.backend.product.entity.ProductOption;
 import com.example.backend.product.repository.CartRepository;
 import com.example.backend.product.repository.ProductOptionRepository;
 import com.example.backend.product.repository.ProductRepository;
@@ -63,9 +63,12 @@ public class ProductCartService {
     }
 
     public List<CartResponseDto> getCartList(Integer memberId) {
+        System.out.println("[getCartList] memberId = " + memberId);
         List<Cart> carts = cartRepository.findByMemberId(memberId);
+        System.out.println("[getCartList] carts.size = " + carts.size());
         List<CartResponseDto> result = new ArrayList<>();
         for (Cart cart : carts) {
+            System.out.println("[getCartList] Cart: " + cart.getId()); // ✅ 얘 찍히는지 확인
             result.add(new CartResponseDto(cart));
         }
         return result;

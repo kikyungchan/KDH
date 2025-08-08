@@ -12,6 +12,7 @@
     object-fit: cover;
     object-position: center;
     display: block;
+    /*background-color: black;*/
     flex-shrink: 0;
 
 }

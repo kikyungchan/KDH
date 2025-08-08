@@ -180,11 +180,10 @@ function Order(props) {
             !items.some(
               (ordered) =>
                 cartItem.productId === ordered.productId &&
-                cartItem.optionId === ordered.optionId &&
-                cartItem.quantity === ordered.quantity &&
-                cartItem.productName === ordered.productName,
+                cartItem.optionId === ordered.optionId,
             ),
         );
+        localStorage.setItem("guestCart", JSON.stringify(updatedCart));
         setCartCount(updatedCart.length);
         navigate("/product/order/complete", {
           state: {

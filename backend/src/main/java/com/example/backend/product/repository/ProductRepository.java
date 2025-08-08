@@ -1,10 +1,9 @@
 package com.example.backend.product.repository;
 
+import com.example.backend.product.dto.ProductMainSlideDto;
 import com.example.backend.product.entity.Product;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -45,15 +44,22 @@ public interface ProductRepository extends JpaRepository<Product, Integer> {
             """)
     Page<Product> findByKeywordOrderByPopularity(String keyword, Pageable pageable);
 
-    // 주간 주문량 10개이상 아이템 랜덤
-    @EntityGraph(attributePaths = "images")
-    @Query(value = "SELECT p FROM Product p WHERE p.id IN (" +
-                   "SELECT oi.product.id FROM OrderItem oi " +
-                   "WHERE oi.order.createdAt > :oneWeekAgo " +
-                   "GROUP BY oi.product.id " +
-                   "HAVING SUM(oi.quantity) >= 10" +
-                   ") ORDER BY FUNCTION('RAND')")
-    List<Product> findHotProductsRandomLimit(LocalDateTime oneWeekAgo, Pageable pageable);
+    //우측 배너 주간판매량 10개이상 아이템 랜덤으로 최대 10개 까지
+    @Query("""
+                SELECT new com.example.backend.product.dto.ProductMainSlideDto(
+                    p.id, p.productName, p.price, t.storedPath
+                )
+                FROM Product p
+                JOIN p.thumbnails t
+                WHERE t.isMain = true AND p.id IN (
+                    SELECT oi.product.id FROM OrderItem oi
+                    WHERE oi.order.createdAt > :oneWeekAgo
+                    GROUP BY oi.product.id
+                    HAVING SUM(oi.quantity) >= 10
+                )
+                ORDER BY FUNCTION('RAND')
+            """)
+    List<ProductMainSlideDto> findHotProductsRandomLimit(LocalDateTime oneWeekAgo, Pageable pageable);
 
     @Query("SELECT p FROM Product p WHERE p.category = :category AND " +
            "(LOWER(p.productName) LIKE LOWER(CONCAT('%', :keyword, '%')) " +
@@ -87,7 +93,7 @@ public interface ProductRepository extends JpaRepository<Product, Integer> {
             """)
     Page<Product> findByCategoryAndKeywordOrderByPopularity(@Param("category") String category, @Param("keyword") String keyword, Pageable pageable);
 
-    //    누적판매량기준
+    //    누적판매량 제일 많은 아이템 3개
     @Query("""
                 SELECT p FROM Product p
                 LEFT JOIN OrderItem oi ON oi.product = p

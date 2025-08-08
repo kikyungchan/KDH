@@ -224,3 +224,36 @@ CREATE TABLE product_thumbnail
 
 ALTER TABLE product_thumbnail
     ADD CONSTRAINT FK_PRODUCT_THUMBNAIL_ON_PRODUCT FOREIGN KEY (product_id) REFERENCES product (id);
+
+SELECT * FROM product_thumbnail
+WHERE is_main = true;
+
+ALTER TABLE prj4.order_item
+ADD COLUMN product_name VARCHAR(255),
+ADD COLUMN option_name VARCHAR(255),
+ADD COLUMN total_price INT;
+
+# 게스트오더아이템테이블
+CREATE TABLE prj4.guest_order_item
+(
+    id              INT AUTO_INCREMENT NOT NULL,
+    guest_order_id INT                NOT NULL,
+    product_id      INT                NULL,
+    option_id       INT                NULL,
+    product_name    VARCHAR(255)       NULL,
+    option_name     VARCHAR(255)       NULL,
+    quantity        INT                NOT NULL,
+    price           INT                NOT NULL,
+    total_price     INT                NOT NULL,
+    CONSTRAINT pk_guest_order_item PRIMARY KEY (id)
+);
+
+ALTER TABLE prj4.guest_order_item
+    ADD CONSTRAINT FK_GUEST_ORDER_ITEM_ON_GUEST_ORDERS FOREIGN KEY (guest_order_id) REFERENCES prj4.guest_orders (id) ON DELETE CASCADE;
+
+ALTER TABLE prj4.guest_order_item
+    ADD CONSTRAINT FK_GUEST_ORDER_ITEM_ON_OPTION FOREIGN KEY (option_id) REFERENCES product_option (id);
+
+ALTER TABLE prj4.guest_order_item
+    ADD CONSTRAINT FK_GUEST_ORDER_ITEM_ON_PRODUCT FOREIGN KEY (product_id) REFERENCES product (id);
+

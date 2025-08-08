@@ -2,38 +2,21 @@ import React, { useContext } from "react";
 import { Link, useNavigate } from "react-router";
 import { FiSearch, FiUser, FiShoppingCart } from "react-icons/fi";
 import { useCart } from "../../Product/CartContext.jsx";
-import SearchBar from "./SearchBar.jsx";
 import { NavUserMenu } from "../NavUserMenu.jsx";
 import { AuthenticationContext } from "../AuthenticationContextProvider.jsx";
 
 NavUserMenu.propTypes = {};
 
-function NavRight({
-  iconRef,
-  showSearch,
-  setShowSearch,
-  keyword,
-  setKeyword,
-  onSearchToggle,
-  searchRef,
-}) {
+function NavRight({ iconRef, onSearchToggle }) {
   const { cartCount } = useCart();
   const { user, isAdmin, logout } = useContext(AuthenticationContext);
-  const navigate = useNavigate();
-
-  const handleSearchClick = () => {
-    if (keyword.trim() !== "") {
-      navigate(`/product/list?keyword=${keyword.trim()}`);
-      setKeyword("");
-    }
-  };
 
   return (
     <div className="navbar-right">
       <div className="navbar-icons">
         <FiSearch
           ref={iconRef}
-          className="navbar-icon"
+          className="navbar-icon "
           onClick={() => onSearchToggle()}
           style={{ cursor: "pointer" }}
         />

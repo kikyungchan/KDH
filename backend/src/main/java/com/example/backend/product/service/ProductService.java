@@ -40,6 +40,7 @@ public class ProductService {
     private final GuestOrderRepository guestOrderRepository;
     private final ProductCommentRepository productCommentRepository;
     private final ProductThumbnailRepository productThumbnailRepository;
+    private final CartRepository cartRepository;
 
     // url에서 key만 따오는 메소드
     private String extractS3Key(String url) {
@@ -70,7 +71,7 @@ public class ProductService {
             }
             productOptionRepository.saveAll(optionList);
         }
-// 썸네일 저장
+        // 썸네일 저장
         List<ProductThumbnail> thumbnailList = new ArrayList<>();
         if (dto.getThumbnails() != null) {
             for (int i = 0; i < dto.getThumbnails().size(); i++) {
@@ -253,7 +254,16 @@ public class ProductService {
 
     public void delete(Integer id) {
         Product product = productRepository.findById(id).orElseThrow();
-
+        List<Cart> carts = cartRepository.findByProduct(product);
+        for (Cart cart : carts) {
+            cartRepository.delete(cart);
+        }
+// 썸네일 이미지 삭제
+        List<ProductThumbnail> thumbnails = product.getThumbnails();
+        for (ProductThumbnail thumb : thumbnails) {
+            s3Uploader.delete(extractS3Key(thumb.getStoredPath())); // S3에서 삭제
+            productThumbnailRepository.delete(thumb); // DB에서 삭제
+        }
         // 상품에 연결된 이미지 전체 삭제 (S3 + DB)
         List<ProductImage> images = product.getImages();
         for (ProductImage image : images) {
@@ -274,14 +284,14 @@ public class ProductService {
         product.setInfo(dto.getInfo());
         product.setQuantity(dto.getQuantity());
 
-        // 삭제 처리
+        // 본문이미지 삭제
         if (dto.getDeletedImages() != null) {
             for (String path : dto.getDeletedImages()) {
                 s3Uploader.delete(extractS3Key(path));
                 productImageRepository.deleteByStoredPath(path);
             }
         }
-        // 파일 저장
+        // 본문이미지 저장
         if (dto.getNewImages() != null) {
             List<ProductImage> imageList = new ArrayList<>();
 
@@ -299,6 +309,33 @@ public class ProductService {
                 }
             }
             productImageRepository.saveAll(imageList);
+
+        }
+        // 기존 썸네일 삭제
+        if (dto.getDeletedThumbnails() != null) {
+            for (String path : dto.getDeletedThumbnails()) {
+                s3Uploader.delete(extractS3Key(path));
+                productThumbnailRepository.deleteByStoredPath(path);
+            }
+        }
+
+        // 새 썸네일 저장
+        if (dto.getNewThumbnails() != null) {
+            List<ProductThumbnail> thumbnailList = new ArrayList<>();
+            for (MultipartFile file : dto.getNewThumbnails()) {
+                try {
+                    String s3Url = s3Uploader.upload(file, "thumbnails/" + product.getId());
+                    ProductThumbnail thumbnail = new ProductThumbnail();
+                    thumbnail.setOriginalFileName(file.getOriginalFilename());
+                    thumbnail.setStoredPath(s3Url);
+                    thumbnail.setProduct(product);
+                    thumbnail.setIsMain(false);
+                    thumbnailList.add(thumbnail);
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+            productThumbnailRepository.saveAll(thumbnailList);
         }
     }
 
@@ -306,53 +343,59 @@ public class ProductService {
         String orderToken = ProductController.OrderTokenGenerator.generateToken();
         String token = auth.replace("Bearer ", "");
         Jwt decoded = jwtDecoder.decode(token);
-        String memberIdStr = decoded.getSubject();
-        Integer memberId = Integer.parseInt(memberIdStr);
+        Integer memberId = Integer.parseInt(decoded.getSubject());
         Member member = memberRepository.findById(memberId).get();
 
+        // 주문 1건만 생성
+        Order order = new Order();
+        order.setMember(member);
+        order.setOrderToken(orderToken);
+        order.setLoginId(member.getLoginId());
+        order.setPhone(member.getPhone());
+        order.setMemberName(member.getName());
+
+        // 첫 요청 기준 공통 배송정보 설정
+        OrderRequest first = reqList.get(0);
+        order.setMemo(first.getMemo());
+        order.setShippingAddress(first.getShippingAddress());
+        order.setZipcode(first.getZipcode());
+        order.setAddressDetail(first.getAddressDetail());
+
+        int totalOrderPrice = 0;
+        List<OrderItem> itemList = new ArrayList<>();
 
         for (OrderRequest req : reqList) {
-            Product product = productRepository.findById(Integer.valueOf(req.getProductId())).get();
+            Product product = productRepository.findById(req.getProductId()).get();
+
             // 재고 차감
-
-
             product.setQuantity(product.getQuantity() - req.getQuantity());
-
-            Order order = new Order();
-            order.setMember(member);
-            order.setMemo(req.getMemo());
-            order.setProductName(product.getProductName());
-            order.setLoginId(member.getLoginId());
-            order.setPhone(member.getPhone());
-            order.setMemberName(member.getName());
-            order.setShippingAddress(req.getShippingAddress());
-            order.setOrderToken(orderToken);
-            order.setAddressDetail(req.getAddressDetail());
-            order.setZipcode(req.getZipcode());
-            order.setTotalPrice(req.getPrice() * req.getQuantity());
-
-            if (req.getOptionId() != null) {
-                ProductOption option = productOptionRepository.findById(req.getOptionId()).get();
-                order.setOptionName(option.getOptionName());
-            }
-
-            orderRepository.save(order);
 
             OrderItem item = new OrderItem();
             item.setOrder(order);
             item.setProduct(product);
+            item.setProductName(product.getProductName());
             item.setQuantity(req.getQuantity());
             item.setPrice(req.getPrice());
+            item.setTotalPrice(req.getQuantity() * req.getPrice());
 
             if (req.getOptionId() != null) {
                 ProductOption option = productOptionRepository.findById(req.getOptionId()).get();
                 item.setOption(option);
+                item.setOptionName(option.getOptionName());
             }
 
-            orderItemRepository.save(item);
+            totalOrderPrice += item.getTotalPrice();
+            itemList.add(item);
         }
+
+        order.setTotalPrice(totalOrderPrice);
+        order.setOrderItems(itemList);
+
+        orderRepository.save(order); // orderItem도 함께 저장됨
+
         return orderToken;
     }
+
 
     public List<ProductBestDto> getTopSellingProducts() {
         Pageable pageable = PageRequest.of(0, 3);

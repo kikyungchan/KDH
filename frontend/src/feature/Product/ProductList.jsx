@@ -1,5 +1,5 @@
-import {Link, useSearchParams} from "react-router";
-import {useEffect, useState} from "react";
+import { Link, useSearchParams } from "react-router";
+import { useEffect, useState } from "react";
 import axios from "axios";
 import "./css/ProductList.css";
 
@@ -59,9 +59,9 @@ export function ProductList() {
   };
 
   return (
-    <div id="product-list-container" className="w-full pt-3 px-90">
-      <div className="flex justify-between items-center mb-6">
-        <h2 className="text-xl" style={{fontSize: "2rem"}}>
+    <div id="product-list-container" className="w-full pt-3 px-[225px]">
+      <div className="flex justify-between items-center mt-3">
+        <h2 className="text-xl" style={{ fontSize: "2rem" }}>
           상품 목록
         </h2>
         <select
