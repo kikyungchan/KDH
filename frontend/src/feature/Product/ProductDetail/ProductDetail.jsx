@@ -2,7 +2,7 @@ import { Button, Col, Container, Row, Spinner } from "react-bootstrap";
 import { useNavigate, useSearchParams } from "react-router";
 import NoticeSection from "./util/NoticeSection.jsx";
 import ProductComment from "./ProductComment.jsx";
-import { useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import BuyButton from "./util/BuyButton.jsx";
 import CartAdded from "./util/CartAdded.jsx";
 import { useCart } from "../CartContext.jsx";
@@ -20,7 +20,6 @@ import "../css/ProductList.css";
 import ShareModal from "./util/ShareModal.jsx";
 import { RxShare1 } from "react-icons/rx";
 import LikeButton from "./util/LikeButton.jsx";
-import { AuthenticationContext } from "../../common/AuthenticationContextProvider.jsx";
 
 export function ProductDetail() {
   const [selectedThumbnail, setSelectedThumbnail] = useState(null);
@@ -37,7 +36,6 @@ export function ProductDetail() {
   const id = searchParams.get("id");
   const navigate = useNavigate();
   const [isProcessing, setIsProcessing] = useState(false);
-  const { user, isAdmin } = useContext(AuthenticationContext);
 
   useEffect(() => {
     axios
@@ -91,15 +89,8 @@ export function ProductDetail() {
 
   return (
     <div className="container">
-      <div
-        className="detail-row-wrapper"
-        style={{ display: "flex", justifyContent: "center" }}
-      >
-        {/* 기존 Col -> div로 대체 */}
-        <div
-          className="detail-col-wrapper"
-          style={{ width: "100%", maxWidth: "1256px", padding: "30px 60px" }}
-        >
+      <Row className="justify-content-center">
+        <Col>
           <div
             style={{
               display: "flex",
@@ -133,7 +124,7 @@ export function ProductDetail() {
                       objectFit: "cover",
                       border:
                         selectedThumbnail === thumb.storedPath
-                          ? "px solid black"
+                          ? "2px solid black"
                           : "1px solid #ccc",
                       cursor: "pointer",
                       borderRadius: "4px",
@@ -393,26 +384,19 @@ export function ProductDetail() {
               <div>
                 {/* 관리자용 수정/삭제 버튼 */}
                 {/*Todo: 수정삭제버튼 관리자만 보이게 수정*/}
-                {user !== null && isAdmin && (
-                  <>
-                    <Button
-                      className="btn-secondary"
-                      onClick={handleEditButton}
-                    >
-                      수정
-                    </Button>
-                    <Button className="btn-danger" onClick={handleDeleteButton}>
-                      삭제
-                    </Button>
-                    <Button
-                      className="btn-primary"
-                      onClick={handleQuestionButton}
-                      disabled={isProcessing}
-                    >
-                      문의하기
-                    </Button>
-                  </>
-                )}
+                <Button className="btn-secondary" onClick={handleEditButton}>
+                  수정
+                </Button>
+                <Button className="btn-danger" onClick={handleDeleteButton}>
+                  삭제
+                </Button>
+                <Button
+                  className="btn-primary"
+                  onClick={handleQuestionButton}
+                  disabled={isProcessing}
+                >
+                  문의하기
+                </Button>
               </div>
             </div>
           </div>
@@ -487,8 +471,8 @@ export function ProductDetail() {
           </div>
         </div>
       </div>*/}
-        </div>
-      </div>
+        </Col>
+      </Row>
 
       {/*장바구니 버튼 모달*/}
       <CartAdded show={showModal} onHide={() => setShowModal(false)} />

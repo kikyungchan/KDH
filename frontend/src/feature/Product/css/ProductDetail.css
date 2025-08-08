@@ -6,11 +6,8 @@
 }
 
 .product-thumbnail {
-    width: 100%;
-    max-width: 550px;
-    height: auto;
-    /*max-height: 600px;*/
-    aspect-ratio: 11 / 12; /* 가로세로 비율 유지 (선택사항) */
+    width: 550px;
+    height: 600px;
     margin-bottom: 2rem;
     object-fit: cover;
     object-position: center;
@@ -19,7 +16,6 @@
     flex-shrink: 0;
 
 }
-
 
 .product-detail-image {
     width: 80%;
