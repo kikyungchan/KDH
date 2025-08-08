@@ -269,13 +269,17 @@ export function handleBuyCurrentProductOnly({
   setShowCartConfirmModal(false);
   navigate("/product/order", {
     state: {
-      productId: product.id,
-      productName: product.productName,
-      price: selectedOption ? selectedOption.price : product.price,
-      quantity: quantity,
-      imagePath: thumbnail,
-      option: selectedOption?.optionName || null,
-      optionId: selectedOption?.id || null,
+      items: [
+        {
+          productId: product.id,
+          productName: product.productName,
+          price: selectedOption ? selectedOption.price : product.price,
+          quantity,
+          imagePath: thumbnail,
+          optionName: selectedOption?.optionName || null,
+          optionId: selectedOption?.id || null,
+        },
+      ],
     },
   });
 }

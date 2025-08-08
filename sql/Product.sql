@@ -257,3 +257,10 @@ ALTER TABLE prj4.guest_order_item
 ALTER TABLE prj4.guest_order_item
     ADD CONSTRAINT FK_GUEST_ORDER_ITEM_ON_PRODUCT FOREIGN KEY (product_id) REFERENCES product (id);
 
+ALTER TABLE guest_orders
+    CHANGE detailed_address address_detail VARCHAR(255);
+
+ALTER TABLE guest_orders
+    CHANGE postal_code zipcode VARCHAR(20);
+
+
