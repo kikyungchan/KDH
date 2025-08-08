@@ -1,12 +1,11 @@
 .navbar-container {
     position: fixed;
-    max-width: 1256px;
     margin: 0 auto;
     top: 0;
     left: 0;
     right: 0;
     z-index: 1000;
-    background-color: white;
+    background-color: #e6e6e6;
 }
 
 
