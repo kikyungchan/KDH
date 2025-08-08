@@ -1,8 +1,9 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import axios from "axios";
 import { jwtDecode } from "jwt-decode";
 import { useNavigate } from "react-router";
 import StarRating from "./util/StarRating.jsx";
+import { AuthenticationContext } from "../../common/AuthenticationContextProvider.jsx";
 
 function ReviewSection({ productId, onReviewChange }) {
   const [isPurchasable, setIsPurchasable] = useState(false);
@@ -15,6 +16,7 @@ function ReviewSection({ productId, onReviewChange }) {
   const [content, setContent] = useState("");
   const [comments, setComments] = useState([]);
   const [rating, setRating] = useState(5);
+  const { isAdmin } = useContext(AuthenticationContext);
   const navigate = useNavigate();
 
   const token = localStorage.getItem("token");
@@ -84,13 +86,15 @@ function ReviewSection({ productId, onReviewChange }) {
       navigate("/login");
       return;
     }
-    if (alreadyReviewed) {
-      alert("구매한 상품은 한 번만 리뷰작성이 가능합니다.");
-      return;
-    }
-    if (!isPurchasable) {
-      alert("해당 상품을 구매한 회원만 리뷰 작성이 가능합니다.");
-      return;
+    if (!isAdmin) {
+      if (alreadyReviewed) {
+        alert("구매한 상품은 한 번만 리뷰작성이 가능합니다.");
+        return;
+      }
+      if (!isPurchasable) {
+        alert("해당 상품을 구매한 회원만 리뷰 작성이 가능합니다.");
+        return;
+      }
     }
     setShowInput(true);
   }
@@ -231,8 +235,8 @@ function ReviewSection({ productId, onReviewChange }) {
                 {c.createdAt?.replace("T", " ").slice(0, 16)}
               </small>
 
-              {c.memberId === currentUserId && (
-                <div style={{ marginTop: "5px" }}>
+              {(c.memberId === currentUserId || isAdmin) && (
+                <div style={{ marginTop: "5px", marginBottom: "5px" }}>
                   <button
                     className="btn btn-sm btn-outline"
                     onClick={() => handleEdit(c)}

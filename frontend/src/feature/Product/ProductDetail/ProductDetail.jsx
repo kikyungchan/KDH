@@ -91,8 +91,15 @@ export function ProductDetail() {
 
   return (
     <div className="container">
-      <Row className="justify-content-center">
-        <Col>
+      <div
+        className="detail-row-wrapper"
+        style={{ display: "flex", justifyContent: "center" }}
+      >
+        {/* 기존 Col -> div로 대체 */}
+        <div
+          className="detail-col-wrapper"
+          style={{ width: "100%", maxWidth: "1256px", padding: "30px 60px" }}
+        >
           <div
             style={{
               display: "flex",
@@ -126,7 +133,7 @@ export function ProductDetail() {
                       objectFit: "cover",
                       border:
                         selectedThumbnail === thumb.storedPath
-                          ? "2px solid black"
+                          ? "px solid black"
                           : "1px solid #ccc",
                       cursor: "pointer",
                       borderRadius: "4px",
@@ -480,8 +487,8 @@ export function ProductDetail() {
           </div>
         </div>
       </div>*/}
-        </Col>
-      </Row>
+        </div>
+      </div>
 
       {/*장바구니 버튼 모달*/}
       <CartAdded show={showModal} onHide={() => setShowModal(false)} />
