@@ -6,8 +6,10 @@ import "swiper/css";
 import "swiper/css/autoplay";
 import "swiper/css/mousewheel";
 import "./ImageSlide.css";
+import { useNavigate } from "react-router";
 
 function ImageSlide() {
+  const navigate = useNavigate();
   const [slides, setSlides] = useState([]);
   const swiperRef = useRef(null);
   const hasJustReachedEnd = useRef(false);
@@ -82,6 +84,7 @@ function ImageSlide() {
         <SwiperSlide key={index}>
           <div
             className="slide"
+            onClick={() => navigate(`/product/view?id=${product.id}`)}
             style={{
               backgroundImage: `url(${product.thumbnailUrl})`,
             }}
