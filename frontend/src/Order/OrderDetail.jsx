@@ -50,7 +50,8 @@ export function OrderDetail() {
                     <td className="text-left">{order.memberName}</td>
                   </tr>
                   <tr>
-                    <td className="w-1/4">연락처</td>
+                    <td className="w-1/4">연락수정
+                      처</td>
                     <td className="td-left">{order.phone}</td>
                   </tr>
                   <tr>
