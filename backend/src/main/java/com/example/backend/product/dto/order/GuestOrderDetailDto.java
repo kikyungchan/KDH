@@ -30,8 +30,8 @@ public class GuestOrderDetailDto {
                 guestOrder.getReceiverName(),
                 guestOrder.getReceiverPhone(),
                 guestOrder.getShippingAddress(),
-                guestOrder.getDetailedAddress(),
-                guestOrder.getPostalCode(),
+                guestOrder.getAddressDetail(),
+                guestOrder.getZipcode(),
                 guestOrder.getMemo(),
                 guestOrder.getTotalPrice()
         );

@@ -94,7 +94,11 @@ function NavBar(props) {
           />
           <div className="navbar-center">
             <Link to="/Home" className="navbar-logo">
-              코데헌
+              {/*코데헌*/}
+              <img
+                src="../../../../public/logo/kdh.png"
+                style={{ width: "80px" }}
+              />
             </Link>
           </div>
           {/*왼쪽 메뉴*/}
