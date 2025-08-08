@@ -14,12 +14,14 @@ function NavRight({ iconRef, onSearchToggle }) {
   return (
     <div className="navbar-right">
       <div className="navbar-icons">
-        <FiSearch
-          ref={iconRef}
-          className="navbar-icon "
-          onClick={() => onSearchToggle()}
-          style={{ cursor: "pointer" }}
-        />
+        <div className="FiSearch">
+          <FiSearch
+            ref={iconRef}
+            className="navbar-icon "
+            onClick={() => onSearchToggle()}
+            style={{ cursor: "pointer" }}
+          />
+        </div>
         <NavUserMenu user={user} logout={logout} isAdmin={isAdmin} />
         <Link to="/product/cart" className="cart-icon-wrapper">
           <FiShoppingCart className="navbar-icon" />

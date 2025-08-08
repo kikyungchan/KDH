@@ -196,7 +196,39 @@
     display: flex;
 }
 
+.mobile-search-form {
+    display: flex;
+    align-items: center;
+    border: 1px solid #ddd;
+    border-radius: 20px;
+    padding: 0.5rem 1rem;
+    gap: 8px;
+    background-color: #f8f8f8;
+    width: 100%;
+    /*flex-direction: row-reverse;*/
+}
+
+.mobile-search-input {
+    flex: 1;
+    border: none;
+    background: transparent;
+    outline: none;
+    font-size: 1rem;
+}
+
+.mobile-search-icon {
+    cursor: pointer;
+    color: #555;
+    font-size: 1.2rem;
+}
+
 /* 모바일 레이아웃용 설정 */
+@media (max-width: 639px) {
+    .FiSearch {
+        display: none;
+    }
+}
+
 @media (max-width: 767px) {
     .hamburger-icon {
         display: block;

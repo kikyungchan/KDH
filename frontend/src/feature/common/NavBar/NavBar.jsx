@@ -83,6 +83,15 @@ function NavBar(props) {
     setIsMobileMenuOpen(false);
   };
 
+  // ⭐ 모바일 메뉴 내 검색 기능 처리 함수
+  const handleMobileSearch = () => {
+    if (keyword.trim() !== "") {
+      navigate(`/product/list?keyword=${keyword.trim()}`);
+      setKeyword("");
+      setIsMobileMenuOpen(false); // 검색 후 메뉴 닫기
+    }
+  };
+
   return (
     <>
       <nav className="navbar-container">
@@ -129,6 +138,22 @@ function NavBar(props) {
       {/* 모바일 메뉴 드롭다운 */}
       {isMobileMenuOpen && (
         <div className="mobile-menu" ref={menuRef}>
+          <div className="mobile-search-form">
+            <input
+              type="text"
+              placeholder="키워드로 검색"
+              className="mobile-search-input"
+              value={keyword}
+              onChange={(e) => setKeyword(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") handleMobileSearch();
+              }}
+            />
+            <FiSearch
+              className="mobile-search-icon"
+              onClick={handleMobileSearch}
+            />
+          </div>
           <div>
             <div
               className="btn btn-sm btn-ghost text-left cursor-pointer text-xl"
