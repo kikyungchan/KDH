@@ -4,14 +4,15 @@ import { v4 as uuidv4 } from "uuid";
 
 // 이거 하드코딩 괜찮나..?
 const clientKey = "test_gck_docs_Ovk5rk1EwkEbP0W43n07xlzm";
-const customerKey = "_KrzVx1e0wEdv5FrvB0EM";
+const customerKey = "kCGTAUtheqwIR-I7TEkum";
 
 export function CheckoutPage() {
   const [amount, setAmount] = useState({
     currency: "KRW",
     // value: 50_000,
-    value: 100,
+    value: 200,
   });
+  const [paymentData, setPaymentData] = useState(null);
   const [ready, setReady] = useState(false);
   const [widgets, setWidgets] = useState(null);
   // const orderId = crypto.randomUUID();
@@ -67,6 +68,49 @@ export function CheckoutPage() {
     }
 
     widgets.setAmount(amount);
+
+    const handleMessage = (event) => {
+      // 보안: 출처 확인
+      /*if (
+        event.origin !== window.location.origin ||
+        event.origin !== "https://payment-widget.tosspayments.com"
+      ) {
+        console.warn("신뢰할 수 없는 출처:", event.origin);
+        return;
+      }*/
+
+      // 메시지 타입별 처리
+      switch (event.data.type) {
+        case "CHECKOUT_DATA":
+          console.log("결제 데이터 받음:", event.data.data);
+          setPaymentData(event.data.data); // state 업데이트
+          widgets.setAmount(event.data.data.amount);
+
+          break;
+        case "CLOSE_POPUP":
+          window.close();
+          break;
+      }
+    };
+
+    // 이벤트 리스너 등록
+    window.addEventListener("message", handleMessage);
+
+    console.log("이벤트 받음");
+    // 부모에게 "준비됐어!" 신호 보내기
+    if (window.opener) {
+      window.opener.postMessage(
+        {
+          type: "POPUP_READY",
+        },
+        window.location.origin,
+      );
+    }
+
+    // 클린업: 컴포넌트 언마운트시 리스너 제거
+    return () => {
+      window.removeEventListener("message", handleMessage);
+    };
   }, [widgets, amount]);
 
   return (

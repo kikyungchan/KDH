@@ -1,5 +1,6 @@
 package com.example.backend.chat.controller;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.server.ServerHttpRequest;
 import org.springframework.http.server.ServletServerHttpRequest;
@@ -10,10 +11,15 @@ import org.springframework.messaging.simp.config.MessageBrokerRegistry;
 import org.springframework.messaging.simp.stomp.StompCommand;
 import org.springframework.messaging.simp.stomp.StompHeaderAccessor;
 import org.springframework.messaging.support.ChannelInterceptor;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.oauth2.jwt.Jwt;
+import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.web.socket.WebSocketHandler;
 import org.springframework.web.socket.config.annotation.EnableWebSocketMessageBroker;
 import org.springframework.web.socket.config.annotation.StompEndpointRegistry;
 import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerConfigurer;
+import org.springframework.web.socket.server.HandshakeInterceptor;
 import org.springframework.web.socket.server.support.DefaultHandshakeHandler;
 
 import java.security.Principal;
@@ -21,8 +27,37 @@ import java.util.List;
 import java.util.Map;
 
 @Configuration
+@RequiredArgsConstructor
 @EnableWebSocketMessageBroker
 public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
+
+    private final JwtDecoder jwtDecoder;
+
+    // MyHandshakeInterceptor를 static 내부 클래스로 정의
+    public static class MyHandshakeInterceptor implements HandshakeInterceptor {
+        @Override
+        public boolean beforeHandshake(ServerHttpRequest request, org.springframework.http.server.ServerHttpResponse response, WebSocketHandler wsHandler, Map<String, Object> attributes) throws Exception {
+            if (request instanceof ServletServerHttpRequest) {
+                ServletServerHttpRequest servletRequest = (ServletServerHttpRequest) request;
+                String authHeader = servletRequest.getServletRequest().getParameter("Authorization");
+
+                if (authHeader != null && !authHeader.trim().isEmpty()) {
+                    String token = authHeader.replace("Bearer ", "");
+                    attributes.put("jwt", token);
+                    System.out.println("인터셉터: 쿼리 파라미터에서 토큰을 추출하여 attributes에 저장했습니다.");
+                } else {
+                    System.out.println("인터셉터: 쿼리 파라미터에 'Authorization' 헤더가 없습니다.");
+                }
+            }
+            return true;
+        }
+
+        @Override
+        public void afterHandshake(ServerHttpRequest request, org.springframework.http.server.ServerHttpResponse response, WebSocketHandler wsHandler, Exception exception) {
+        }
+    }
+
+    // ---
 
     @Override
     public void configureClientInboundChannel(ChannelRegistration registration) {
@@ -30,114 +65,60 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
             @Override
             public Message<?> preSend(Message<?> message, MessageChannel channel) {
                 StompHeaderAccessor accessor = StompHeaderAccessor.wrap(message);
-                System.out.println("STOMP Command: " + accessor.getCommand());
-                System.out.println("▶ Native Headers1: " + accessor.toNativeHeaderMap());
-                System.out.println("▶ user name (preSend): " + accessor.getUser().getName());
-                // todo : user 값은 넘어오는데 user name 이 guset 로 넘어옴
 
-                // 클라이언트가 STOMP CONNECT 프레임을 보낼 때 한 번 실행
-                if (StompCommand.CONNECT.equals(accessor.getCommand())) {
-                    // 1) native headers 전체
-                    Map<String, List<String>> nativeHeaders = accessor.toNativeHeaderMap();
-                    System.out.println("▶ Native Headers: " + nativeHeaders);
-                    System.out.println("▶ username" + nativeHeaders.get("username"));
-
-                    List<String> users = nativeHeaders.get("username");
-                    System.out.println("▶ users " + users);
-                    System.out.println("▶ users.get(0) " + users.get(0));
-                    System.out.println("true false : " + (users != null && !users.isEmpty()));
-                    String username = (users != null && !users.isEmpty())
-                            ? users.get(0)
-                            : "guest";
-                    System.out.println("username33 : " + username);
-                    //  null/빈값 체크
-                    if (username == null || username.isEmpty()) {
-                        System.out.println("username is null");
-                        username = "guest";
-                    }
-                    final String user = username;
-                    accessor.setUser(() -> user);
-                    System.out.println("▶ 설정된 Principal: " + accessor.getUser().getName());
-                }
-
+                // SUBSCRIBE 요청이 들어왔을 때만 Principal을 확인합니다.
                 if (StompCommand.SUBSCRIBE.equals(accessor.getCommand())) {
-                    // nativeHeaders에는 username 없음
-                    // 대신 세션에 세팅된 Principal 에서 참조
-                    Principal user = accessor.getUser();
-                    System.out.println("▶ SUBSCRIBE user: " + user.getName());
+                    Principal userPrincipal = accessor.getUser();
 
-                    String username = (user != null ? user.getName() : "anonymous");
-                    System.out.println("▶ SUBSCRIBE 요청자: " + username);
+                    if (userPrincipal != null) {
+                        System.out.println("▶ SUBSCRIBE 요청자: " + userPrincipal.getName());
+                    } else {
+                        System.out.println("▶ SUBSCRIBE 요청자: Principal을 찾을 수 없습니다.");
+                    }
                 }
-                System.out.println("message : " + message);
-                System.out.println("▶ Native Headers2: " + accessor.toNativeHeaderMap());
+
                 return message;
             }
         });
     }
 
+    // ---
+
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
-        System.out.println("registerStompEndpoints" + registry);
         registry.addEndpoint("/ws-chat")
-                .setAllowedOriginPatterns("*") // cors 허용 범위
-
-                // Spring Security 인증된 사용자(Principal) 사용
+                .setAllowedOriginPatterns("*")
+                .addInterceptors(new MyHandshakeInterceptor()) // 인터셉터가 먼저 토큰을 attributes에 넣습니다.
                 .setHandshakeHandler(new DefaultHandshakeHandler() {
                     @Override
                     protected Principal determineUser(ServerHttpRequest request,
                                                       WebSocketHandler wsHandler,
                                                       Map<String, Object> attributes) {
-
-
-                        // 예시: ?username=userA 쿼리로 전달받았다 가정
                         System.out.println("attributes: " + attributes);
-                        System.out.println("attributes.username : " + attributes.get("username"));
-                        System.out.println("request : " + request);
-                        /*String user = ((ServletServerHttpRequest) request)
-                                .getServletRequest()
-                                .getParameter("username");
-//                        todo : SUBSCRIBE 요청 처리 시 여기서 username 이 guest22로 변경됨,
-                        System.out.println("username from attrs: " + user);
-                        return () -> (user != null ? user : "guest2");*/
 
-                        if (request instanceof ServletServerHttpRequest) {
-                            Principal httpPrincipal = request.getPrincipal();
-                            System.out.println("▶ HTTP 요청 Principal: " + httpPrincipal);
-                        } else {
-                            System.out.println("▶ HTTP 요청이 ServletServerHttpRequest 가 아닙니다.");
+                        String jwt = (String) attributes.get("jwt");
+
+                        if (jwt != null) {
+                            Jwt decoded = jwtDecoder.decode(jwt);
+                            // JWT에서 loginid 추출
+                            String userId = decoded.getClaimAsString("loginId");
+                            return () -> userId;
                         }
 
-                        // 기본적으로 생성된 Principal 값 확인
-                        Principal defaultP = super.determineUser(request, wsHandler, attributes);
-                        System.out.println("▶ Default Principal: " + defaultP);
-
-                        if (request.getPrincipal() != null) {
-                            Principal httpPrincipal = request.getPrincipal();
-                            return httpPrincipal;
-                        } else {
-                            String user = (String) attributes.get("username");
-                            if (user == null || user.isEmpty()) user = "guest22";
-                            final String principalName = user;
-                            Principal httpPrincipal = request.getPrincipal();
-                            System.out.println("▶ Handshake Principal: " + principalName);
-                            System.out.println("▶ HTTP 요청 Principal: " + httpPrincipal);
-                            return () -> principalName;
-                        }
+                        // 토큰이 없거나 유효하지 않으면 익명 사용자로 처리
+                        return () -> "anonymous";
                     }
-
-
                 })
                 .withSockJS();
     }
 
+    // ---
+
     @Override
     public void configureMessageBroker(MessageBrokerRegistry registry) {
-        System.out.println("configureMessageBroker " + registry);
-        registry.enableSimpleBroker("/queue");              // client subscribe prefix
-        registry.setApplicationDestinationPrefixes("/app"); // client send prefix
-        registry.setUserDestinationPrefix("/user");         // 1:1 메시지 prefix
+        registry.enableSimpleBroker("/queue");
+        registry.setApplicationDestinationPrefixes("/app");
+        registry.setUserDestinationPrefix("/user");
     }
-
 
 }

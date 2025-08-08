@@ -17,6 +17,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import com.example.backend.member.repository.MemberRepository;
@@ -95,10 +96,24 @@ public class QuestionService {
         return true;
     }
 
-    public Map<String, Object> list(String keyword, Integer pageNumber) {
+    public Map<String, Object> list(String keyword, Integer pageNumber, Authentication authentication) {
+
+        String userId = null;
+        String role = null;
+        Object principal = authentication.getPrincipal();
+        System.out.println("principal = " + principal);
+        if (principal instanceof Jwt) {
+            Jwt jwt = (Jwt) principal;
+            userId = jwt.getClaimAsString("loginId");
+            List<String> rolelist = jwt.getClaimAsStringList("roles");
+//            role = String.join(",", rolelist);
+            role = (rolelist != null && !rolelist.isEmpty()) ? rolelist.get(0) : null;
+
+        }
 
         Page<QuestionListDto> questionListDtoPage
-                = questionRepository.findAllBy(keyword, PageRequest.of(pageNumber - 1, 10));
+                = questionRepository.findAllBy(keyword, userId, role, PageRequest.of(pageNumber - 1, 10));
+
 
         int totalPages = questionListDtoPage.getTotalPages(); // 마지막 페이지
         int rightPageNumber = ((pageNumber - 1) / 10 + 1) * 10;

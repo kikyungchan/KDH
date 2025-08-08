@@ -27,21 +27,27 @@ export function SuccessPage() {
             headers: { "Content-Type": "application/json" },
           })
           .then((res) => {
-            console.log("res : ", res.data);
-            navigate("/product/list");
             toast("결제가 완료되었습니다", { type: "success" });
+            window.opener.postMessage(
+              {
+                type: "PAY_SUCCESS",
+                data: res.data,
+              },
+              window.location.origin,
+            );
           })
           .catch((err) => {
             console.log("err : ", err);
             const message = err.response.data.message ?? err.message;
-            // navigate(window.location.origin + `/pay/fail?message=${message}`);
-            // window.location.href = `/pay/fail?message=${message}`;
-            toast(message, { type: "error" });
-            navigate("/product/list");
+            window.opener.postMessage(
+              { type: "PAY_FAIL", data: err.data },
+              window.location.origin,
+            );
           })
           .finally(() => {
             console.log("always");
             hasCalled.current = false;
+            setTimeout(() => window.close(), 100);
           });
       }
     }

@@ -8,7 +8,7 @@ import {
   Table,
   ToggleButton,
 } from "react-bootstrap";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate, useSearchParams } from "react-router";
 import { FaRegComments, FaRegImages } from "react-icons/fa";
@@ -106,6 +106,7 @@ export function QnaList() {
                     value={radio.value}
                     checked={idx === 1}
                     onClick={radio.fnc}
+                    onChange={(e) => e.target.value}
                   />
                 ))}
               </ButtonGroup>
@@ -160,37 +161,76 @@ export function QnaList() {
       </Row>
       <Row className="my-3">
         <Col>
-          <Pagination className="justify-content-center">
-            <Pagination.First
-              disabled={pageInfo.currentPageNumber === 1}
-              onClick={() => handlePageNumberClick(1)}
-            ></Pagination.First>
-            <Pagination.Prev
-              disabled={pageInfo.leftPageNumber <= 1}
-              onClick={() =>
-                handlePageNumberClick(pageInfo.leftPageNumber - 10)
-              }
-            ></Pagination.Prev>
-            {pageNumbers.map((pageNumber) => (
-              <Pagination.Item
-                key={pageNumber}
-                onClick={() => handlePageNumberClick(pageNumber)}
-                active={pageInfo.currentPageNumber === pageNumber}
+          <ul className="join flex justify-center">
+            {/* 첫 페이지로 이동 */}
+            <li>
+              <button
+                className="join-item btn btn-sm"
+                disabled={pageInfo.currentPageNumber === 1}
+                onClick={() => handlePageNumberClick(1)}
+                aria-label="First Page"
               >
-                {pageNumber}
-              </Pagination.Item>
+                &laquo;
+              </button>
+            </li>
+            {/* 10페이지 이전 이동 */}
+            <li>
+              <button
+                className="join-item btn btn-sm"
+                disabled={pageInfo.leftPageNumber <= 1}
+                onClick={() =>
+                  handlePageNumberClick(pageInfo.leftPageNumber - 10)
+                }
+                aria-label="Previous 10 Pages"
+              >
+                &#8249;
+              </button>
+            </li>
+            {/* 페이지 번호들 */}
+            {pageNumbers.map((pageNumber) => (
+              <li key={pageNumber}>
+                <button
+                  className={`join-item btn btn-sm ${
+                    pageInfo.currentPageNumber === pageNumber
+                      ? "btn-active btn-primary"
+                      : ""
+                  }`}
+                  onClick={() => handlePageNumberClick(pageNumber)}
+                  aria-current={
+                    pageInfo.currentPageNumber === pageNumber
+                      ? "page"
+                      : undefined
+                  }
+                >
+                  {pageNumber}
+                </button>
+              </li>
             ))}
-            <Pagination.Next
-              disabled={pageInfo.rightPageNumber >= pageInfo.totalPages}
-              onClick={() =>
-                handlePageNumberClick(pageInfo.rightPageNumber + 1)
-              }
-            ></Pagination.Next>
-            <Pagination.Last
-              disabled={pageInfo.currentPageNumber === pageInfo.totalPages}
-              onClick={() => handlePageNumberClick(pageInfo.totalPages)}
-            ></Pagination.Last>
-          </Pagination>
+            {/* 10페이지 이후 이동 */}
+            <li>
+              <button
+                className="join-item btn btn-sm"
+                disabled={pageInfo.rightPageNumber >= pageInfo.totalPages}
+                onClick={() =>
+                  handlePageNumberClick(pageInfo.rightPageNumber + 1)
+                }
+                aria-label="Next 10 Pages"
+              >
+                &#8250;
+              </button>
+            </li>
+            {/* 마지막 페이지로 이동 */}
+            <li>
+              <button
+                className="join-item btn btn-sm"
+                disabled={pageInfo.currentPageNumber === pageInfo.totalPages}
+                onClick={() => handlePageNumberClick(pageInfo.totalPages)}
+                aria-label="Last Page"
+              >
+                &raquo;
+              </button>
+            </li>
+          </ul>
         </Col>
       </Row>
     </>

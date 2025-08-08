@@ -47,7 +47,7 @@ export function AnsAdd() {
   }, []);
 
   if (!question) {
-    return <Spinner />;
+    return <span className="loading loading-spinner"></span>;
   }
 
   function handleAnswerButtonClick() {
@@ -87,104 +87,141 @@ export function AnsAdd() {
           <h2 className="mb-4">문의 내역 상세</h2>
           <div className="row">
             <div>
-              {/*<div>*/}
-
-              <FormGroup className="mb-3" controlId="category1">
-                <FormLabel>상담유형</FormLabel>
-                <FormControl
-                  disabled={true}
-                  aria-label="Default select example"
+              <div className="form-control w-full mb-3">
+                <label className="label">
+                  <span className="label-text">상담유형</span>
+                </label>
+                <input
+                  type="text"
+                  className="input input-bordered w-full"
                   value={categoryList[question.category].value}
-                ></FormControl>
-              </FormGroup>
+                  disabled
+                  aria-label="Default select example"
+                />
+              </div>
             </div>
             <br />
             <div>
-              <FormGroup>
-                <FormLabel>문의하실 상품</FormLabel>
+              <div className="form-control w-full mb-4">
+                <label className="label">
+                  <span className="label-text">문의하실 상품</span>
+                </label>
                 <div>
-                  {/*상품 이미지*/}
-                  <Image
+                  {/* 상품 이미지 */}
+                  <img
                     src={question.imagePath}
-                    fluid
-                    style={{
-                      width: "100%",
-                      height: "auto",
-                      objectFit: "contain",
-                    }}
+                    alt="상품 이미지"
+                    className="w-full h-auto object-contain rounded-xl shadow mb-3"
                   />
-                  <br />
-                  <br />
-                  {/*상품명*/}
-                  <FormControl disabled={true} placeholder={question.product} />
-                  <h5 className="text-end fw-bold text-danger">
-                    {/* toLocaleString() : 세자리수마다 쉼표로 보기 쉽게 표현*/}
+                  {/* 상품명(읽기 전용) */}
+                  <input
+                    type="text"
+                    className="input input-bordered w-full mb-2"
+                    value={question.product}
+                    placeholder="상품명"
+                    disabled
+                  />
+                  {/* 가격 (오른쪽 정렬, 굵은 빨간색) */}
+                  <h5 className="text-right font-bold text-red-600">
                     {question.price.toLocaleString()}원
+                    {/* toLocaleString(): 세 자리마다 콤마 표시 */}
                   </h5>
                 </div>
-              </FormGroup>
+              </div>
             </div>
             <br />
             <br />
             <div>
-              <FormGroup>
-                <FormLabel>제목</FormLabel>
-                <FormControl
+              <div className="form-control w-full mb-4">
+                <label className="label">
+                  <span className="label-text">제목</span>
+                </label>
+                <input
+                  type="text"
+                  className="input input-bordered w-full"
                   value={question.title}
-                  disabled={true}
-                  readOnly={true}
+                  disabled
                 />
-              </FormGroup>
+              </div>
             </div>
             <div>
               <br />
             </div>
             <div>
-              <FormGroup className="mb-3" controlId="content1">
-                <FormLabel>문의 내용</FormLabel>
-                <FormControl
-                  as="textarea"
+              <div className="form-control w-full mb-3">
+                <label className="label">
+                  <span className="label-text">문의 내용</span>
+                </label>
+                <textarea
+                  className="textarea textarea-bordered w-full"
                   rows={6}
                   value={question.content}
-                  readOnly={true}
+                  readOnly
                 />
-              </FormGroup>
+              </div>
             </div>
             <div>
-              <FormGroup className="mb-3" controlId="content1">
-                <FormLabel>답변 내용</FormLabel>
-                <FormControl
-                  as="textarea"
+              <div className="form-control w-full mb-3">
+                <label className="label">
+                  <span className="label-text">답변 내용</span>
+                </label>
+                <textarea
+                  className="textarea textarea-bordered w-full"
                   rows={6}
                   onChange={(e) => setAnswer(e.target.value)}
                 />
-              </FormGroup>
+              </div>
             </div>
             <br />
             <div className="mb-3">
-              <Button className="ms-2 btn-primary" onClick={setModalShow}>
+              <button
+                type="button"
+                className="btn btn-primary ml-2"
+                onClick={setModalShow}
+              >
                 답변 등록
-              </Button>
+              </button>
             </div>
           </div>
         </div>
       </Col>
-      <Modal show={modalShow} onHide={() => setModalShow(false)}>
-        <Modal.Header closeButton>
-          <Modal.Title>답변 등록 확인</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          답변을 등록하면 수정할 수 없습니다. 등록하시겠습니까?
-        </Modal.Body>
-        <Modal.Footer>
-          <Button variant="outline-dark" onClick={() => setModalShow(false)}>
-            취소
-          </Button>
-          <Button variant="primary" onClick={handleAnswerButtonClick}>
-            답변완료
-          </Button>
-        </Modal.Footer>
-      </Modal>
+      {modalShow && (
+        <div className="modal modal-open">
+          <div className="modal-box">
+            <h3 className="font-bold text-lg mb-3">답변 등록 확인</h3>
+            <p className="mb-6">
+              답변을 등록하면 수정할 수 없습니다.
+              <br />
+              등록하시겠습니까?
+            </p>
+            <div className="modal-action">
+              <button
+                className="btn btn-outline btn-neutral"
+                onClick={() => setModalShow(false)}
+              >
+                취소
+              </button>
+              <button
+                className="btn btn-primary"
+                onClick={handleAnswerButtonClick}
+              >
+                답변완료
+              </button>
+            </div>
+            <button
+              className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2"
+              onClick={() => setModalShow(false)}
+              aria-label="Close"
+            >
+              ✕
+            </button>
+          </div>
+          <label
+            className="modal-backdrop"
+            onClick={() => setModalShow(false)}
+          ></label>
+        </div>
+      )}
     </Row>
   );
 }

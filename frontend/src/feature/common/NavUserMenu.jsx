@@ -1,16 +1,22 @@
-import {FiUser} from "react-icons/fi";
-import {Link} from "react-router";
+import { FiUser } from "react-icons/fi";
+import { Link } from "react-router";
 
-export function NavUserMenu({user, logout, isAdmin}) {
+export function NavUserMenu({ user, logout, isAdmin }) {
   return (
     <div className="dropdown dropdown-end">
-      <div tabIndex={0} role="button" className="btn btn-ghost btn-circle avatar">
-        <FiUser className="text-2xl text-black"/>
+      <div
+        tabIndex={0}
+        role="button"
+        className="btn btn-ghost btn-circle avatar"
+      >
+        <FiUser className="text-2xl text-black" />
       </div>
-      <ul tabIndex={0}
-          className="menu dropdown-content mt-3 z-[999]
-          text-lg
-           p-2 shadow bg-white text-black rounded-box w-52">
+      <ul
+        tabIndex={0}
+        className="menu dropdown-content z-[999]
+        text-lg
+          p-2 shadow bg-white text-black rounded-box w-52"
+      >
         {user ? (
           <>
             <li className="px-3 py-1 font-semibold">{user.name} 님</li>

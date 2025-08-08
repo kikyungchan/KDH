@@ -1,5 +1,5 @@
 import { useLocation, useNavigate } from "react-router";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import axios from "axios";
 import "./css/ProductOrder.css";
 import { useCart } from "./CartContext.jsx";
@@ -26,6 +26,7 @@ function Order(props) {
   );
   const shippingFee = totalItemPrice >= 100000 ? 0 : 3000;
   const navigate = useNavigate();
+  const checkoutWindow = useRef(null);
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -43,7 +44,58 @@ function Order(props) {
         })
         .catch((err) => {});
     }
+    window.addEventListener("message", (event) => {
+      // if (event.origin !== "https://yourdomain.com") return;
+      /*      if (event.data?.type === "PAY_SUCCESS") {
+              // 원하는 처리
+              console.log("팝업에서 데이터 받음!", event.data);
+            }*/
+      switch (event.data.type) {
+        case "POPUP_READY":
+          console.log("팝업 준비 완료!");
+          // 팝업이 준비되면 데이터 전송
+          sendDataToPopup();
+          break;
+
+        case "PAY_SUCCESS":
+          console.log("결제 완료:", event.data.data);
+          // 결제 완료 처리
+          handlePaymentResult(event.data.data);
+          break;
+      }
+    });
   }, []);
+
+  function handlePaymentConnection() {
+    checkoutWindow.current = window.open(
+      "/pay/Checkout", // 새 창에서 열 주소
+      "_blank", // 새 창
+      "width=600,height=800",
+    );
+  }
+
+  function sendDataToPopup() {
+    if (checkoutWindow.current && !checkoutWindow.current.closed) {
+      checkoutWindow.current.postMessage(
+        {
+          type: "CHECKOUT_DATA",
+          data: {
+            orderId: "12345",
+            amount: totalItemPrice + shippingFee,
+            productName: items[0].productName,
+          },
+        },
+        window.location.origin,
+      );
+    }
+  }
+
+  const handlePaymentResult = (result) => {
+    if (result.success) {
+      alert("결제가 완료되었습니다!");
+      // 페이지 새로고침이나 상태 업데이트
+    }
+  };
 
   if (!state || items.length === 0) {
     return <div>잘못된 접근입니다.</div>;
@@ -127,6 +179,14 @@ function Order(props) {
         })
         .then((res) => {
           setCartCount(res.data);
+          /*return new Promise((resolve) => {
+            const checkoutWindow = window.open(
+              "/pay/Checkout", // 새 창에서 열 주소
+              "_blank", // 새 창
+              "width=600,height=800",
+            );
+            console.log("checkoutWindow", checkoutWindow);
+          });*/
         })
         .then((res) => {
           alert("주문이 완료되었습니다.");
@@ -433,6 +493,14 @@ function Order(props) {
         </button>
         <button onClick={handleCancelButton} className="order-button cancel">
           취소
+        </button>
+        <button
+          className={"btn btn-primary"}
+          onClick={() => {
+            handlePaymentConnection();
+          }}
+        >
+          토스 페이먼츠
         </button>
       </div>
     </div>
