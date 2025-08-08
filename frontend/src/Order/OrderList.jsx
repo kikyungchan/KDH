@@ -11,9 +11,10 @@ export function OrderList() {
 
   useEffect(() => {
     setIsProcessing(true);
-    axios.get(`/api/product/order/list?page=${page}`)
+    axios.get(`/api/order/list?page=${page}`)
       .then((res) => {
         setOrderList(res.data.content);
+        setTotalPages(res.data.totalPages);
       })
       .catch((err) => {
         console.error("❌ 주문 목록 불러오기 실패:", err);
@@ -49,7 +50,7 @@ export function OrderList() {
                         <div>{new Date(order.orderDate).toLocaleDateString()}</div>
                         <div
                           className="cursor-pointer not-hover:underline"
-                          onClick={() => navigate(`/product/order/detail/${order.orderToken}`)}
+                          onClick={() => navigate(`/order/detail/${order.orderToken}`)}
                         >
                           주문상세
                         </div>

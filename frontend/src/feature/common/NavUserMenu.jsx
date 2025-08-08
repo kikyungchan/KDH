@@ -30,14 +30,11 @@ export function NavUserMenu({ user, logout, isAdmin }) {
             )}
             {!isAdmin && (
               <li>
-                <Link to="/orders">주문 내역</Link>
-                {/*<Link to="/product/order/list">주문 내역</Link>*/}
+                <Link to="/order/list">주문 내역</Link>
               </li>
             )}
             <li>
-              <button onClick={logout}>로그아웃</button>
-              {/*<Link to="/logout">로그아웃</Link>*/}
-
+              <Link to="/logout">로그아웃</Link>
             </li>
           </>
         ) : (
@@ -47,6 +44,9 @@ export function NavUserMenu({ user, logout, isAdmin }) {
             </li>
             <li>
               <Link to="/signup">회원가입</Link>
+            </li>
+            <li>
+              <Link to="/order/guest-order">비회원 주문조회</Link>
             </li>
           </>
         )}

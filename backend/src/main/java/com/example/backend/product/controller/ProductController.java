@@ -38,9 +38,6 @@ import java.util.Map;
 public class ProductController {
 
     private final ProductService productService;
-    private final OrderService orderService;
-    private final JwtDecoder jwtDecoder;
-    private final MemberRepository memberRepository;
     private final GuestOrderRepository guestOrderRepository;
     private final ProductRepository productRepository;
     private final ProductThumbnailRepository productThumbnailRepository;
@@ -270,31 +267,5 @@ public class ProductController {
         List<ProductBestDto> topProducts = productService.getTopSellingProducts();
         return ResponseEntity.ok(topProducts);
     }
-/*
-
-    // 주문 목록 조회
-    @GetMapping("/order/list")
-    public Page<OrderDto> getOrderList(Authentication authentication,
-                                       @PageableDefault(
-                                               size = 5,
-                                               sort = "orderDate",
-                                               direction = Sort.Direction.DESC) Pageable pageable) {
-        Integer memberId = Integer.parseInt(authentication.getName());
-        return orderService.getOrdersByUsersLoginId(memberId, pageable);
-    }
-
-    // 주문 상세 조회
-    @GetMapping("/order/detail/{orderToken}")
-    private ResponseEntity<OrderDetailDto> getOrderDetail(@PathVariable String orderToken,
-                                                          @RequestHeader("Authorization") String authHeader) {
-
-        String token = authHeader.replace("Bearer ", "");
-        Jwt decode = jwtDecoder.decode(token);
-        Integer memberId = Integer.parseInt(decode.getSubject());
-
-        OrderDetailDto dto = orderService.getOrderDetail(orderToken, memberId);
-        return ResponseEntity.ok(dto);
-    }
-*/
 
 }

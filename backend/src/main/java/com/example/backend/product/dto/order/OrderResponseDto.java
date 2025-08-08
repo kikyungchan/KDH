@@ -1,4 +1,4 @@
-package com.example.backend.product.dto;
+package com.example.backend.product.dto.order;
 
 import lombok.Data;
 

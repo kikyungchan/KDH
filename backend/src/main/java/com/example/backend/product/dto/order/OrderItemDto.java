@@ -1,4 +1,4 @@
-package com.example.backend.product.dto;
+package com.example.backend.product.dto.order;
 
 import com.example.backend.product.entity.OrderItem;
 
