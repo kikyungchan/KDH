@@ -4,23 +4,68 @@
     margin-bottom: 60px;
 }
 
+/*.main-visual-row {*/
+/*    display: flex;*/
+/*    width: 100%;*/
+/*    gap: 16px;*/
+/*    margin-top: 20px;*/
+/*    margin-bottom: 60px;*/
+/*    align-items: stretch;*/
+/*}*/
+
 .main-visual-row {
     display: flex;
-    width: 100%;
+    flex-direction: row;
     gap: 16px;
     margin-top: 20px;
     margin-bottom: 60px;
     align-items: stretch;
 }
 
+@media (max-width: 1023px) {
+    .main-visual-row {
+        flex-direction: column;
+        gap: 24px;
+    }
+}
+
+
+/*.main-visual-box {*/
+/*    position: relative;*/
+/*    width: 70%;*/
+/*    height: 600px;*/
+/*    overflow: hidden;*/
+/*    border-radius: 6px;*/
+/*    !*border: 1px solid black;*!*/
+/*}*/
+
 .main-visual-box {
-    position: relative;
     width: 70%;
     height: 600px;
-    overflow: hidden;
     border-radius: 6px;
-    /*border: 1px solid black;*/
+    overflow: hidden;
+    position: relative;
 }
+
+@media (max-width: 1023px) {
+    .main-visual-box {
+        width: 100%;
+        height: 500px;
+    }
+}
+
+@media (max-width: 767px) {
+    .main-visual-box {
+        height: 400px;
+    }
+}
+
+@media (max-width: 639px) {
+    .main-visual-box {
+        height: 300px;
+    }
+}
+
 
 .main-visual-img {
     width: 100%;
@@ -45,13 +90,39 @@
 }
 
 /* 우측 HOT 슬라이드 영역 */
+/*.hot-items-carousel {*/
+/*    width: 30%;*/
+/*    height: 600px; !* 왼쪽 메인 비주얼 박스 높이에 맞춤 *!*/
+/*    position: relative;*/
+/*    overflow: hidden;*/
+/*    !*border: 1px solid black;*!*/
+/*    border-radius: 6px;*/
+/*}*/
 .hot-items-carousel {
     width: 30%;
-    height: 600px; /* 왼쪽 메인 비주얼 박스 높이에 맞춤 */
+    height: 600px;
     position: relative;
     overflow: hidden;
-    /*border: 1px solid black;*/
     border-radius: 6px;
+}
+
+@media (max-width: 1023px) {
+    .hot-items-carousel {
+        width: 100%;
+        height: 250px;
+    }
+}
+
+@media (max-width: 767px) {
+    .hot-items-carousel {
+        height: 200px;
+    }
+}
+
+@media (max-width: 639px) {
+    .hot-items-carousel {
+        height: 180px;
+    }
 }
 
 /* Swiper 구성요소들 높이 맞춰줌 */
@@ -129,33 +200,72 @@
     z-index: 10;
 }
 
+/*.hot-slide-text {*/
+/*    position: absolute;*/
+/*    top: 10px;*/
+/*    left: 16px;*/
+/*    color: white;*/
+/*    background: rgba(0, 0, 0, 0.5);*/
+/*    padding: 8px 12px;*/
+/*    border-radius: 4px;*/
+/*    font-size: 1rem;*/
+/*    font-weight: 600;*/
+/*    z-index: 10;*/
+/*    text-shadow: 0 1px 4px rgba(0, 0, 0, 0.7);*/
+/*}*/
+
+/*@media screen and (max-width: 767px) {*/
+/*    .main-visual-row {*/
+/*        flex-direction: column;*/
+/*    }*/
+
+/*    .main-visual-box {*/
+/*        width: 100%;*/
+/*        height: 500px;*/
+/*    }*/
+
+/*    .hot-items-carousel {*/
+/*        width: 100%;*/
+/*        height: 200px; !* 모바일에선 너무 크지 않게 줄여줌 *!*/
+/*    }*/
+
+/*    .custom-nav-btn {*/
+/*        width: 28px;*/
+/*        height: 28px;*/
+/*        font-size: 16px;*/
+/*    }*/
+
+/*    .hot-slide-text {*/
+/*        font-size: 0.9rem;*/
+/*        padding: 6px 10px;*/
+/*    }*/
+
+/*    .slide-index-indicator {*/
+/*        font-size: 0.75rem;*/
+/*        padding: 2px 6px;*/
+/*    }*/
+/*}*/
+
 .hot-slide-text {
-    position: absolute;
-    top: 10px;
-    left: 16px;
-    color: white;
-    background: rgba(0, 0, 0, 0.5);
-    padding: 8px 12px;
-    border-radius: 4px;
     font-size: 1rem;
-    font-weight: 600;
-    z-index: 10;
-    text-shadow: 0 1px 4px rgba(0, 0, 0, 0.7);
+    padding: 8px 12px;
 }
 
-@media screen and (max-width: 767px) {
-    .main-visual-row {
-        flex-direction: column;
-    }
+.custom-nav-btn {
+    width: 32px;
+    height: 32px;
+    font-size: 18px;
+}
 
-    .main-visual-box {
-        width: 100%;
-        height: 500px;
-    }
+.slide-index-indicator {
+    font-size: 0.85rem;
+    padding: 4px 8px;
+}
 
-    .hot-items-carousel {
-        width: 100%;
-        height: 200px; /* 모바일에선 너무 크지 않게 줄여줌 */
+@media (max-width: 767px) {
+    .hot-slide-text {
+        font-size: 0.9rem;
+        padding: 6px 10px;
     }
 
     .custom-nav-btn {
@@ -164,16 +274,30 @@
         font-size: 16px;
     }
 
+    .slide-index-indicator {
+        font-size: 0.75rem;
+        padding: 3px 6px;
+    }
+}
+
+@media (max-width: 639px) {
     .hot-slide-text {
-        font-size: 0.9rem;
-        padding: 6px 10px;
+        font-size: 0.75rem;
+        padding: 4px 8px;
+    }
+
+    .custom-nav-btn {
+        width: 24px;
+        height: 24px;
+        font-size: 14px;
     }
 
     .slide-index-indicator {
-        font-size: 0.75rem;
-        padding: 2px 6px;
+        font-size: 0.65rem;
+        padding: 2px 5px;
     }
 }
+
 
 
 
