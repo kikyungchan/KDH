@@ -21,8 +21,6 @@
     width: 80%;
     object-fit: contain; /* 이미지 비율 유지하며 축소 */
     margin: 0 auto;
-
-
     display: flex;
     justify-content: center;
     align-items: center;
@@ -30,8 +28,6 @@
 
 .product-card {
     display: block;
-
-
     padding: 1.2rem;
     background-color: #fff;
     text-decoration: none;
