@@ -47,7 +47,22 @@ function ProductCart(props) {
     setSelectedItem(item);
     setSelectedOptionId(item.optionId); // 기존 선택된 옵션
     setSelectedQuantity(item.quantity); // 기존 수량
-    setSelectedStock(item.stockQuantity); // 재고 초기 세팅
+
+    if (item.options?.length > 0) {
+      const selectedOpt = item.options.find(
+        (opt) => Number(opt.id) === Number(item.optionId), // 여기로 수정
+      );
+      setSelectedStock(selectedOpt?.stockQuantity ?? Infinity); // 옵션 상품일 경우
+      console.log("item.optionId:", item.optionId);
+      console.log("item.options:", item.options);
+      console.log("선택된 옵션 재고:", selectedOpt?.stockQuantity); // ✅ 여기
+    } else {
+      setSelectedStock(item.stockQuantity ?? Infinity); // 옵션 없는 상품
+      console.log("item.optionId:", item.optionId);
+      console.log("item.options:", item.options);
+      console.log("옵션 없는 상품 재고:", item.stockQuantity); // ✅ 여기
+    }
+
     setShowModal(true);
   }
 
@@ -405,15 +420,17 @@ function ProductCart(props) {
                       selectedOptionId !== null ? String(selectedOptionId) : ""
                     }
                     onChange={(e) => {
-                      const value = e.target.value;
-                      setSelectedOptionId(Number(value));
+                      const value = Number(e.target.value);
+                      setSelectedOptionId(value);
 
                       // 선택된 옵션의 재고 찾아서 갱신
                       const selectedOpt = selectedItem.options.find(
-                        (opt) => opt.id === value,
+                        (opt) => Number(opt.id) === value,
                       );
                       if (selectedOpt) {
                         setSelectedStock(selectedOpt.stockQuantity); // 재고 갱신
+                      } else {
+                        setSelectedStock(Infinity);
                       }
                     }}
                   >
