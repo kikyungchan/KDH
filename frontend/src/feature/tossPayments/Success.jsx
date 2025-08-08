@@ -31,29 +31,23 @@ export function SuccessPage() {
             window.opener.postMessage(
               {
                 type: "PAY_SUCCESS",
-                orderId: res.data.orderId,
-                amount: res.data.amount + "원",
-                paymentKey: res.data.paymentKey,
+                data: res.data,
               },
-              "*", // 또는 부모 도메인
+              window.location.origin,
             );
           })
           .catch((err) => {
             console.log("err : ", err);
             const message = err.response.data.message ?? err.message;
             window.opener.postMessage(
-              {
-                type: "PAY_FAIL",
-                code: err.code,
-                message: err.message,
-              },
-              "*", // 또는 부모 도메인
+              { type: "PAY_FAIL", data: err.data },
+              window.location.origin,
             );
           })
           .finally(() => {
             console.log("always");
             hasCalled.current = false;
-            setTimeout(() => window.close(), 300);
+            setTimeout(() => window.close(), 100);
           });
       }
     }

@@ -11,8 +11,7 @@ export function FailPage() {
       window.opener.postMessage(
         {
           type: "PAY_FAIL",
-          code: searchParams.get("code"),
-          message: searchParams.get("message"),
+          data: searchParams,
         },
         "*", // 또는 부모 도메인
       );

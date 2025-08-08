@@ -108,6 +108,7 @@ export function Chat() {
     // 보낼 메시지 객체
     const chatMsg = { from: user.name, to: target, message: text };
     // SEND_DEST로 파일 전송
+
     clientRef.current.publish({
       destination: SEND_DEST,
       body: JSON.stringify(chatMsg),
