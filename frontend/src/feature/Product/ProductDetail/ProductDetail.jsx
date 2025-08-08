@@ -505,7 +505,7 @@ export function ProductDetail() {
       <ScrollToTopButton />
       <ShareModal
         show={showShareModal}
-        onHide={() => setShowShareModal(false)}
+        onClose={() => setShowShareModal(false)}
         shareUrl={window.location.href}
         productName={product.productName}
       />
