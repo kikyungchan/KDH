@@ -2,6 +2,7 @@ package com.example.backend.product.controller;
 
 import com.example.backend.member.repository.MemberRepository;
 import com.example.backend.product.dto.order.GuestLookupRequest;
+import com.example.backend.product.dto.order.GuestOrderDetailDto;
 import com.example.backend.product.dto.order.OrderDetailDto;
 import com.example.backend.product.dto.order.OrderDto;
 import com.example.backend.product.entity.GuestOrder;
@@ -73,14 +74,17 @@ public class OrderController {
     }
 
     @GetMapping("/guest-order/detail")
-    public ResponseEntity<OrderDetailDto> getGuestOrderDetail(HttpSession session) {
+    public ResponseEntity<GuestOrderDetailDto> getGuestOrderDetail(HttpSession session) {
         try {
             GuestOrder guestOrder = orderService.getGuestOrderDetail(session);
-            return ResponseEntity.ok(guestOrder);
+
+            GuestOrderDetailDto dto = GuestOrderDetailDto.fromEntity(guestOrder);
+            return ResponseEntity.ok(dto);
+
         } catch (SecurityException e) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(e.getMessage());
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         } catch (NoSuchElementException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
     }
 
