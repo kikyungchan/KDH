@@ -73,12 +73,12 @@ export function ProductList() {
       </div>
 
       {/* 하단 (모바일용) */}
-      <div className="mt-4 sort-wrapper-mobile">
+      <div className="mt-4 sort-wrapper-mobile product-list-header ">
         <h2 className="text-xl" style={{ fontSize: "2rem" }}>
           상품 목록
         </h2>
         <select
-          className="select select-sm w-full"
+          className="select select-sm w-52"
           value={sort}
           onChange={handleSortChange}
         >
