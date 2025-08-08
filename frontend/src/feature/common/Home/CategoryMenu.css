@@ -30,7 +30,7 @@
     cursor: pointer;
     width: 120px;
     height: 200px;
-    border: 1px solid;
+    /*border: 1px solid;*/
 
 }
 
@@ -43,4 +43,27 @@
     font-size: 1rem;
     color: #333;
     white-space: nowrap;
+}
+
+@media screen and (max-width: 640px) {
+    /*.category-title {*/
+    /*    font-size: 1.1rem;*/
+    /*    margin-bottom: 1.2rem;*/
+    /*}*/
+    .category-item {
+        width: 60px;
+        height: 160px;
+    }
+
+    .category-img {
+        height: 100px;
+    }
+
+    .category-label {
+        font-size: 0.85rem;
+    }
+
+    .category-icon {
+        font-size: 2rem;
+    }
 }
