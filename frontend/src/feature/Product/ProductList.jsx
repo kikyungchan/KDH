@@ -78,9 +78,7 @@ export function ProductList() {
 
       {/* 하단 (모바일용) */}
       <div className="mt-4 sort-wrapper-mobile product-list-header ">
-        <h2 className="text-xl" style={{ fontSize: "2rem" }}>
-          상품 목록
-        </h2>
+        <h2 className="text-xl mobile-title">상품 목록</h2>
         <select
           className="select select-sm w-52"
           value={sort}
@@ -94,7 +92,7 @@ export function ProductList() {
       </div>
       {loading ? (
         <div className="flex justify-center items-center my-12 text-gray-500">
-          <span className="loading loading-spinner loading-sm mr-2"/>
+          <span className="loading loading-spinner loading-sm mr-2" />
           페이지 로딩 중...
         </div>
       ) : products.length === 0 ? (
