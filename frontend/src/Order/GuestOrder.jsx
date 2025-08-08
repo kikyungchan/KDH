@@ -11,7 +11,7 @@ export function GuestOrder() {
   function handleSearchOrderButtonClick(e) {
     e.preventDefault();
 
-    axios.post("api/order/guest-order/lookup", {
+    axios.post("/api/order/guest-order/lookup", {
       guestOrderToken: orderToken,
       guestName: name,
       guestPhone: phone,

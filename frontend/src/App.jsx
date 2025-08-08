@@ -59,7 +59,7 @@ function App() {
                 <Route path="/order/list" element={<OrderList />} />
                 <Route path="/order/detail/:orderToken" element={<OrderDetail />} />
                 <Route path="/order/guest-order" element={<GuestOrder />} />
-                <Route path="/order/guest-order/detail/:orderToken" element={<GuestOrderDetail />} />
+                <Route path="/order/guest-order/detail" element={<GuestOrderDetail />} />
                 <Route path="/member/edit" element={<MemberEdit />} />
                 <Route path="/member/list" element={<MemberList />} />
                 <Route path="/member" element={<MemberDetail />} />
