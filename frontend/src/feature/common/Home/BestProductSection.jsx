@@ -12,7 +12,6 @@ function BestProductSection() {
     axios
       .get("/api/product/best")
       .then((res) => {
-        console.log(res.data);
         setBestProducts(res.data);
       })
       .catch((err) => console.log(err));
