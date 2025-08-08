@@ -116,7 +116,7 @@ export function MemberLogin() {
 
               {/* 비회원 주문 조회 */}
               <div className="text-right mt-2 text-sm">
-                <Link to="/find/id" className="link link-hover text-gray-700">
+                <Link to="/order/guest-order" className="link link-hover text-gray-700">
                   비회원 주문 조회
                 </Link>
               </div>

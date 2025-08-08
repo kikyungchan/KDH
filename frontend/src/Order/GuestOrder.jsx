@@ -1,12 +1,28 @@
 import React, {useState} from "react";
-import {Link} from "react-router";
+import {Link, useNavigate} from "react-router";
+import axios from "axios";
 
 export function GuestOrder() {
   const [orderToken, setOrderToken] = useState("");
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
-  function handleSearchOrderButtonClick() {
+  const navigate = useNavigate();
 
+  function handleSearchOrderButtonClick(e) {
+    e.preventDefault();
+
+    axios.post("api/order/guest-order/lookup", {
+      guestOrderToken: orderToken,
+      guestName: name,
+      guestPhone: phone,
+    })
+      .then(() => {
+        // 인증 성공 -> 상세 페이지로 이동
+        navigate("/order/guest-order/detail");
+      })
+      .catch((err) => {
+        alert(err.response?.data || "조회 실패");
+      });
   }
 
   return (
@@ -50,7 +66,8 @@ export function GuestOrder() {
                 <div className="text-end mt-3">
                   <button
                     type="submit"
-                    className="btn btn-neutral w-full font-bold">주문조회</button>
+                    className="btn btn-neutral w-full font-bold">주문조회
+                  </button>
                 </div>
               </form>
             </div>
