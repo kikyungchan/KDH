@@ -6,11 +6,16 @@
     overflow: hidden;
 }
 
+.slide {
+    cursor: pointer;
+}
+
 .overlay {
     position: absolute;
-    bottom: 100px;
-    left: 50px;
+    bottom: 250px;
+    left: 150px;
     color: white;
+    font-size: 2rem;
     text-shadow: 1px 1px 8px rgba(0, 0, 0, 0.8);
 }
 

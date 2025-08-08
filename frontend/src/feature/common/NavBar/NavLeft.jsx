@@ -28,19 +28,85 @@ function NavLeft({ user, isAdmin, handleCategoryClick }) {
           className="menu dropdown-content z-[1000] p-2 shadow bg-base-100 rounded-box w-52"
         >
           <li>
-            <button onClick={() => navigate("/product/list")}>전체</button>
+            <button
+              onClick={() => {
+                navigate("/product/list");
+              }}
+            >
+              전체
+            </button>
           </li>
           <li>
-            <button onClick={() => handleCategoryClick("outer")}>겉옷</button>
+            <button
+              onClick={() => {
+                handleCategoryClick("outer");
+              }}
+            >
+              겉옷
+            </button>
           </li>
           <li>
-            <button onClick={() => handleCategoryClick("top")}>상의</button>
+            <button
+              onClick={() => {
+                handleCategoryClick("top");
+              }}
+            >
+              상의
+            </button>
           </li>
           <li>
-            <button onClick={() => handleCategoryClick("bottom")}>하의</button>
+            <button
+              onClick={() => {
+                handleCategoryClick("bottom");
+              }}
+            >
+              하의
+            </button>
           </li>
           <li>
-            <button onClick={() => handleCategoryClick("hat")}>모자</button>
+            <button
+              onClick={() => {
+                handleCategoryClick("hat");
+              }}
+            >
+              모자
+            </button>
+          </li>
+          <li>
+            <button
+              onClick={() => {
+                handleCategoryClick("bag");
+              }}
+            >
+              가방
+            </button>
+          </li>
+          <li>
+            <button
+              onClick={() => {
+                handleCategoryClick("shoes");
+              }}
+            >
+              신발
+            </button>
+          </li>
+          <li>
+            <button
+              onClick={() => {
+                handleCategoryClick("socks");
+              }}
+            >
+              양말
+            </button>
+          </li>
+          <li>
+            <button
+              onClick={() => {
+                handleCategoryClick("belt");
+              }}
+            >
+              벨트
+            </button>
           </li>
         </ul>
       </div>

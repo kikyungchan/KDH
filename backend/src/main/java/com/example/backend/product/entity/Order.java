@@ -46,6 +46,8 @@ public class Order {
     @Column(name = "member_name", nullable = false)
     private String memberName;
 
+    private String memo;
+
     @Column(nullable = false)
     private String phone;
 
@@ -56,7 +58,7 @@ public class Order {
     protected void onCreate() {
         this.createdAt = LocalDateTime.now();
     }
-    
+
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
     @ToString.Exclude
     private List<OrderItem> orderItems = new ArrayList<>();
@@ -65,13 +67,6 @@ public class Order {
         orderItems.add(item);
         item.setOrder(this);
     }
-
-    private String memo;
-
-    private String productName;
-
-    private String optionName;
-
     private String zipcode;
 
     private String addressDetail;
@@ -79,11 +74,4 @@ public class Order {
     @Column(name = "order_token")
     private String orderToken;
 
-    //    private String detailedAddress;
-    //    private String postalCode;
-//    @ManyToOne
-//    @JoinColumn(name = "product_id")
-//    private Product product;
-
-//    private Integer quantity;
 }

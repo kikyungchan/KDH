@@ -68,7 +68,6 @@ public class ProductCartService {
         System.out.println("[getCartList] carts.size = " + carts.size());
         List<CartResponseDto> result = new ArrayList<>();
         for (Cart cart : carts) {
-            System.out.println("[getCartList] Cart: " + cart.getId()); // ✅ 얘 찍히는지 확인
             result.add(new CartResponseDto(cart));
         }
         return result;
@@ -88,6 +87,14 @@ public class ProductCartService {
         Cart cart = cartRepository.findById(req.getCartId()).get();
         Product product = cart.getProduct();
 //        ProductOption option = productOptionRepository.findById(req.getOptionId()).get();
+
+        // 재고 초과 검증
+        if (req.getQuantity() > product.getQuantity()) {
+            throw new IllegalArgumentException(product.getQuantity() + "개 이상 구매하실 수 없습니다.");
+        }
+
+
+        // 옵션 있는 상품처리
         if (req.getOptionId() != null) {
             ProductOption newOption = productOptionRepository.findById(req.getOptionId()).get();
 

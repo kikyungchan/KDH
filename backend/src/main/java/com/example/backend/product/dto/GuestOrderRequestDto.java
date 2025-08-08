@@ -10,8 +10,8 @@ public class GuestOrderRequestDto {
     private String receiverName;
     private String receiverPhone;
     private String shippingAddress;
-    private String detailedAddress;
-    private String postalCode;
+    private String addressDetail;
+    private String zipcode;
 
     private Integer productId;
     private String productName;

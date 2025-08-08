@@ -5,6 +5,7 @@ import axios from "axios";
 import { useCart } from "./CartContext.jsx";
 
 function ProductCart(props) {
+  const [selectedStock, setSelectedStock] = useState(null);
   const { setCartCount } = useCart();
   const navigate = useNavigate();
   const [showModal, setShowModal] = useState(false);
@@ -31,6 +32,7 @@ function ProductCart(props) {
           },
         })
         .then((res) => {
+          console.log("응답 데이터:", res.data);
           setCartItems(res.data);
         })
         .catch((err) => console.log(err));
@@ -43,9 +45,19 @@ function ProductCart(props) {
 
   function handleEditOption(item) {
     setSelectedItem(item);
-    setSelectedOptionId(item.optionId); // 기본 선택
+    setSelectedOptionId(item.optionId); // 기존 선택된 옵션
     setSelectedQuantity(item.quantity); // 기존 수량
-    setShowModal(true); // 로그인 사용자는 이미 옵션 있음
+
+    if (item.options?.length > 0) {
+      const selectedOpt = item.options.find(
+        (opt) => Number(opt.id) === Number(item.optionId), // 여기로 수정
+      );
+      setSelectedStock(selectedOpt?.stockQuantity ?? Infinity); // 옵션 상품일 경우
+    } else {
+      setSelectedStock(item.stockQuantity ?? Infinity); // 옵션 없는 상품
+    }
+
+    setShowModal(true);
   }
 
   function handleCheckboxChange(index, checked) {
@@ -402,8 +414,18 @@ function ProductCart(props) {
                       selectedOptionId !== null ? String(selectedOptionId) : ""
                     }
                     onChange={(e) => {
-                      const value = e.target.value;
-                      setSelectedOptionId(Number(value));
+                      const value = Number(e.target.value);
+                      setSelectedOptionId(value);
+
+                      // 선택된 옵션의 재고 찾아서 갱신
+                      const selectedOpt = selectedItem.options.find(
+                        (opt) => Number(opt.id) === value,
+                      );
+                      if (selectedOpt) {
+                        setSelectedStock(selectedOpt.stockQuantity); // 재고 갱신
+                      } else {
+                        setSelectedStock(Infinity);
+                      }
                     }}
                   >
                     <option value="">옵션 선택</option>
@@ -425,13 +447,34 @@ function ProductCart(props) {
                   -
                 </button>
                 <input
-                  type="text"
+                  type="number"
+                  min="1"
                   value={selectedQuantity}
-                  readOnly
+                  onChange={(e) => {
+                    const value = parseInt(e.target.value, 10);
+                    if (isNaN(value) || value < 1) return;
+
+                    const maxQty = selectedStock ?? Infinity;
+                    if (value > maxQty) {
+                      alert(`재고 ${maxQty}개 이상 구매하실 수 없습니다.`);
+                      setSelectedQuantity(maxQty);
+                    } else {
+                      setSelectedQuantity(value);
+                    }
+                  }}
                   className="mx-2"
-                  style={{ width: 40, textAlign: "center" }}
+                  style={{ width: 60, textAlign: "center" }}
                 />
-                <button onClick={() => setSelectedQuantity((q) => q + 1)}>
+                <button
+                  onClick={() => {
+                    const maxQty = selectedStock ?? Infinity;
+                    if (selectedQuantity + 1 > maxQty) {
+                      alert(`재고 ${maxQty}개 이상 구매하실 수 없습니다.`);
+                      return;
+                    }
+                    setSelectedQuantity((q) => q + 1);
+                  }}
+                >
                   +
                 </button>
               </div>

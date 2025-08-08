@@ -21,7 +21,7 @@
 
 .product-image-wrapper {
     width: 100%;
-    height: 320px; /* ← 이미지 높이 크게 */
+    aspect-ratio: 4 / 3;
     overflow: hidden;
     display: flex;
     align-items: center;
@@ -32,6 +32,7 @@
     width: 100%;
     height: 100%;
     object-fit: cover;
+    display: block;
 }
 
 .product-info-wrapper {
@@ -101,4 +102,32 @@
     #product-list-container .product-grid {
         grid-template-columns: repeat(4, 300px);
     }
+}
+
+.sort-wrapper-mobile {
+    display: none;
+}
+
+@media (max-width: 1023px) {
+    .sort-wrapper-pc {
+        display: none;
+    }
+
+    .sort-wrapper-mobile {
+        display: block;
+        justify-content: center;
+        justify-items: center;
+        align-items: center;
+        align-content: center;
+    }
+}
+
+.product-list-header {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 16px;
+    flex-direction: row;
+    flex-wrap: wrap;
+    text-align: center;
 }

@@ -36,29 +36,11 @@ public class GuestOrder {
     @Column(name = "shipping_address")
     private String shippingAddress;
 
-    @Column(name = "detailed_address")
-    private String detailedAddress;
+    @Column(name = "address_detail")
+    private String addressDetail;
 
-    @Column(name = "postal_code", length = 20)
-    private String postalCode;
-
-    @Column(name = "product_id")
-    private Integer productId;
-
-    @Column(name = "product_name")
-    private String productName;
-
-    @Column(name = "option_id")
-    private Integer optionId;
-
-    @Column(name = "option_name")
-    private String optionName;
-
-    @Column(name = "quantity")
-    private Integer quantity;
-
-    @Column(name = "price")
-    private Integer price;
+    @Column(name = "zipcode", length = 20)
+    private String zipcode;
 
     private Integer totalPrice;
 

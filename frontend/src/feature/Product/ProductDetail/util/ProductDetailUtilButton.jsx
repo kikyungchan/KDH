@@ -128,6 +128,9 @@ export function handleCartButton({
     const selectedId = enrichedOptions.find(
       (opt) => opt.optionName === selectedOption?.optionName,
     )?.id;
+    const selectedStock = enrichedOptions.find(
+      (opt) => opt.optionName === selectedOption.optionName,
+    )?.stockQuantity;
 
     if (product.options?.length > 0 && selectedOption) {
       cartItem = {
@@ -139,6 +142,7 @@ export function handleCartButton({
         quantity,
         imagePath: thumbnail,
         options: enrichedOptions,
+        stockQuantity: selectedStock ?? product.quantity,
       };
     } else if (product.options?.length === 0) {
       cartItem = {
@@ -150,6 +154,7 @@ export function handleCartButton({
         optionName: null,
         optionId: null,
         options: [],
+        stockQuantity: selectedStock ?? product.quantity,
       };
     } else {
       alert("옵션을 선택해주세요.");
@@ -264,13 +269,17 @@ export function handleBuyCurrentProductOnly({
   setShowCartConfirmModal(false);
   navigate("/product/order", {
     state: {
-      productId: product.id,
-      productName: product.productName,
-      price: selectedOption ? selectedOption.price : product.price,
-      quantity: quantity,
-      imagePath: thumbnail,
-      option: selectedOption?.optionName || null,
-      optionId: selectedOption?.id || null,
+      items: [
+        {
+          productId: product.id,
+          productName: product.productName,
+          price: selectedOption ? selectedOption.price : product.price,
+          quantity,
+          imagePath: thumbnail,
+          optionName: selectedOption?.optionName || null,
+          optionId: selectedOption?.id || null,
+        },
+      ],
     },
   });
 }

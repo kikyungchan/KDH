@@ -11,10 +11,11 @@ import java.util.Optional;
 public interface GuestOrderRepository extends JpaRepository<GuestOrder, Integer> {
 
     @Query(value = """
-            SELECT SUM(quantity)
-            FROM guest_orders
-            WHERE product_id = :productId
-              AND created_at > :since
+            SELECT SUM(goi.quantity)
+            FROM guest_order_item goi
+            JOIN guest_orders go ON goi.guest_order_id = go.id
+            WHERE goi.product_id = :productId
+              AND go.created_at > :since
             """, nativeQuery = true)
     Integer getWeeklySales(@Param("productId") Integer productId, @Param("since") LocalDateTime since);
 

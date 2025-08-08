@@ -60,7 +60,24 @@ export function ProductList() {
 
   return (
     <div id="product-list-container" className="w-full pt-3 px-[225px]">
-      <div className="flex justify-between items-center mt-3">
+      <div className="flex justify-between items-center mt-3 sort-wrapper-pc">
+        <h2 className="text-xl" style={{ fontSize: "2rem" }}>
+          상품 목록
+        </h2>
+        <select
+          className="select select-sm w-52"
+          value={sort}
+          onChange={handleSortChange}
+        >
+          <option value="recent">기본순</option>
+          <option value="popular">인기순</option>
+          <option value="price_asc">가격 낮은순</option>
+          <option value="price_desc">가격 높은순</option>
+        </select>
+      </div>
+
+      {/* 하단 (모바일용) */}
+      <div className="mt-4 sort-wrapper-mobile product-list-header ">
         <h2 className="text-xl" style={{ fontSize: "2rem" }}>
           상품 목록
         </h2>

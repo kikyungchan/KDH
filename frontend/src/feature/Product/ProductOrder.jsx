@@ -227,8 +227,8 @@ function Order(props) {
         receiverName: receiverName,
         receiverPhone: receiverPhone,
         receiverAddress: receiverAddress,
-        postalCode: postalCode,
-        detailedAddress: receiverDetailAddress,
+        zipcode: postalCode,
+        addressDetail: receiverDetailAddress,
       }));
       axios.post("/api/product/order/guest", payloadList).then((res) => {
         const token = res.data.guestOrderToken;

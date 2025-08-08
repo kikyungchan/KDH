@@ -71,8 +71,8 @@ public class ProductController {
         order.setReceiverName(first.getReceiverName());
         order.setReceiverPhone(first.getReceiverPhone());
         order.setShippingAddress(first.getShippingAddress());
-        order.setDetailedAddress(first.getDetailedAddress());
-        order.setPostalCode(first.getPostalCode());
+        order.setAddressDetail(first.getAddressDetail());
+        order.setZipcode(first.getZipcode());
         order.setMemo(first.getMemo());
 
         String token = OrderTokenGenerator.generateToken();
@@ -82,12 +82,6 @@ public class ProductController {
         List<GuestOrderItem> itemList = new ArrayList<>();
 
         for (GuestOrderRequestDto dto : dtoList) {
-            System.out.println("➡ 옵션 ID: " + dto.getOptionId());
-            System.out.println("➡ 옵션 이름: " + dto.getOptionName());
-            System.out.println("➡ 옵션 ID: " + dto.getOptionId());
-            System.out.println("➡ 옵션 이름: " + dto.getOptionName());
-            System.out.println("➡ 옵션 ID: " + dto.getOptionId());
-            System.out.println("➡ 옵션 이름: " + dto.getOptionName());
             Product product = productRepository.findById(dto.getProductId())
                     .orElseThrow(() -> new RuntimeException("상품이 존재하지 않습니다."));
 
@@ -110,10 +104,6 @@ public class ProductController {
 
             if (dto.getOptionId() != null) {
                 ProductOption option = productOptionRepository.findById(dto.getOptionId()).orElse(null);
-                System.out.println("🔍 DB에서 조회한 옵션: " + option);
-                System.out.println("🔍 DB에서 조회한 옵션: " + option);
-                System.out.println("🔍 DB에서 조회한 옵션: " + option);
-                System.out.println("🔍 DB에서 조회한 옵션: " + option);
                 item.setOption(option);
                 item.setOptionName(option != null ? option.getOptionName() : null);
             }
@@ -201,7 +191,7 @@ public class ProductController {
                                     @RequestParam String options,
                                     @RequestParam String detailText,
                                     @RequestParam("thumbnails") List<MultipartFile> thumbnails,
-                                    @RequestParam("detailImages") List<MultipartFile> detailImages) {
+                                    @RequestParam(value = "detailImages", required = false) List<MultipartFile> detailImages) {
         ObjectMapper objectMapper = new ObjectMapper();
         List<ProductOptionDto> optionList;
         try {

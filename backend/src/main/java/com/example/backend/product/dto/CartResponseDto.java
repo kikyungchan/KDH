@@ -19,6 +19,8 @@ public class CartResponseDto {
     private Integer productId;
     private Integer optionId;
 
+    private Integer stockQuantity;
+
     private List<ProductOptionDto> options;
 
 
@@ -27,6 +29,7 @@ public class CartResponseDto {
         this.productName = cart.getProduct().getProductName();
         this.quantity = cart.getQuantity();
         this.productId = cart.getProduct().getId();
+        this.stockQuantity = cart.getProduct().getQuantity();
         // 옵션이 있는 경우
         if (cart.getOption() != null) {
             this.price = cart.getOption().getPrice();
