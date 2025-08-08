@@ -35,14 +35,23 @@ export function GuestOrderDetail() {
               <h2 className="mb-6 text-center text-2xl font-bold">주문 상세</h2>
               <br/>
               <div>
+                <h3>주문정보</h3>
                 {/*<div>주문일자 : {new Date(order.guestOrder).toLocaleDateString()}</div>*/}
                 <div className="text-sm">주문번호 : {order.guestOrderToken}</div>
+                <div>이름 : {order.guestName}</div>
+                <div>연락처 : {order.guestPhone}</div>
+
               </div>
               <hr className="border-t border-gray-300 my-3"/>
               <div>
-                <div>이름 : {order.guestName}</div>
-                <div>연락처 : {order.guestPhone}</div>
+                <h3>배송정보</h3>
                 <div>
+                  <div>
+                    {order.receiverName}
+                  </div>
+                  <div>
+                    {order.receiverPhone}
+                  </div>
                   <div>
                     우편번호 : {order.zipcode}
                   </div>
@@ -58,6 +67,7 @@ export function GuestOrderDetail() {
                 </div>
               </div>
               <hr className="border-t border-gray-300 my-3"/>
+              {/* TODO : 비회원 주문도 orderItem set 되면 구현 */}
               {/*<div>*/}
               {/*  <div className="mb-2">주문 상품 {order.orderItems.length}개</div>*/}
               {/*  <div>*/}
@@ -89,7 +99,7 @@ export function GuestOrderDetail() {
               <div className="text-end">
                 <button className="btn btn-outline btn-neutral"
                         onClick={() => {
-                          navigate("/product/order/list")
+                          navigate("/home")
                         }}>
                   홈으로
                 </button>

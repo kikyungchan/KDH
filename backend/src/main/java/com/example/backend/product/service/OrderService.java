@@ -119,6 +119,7 @@ public class OrderService {
             throw new SecurityException("주문자 정보가 일치하지 않습니다");
         }
         session.setAttribute("guestOrderToken", order.getGuestOrderToken());
+        session.setMaxInactiveInterval(180); // 180초 후 자동 만료
     }
 
     public GuestOrder getGuestOrderDetail(HttpSession session) {
