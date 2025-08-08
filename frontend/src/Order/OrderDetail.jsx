@@ -43,22 +43,54 @@ export function OrderDetail() {
               </div>
               <hr className="border-t border-gray-300 my-3"/>
               <div>
-                <div>이름 : {order.memberName}</div>
-                <div>연락처 : {order.phone}</div>
-                <div>
-                  <div>
-                    우편번호 : {order.zipcode}
-                  </div>
-                  <div>
-                    주소 : {order.shippingAddress}
-                  </div>
-                  <div>
-                    상세주소 : {order.addressDetail}
-                  </div>
-                  <div>
-                    배송메모 : {order.memo}
-                  </div>
-                </div>
+                <table>
+                  <tbody className="w-full table-fixed">
+                  <tr>
+                    <td className="w-1/4 text-left">이름</td>
+                    <td className="text-left">{order.memberName}</td>
+                  </tr>
+                  <tr>
+                    <td className="w-1/4">연락처</td>
+                    <td className="td-left">{order.phone}</td>
+                  </tr>
+                  <tr>
+                    <td className="w-1/4">우편번호</td>
+                    <td className="td-left">{order.zipcode}</td>
+                  </tr>
+                  <tr>
+                    <td>주소</td>
+                    <td>{order.shippingAddress}</td>
+                  </tr>
+                  <tr>
+                    <td>상세주소</td>
+                    <td>{order.addressDetail}</td>
+                  </tr>
+                  <tr>
+                    <td>배송메세지</td>
+                    <td>{order.memo}</td>
+                  </tr>
+                  </tbody>
+                </table>
+                <ul>
+                  <li className="row">
+                    <span className="cell">1행 1열</span>
+                    <span className="cell">1행 2열</span>
+                  </li>
+                  <li className="row">
+                    <span className="cell">2행 1열</span>
+                    <span className="cell">2행 2열</span>
+                  </li>
+                  <li className="row">
+                    <span className="cell">3행 1열</span>
+                    <span className="cell">3행 2열</span>
+                  </li>
+                  <li>이름 : {order.memberName}</li>
+                  <li>연락처 : {order.phone}</li>
+                  <li>우편번호 : {order.zipcode}</li>
+                  <li>주소 : {order.shippingAddress}</li>
+                  <li>상세주소 : {order.addressDetail}</li>
+                  <li>배송메모 : {order.memo}</li>
+                </ul>
               </div>
               <hr className="border-t border-gray-300 my-3"/>
               <div>
@@ -71,12 +103,12 @@ export function OrderDetail() {
                              alt={item.productName}
                              className="w-32 h-32"/>
                       </div>
-                      <div>
-                        <div className="font-semibold text-lg">{item.productName}</div>
-                        <div className="text-sm text-gray-600">옵션: {item.productOption}</div>
-                        <div className="text-sm">수량: {item.quantity}</div>
-                        <div className="text-sm">가격: {item.price.toLocaleString()}원</div>
-                      </div>
+                      <ul className="content-center">
+                        <li>상품명: {item.productName}</li>
+                        <li>옵션: {item.productOption}</li>
+                        <li>수량: {item.quantity}</li>
+                        <li>가격: {item.price.toLocaleString()}원</li>
+                      </ul>
                       <br/>
                     </div>
 
@@ -91,7 +123,9 @@ export function OrderDetail() {
               </div>
               <div className="text-end">
                 <button className="btn btn-outline btn-neutral"
-                onClick={() => {navigate("/product/order/list")}}>
+                        onClick={() => {
+                          navigate("/product/order/list")
+                        }}>
                   목록으로
                 </button>
               </div>
