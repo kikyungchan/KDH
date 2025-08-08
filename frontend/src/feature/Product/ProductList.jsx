@@ -59,7 +59,7 @@ export function ProductList() {
   };
 
   return (
-    <div id="product-list-container">
+    <div className="container" id="product-list-container">
       {/* PC와 모바일을 위한 별도의 헤더를 하나로 통합 */}
       <div className="product-list-header">
         <h2 className="title">상품 목록</h2>
