@@ -71,12 +71,14 @@ function App() {
                 <Route path="/qna/view" element={<QnaView />} />
                 <Route path="/faq/list" element={<FaQList />} />
                 <Route path="chat/chatting" element={<Chat />} />
-                <Route path="pay/Checkout" element={<CheckoutPage />} />
-                <Route path="pay/success" element={<SuccessPage />} />
-                <Route path="pay/fail" element={<FailPage />} />
               </Route>
             </Routes>
           </CartProvider>
+          <Routes>
+            <Route path="pay/Checkout" element={<CheckoutPage />} />
+            <Route path="pay/success" element={<SuccessPage />} />
+            <Route path="pay/fail" element={<FailPage />} />
+          </Routes>
         </BrowserRouter>
       </AuthenticationContextProvider>
     </AlertProvider>

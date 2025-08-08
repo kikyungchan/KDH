@@ -21,11 +21,12 @@ public interface QuestionRepository extends JpaRepository<Question, Integer> {
                                     q.updatedAt)
                         FROM Question q JOIN Member m
                                     ON q.user.loginId = m.loginId
-                        WHERE q.title LIKE %:keyword%
-                           OR q.content LIKE %:keyword%
+                        WHERE (q.title LIKE %:keyword%
+                           OR q.content LIKE %:keyword%) 
+                           and (:role = "admin" or q.user.loginId = :userid)
                         ORDER BY q.id DESC
             """)
-    Page<QuestionListDto> findAllBy(String keyword, PageRequest attr1);
+    Page<QuestionListDto> findAllBy(String keyword, String userid, String role, PageRequest attr1);
 
 
     @Query(value = """

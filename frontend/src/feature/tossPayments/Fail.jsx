@@ -5,10 +5,18 @@ import { toast } from "react-toastify";
 export function FailPage() {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
-  // todo : 실패 테스트 해봐야 함
   useEffect(() => {
     toast(searchParams.get("message"), { type: "error" });
-    navigate(-1);
+    if (window.opener) {
+      window.opener.postMessage(
+        {
+          type: "PAY_FAIL",
+          data: searchParams,
+        },
+        "*", // 또는 부모 도메인
+      );
+      setTimeout(() => window.close(), 300);
+    }
   }, []);
 
   return (

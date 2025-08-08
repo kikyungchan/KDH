@@ -37,10 +37,10 @@ public class FaqListDto {
             long hours = seconds / 3600;
             return hours + "시간 전";
         } else if (seconds < 60 * 60 * 24 * 7) { // 1주일
-            long days = seconds / 3600 / 24;
+            long days = seconds / (3600 * 24);
             return days + "일 전";
         } else if (seconds < 60 * 60 * 24 * 7 * 4) { // 4주
-            long weeks = seconds / 3600 / 24 * 7;
+            long weeks = seconds / (3600 * 24 * 7);
             return weeks + "주 전";
         } else {
             // Period를 사용하여 정확한 월/년 계산
@@ -79,10 +79,10 @@ public class FaqListDto {
             long hours = seconds / 3600;
             return hours + "시간 전";
         } else if (seconds < 60 * 60 * 24 * 7) { // 1주일
-            long days = seconds / 3600 / 24;
+            long days = seconds / (3600 * 24);
             return days + "일 전";
         } else if (seconds < 60 * 60 * 24 * 7 * 4) { // 4주
-            long weeks = seconds / 3600 / 24 * 7;
+            long weeks = seconds / (3600 * 24 * 7);
             return weeks + "주 전";
         } else {
             // Period를 사용하여 정확한 월/년 계산

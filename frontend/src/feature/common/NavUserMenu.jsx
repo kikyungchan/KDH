@@ -14,8 +14,8 @@ export function NavUserMenu({ user, logout, isAdmin }) {
       <ul
         tabIndex={0}
         className="menu dropdown-content z-[999]
-      text-lg
-       p-2 shadow bg-white text-black rounded-box w-52"
+        text-lg
+          p-2 shadow bg-white text-black rounded-box w-52"
       >
         {user ? (
           <>

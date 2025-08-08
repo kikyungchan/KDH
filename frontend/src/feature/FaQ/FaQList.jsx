@@ -13,7 +13,7 @@ import {
   Table,
   ToggleButton,
 } from "react-bootstrap";
-import { useNavigate, useSearchParams } from "react-router";
+import { Link, useNavigate, useSearchParams } from "react-router";
 import { useContext, useEffect, useState } from "react";
 import axios from "axios";
 import { toast } from "react-toastify";
@@ -25,16 +25,17 @@ export function FaQList() {
   const navigate = useNavigate();
   const [pageInfo, setPageInfo] = useState(null);
   const [faqList, setFaQList] = useState(null);
-  const [modalShow, setModalShow] = useState();
+  const [modalShow, setModalShow] = useState(false);
   const [title, setTitle] = useState();
   const [content, setContent] = useState();
-  const [category, setCategory] = useState(null);
+  const [category, setCategory] = useState("");
   const [searchCategory, setsearchCategory] = useState("");
   const [searchParams, setSearchParams] = useSearchParams("1");
+  const [openId, setOpenId] = useState(null); // 열린 아이디(id)만 저장
   const radios = [
-    { name: "상품목록", value: "1", fnc: handleQnaAddButtonClick },
-    { name: "문의내역", value: "2", fnc: handleQnaListButtonClick },
-    { name: "자주 묻는 질문", value: "3", fnc: handleFaQListButtonClick },
+    { name: "1:1 문의하기", value: "1", path: "/chat/chatting" },
+    { name: "문의내역", value: "2", path: "/qna/list" },
+    { name: "자주 묻는 질문", value: "3", path: "/faq/list" },
   ];
   const catlist = [
     { name: "전체", value: 0 },
@@ -61,6 +62,18 @@ export function FaQList() {
         // newSearchParams.set("P", PAGE);
         // newSearchParams.set("q", );
         // setSearchParams(newSearchParams);
+        const hash = window.location.hash.replace("#", "");
+        if (hash) {
+          setTimeout(() => {
+            const el = document.getElementById(hash);
+            if (el && el.type === "checkbox") {
+              el.checked = true;
+              console.log("checked : ", hash);
+              // 부드럽게 스크롤 이동도 추가하고 싶으면 아래처럼!
+              el.scrollIntoView({ behavior: "smooth", block: "center" });
+            }
+          }, 0);
+        }
       })
       .catch((err) => {
         console.log(err.data);
@@ -83,24 +96,11 @@ export function FaQList() {
     setSearchParams(categorySearchParams);
   }
 
-  function handleQnaAddButtonClick() {
-    navigate("/product/list");
-  }
-
-  function handleQnaListButtonClick() {
-    navigate("/qna/list");
-  }
-
-  function handleFaQListButtonClick() {
-    navigate("/faq/list");
-  }
-
   // useState 안전장치
   if (!faqList) {
     return <span className="loading loading-spinner"></span>;
   }
 
-  // todo : 백엔드도 text형으로 바꾸기
   function handleSaveButtonClick() {
     axios
       .post("/api/faq/add", {
@@ -145,7 +145,7 @@ export function FaQList() {
                   <ul>
                     <li className="mb-2 py-1">
                       <a
-                        href="/faq/list?c=2&#배송은+얼마나+걸리나요?"
+                        href="/faq/list?c=2&#4"
                         className="flex items-center text-[#1B64DA] hover:underline"
                       >
                         <span className="bg-blue-100 text-[#1B64DA] rounded-full w-5 h-5 flex items-center justify-center mr-2 text-xs font-bold">
@@ -156,7 +156,7 @@ export function FaQList() {
                     </li>
                     <li className="mb-2 py-1">
                       <a
-                        href="/faq/list?c=3&#주문+취소는+어떻게+하나요"
+                        href="/faq/list?c=3&#9"
                         className="flex items-center text-[#1B64DA] hover:underline"
                       >
                         <span className="bg-blue-100 text-[#1B64DA] rounded-full w-5 h-5 flex items-center justify-center mr-2 text-xs font-bold">
@@ -167,7 +167,7 @@ export function FaQList() {
                     </li>
                     <li className="mb-2 py-1">
                       <a
-                        href="/faq/list?c=7&#제품의+자세한+정보는+어떻게+알+수+있나요"
+                        href="/faq/list?c=7&#7"
                         className="flex items-center text-[#1B64DA] hover:underline"
                       >
                         <span className="bg-blue-100 text-[#1B64DA] rounded-full w-5 h-5 flex items-center justify-center mr-2 text-xs font-bold">
@@ -178,24 +178,24 @@ export function FaQList() {
                     </li>
                     <li className="mb-2 py-1">
                       <a
-                        href="/faq/list?c=4&#제품이+불량입니다.+반품+혹은+교환은+어떻게+하나요"
+                        href="/faq/list?c=4&#10"
                         className="flex items-center text-blue-600 hover:underline"
                       >
                         <span className="bg-blue-100 text-blue-600 rounded-full w-5 h-5 flex items-center justify-center mr-2 text-xs font-bold">
                           Q
                         </span>
-                        제품이 불량일 때는?
+                        제품의 교환 또는 반품을 할 수 있나요?
                       </a>
                     </li>
                     <li className="mb-2 py-1">
                       <a
-                        href="/faq/list?c=6&#카카오+계정으로+로그인+하면+&amp;#39;이미+카카오로+가입하신+이메일입니다&amp;#39;+라고+나오는데+어떻게+해야+하나요"
+                        href="/faq/list?c=6&#8"
                         className="flex items-center text-blue-600 hover:underline"
                       >
                         <span className="bg-blue-100 text-blue-600 rounded-full w-5 h-5 flex items-center justify-center mr-2 text-xs font-bold">
                           Q
                         </span>
-                        카카오 계정으로 로그인하면 이미 가입되었다고 합니다.
+                        비밀번호 변겅은 어떻게 하나요?
                       </a>
                     </li>
                   </ul>
@@ -217,19 +217,18 @@ export function FaQList() {
                       <li>토요일, 공휴일: 오늘의집 직접배송 주문건 상담</li>
                       <li>일요일: 휴무</li>
                     </ol>
-                    <ButtonGroup className="mt-22 ">
+                    <ButtonGroup className="mt-10 flex-wrap flex justify-between">
                       {radios.map((radio, idx) => (
-                        <input
+                        <Link
                           key={idx}
-                          className="btn btn-outline mx-2 my-1
-                          btn-block lg:w-auto lg:my-auto"
-                          type="radio"
-                          name="바로가기"
-                          aria-label={radio.name}
-                          value={radio.value}
-                          checked={idx === 2}
-                          onClick={radio.fnc}
-                        />
+                          className={`btn w-full py-2  ${idx === 2 ? "btn-primary lg:w-full block mx-0" : "btn-outline px-[clamp(16px,calc(9vw-60px),90px)]"}
+                           my-1
+                          btn-block lg:w-auto lg:my-auto`}
+                          // onClick={radio.fnc}
+                          to={radio.path}
+                        >
+                          {radio.name}
+                        </Link>
                       ))}
                     </ButtonGroup>
                   </div>
@@ -240,7 +239,7 @@ export function FaQList() {
             <div>
               <nav className="pt-10 px-6 pb-0">
                 {catlist.map((cat, idx) => (
-                  <label for={cat.name} key={cat.name}>
+                  <label htmlFor={cat.name} key={cat.name}>
                     <button
                       id={cat.name}
                       type="checkbox"
@@ -258,14 +257,21 @@ export function FaQList() {
             </div>
             <br />
             {faqList.length > 0 ? (
-              <>
-                {faqList.map((faq) => (
-                  <div className="collapse collapse-plus bg-base-100 border border-base-300">
+              <div>
+                {faqList.map((faq, i) => (
+                  <div
+                    key={i}
+                    className="collapse collapse-plus bg-base-100 border border-base-300"
+                  >
                     <input
-                      id={faq.question}
+                      id={faq.id}
                       type="checkbox"
                       name="faqlist"
                       className="w-full"
+                      checked={openId === faq.id}
+                      onChange={() =>
+                        setOpenId(openId === faq.id ? null : faq.id)
+                      }
                     />
                     <div className="collapse-title font-semibold flex items-center">
                       <span className="bg-blue-100 text-blue-600 rounded-full w-5 h-5 flex items-center justify-center mr-2 text-xs font-bold">
@@ -278,11 +284,9 @@ export function FaQList() {
                     </pre>
                   </div>
                 ))}
-              </>
+              </div>
             ) : (
-              <p>
-                작성된 글이 없습니다. <br />새 글을 작성해 보세요.
-              </p>
+              <p>faq를 정상적으로 불러오지 못했습니다</p>
             )}
             <br />
             <div>
@@ -293,9 +297,10 @@ export function FaQList() {
                 // </Button>
                 <button
                   className="btn btn-accent"
-                  onClick={() =>
-                    document.getElementById("my_modal_1").showModal()
-                  }
+                  // onClick={() =>
+                  // document.getElementById("my_modal_1").showModal()
+                  // }
+                  onClick={setModalShow}
                 >
                   등록하기
                 </button>
@@ -304,58 +309,73 @@ export function FaQList() {
           </div>
         </Col>
         {/*  todo : admin 확인되면 modal 띄워서 자주 묻는 질문 CUD 할 수 있게 기능 추가*/}
-
-        <dialog id="my_modal_1" className="modal">
-          <div className="modal-box">
-            <h3 className="font-bold text-lg">FaQ 등록</h3>
-            <br />
-            <fieldset className="fieldset">
-              <legend className="fieldset-legend">카테고리</legend>
-              <select
-                defaultValue="Pick a browser"
-                className="select"
-                onChange={(e) => setCategory(e.target.value)}
-              >
-                <option hidden selected value="0">
-                  카테고리를 선택해주세요
-                </option>
-                {catlist.map((cat, idx) => (
-                  <option value={cat.value}>{cat.name}</option>
-                ))}
-              </select>
-            </fieldset>
-            <fieldset className="fieldset">
-              <legend className="fieldset-legend">faq 질문</legend>
-              <input
-                type="text"
-                className="input w-full"
-                placeholder="질문을 입력해주세요"
-                value={title}
-                onChange={(e) => setTitle(e.target.value)}
-              ></input>
-            </fieldset>
-            <fieldset className="fieldset">
-              <legend className="fieldset-legend">faq 답변</legend>
-              <textarea
-                className="textarea h-24 w-full"
-                placeholder="답변을 입력해주세요"
-                value={content}
-                onChange={(e) => setContent(e.target.value)}
-              ></textarea>
-            </fieldset>
-            <div className="modal-action">
-              <button
-                className="btn mx-1 btn-accent"
-                onClick={handleSaveButtonClick}
-              >
-                등록
-              </button>
-              <form method="dialog">
-                <button className="btn mx-1 btn-default">취소</button>
-              </form>
+        {modalShow && (
+          <div id="my_modal_1" className="modal modal-open">
+            <div className="modal-box">
+              <h3 className="font-bold text-lg">FaQ 등록</h3>
+              <br />
+              <fieldset className="fieldset">
+                <legend className="fieldset-legend">카테고리</legend>
+                <select
+                  className="select"
+                  value={category}
+                  onChange={(e) => setCategory(e.target.value)}
+                >
+                  <option hidden disabled value="">
+                    카테고리를 선택해주세요
+                  </option>
+                  {catlist.map((cat, idx) => (
+                    <option key={idx} value={cat.value}>
+                      {cat.name}
+                    </option>
+                  ))}
+                </select>
+              </fieldset>
+              <fieldset className="fieldset">
+                <legend className="fieldset-legend">faq 질문</legend>
+                <input
+                  type="text"
+                  className="input w-full"
+                  placeholder="질문을 입력해주세요"
+                  value={title}
+                  onChange={(e) => setTitle(e.target.value)}
+                ></input>
+              </fieldset>
+              <fieldset className="fieldset">
+                <legend className="fieldset-legend">faq 답변</legend>
+                <textarea
+                  className="textarea h-24 w-full"
+                  placeholder="답변을 입력해주세요"
+                  value={content}
+                  onChange={(e) => setContent(e.target.value)}
+                ></textarea>
+              </fieldset>
+              <div className="modal-action">
+                <button
+                  className="btn mx-1 btn-accent"
+                  onClick={handleSaveButtonClick}
+                >
+                  등록
+                </button>
+                <form method="dialog">
+                  <button
+                    className="btn mx-1 btn-default"
+                    onClick={() => setModalShow(false)}
+                  >
+                    취소
+                  </button>
+                </form>
+                <button
+                  className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2"
+                  onClick={() => setModalShow(false)}
+                  aria-label="Close"
+                >
+                  ✕
+                </button>
+              </div>
             </div>
           </div>
-        </dialog>
+        )}
       </Row>
     </>
   );
