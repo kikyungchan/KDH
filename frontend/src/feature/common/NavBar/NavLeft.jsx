@@ -110,10 +110,11 @@ function NavLeft({ user, isAdmin, handleCategoryClick }) {
           </li>
         </ul>
       </div>
-
-      <Link to="/product/regist" className="btn btn-ghost text-xl">
-        상품등록
-      </Link>
+      {user !== null && isAdmin && (
+        <Link to="/product/regist" className="btn btn-ghost text-xl">
+          상품등록
+        </Link>
+      )}
       {user !== null && isAdmin && (
         <Link to="/member/list" className="btn btn-ghost text-xl">
           회원목록
