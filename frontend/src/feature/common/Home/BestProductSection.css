@@ -86,25 +86,19 @@
     text-align: center;
 }
 
-/*@media (max-width: 767px) {*/
-/*    .best-product-section {*/
-/*        max-width: min(100%, 720px);*/
-/*    }*/
-/*}*/
-/* 639px 이하는 2줄까지만 보이게 (그라데이션 없음) */
+
 @media (max-width: 639px) {
     .best-category-tabs {
-        flex-wrap: wrap; /* 여러 줄 */
-        gap: 10px; /* 행/열 간격 그대로 */
-        max-height: 84px; /* 대략 2줄 높이 (필요시 76~92px로 미세조정) */
-        overflow: hidden; /* 넘치는 항목 안 보이게 */
+        flex-wrap: wrap;
+        gap: 10px;
+        max-height: 84px;
+        overflow: hidden;
         padding-bottom: 0;
-        -webkit-overflow-scrolling: auto; /* 스크롤 효과 제거 */
-        transition: max-height .2s ease; /* 펼칠 때 부드럽게 */
+        -webkit-overflow-scrolling: auto;
+        transition: max-height .2s ease;
     }
 
 
-    /* 그라데이션 완전 제거 */
     .best-category-tabs::after {
         content: none !important;
         display: none !important;
