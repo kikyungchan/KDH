@@ -98,6 +98,11 @@ export function GuestOrder() {
                   </button>
                 </div>
               </form>
+              <div className="text-right mt-2 text-sm">
+                <Link to="/login" className="link link-hover text-gray-700">
+                  돌아가기
+                </Link>
+              </div>
             </div>
           </div>
         </div>

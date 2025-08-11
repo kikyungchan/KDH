@@ -24,12 +24,13 @@ export function ProductOrderComplete() {
 
             {/* 주문 상품 정보 */}
             <div className="order-box rounded">
-              <h4 className="mb-3">주문 상품 정보</h4>
+              <h4 className="font-semibold mb-3">주문 상품 정보</h4>
               {items.map((item, idx) => (
                 <div key={idx} className="order-product mb-3">
                   <img
                     src={item.imagePath}
                     alt="상품"
+                    className="rounded"
                     style={{
                       width: "150px",
                       height: "150px",
@@ -39,7 +40,9 @@ export function ProductOrderComplete() {
                   <div className="order-product-info">
                     <div className="font-bold">{item.productName}</div>
                     <div className="text-sm text-gray-700">
-                      {item.optionName ?? item.option} / {item.quantity}개
+                      {(item.optionName ?? item.option)
+                        ? `${item.optionName ?? item.option} / ${item.quantity}개`
+                        : `${item.quantity}개`}
                     </div>
                     <div className="text-sm">
                       {(item.price * item.quantity).toLocaleString()}원
@@ -58,26 +61,44 @@ export function ProductOrderComplete() {
 
             {/* 주문자 정보 */}
             <div className="order-box rounded">
-              <h4 className="mb-3">주문자 정보</h4>
-              <div>이름: {orderer.name}</div>
-              <div>연락처: {orderer.phone}</div>
-              <div>주소: {orderer.address}</div>
+              <h4 className="font-semibold mb-3">주문자 정보</h4>
+              <div className="flex">
+                <div className="w-40">
+                  <div>이름</div>
+                  <div>연락처</div>
+                  <div>주소</div>
+                </div>
+                <div>
+                  <div>{orderer.name}</div>
+                  <div>{orderer.phone}</div>
+                  <div>{orderer.address}</div>
+                </div>
+              </div>
             </div>
 
             {/* 배송 정보 */}
             <div className="order-box rounded">
-              <h4 className="mb-3">배송 정보</h4>
-              <div>수령인: {receiver.name}</div>
-              <div>연락처: {receiver.phone}</div>
-              <div>
-                주소: ({receiver.postalCode}) {receiver.address}{" "}
-                {receiver.detailedAddress}
+              <h4 className="font-semibold mb-3">배송 정보</h4>
+              <div className="flex">
+                <div className="w-40">
+                  <div>받는사람</div>
+                  <div>연락처</div>
+                  <div>주소</div>
+                </div>
+                <div>
+                  <div>{receiver.name}</div>
+                  <div>{receiver.phone}</div>
+                  <div>
+                    {receiver.address} {receiver.detailedAddress}({" "}
+                    {receiver.postalCode} )
+                  </div>
+                </div>
               </div>
             </div>
 
             {/* 배송 메모 */}
             <div className="order-box rounded">
-              <h4 className="mb-3">배송 메모</h4>
+              <h4 className="font-semibold mb-3">배송 메모</h4>
               <div>{memo || "없음"}</div>
             </div>
 

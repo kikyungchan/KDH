@@ -44,63 +44,34 @@ export function OrderDetail() {
             <div className="mb-8">
               <h2 className="mb-6 text-center text-2xl font-bold">주문 상세</h2>
               <br />
-              <div>
-                <div>
-                  주문일자 : {new Date(order.orderDate).toLocaleDateString()}
+              <div className="flex">
+                <div className="font-semibold w-40">
+                  <div>주문일자</div>
+                  <div>주문번호</div>
                 </div>
-                <div className="text-sm">주문번호 : {order.orderToken}</div>
+                <div className="w-full">
+                  <div>{new Date(order.orderDate).toLocaleDateString()}</div>
+                  <div>{order.orderToken}</div>
+                </div>
               </div>
               <hr className="border-t border-gray-300 my-3" />
-              <div>
-                <table>
-                  <tbody className="w-full table-fixed">
-                    <tr>
-                      <td className="w-1/4 text-left">이름</td>
-                      <td className="text-left">{order.memberName}</td>
-                    </tr>
-                    <tr>
-                      <td className="w-1/4">연락수 처</td>
-                      <td className="td-left">{order.phone}</td>
-                    </tr>
-                    <tr>
-                      <td className="w-1/4">우편번호</td>
-                      <td className="td-left">{order.zipcode}</td>
-                    </tr>
-                    <tr>
-                      <td>주소</td>
-                      <td>{order.shippingAddress}</td>
-                    </tr>
-                    <tr>
-                      <td>상세주소</td>
-                      <td>{order.addressDetail}</td>
-                    </tr>
-                    <tr>
-                      <td>배송메세지</td>
-                      <td>{order.memo}</td>
-                    </tr>
-                  </tbody>
-                </table>
-                {/* TODO : 테이블로 정리해두기 */}
-                <ul>
-                  <li className="row">
-                    <span className="cell">1행 1열</span>
-                    <span className="cell">1행 2열</span>
-                  </li>
-                  <li className="row">
-                    <span className="cell">2행 1열</span>
-                    <span className="cell">2행 2열</span>
-                  </li>
-                  <li className="row">
-                    <span className="cell">3행 1열</span>
-                    <span className="cell">3행 2열</span>
-                  </li>
-                  <li>이름 : {order.memberName}</li>
-                  <li>연락처 : {order.phone}</li>
-                  <li>우편번호 : {order.zipcode}</li>
-                  <li>주소 : {order.shippingAddress}</li>
-                  <li>상세주소 : {order.addressDetail}</li>
-                  <li>배송메모 : {order.memo}</li>
-                </ul>
+              <div className="flex">
+                <div className="font-semibold w-40">
+                  <div>이름</div>
+                  <div>연락처</div>
+                  <div>우편번호</div>
+                  <div>주소</div>
+                  <div>상세주소</div>
+                  <div>배송메세지</div>
+                </div>
+                <div className="w-full">
+                  <div>{order.memberName}</div>
+                  <div>{order.phone}</div>
+                  <div>{order.zipcode}</div>
+                  <div>{order.shippingAddress}</div>
+                  <div>{order.addressDetail}</div>
+                  <div>{order.memo}</div>
+                </div>
               </div>
               <hr className="border-t border-gray-300 my-3" />
               <div>
