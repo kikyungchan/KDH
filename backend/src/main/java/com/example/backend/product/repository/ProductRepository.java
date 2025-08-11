@@ -28,7 +28,7 @@ public interface ProductRepository extends JpaRepository<Product, Integer> {
             SELECT p FROM Product p
             LEFT JOIN OrderItem oi ON oi.product = p
             GROUP BY p
-            ORDER BY COUNT(oi.id) DESC
+            ORDER BY SUM(oi.quantity) DESC
             """)
     Page<Product> findAllOrderByPopularity(Pageable pageable);
 
@@ -40,7 +40,7 @@ public interface ProductRepository extends JpaRepository<Product, Integer> {
                    OR LOWER(p.info) LIKE LOWER(CONCAT('%', :keyword, '%'))
                    OR LOWER(p.detailText) LIKE LOWER(CONCAT('%', :keyword, '%'))
                 GROUP BY p
-                ORDER BY COUNT(oi.id) DESC
+                ORDER BY SUM(oi.quantity) DESC
             """)
     Page<Product> findByKeywordOrderByPopularity(String keyword, Pageable pageable);
 
@@ -61,6 +61,7 @@ public interface ProductRepository extends JpaRepository<Product, Integer> {
             """)
     List<ProductMainSlideDto> findHotProductsRandomLimit(LocalDateTime oneWeekAgo, Pageable pageable);
 
+    // 검색쿼리
     @Query("SELECT p FROM Product p WHERE p.category = :category AND " +
            "(LOWER(p.productName) LIKE LOWER(CONCAT('%', :keyword, '%')) " +
            "OR LOWER(p.info) LIKE LOWER(CONCAT('%', :keyword, '%')) " +

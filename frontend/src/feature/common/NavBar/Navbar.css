@@ -73,9 +73,9 @@
 
 .search-bar-popup {
     position: absolute;
-    top: 55%;
+    top: 53%;
     transform: translateY(-50%);
-    right: 17%;
+    right: 13%;
     display: none;
     align-items: center;
     background: #f1f1f1;
