@@ -39,11 +39,11 @@ export function OrderDetail() {
   return (
     <div className="page-wrapper">
       <div className="center-top-container">
-        <div className="w-full max-w-[600px] mx-auto px-4">
+        <div className="w-full max-w-[700px] mx-auto px-4">
           <div className="rounded-card">
             <div className="mb-8">
               <h2 className="mb-6 text-center text-2xl font-bold">주문 상세</h2>
-              <div className="border border-gray-200 rounded px-3 py-2 mb-2">
+              <div className="border border-gray-100 rounded px-3 py-2 mb-2">
                 <div className="flex">
                   <div className="w-40">
                     <div>주문일자</div>
@@ -55,7 +55,7 @@ export function OrderDetail() {
                   </div>
                 </div>
               </div>
-              <div className="border border-gray-200 rounded px-3 py-2 mb-2">
+              <div className="border border-gray-100 rounded px-3 py-2 mb-2">
                 <h4 className="font-semibold mb-2">주문 정보</h4>
                 <div className="flex">
                   <div className="w-40 ">
@@ -68,7 +68,7 @@ export function OrderDetail() {
                   </div>
                 </div>
               </div>
-              <div className="border border-gray-200 rounded px-3 py-2 mb-2">
+              <div className="border border-gray-100 rounded px-3 py-2 mb-2">
                 <h4 className="font-semibold mb-2">배송지 정보</h4>
                 <div className="flex">
                   <div className="w-40">
@@ -89,7 +89,7 @@ export function OrderDetail() {
                   </div>
                 </div>
               </div>
-              <div className="border border-gray-200 rounded px-3 py-2 mb-2">
+              <div className="border border-gray-100 rounded px-3 py-2 mb-2">
                 <h4 className="font-semibold mb-2">주문 상품</h4>
                 <div>
                   {order.orderItems.map((item, index) => (
@@ -120,21 +120,11 @@ export function OrderDetail() {
                   ))}
                 </div>
               </div>
-              <div className="border border-white px-3 py-1 mb-2">
+              <div className="border border-white px-3 py-1">
                 <div>
                   <div>주문 상품 : {order.orderItems.length}개</div>
                   <div>총 금액 : {order.totalPrice}</div>
                 </div>
-              </div>
-              <div className="text-end mt-3">
-                <button
-                  className="btn btn-outline btn-neutral"
-                  onClick={() => {
-                    navigate("/product/order/list");
-                  }}
-                >
-                  목록으로
-                </button>
               </div>
             </div>
           </div>

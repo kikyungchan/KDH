@@ -28,7 +28,7 @@ export function OrderList() {
   return (
     <div className="page-wrapper">
       <div className="center-top-container">
-        <div className="w-full max-w-[600px] mx-auto px-4">
+        <div className="w-full max-w-[700px] mx-auto px-4">
           <div className="rounded-card">
             <div className="mb-8">
               <h2 className="mb-6 text-center text-2xl font-bold">주문 목록</h2>
