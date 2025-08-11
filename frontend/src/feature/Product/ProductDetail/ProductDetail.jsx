@@ -286,15 +286,17 @@ export function ProductDetail() {
                     <Button className="btn-danger" onClick={handleDeleteButton}>
                       삭제
                     </Button>
-                    <Button
-                      className="btn-primary"
-                      onClick={handleQuestionButton}
-                      disabled={isProcessing}
-                    >
-                      문의하기
-                    </Button>
                   </div>
-                  {/*
+                </>
+              )}
+              <Button
+                className="btn-primary mt-3"
+                onClick={handleQuestionButton}
+                disabled={isProcessing}
+              >
+                문의하기
+              </Button>
+              {/*
     todo : faq 페이지, 추천해주는 질문 몇개를 골라서 3개 이상 답하도록
 
       <div>
@@ -336,8 +338,6 @@ export function ProductDetail() {
           </div>
         </div>
       </div>*/}
-                </>
-              )}
             </div>
           </div>
         </div>

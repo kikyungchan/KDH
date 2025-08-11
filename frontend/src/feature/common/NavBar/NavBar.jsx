@@ -111,7 +111,11 @@ function NavBar(props) {
             </Link>
           </div>
           {/*왼쪽 메뉴*/}
-          <NavLeft handleCategoryClick={handleCategoryClick} />
+          <NavLeft
+            user={user}
+            isAdmin={isAdmin}
+            handleCategoryClick={handleCategoryClick}
+          />
           {/* 오른쪽 아이콘 */}
           <NavRight
             // user={user}

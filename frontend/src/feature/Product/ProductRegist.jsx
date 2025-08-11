@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router";
 import "./css/ProductRegist.css";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import axios from "axios";
 
 export function ProductRegist() {
@@ -9,7 +9,6 @@ export function ProductRegist() {
 
   const [detailImages, setDetailImages] = useState([]);
   const [detailPreview, setDetailPreview] = useState([]);
-  const [previewImages, setPreviewImages] = useState([]); // 미리보기 URL
   const navigate = useNavigate();
   const [detailText, setDetailText] = useState("");
   const [productName, setProductName] = useState("");
@@ -17,21 +16,54 @@ export function ProductRegist() {
   const [quantity, setQuantity] = useState("");
   const [category, setCategory] = useState("");
   const [info, setInfo] = useState("");
-  const [images, setImages] = useState([]);
   const [options, setOptions] = useState([]);
 
+  useEffect(() => {
+    return () => {
+      thumbnailPreview.forEach((u) => URL.revokeObjectURL(u));
+      detailPreview.forEach((u) => URL.revokeObjectURL(u));
+    };
+  }, []);
+
+  // 파일 식별용 키
+  const fileKey = (f) => `${f.name}_${f.size}_${f.lastModified}`;
+
+  // 썸네일 이미지 추가 (기존 유지 + 뒤에 append)
   const handleThumbnailChange = (e) => {
-    const files = Array.from(e.target.files);
-    setThumbnails(files);
-    const previews = files.map((file) => URL.createObjectURL(file));
-    setThumbnailPreview(previews);
+    const files = Array.from(e.target.files || []);
+    if (files.length === 0) return;
+
+    setThumbnails((prev) => {
+      const prevMap = new Map(prev.map((f) => [fileKey(f), f]));
+      files.forEach((f) => prevMap.set(fileKey(f), f));
+      return Array.from(prevMap.values());
+    });
+
+    setThumbnailPreview((prev) => [
+      ...prev,
+      ...files.map((file) => URL.createObjectURL(file)),
+    ]);
+
+    e.target.value = "";
   };
 
+  // 본문 이미지 추가 (기존 유지 + 뒤에 append)
   const handleDetailImageChange = (e) => {
-    const files = Array.from(e.target.files);
-    setDetailImages(files);
-    const previews = files.map((file) => URL.createObjectURL(file));
-    setDetailPreview(previews);
+    const files = Array.from(e.target.files || []);
+    if (files.length === 0) return;
+
+    setDetailImages((prev) => {
+      const prevMap = new Map(prev.map((f) => [fileKey(f), f]));
+      files.forEach((f) => prevMap.set(fileKey(f), f));
+      return Array.from(prevMap.values());
+    });
+
+    setDetailPreview((prev) => [
+      ...prev,
+      ...files.map((file) => URL.createObjectURL(file)),
+    ]);
+
+    e.target.value = "";
   };
 
   const handleRemoveThumbnail = (idx) => {
@@ -41,6 +73,7 @@ export function ProductRegist() {
     newPreviews.splice(idx, 1);
     setThumbnails(newFiles);
     setThumbnailPreview(newPreviews);
+    URL.revokeObjectURL(thumbnailPreview[idx]); // 썸네일 삭제 시
   };
 
   const handleRemoveDetailImage = (idx) => {
@@ -50,6 +83,7 @@ export function ProductRegist() {
     newPreviews.splice(idx, 1);
     setDetailImages(newFiles);
     setDetailPreview(newPreviews);
+    URL.revokeObjectURL(detailPreview[idx]); // 본문 이미지 삭제 시
   };
 
   function handleSubmit(e) {
@@ -119,27 +153,6 @@ export function ProductRegist() {
       });
   }
 
-  function handleRemoveImage(index) {
-    setImages((prev) => {
-      const updated = [...prev];
-      updated.splice(index, 1);
-      return updated;
-    });
-    setPreviewImages((prev) => {
-      const updated = [...prev];
-      updated.splice(index, 1);
-      return updated;
-    });
-  }
-
-  function handleImageChange(e) {
-    const files = Array.from(e.target.files);
-    setImages((prev) => [...prev, ...files]);
-
-    const previews = files.map((file) => URL.createObjectURL(file));
-    setPreviewImages((prev) => [...prev, ...previews]);
-  }
-
   return (
     <div className="container">
       <form onSubmit={handleSubmit}>
@@ -193,16 +206,6 @@ export function ProductRegist() {
             onChange={(e) => setInfo(e.target.value)}
           />
         </div>
-        {/* 본문영역 텍스트 삽입 폼 필요하면 추가.*/}
-        {/*<div className="product-regist-field">*/}
-        {/*  <label className="product-regist-label">본문영역</label>*/}
-        {/*  <textarea*/}
-        {/*    rows={5}*/}
-        {/*    className="product-regist-textarea"*/}
-        {/*    value={detailText}*/}
-        {/*    onChange={(e) => setDetailText(e.target.value)}*/}
-        {/*  />*/}
-        {/*</div>*/}
 
         <div className="product-regist-options">
           <label className="product-regist-label">옵션 목록</label>
@@ -264,9 +267,7 @@ export function ProductRegist() {
             >
               파일 선택
             </label>
-            <span className="product-regist-file-count">
-              파일 {thumbnails.length}개
-            </span>
+            <span className="product-regist-file-count"></span>
             <input
               id="thumbnailFileInput"
               type="file"
@@ -308,9 +309,7 @@ export function ProductRegist() {
             >
               파일 선택
             </label>
-            <span className="product-regist-file-count">
-              파일 {detailImages.length}개
-            </span>
+            <span className="product-regist-file-count"></span>
             <input
               id="detailFileInput"
               type="file"
