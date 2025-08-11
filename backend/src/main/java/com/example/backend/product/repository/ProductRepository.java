@@ -76,7 +76,7 @@ public interface ProductRepository extends JpaRepository<Product, Integer> {
                 LEFT JOIN OrderItem oi ON oi.product = p
                 WHERE p.category = :category
                 GROUP BY p
-                ORDER BY COUNT(oi.id) DESC
+                ORDER BY SUM(oi.quantity) DESC
             """)
     Page<Product> findByCategoryOrderByPopularity(@Param("category") String category, Pageable pageable);
 
@@ -89,7 +89,7 @@ public interface ProductRepository extends JpaRepository<Product, Integer> {
                     LOWER(p.detailText) LIKE LOWER(CONCAT('%', :keyword, '%'))
                 )
                 GROUP BY p
-                ORDER BY COUNT(oi.id) DESC
+                ORDER BY SUM(oi.quantity) DESC
             """)
     Page<Product> findByCategoryAndKeywordOrderByPopularity(@Param("category") String category, @Param("keyword") String keyword, Pageable pageable);
 
