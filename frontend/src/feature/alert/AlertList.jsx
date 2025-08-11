@@ -68,6 +68,25 @@ export function AlertList() {
             ) : (
               <p>새로운 소식이 없습니다.</p>
             )}
+            <input
+              placeholder="상대방 아이디"
+              value={target}
+              onChange={(e) => setTarget(e.target.value)}
+              style={{ marginRight: 10 }}
+            />
+            <input
+              placeholder="메시지 입력"
+              value={text}
+              onChange={(e) => setText(e.target.value)}
+              onKeyPress={(e) => e.key === "Enter" && sendMessage()}
+              style={{ width: "40%", marginRight: 10 }}
+            />
+            <button
+              className={"btn btn-outline btn-primary"}
+              onClick={sendMessage}
+            >
+              전송
+            </button>
           </div>
         </Col>
       </Row>

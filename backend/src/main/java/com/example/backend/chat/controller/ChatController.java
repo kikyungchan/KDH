@@ -34,6 +34,18 @@ public class ChatController {
         return msg;
     }
 
+    @MessageMapping("/chat/alert")
+    @SendToUser("/queue/alert")
+    public ChatForm sendAlertMessage(ChatForm msg, Principal principal) {
+        msg.setType(ChatForm.MessageType.CHAT);
+        template.convertAndSendToUser(
+                msg.getTo(),                // 받는 사용자 ID
+                "/queue/messages",          // 구독 경로
+                msg                         // 메시지 payload
+        );
+        return msg;
+    }
+
     @MessageMapping("/topic/chat/{roomId}")
     public ChatForm sendTopicMessage(@DestinationVariable String roomId, ChatForm msg, Principal principal) {
         msg.setType(ChatForm.MessageType.CHAT);
