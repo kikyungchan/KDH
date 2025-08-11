@@ -37,24 +37,22 @@ function Home() {
       .get("/api/product/hot-random")
       .then((res) => {
         const leftId = leftVisual?.productId; // 좌측 상품 ID
-        const leftThumb = leftVisual?.storedPath; // 좌측 썸네일 URL
-        const sliced = res.data
-          .slice(0, 10)
-          // 좌측과 ID/이미지 URL이 같은 것은 제외
-          .filter((it) => it.id !== leftId && it.thumbnailUrl !== leftThumb);
+
+        const filtered = res.data.filter((it) => it.id !== leftId);
+
+        const shuffled = [...filtered].sort(() => Math.random() - 0.5);
 
         const messages = [
           "첫구매 최대 2만원 할인!",
           "인기상품 특가!",
           "한정 수량 할인!",
         ];
-        const shuffled = [...sliced]
-          .sort(() => Math.random() - 0.5)
-          .map((item) => ({
-            ...item,
-            message: messages[Math.floor(Math.random() * messages.length)],
-          }));
-        setShuffledItems(shuffled);
+        const withMsg = shuffled.map((item) => ({
+          ...item,
+          message: messages[Math.floor(Math.random() * messages.length)],
+        }));
+
+        setShuffledItems(withMsg.slice(0, 4));
       })
       .catch((err) => console.error("HOT 상품 불러오기 실패:", err));
   }, [leftVisual]); // 좌측배너 먼저 로딩 후 중복 상품 표시안되게.
