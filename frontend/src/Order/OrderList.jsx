@@ -82,6 +82,9 @@ export function OrderList() {
                         <div>
                           <div className="mb-1">상품명: {item.productName}</div>
                           <div className="text-sm mb-1">
+                            <div>커밋</div>
+                            {/* 커밋용 주석
+                             */}
                             옵션: {item.productOption || "기본"} /{" "}
                             {item.quantity}개
                           </div>
