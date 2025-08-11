@@ -39,7 +39,6 @@ public class Order {
     @Column(name = "shipping_address", nullable = false)
     private String shippingAddress;
 
-
     @Column(name = "login_id", nullable = false)
     private String loginId;
 
@@ -67,6 +66,7 @@ public class Order {
         orderItems.add(item);
         item.setOrder(this);
     }
+
     private String zipcode;
 
     private String addressDetail;

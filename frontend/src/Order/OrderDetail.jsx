@@ -43,41 +43,54 @@ export function OrderDetail() {
           <div className="rounded-card">
             <div className="mb-8">
               <h2 className="mb-6 text-center text-2xl font-bold">주문 상세</h2>
-              <br />
-              <div className="flex">
-                <div className="font-semibold w-40">
-                  <div>주문일자</div>
-                  <div>주문번호</div>
-                </div>
-                <div className="w-full">
-                  <div>{new Date(order.orderDate).toLocaleDateString()}</div>
-                  <div>{order.orderToken}</div>
-                </div>
-              </div>
-              <hr className="border-t border-gray-300 my-3" />
-              <div className="flex">
-                <div className="font-semibold w-40">
-                  <div>이름</div>
-                  <div>연락처</div>
-                  <div>우편번호</div>
-                  <div>주소</div>
-                  <div>상세주소</div>
-                  <div>배송메세지</div>
-                </div>
-                <div className="w-full">
-                  <div>{order.memberName}</div>
-                  <div>{order.phone}</div>
-                  <div>{order.zipcode}</div>
-                  <div>{order.shippingAddress}</div>
-                  <div>{order.addressDetail}</div>
-                  <div>{order.memo}</div>
+              <div className="border border-gray-200 rounded px-3 py-2 mb-2">
+                <div className="flex">
+                  <div className="w-40">
+                    <div>주문일자</div>
+                    <div>주문번호</div>
+                  </div>
+                  <div className="w-full">
+                    <div>{new Date(order.orderDate).toLocaleDateString()}</div>
+                    <div>{order.orderToken}</div>
+                  </div>
                 </div>
               </div>
-              <hr className="border-t border-gray-300 my-3" />
-              <div>
-                <div className="mb-2">
-                  주문 상품 {order.orderItems.length}개
+              <div className="border border-gray-200 rounded px-3 py-2 mb-2">
+                <h4 className="font-semibold mb-2">주문 정보</h4>
+                <div className="flex">
+                  <div className="w-40 ">
+                    <div>이름</div>
+                    <div>연락처</div>
+                  </div>
+                  <div className="w-full">
+                    <div>{order.memberName}</div>
+                    <div>{order.phone}</div>
+                  </div>
                 </div>
+              </div>
+              <div className="border border-gray-200 rounded px-3 py-2 mb-2">
+                <h4 className="font-semibold mb-2">배송지 정보</h4>
+                <div className="flex">
+                  <div className="w-40">
+                    <div>받는 사람</div>
+                    <div>연락처</div>
+                    <div>우편번호</div>
+                    <div>주소</div>
+                    <div>상세주소</div>
+                    <div>배송메세지</div>
+                  </div>
+                  <div className="w-full">
+                    <div>{order.memberName}</div>
+                    <div>{order.phone}</div>
+                    <div>{order.zipcode}</div>
+                    <div>{order.shippingAddress}</div>
+                    <div>{order.addressDetail}</div>
+                    <div>{order.memo}</div>
+                  </div>
+                </div>
+              </div>
+              <div className="border border-gray-200 rounded px-3 py-2 mb-2">
+                <h4 className="font-semibold mb-2">주문 상품</h4>
                 <div>
                   {order.orderItems.map((item, index) => (
                     <div key={index} className="flex gap-3">
@@ -88,24 +101,32 @@ export function OrderDetail() {
                           className="w-32 h-32 rounded"
                         />
                       </div>
-                      <ul className="content-center">
-                        <li>상품명: {item.productName}</li>
-                        <li>옵션: {item.productOption}</li>
-                        <li>수량: {item.quantity}</li>
-                        <li>가격: {item.price.toLocaleString()}원</li>
-                      </ul>
+                      <div className="flex items-center">
+                        <div className="w-15">
+                          <div>상품명 :</div>
+                          <div>옵션 :</div>
+                          <div>수량 :</div>
+                          <div>가격 :</div>
+                        </div>
+                        <div>
+                          <div>{item.productName}</div>
+                          <div>{item.productOption}</div>
+                          <div>{item.quantity}</div>
+                          <div>{item.price.toLocaleString()}원</div>
+                        </div>
+                      </div>
                       <br />
                     </div>
                   ))}
                 </div>
               </div>
-              <hr className="border-t border-gray-300 my-3" />
-              <div>
-                <div>결제정보</div>
-                <div>결제수단</div>
-                <div>총 금액 : {order.totalPrice}</div>
+              <div className="border border-white px-3 py-1 mb-2">
+                <div>
+                  <div>주문 상품 : {order.orderItems.length}개</div>
+                  <div>총 금액 : {order.totalPrice}</div>
+                </div>
               </div>
-              <div className="text-end">
+              <div className="text-end mt-3">
                 <button
                   className="btn btn-outline btn-neutral"
                   onClick={() => {

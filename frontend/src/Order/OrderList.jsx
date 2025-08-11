@@ -67,7 +67,7 @@ export function OrderList() {
                     {order.orderItems.map((item, index) => (
                       <div
                         key={`${order.orderId}-${index}`}
-                        className="flex gap-3"
+                        className="flex gap-3 items-center"
                       >
                         <div className="mb-2">
                           <img
