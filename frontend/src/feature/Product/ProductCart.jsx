@@ -349,150 +349,165 @@ function ProductCart(props) {
                   {/*<hr className="mt-4" />*/}
                 </>
               )}
-              {/*옵션/수량 변경 모달*/}
-              {showModal && selectedItem && (
-                <div
-                  style={{
-                    position: "fixed",
-                    top: 0,
-                    left: 0,
-                    width: "100vw",
-                    height: "100vh",
-                    backgroundColor: "rgba(0, 0, 0, 0.5)",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    zIndex: 9999,
-                  }}
-                >
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4">
+                {/*옵션/수량 변경 모달*/}
+                {showModal && selectedItem && (
                   <div
                     style={{
-                      background: "white",
-                      padding: 24,
-                      width: 400,
-                      borderRadius: 8,
+                      position: "fixed",
+                      top: 0,
+                      left: 0,
+                      width: "100vw",
+                      height: "100vh",
+                      backgroundColor: "rgba(0, 0, 0, 0.5)",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      zIndex: 9999,
                     }}
                   >
-                    <h5>옵션 변경</h5>
-                    {/* 상품 이미지 및 이름 */}
                     <div
                       style={{
-                        display: "flex",
-                        alignItems: "center",
-                        gap: "12px",
-                        marginBottom: 16,
+                        background: "white",
+                        padding: 24,
+                        width: 400,
+                        borderRadius: 8,
                       }}
                     >
-                      <img
-                        src={selectedItem.imagePath}
-                        alt="상품"
-                        style={{ width: 80, height: 80, objectFit: "cover" }}
-                      />
-                      <span>{selectedItem.productName}</span>
-                    </div>
-
-                    {/* 옵션 선택 */}
-                    {(selectedItem.options || []).length > 0 && (
-                      <div>
-                        <label>옵션 선택</label>
-                        <select
-                          className="form-select"
-                          value={
-                            selectedOptionId !== null
-                              ? String(selectedOptionId)
-                              : ""
-                          }
-                          onChange={(e) => {
-                            const value = Number(e.target.value);
-                            setSelectedOptionId(value);
-
-                            // 선택된 옵션의 재고 찾아서 갱신
-                            const selectedOpt = selectedItem.options.find(
-                              (opt) => Number(opt.id) === value,
-                            );
-                            if (selectedOpt) {
-                              setSelectedStock(selectedOpt.stockQuantity); // 재고 갱신
-                            } else {
-                              setSelectedStock(Infinity);
-                            }
-                          }}
-                        >
-                          <option value="">옵션 선택</option>
-                          {selectedItem.options.map((opt) => (
-                            <option key={opt.id} value={String(opt.id)}>
-                              {opt.optionName} (+{opt.price?.toLocaleString()}
-                              원)
-                            </option>
-                          ))}
-                        </select>
+                      <h5 className="font-semibold text-center mb-3">
+                        옵션 / 수량 변경
+                      </h5>
+                      {/* 상품 이미지 및 이름 */}
+                      <div
+                        style={{
+                          display: "flex",
+                          alignItems: "center",
+                          gap: "12px",
+                          marginBottom: 16,
+                        }}
+                      >
+                        <img
+                          src={selectedItem.imagePath}
+                          alt="상품"
+                          style={{ width: 80, height: 80, objectFit: "cover" }}
+                          className="rounded"
+                        />
+                        <span>{selectedItem.productName}</span>
                       </div>
-                    )}
 
-                    {/* 수량 설정 */}
-                    <div className="mt-3 d-flex align-items-center">
-                      <label className="me-3">수량</label>
-                      <button
-                        onClick={() =>
-                          setSelectedQuantity((q) => Math.max(1, q - 1))
-                        }
-                      >
-                        -
-                      </button>
-                      <input
-                        type="number"
-                        min="1"
-                        value={selectedQuantity}
-                        onChange={(e) => {
-                          const value = parseInt(e.target.value, 10);
-                          if (isNaN(value) || value < 1) return;
+                      {/* 옵션 선택 */}
+                      {(selectedItem.options || []).length > 0 && (
+                        <div className="flex items-center ">
+                          <label className="block w-25 font-semibold me-4">
+                            옵션 선택
+                          </label>
+                          <select
+                            className=" select select-bordered w-full"
+                            value={
+                              selectedOptionId !== null
+                                ? String(selectedOptionId)
+                                : ""
+                            }
+                            onChange={(e) => {
+                              const value = Number(e.target.value);
+                              setSelectedOptionId(value);
 
-                          const maxQty = selectedStock ?? Infinity;
-                          if (value > maxQty) {
-                            alert(
-                              `재고 ${maxQty}개 이상 구매하실 수 없습니다.`,
-                            );
-                            setSelectedQuantity(maxQty);
-                          } else {
-                            setSelectedQuantity(value);
-                          }
-                        }}
-                        className="mx-2"
-                        style={{ width: 60, textAlign: "center" }}
-                      />
-                      <button
-                        onClick={() => {
-                          const maxQty = selectedStock ?? Infinity;
-                          if (selectedQuantity + 1 > maxQty) {
-                            alert(
-                              `재고 ${maxQty}개 이상 구매하실 수 없습니다.`,
-                            );
-                            return;
-                          }
-                          setSelectedQuantity((q) => q + 1);
-                        }}
-                      >
-                        +
-                      </button>
-                    </div>
+                              // 선택된 옵션의 재고 찾아서 갱신
+                              const selectedOpt = selectedItem.options.find(
+                                (opt) => Number(opt.id) === value,
+                              );
+                              if (selectedOpt) {
+                                setSelectedStock(selectedOpt.stockQuantity); // 재고 갱신
+                              } else {
+                                setSelectedStock(Infinity);
+                              }
+                            }}
+                          >
+                            <option value="">옵션 선택</option>
+                            {selectedItem.options.map((opt) => (
+                              <option key={opt.id} value={String(opt.id)}>
+                                {opt.optionName} (+{opt.price?.toLocaleString()}
+                                원)
+                              </option>
+                            ))}
+                          </select>
+                        </div>
+                      )}
 
-                    {/* 버튼 영역 */}
-                    <div className="mt-4 d-flex justify-content-end gap-2">
-                      <button
-                        onClick={() => setShowModal(false)}
-                        className="btn btn-secondary"
-                      >
-                        취소
-                      </button>
-                      <button
-                        className="btn btn-dark"
-                        onClick={handleUpdateCartItem}
-                      >
-                        변경
-                      </button>
+                      {/* 수량 설정 */}
+                      <div className="flex mt-4 items-center">
+                        <label className="block w-25 font-semibold mr-9">
+                          수량
+                        </label>
+                        <div className="join">
+                          <button
+                            className="join-item btn"
+                            onClick={() =>
+                              setSelectedQuantity((q) => Math.max(1, q - 1))
+                            }
+                          >
+                            -
+                          </button>
+                          <input
+                            type="number"
+                            min="1"
+                            value={selectedQuantity}
+                            onChange={(e) => {
+                              const value = parseInt(e.target.value, 10);
+                              if (isNaN(value) || value < 1) return;
+
+                              const maxQty = selectedStock ?? Infinity;
+                              if (value > maxQty) {
+                                alert(
+                                  `재고 ${maxQty}개 이상 구매하실 수 없습니다.`,
+                                );
+                                setSelectedQuantity(maxQty);
+                              } else {
+                                setSelectedQuantity(value);
+                              }
+                            }}
+                            className="input input-bordered join-item text-center"
+                            style={{ width: 60, textAlign: "center" }}
+                          />
+                          <button
+                            className="btn join-item"
+                            onClick={() => {
+                              const maxQty = selectedStock ?? Infinity;
+                              if (selectedQuantity + 1 > maxQty) {
+                                alert(
+                                  `재고 ${maxQty}개 이상 구매하실 수 없습니다.`,
+                                );
+                                return;
+                              }
+                              setSelectedQuantity((q) => q + 1);
+                            }}
+                          >
+                            +
+                          </button>
+                        </div>
+                      </div>
+
+                      {/* 버튼 영역 */}
+                      <div className="mt-4 d-flex justify-content-end gap-2">
+                        <button
+                          type="button"
+                          className="btn btn-dark"
+                          onClick={handleUpdateCartItem}
+                        >
+                          변경
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => setShowModal(false)}
+                          className="btn btn-secondary"
+                        >
+                          취소
+                        </button>
+                      </div>
                     </div>
                   </div>
-                </div>
-              )}
+                )}
+              </div>
             </div>
           </main>
           {/* 우측: 주문 요약 sticky */}
