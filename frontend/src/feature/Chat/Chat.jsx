@@ -191,10 +191,10 @@ export function Chat() {
             {/*<h2>1:1 상담 ({user.name})</h2>*/}
 
             {/*채팅 로그*/}
-            <div className="border rounded-lg border-gray-200  h-150 overflow-y-auto mb-2.5">
-              <div className="chat chat-head border-b p-2.5 border-gray-200">
-                <h2>1:1 상담 서비스</h2>
-              </div>
+            <div className="border rounded-t-lg chat chat-head border-b p-2.5 border-gray-300">
+              <h2>1:1 상담 서비스</h2>
+            </div>
+            <div className="border border-gray-300  h-150 overflow-y-auto">
               <div className="chat chat-main p-2.5 ">
                 {/*더미 div*/}
                 {/*삭제 x */}
@@ -210,8 +210,8 @@ export function Chat() {
                       <div className="chat-bubble">{m.message}</div>
                     </div>
                   ) : (
-                    <div className="flex w-full flex-col">
-                      <div className="divider border-gray-200 text-gray-400 text-xs">
+                    <div key={i} className="flex w-full flex-col">
+                      <div className="divider before:bg-gray-300 after:bg-gray-300 text-gray-400 text-xs">
                         {m.message}
                       </div>
                     </div>
@@ -219,37 +219,47 @@ export function Chat() {
                 )}
               </div>
             </div>
-            <input
+            <div className="chat chat-footer border rounded-b-lg p-2 border-gray-300 bg-white mb-2.5 flex items-center gap-2.5">
+              <input
+                placeholder="메시지 입력"
+                value={text}
+                onChange={(e) => setText(e.target.value)}
+                onKeyPress={(e) => e.key === "Enter" && sendGroupMessage()}
+                className="flex-1 text-[1rem] focus:outline-none mx-2"
+              />
+              <button
+                className="btn btn-primary ml-auto"
+                onClick={sendGroupMessage}
+              >
+                전송
+              </button>
+            </div>
+            {/* <input
               placeholder="상대방 아이디"
               value={target}
               onChange={(e) => setTarget(e.target.value)}
               style={{ marginRight: 10 }}
-            />
-            <input
+            />*/}
+            {/*<input
               placeholder="메시지 입력"
               value={text}
               onChange={(e) => setText(e.target.value)}
               onKeyPress={(e) => e.key === "Enter" && sendMessage()}
               style={{ width: "40%", marginRight: 10 }}
-            />
-            <button
+            />*/}
+            {/*<button
               className={"btn btn-outline btn-primary"}
               onClick={sendMessage}
             >
               전송
-            </button>
-            <button
-              className={"btn btn-outline btn-primary"}
-              onClick={sendGroupMessage}
-            >
-              그룹 전송
-            </button>
+            </button>*/}
+
             {clientRef.current && (
               <button
-                className={"btn btn-outline btn-primary"}
+                className={"btn btn-error"}
                 onClick={() => handleChattingOutClick()}
               >
-                연결 해제
+                대화 종료
               </button>
             )}
           </div>
