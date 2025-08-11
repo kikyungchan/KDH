@@ -1,5 +1,5 @@
-import React, {useState} from "react";
-import {Link, useNavigate} from "react-router";
+import React, { useState } from "react";
+import { Link, useNavigate } from "react-router";
 import axios from "axios";
 
 export function GuestOrder() {
@@ -11,11 +11,12 @@ export function GuestOrder() {
   function handleSearchOrderButtonClick(e) {
     e.preventDefault();
 
-    axios.post("/api/order/guest-order/lookup", {
-      guestOrderToken: orderToken,
-      guestName: name,
-      guestPhone: phone,
-    })
+    axios
+      .post("/api/order/guest-order/lookup", {
+        guestOrderToken: orderToken,
+        guestName: name,
+        guestPhone: phone,
+      })
       .then(() => {
         // 인증 성공 -> 상세 페이지로 이동
         navigate("/order/guest-order/detail");
@@ -26,18 +27,33 @@ export function GuestOrder() {
   }
 
   return (
-    <div className="bg-gray-100 min-h-screen">
-      <div className="flex justify-center items-start pt-10">
+    <div className="page-wrapper">
+      <div className="center-top-container">
         <div className="w-full max-w-[400px]">
-          <div className="p-6 shadow rounded-2xl bg-white">
+          <div className="rounded-card">
             <div className="w-full justify-content-center">
-              <Link to="/home" className="navbar-logo w-full block text-center mb-6">
-                코데헌
+              <Link
+                to="/home"
+                className="navbar-logo flex justify-center items-center w-full mb-6"
+              >
+                <img
+                  src="../../../../public/logo/kdh.png"
+                  style={{ width: "80px" }}
+                  className="mr-2"
+                />
+                <span className="text-4xl font-bold">코데헌</span>
               </Link>
-              <h3 className="text-center text-xl font-bold mb-6">비회원 주문 조회</h3>
+              <h3 className="text-center text-xl font-bold mb-6">
+                비회원 주문 조회
+              </h3>
               <form onSubmit={handleSearchOrderButtonClick} className="mb-4">
                 <div className="form-control mb-2">
-                  <label htmlFor="orderToken" className="block text-sm font-semibold mb-2">주문번호</label>
+                  <label
+                    htmlFor="orderToken"
+                    className="block text-sm font-semibold mb-2"
+                  >
+                    주문번호
+                  </label>
                   <input
                     id="orderToken"
                     type="text"
@@ -46,7 +62,12 @@ export function GuestOrder() {
                   />
                 </div>
                 <div className="form-control mb-2">
-                  <label htmlFor="name" className="block text-sm font-semibold mb-2">주문자명</label>
+                  <label
+                    htmlFor="name"
+                    className="block text-sm font-semibold mb-2"
+                  >
+                    주문자명
+                  </label>
                   <input
                     id="name"
                     type="text"
@@ -55,7 +76,12 @@ export function GuestOrder() {
                   />
                 </div>
                 <div className="form-control mb-2">
-                  <label htmlFor="phone" className="block text-sm font-semibold mb-2">전화번호</label>
+                  <label
+                    htmlFor="phone"
+                    className="block text-sm font-semibold mb-2"
+                  >
+                    전화번호
+                  </label>
                   <input
                     id="phone"
                     type="text"
@@ -66,10 +92,17 @@ export function GuestOrder() {
                 <div className="text-end mt-3">
                   <button
                     type="submit"
-                    className="btn btn-neutral w-full font-bold">주문조회
+                    className="btn btn-neutral w-full font-bold"
+                  >
+                    주문조회
                   </button>
                 </div>
               </form>
+              <div className="text-right mt-2 text-sm">
+                <Link to="/login" className="link link-hover text-gray-700">
+                  돌아가기
+                </Link>
+              </div>
             </div>
           </div>
         </div>

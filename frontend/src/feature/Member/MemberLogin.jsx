@@ -1,16 +1,16 @@
-import React, {useContext, useState} from "react";
-import {useNavigate, Link} from "react-router";
+import React, { useContext, useState } from "react";
+import { useNavigate, Link } from "react-router";
 import axios from "axios";
-import {AuthenticationContext} from "../common/AuthenticationContextProvider.jsx";
-import {useCart} from "../Product/CartContext.jsx";
-import {useAlert} from "../common/AlertContext.jsx";
+import { AuthenticationContext } from "../common/AuthenticationContextProvider.jsx";
+import { useCart } from "../Product/CartContext.jsx";
+import { useAlert } from "../common/AlertContext.jsx";
 
 export function MemberLogin() {
   const [loginId, setLoginId] = useState("");
   const [password, setPassword] = useState("");
-  const {login} = useContext(AuthenticationContext);
-  const {showAlert} = useAlert();
-  const {setCartCount} = useCart();
+  const { login } = useContext(AuthenticationContext);
+  const { showAlert } = useAlert();
+  const { setCartCount } = useCart();
 
   const navigate = useNavigate();
 
@@ -44,25 +44,35 @@ export function MemberLogin() {
       .catch((err) => {
         showAlert(err.response?.data?.message); // { type: 'error', text: '...' }
       })
-      .finally(() => {
-      });
+      .finally(() => {});
   }
 
   return (
-    <div className="bg-gray-100 min-h-screen">
-      <div className="flex justify-center items-start pt-10">
+    <div className="page-wrapper">
+      <div className="center-top-container">
         <div className="w-full max-w-[400px]">
-          <div className="p-6 shadow rounded-2xl bg-white">
+          <div className="rounded-card">
             <div className="w-full justify-content-center">
-              <Link to="/home" className="navbar-logo w-full block text-center mb-6">
-                코데헌
+              <Link
+                to="/home"
+                className="navbar-logo flex justify-center items-center w-full mb-6"
+              >
+                <img
+                  src="../../../../public/logo/kdh.png"
+                  style={{ width: "80px" }}
+                  className="mr-2"
+                />
+                <span className="text-4xl font-bold">코데헌</span>
               </Link>
               <h3 className="text-center text-xl font-bold mb-6">로그인</h3>
 
               <form onSubmit={handleLogInButtonClick}>
                 {/* 아이디 */}
                 <div className="form-control mb-4">
-                  <label htmlFor="loginId" className="block text-sm font-semibold mb-2">
+                  <label
+                    htmlFor="loginId"
+                    className="block text-sm font-semibold mb-2"
+                  >
                     아이디
                   </label>
                   <input
@@ -76,7 +86,10 @@ export function MemberLogin() {
 
                 {/* 비밀번호 */}
                 <div className="form-control mb-4">
-                  <label htmlFor="password" className="block text-sm font-semibold mb-2">
+                  <label
+                    htmlFor="password"
+                    className="block text-sm font-semibold mb-2"
+                  >
                     비밀번호
                   </label>
                   <input
@@ -90,7 +103,10 @@ export function MemberLogin() {
 
                 {/* 로그인 버튼 */}
                 <div className="mt-4">
-                  <button type="submit" className="btn btn-neutral w-full font-bold py-2">
+                  <button
+                    type="submit"
+                    className="btn btn-neutral w-full font-bold py-2"
+                  >
                     로그인
                   </button>
                 </div>
@@ -109,14 +125,20 @@ export function MemberLogin() {
                   아이디 찾기
                 </Link>
                 <span className="mx-2 text-gray-400">/</span>
-                <Link to="/find/password" className="link link-hover text-gray-700">
+                <Link
+                  to="/find/password"
+                  className="link link-hover text-gray-700"
+                >
                   비밀번호 찾기
                 </Link>
               </div>
 
               {/* 비회원 주문 조회 */}
               <div className="text-right mt-2 text-sm">
-                <Link to="/order/guest-order" className="link link-hover text-gray-700">
+                <Link
+                  to="/order/guest-order"
+                  className="link link-hover text-gray-700"
+                >
                   비회원 주문 조회
                 </Link>
               </div>

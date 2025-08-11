@@ -1,5 +1,5 @@
-import {useLocation, useNavigate} from "react-router";
-import {useEffect, useState} from "react";
+import { useLocation, useNavigate } from "react-router";
+import { useEffect, useState } from "react";
 import axios from "axios";
 
 export function ResetPassword() {
@@ -87,80 +87,95 @@ export function ResetPassword() {
   };
 
   return (
-    <div className="bg-gray-100 min-h-screen">
-      <div className="flex justify-center items-start pt-10">
+    <div className="page-wrapper">
+      <div className="center-top-container">
         <div className="w-full max-w-[400px]">
-          <div className="p-6 shadow rounded-2xl bg-white">
-            <div className="w-full">
-
+          <div className="rounded-card">
             <div>
-                  <h3 className="text-center text-xl font-bold mb-3">비밀번호 재설정</h3>
-                  <label htmlFor="newPassword" className="block text-sm ml-1 mb-2">
-                    비밀번호는 영문+숫자 조합, 8~20자 사이로 입력해주세요.
-                  </label>
-                  <input
-                    type="password"
-                    value={password}
-                    id="newPassword"
-                    placeholder="비밀번호"
-                    onChange={(e) => setPassword(e.target.value)}
-                    className={`input input-bordered w-full ${
-                      isSubmitted && !passwordValid ? "border-red-500" : ""
-                    }`}
-                  />
-                  {isSubmitted && !passwordValid && (
-                    <p className="ml-1" style={{color: "red", fontSize: "0.875rem"}}>
-                      유효한 비밀번호 형식이 아닙니다.
-                    </p>
-                  )}
-                </div>
+              <div>
+                <h3 className="text-center text-xl font-bold mb-3">
+                  비밀번호 재설정
+                </h3>
+                <label
+                  htmlFor="newPassword"
+                  className="block text-sm ml-1 mb-2"
+                >
+                  비밀번호는 영문+숫자 조합, 8~20자 사이로 입력해주세요.
+                </label>
+                <input
+                  type="password"
+                  value={password}
+                  id="newPassword"
+                  placeholder="비밀번호"
+                  onChange={(e) => setPassword(e.target.value)}
+                  className={`input input-bordered w-full ${
+                    isSubmitted && !passwordValid ? "border-red-500" : ""
+                  }`}
+                />
+                {isSubmitted && !passwordValid && (
+                  <p
+                    className="ml-1"
+                    style={{ color: "red", fontSize: "0.875rem" }}
+                  >
+                    유효한 비밀번호 형식이 아닙니다.
+                  </p>
+                )}
+              </div>
 
-                <div className="form-control mb-4 mt-4">
-                <label htmlFor="passwordCheck" className="block text-sm ml-1 mb-2">비밀번호 확인</label>
-                  <input
-                    type="password"
-                    id="passwordCheck"
-                    className={`input input-bordered w-full ${
-                      !passwordConfirm ? "border-red-500" : ""
-                    }`}
-                    value={password2}
-                    placeholder="비밀번호 확인"
-                    onChange={(e) => setPassword2(e.target.value)}
-                  />
-                  {passwordConfirm || (
-                    <p className="ml-1" style={{color: "red", fontSize: "0.875rem"}}>
-                      비밀번호가 일치하지 않습니다.
-                    </p>
-                  )}
+              <div className="form-control mb-4 mt-4">
+                <label
+                  htmlFor="passwordCheck"
+                  className="block text-sm ml-1 mb-2"
+                >
+                  비밀번호 확인
+                </label>
+                <input
+                  type="password"
+                  id="passwordCheck"
+                  className={`input input-bordered w-full ${
+                    !passwordConfirm ? "border-red-500" : ""
+                  }`}
+                  value={password2}
+                  placeholder="비밀번호 확인"
+                  onChange={(e) => setPassword2(e.target.value)}
+                />
+                {passwordConfirm || (
+                  <p
+                    className="ml-1"
+                    style={{ color: "red", fontSize: "0.875rem" }}
+                  >
+                    비밀번호가 일치하지 않습니다.
+                  </p>
+                )}
+              </div>
+              <div className="text-end mt-2">
+                <div>
+                  <button
+                    className="btn btn-sm btn-neutral mt-2 me-2"
+                    onClick={handleChangePasswordButton}
+                    disabled={
+                      changePasswordButtonDisabled || isPasswordProcessing
+                    }
+                  >
+                    {isPasswordProcessing ? (
+                      <>
+                        <span className="loading loading-spinner loading-sm mr-2" />
+                        저장 중...
+                      </>
+                    ) : (
+                      "재설정"
+                    )}
+                  </button>
                 </div>
-                <div className="text-end mt-2">
-                  <div>
-                    <button
-                      className="btn btn-sm btn-neutral mt-2 me-2"
-                      onClick={handleChangePasswordButton}
-                      disabled={
-                        changePasswordButtonDisabled || isPasswordProcessing
-                      }
-                    >
-                      {isPasswordProcessing ? (
-                        <>
-                          <span className="loading loading-spinner loading-sm mr-2"/>
-                          저장 중...
-                        </>
-                      ) : (
-                        "재설정"
-                      )}
-                    </button>
-                  </div>
-                  <div>
-                    <button
-                      className="btn btn-sm btn-neutral mt-2 me-2"
-                      onClick={() => navigate("/")}
-                    >
-                      돌아가기
-                    </button>
-                  </div>
+                <div>
+                  <button
+                    className="btn btn-sm btn-neutral mt-2 me-2"
+                    onClick={() => navigate("/")}
+                  >
+                    돌아가기
+                  </button>
                 </div>
+              </div>
             </div>
           </div>
         </div>

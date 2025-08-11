@@ -2,7 +2,7 @@ import React, { useContext } from "react";
 import { Link, useNavigate } from "react-router";
 import { FiSearch, FiUser, FiShoppingCart } from "react-icons/fi";
 import { useCart } from "../../Product/CartContext.jsx";
-import { NavUserMenu } from "../NavUserMenu.jsx";
+import { NavUserMenu } from "./NavUserMenu.jsx";
 import { AuthenticationContext } from "../AuthenticationContextProvider.jsx";
 
 NavUserMenu.propTypes = {};

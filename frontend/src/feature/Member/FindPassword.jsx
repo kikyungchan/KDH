@@ -1,6 +1,5 @@
-
-import {useEffect, useState} from "react";
-import {useNavigate} from "react-router";
+import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router";
 import axios from "axios";
 
 export function FindPassword() {
@@ -119,7 +118,7 @@ export function FindPassword() {
     // 아이디와 이메일이 매칭되는지 먼저 확인
     axios
       .get("/api/member/check-id-email", {
-        params: {loginId, email},
+        params: { loginId, email },
       })
       .then((res) => {
         if (!res.data.matched) {
@@ -152,7 +151,7 @@ export function FindPassword() {
 
     axios
       .get("/api/email/auth", {
-        params: {address: email},
+        params: { address: email },
       })
       .then((res) => {
         if (res.data.success) {
@@ -227,164 +226,182 @@ export function FindPassword() {
   };
 
   return (
-    <div className="bg-gray-100 min-h-screen">
-      <div className="flex justify-center items-start pt-10">
+    <div className="page-wrapper">
+      <div className="center-top-container">
         <div className="w-full max-w-[400px]">
-          <div className="p-6 shadow rounded-2xl bg-white">
+          <div className="rounded-card">
             <div className="w-full">
-
-            <div>
-                  <h3 className="text-center text-xl font-bold mb-3">비밀번호 찾기</h3>
-                  <label htmlFor="loginId" className="block text-sm ml-1 mb-2">
-                    회원가입시 등록한 아이디를 입력해주세요.
-                  </label>
-                  <input
-                    type="text"
-                    id="loginId"
-                    value={loginId}
-                    onChange={(e) => {
-                      setLoginId(e.target.value);
-                    }}
-                    className="input input-bordered w-full"
-                    placeholder="아이디"
-                    disabled={authCompleted}
+              <div>
+                <div className="flex items-center justify-center mb-3">
+                  <img
+                    src="../../../../public/logo/kdh.png"
+                    style={{ width: "50px" }}
+                    className="mr-1"
                   />
-                  <div className="flex justify-end items-center text-end mt-2 gap-2">
-                    {isLoginIdChecked && (
+                  <span className="text-center text-xl font-bold">
+                    비밀번호 찾기
+                  </span>
+                </div>
+                <label htmlFor="loginId" className="block text-sm ml-1 mb-2">
+                  회원가입시 등록한 아이디를 입력해주세요.
+                </label>
+                <input
+                  type="text"
+                  id="loginId"
+                  value={loginId}
+                  onChange={(e) => {
+                    setLoginId(e.target.value);
+                  }}
+                  className="input input-bordered w-full"
+                  placeholder="아이디"
+                  disabled={authCompleted}
+                />
+                <div className="flex justify-end items-center text-end mt-2 gap-2">
+                  {isLoginIdChecked && (
+                    <p
+                      style={{ fontSize: "0.875rem" }}
+                      className={loginIdExists ? "text-neutral" : "text-error"}
+                    >
+                      {loginIdCheckMessage}
+                    </p>
+                  )}
+                  <button
+                    type="button"
+                    disabled={authCompleted || remainTime > 0 || isSending}
+                    onClick={handleCheckLoginId}
+                    className="btn btn-sm btn-neutral mb-2"
+                  >
+                    확인
+                  </button>
+                </div>
+              </div>
+              {loginIdExists && (
+                <>
+                  <div className="form-control mb-4 mt-4">
+                    <label htmlFor="email" className="block text-sm ml-1 mb-2">
+                      회원가입시 등록한 이메일을 입력해주세요.
+                    </label>
+                    <input
+                      type="text"
+                      id="email"
+                      value={email}
+                      onChange={(e) => {
+                        setEmail(e.target.value);
+                      }}
+                      className="input input-bordered w-full"
+                      placeholder="이메일"
+                      disabled={authCompleted}
+                    />
+                    {isSubmitted && !emailValid && (
                       <p
-                        style={{fontSize: "0.875rem"}}
-                        className={loginIdExists ? "text-neutral" : "text-error"}
+                        className="ml-1"
+                        style={{ color: "red", fontSize: "0.875rem" }}
                       >
-                        {loginIdCheckMessage}
+                        유효한 이메일 형식이 아닙니다.
                       </p>
                     )}
-                    <button
-                      type="button"
-                      disabled={authCompleted || remainTime > 0 || isSending}
-                      onClick={handleCheckLoginId}
-                      className="btn btn-sm btn-neutral mb-2"
-                    >
-                      확인
-                    </button>
-                  </div>
-                </div>
-                {loginIdExists && (
-                  <>
-                    <div className="form-control mb-4 mt-4">
-                      <label htmlFor="email" className="block text-sm ml-1 mb-2">
-                        회원가입시 등록한 이메일을 입력해주세요.
-                      </label>
-                      <input
-                        type="text"
-                        id="email"
-                        value={email}
-                        onChange={(e) => {
-                          setEmail(e.target.value);
-                        }}
-                        className="input input-bordered w-full"
-                        placeholder="이메일"
-                        disabled={authCompleted}
-                      />
-                      {isSubmitted && !emailValid && (
-                        <p className="ml-1" style={{color: "red", fontSize: "0.875rem"}}>
-                          유효한 이메일 형식이 아닙니다.
+                    <div className="flex justify-end items-center text-end mt-2 gap-2">
+                      {remainTime > 0 && !authCompleted && (
+                        <p
+                          className="text-muted"
+                          style={{ fontSize: "0.875rem" }}
+                        >
+                          인증번호 재전송까지 {remainTime}초 남음
                         </p>
                       )}
-                      <div className="flex justify-end items-center text-end mt-2 gap-2">
-                        {remainTime > 0 && !authCompleted && (
-                          <p className="text-muted"
-                             style={{fontSize: "0.875rem"}}>
-                            인증번호 재전송까지 {remainTime}초 남음
-                          </p>
-                        )}
-                        {authCompleted && (
-                          <p className="text-muted"
-                             style={{fontSize: "0.875rem"}}>
-                            이메일 인증이 완료되었습니다.
-                          </p>
-                        )}
-                        <button
-                          onClick={handleEmailSendButton}
-                          type="button"
-                          hidden={authCompleted}
-                          className="btn btn-sm btn-neutral mb-2"
-                          disabled={authCompleted || remainTime > 0 || isSending}
+                      {authCompleted && (
+                        <p
+                          className="text-muted"
+                          style={{ fontSize: "0.875rem" }}
                         >
-                          {isSending ? (
-                            <>
-                              <span className="loading loading-spinner loading-sm mr-2"/>
-                              전송 중...
-                            </>
-                          ) : (
-                            "인증번호 전송"
+                          이메일 인증이 완료되었습니다.
+                        </p>
+                      )}
+                      <button
+                        onClick={handleEmailSendButton}
+                        type="button"
+                        hidden={authCompleted}
+                        className="btn btn-sm btn-neutral mb-2"
+                        disabled={authCompleted || remainTime > 0 || isSending}
+                      >
+                        {isSending ? (
+                          <>
+                            <span className="loading loading-spinner loading-sm mr-2" />
+                            전송 중...
+                          </>
+                        ) : (
+                          "인증번호 전송"
+                        )}
+                      </button>
+                    </div>
+                  </div>
+                  {/* 인증번호 입력칸 (이메일 전송 후 보여주기) */}
+                  {emailSent && !authCompleted && (
+                    <>
+                      <hr />
+                      <div className="form-control mb-4 mt-4">
+                        <label
+                          htmlFor="authCode"
+                          className="block text-sm font-semibold mb-2"
+                        >
+                          인증번호
+                        </label>
+                        <input
+                          type="text"
+                          value={authCode}
+                          id="authCode"
+                          placeholder="인증번호"
+                          onChange={(e) => setAuthCode(e.target.value)}
+                          className={`input input-bordered w-full ${
+                            authFailed ? "border-red-500" : "border-gray-300"
+                          }`}
+                          readOnly={authCompleted}
+                          disabled={authCompleted}
+                        />
+                        <div className="flex justify-end items-center text-end mt-2 gap-2">
+                          {authFailed && (
+                            <p style={{ color: "red", fontSize: "0.875rem" }}>
+                              인증번호를 올바르게 입력하세요.
+                            </p>
                           )}
-                        </button>
-                      </div>
-                    </div>
-                    {/* 인증번호 입력칸 (이메일 전송 후 보여주기) */}
-                    {emailSent && !authCompleted && (
-                      <>
-                        <hr/>
-                        <div className="form-control mb-4 mt-4">
-                          <label htmlFor="authCode" className="block text-sm font-semibold mb-2">
-                            인증번호
-                          </label>
-                          <input
-                            type="text"
-                            value={authCode}
-                            id="authCode"
-                            placeholder="인증번호"
-                            onChange={(e) => setAuthCode(e.target.value)}
-                            className={`input input-bordered w-full ${
-                              authFailed ? "border-red-500" : "border-gray-300"
-                            }`}
-                            readOnly={authCompleted}
+                          <button
+                            type="button"
+                            className="btn btn-sm btn-neutral mt-2"
+                            onClick={handleAuthCodeVerify}
                             disabled={authCompleted}
-                          />
-                          <div className="flex justify-end items-center text-end mt-2 gap-2">
-                            {authFailed && (
-                              <p style={{color: "red", fontSize: "0.875rem"}}>
-                                인증번호를 올바르게 입력하세요.
-                              </p>
-                            )}
-                            <button
-                              type="button"
-                              className="btn btn-sm btn-neutral mt-2"
-                              onClick={handleAuthCodeVerify}
-                              disabled={authCompleted}
-                            >
-                              인증번호 확인
-                            </button>
-                          </div>
+                          >
+                            인증번호 확인
+                          </button>
                         </div>
-                      </>
-                    )}
-                  </>
-                )}
-                {authCompleted && (
-                  <>
-                    <div className="text-end mt-2">
-                      <div>
-                        <button
-                          type="button"
-                          className="btn btn-sm btn-neutral mt-2 mr-2"
-                          onClick={handleResetPasswordButton}
-                        >
-                          비밀번호 재설정
-                        </button>
                       </div>
-                      <div>
-                        <button
-                          type="button"
-                          className="btn btn-sm btn-neutral mt-2 mr-2"
-                          onClick={() => navigate("/")}
-                        >
-                          돌아가기
-                        </button>
-                      </div>
+                    </>
+                  )}
+                </>
+              )}
+              {authCompleted && (
+                <>
+                  <div className="text-end mt-2">
+                    <div>
+                      <button
+                        type="button"
+                        className="btn btn-sm btn-neutral mt-2 mr-2"
+                        onClick={handleResetPasswordButton}
+                      >
+                        비밀번호 재설정
+                      </button>
                     </div>
-                  </>
-                )}
+                    <div>
+                      <button
+                        type="button"
+                        className="btn btn-sm btn-neutral mt-2 mr-2"
+                        onClick={() => navigate("/")}
+                      >
+                        돌아가기
+                      </button>
+                    </div>
+                  </div>
+                </>
+              )}
             </div>
           </div>
         </div>

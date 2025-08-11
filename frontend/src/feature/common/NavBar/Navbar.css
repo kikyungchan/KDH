@@ -97,7 +97,9 @@
     border: none;
     outline: none;
     background: transparent;
-    font-size: 1rem;
+    font-size: 1.25rem; /* 글자 크기 키움 */
+    padding: 0.75rem 1rem 0.5rem; /* 상, 좌우, 하 */
+    height: 3rem; /* 고정 높이 */
 }
 
 .search-close-icon {
