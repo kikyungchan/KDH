@@ -239,7 +239,6 @@ function ProductCart(props) {
   }
 
   return (
-    // TODO : 결제 금액 및 버튼 사이드바로 이동
     <div className="page-wrapper">
       <div className="center-top-container">
         <div className="w-full mx-auto px-4">
@@ -269,7 +268,7 @@ function ProductCart(props) {
                         onChange={handleSelectAllCheckboxChange}
                       />
                     </div>
-                    <div className="col-span-5">상품 정보</div>
+                    <div className="col-span-5 ml-10">상품 정보</div>
                     <div className="col-span-2 text-center">수량</div>
                     <div className="col-span-2 text-center">가격</div>
                     <div className="col-span-2 text-center">총 금액</div>
@@ -279,7 +278,7 @@ function ProductCart(props) {
                   {cartItems.map((item, index) => (
                     <div
                       key={index}
-                      className="grid grid-cols-12 items-center border-b py-4"
+                      className="grid grid-cols-12 items-center border-b border-gray-300 py-4"
                     >
                       <div className="col-span-1 flex justify-center">
                         <input
@@ -510,7 +509,9 @@ function ProductCart(props) {
           {/* 우측: 주문 요약 sticky */}
           <aside className="hidden xl:block fixed left-1/2 top-30 ml-[416px] w-[320px] z-30">
             <div className="rounded-card p-6 bg-white shadow">
-              <h3 className="text-xl font-semibold mb-4">주문 요약</h3>
+              <h3 className="text-xl text-center font-semibold mb-4">
+                주문 요약
+              </h3>
 
               <div className="space-y-2 text-sm">
                 <div className="flex justify-between">

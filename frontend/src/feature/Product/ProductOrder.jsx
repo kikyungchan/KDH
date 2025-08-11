@@ -326,7 +326,7 @@ function Order(props) {
             >
               {/* 왼쪽: 주문 상품 목록 */}
               <div style={{ flex: 2 }}>
-                <h4 className="mb-1 font-semibold">주문 상품 정보</h4>
+                <h4 className="mb-1 font-semibold text-lg">주문 상품 정보</h4>
                 {items.map((item, idx) => (
                   <div key={idx} className="order-product mb-1">
                     <img
@@ -361,6 +361,7 @@ function Order(props) {
               </div>
               {/* 오른쪽: 주문 요약 */}
               <div
+                className="mt-3"
                 style={{
                   flex: 1,
                   background: "#f9f9f9",
@@ -370,20 +371,14 @@ function Order(props) {
                   height: "fit-content",
                 }}
               >
-                <h5 style={{ marginBottom: "12px" }}>주문 요약</h5>
-                <div
-                  style={{ display: "flex", justifyContent: "space-between" }}
-                >
+                <h5 className="block text-center font-semibold mb-3">
+                  주문 요약
+                </h5>
+                <div className="flex justify-content-between">
                   <span>상품가격</span>
                   <span>{totalItemPrice.toLocaleString()}원</span>
                 </div>
-                <div
-                  style={{
-                    display: "flex",
-                    justifyContent: "space-between",
-                    marginTop: "6px",
-                  }}
-                >
+                <div className="flex justify-content-between mt-2">
                   <span>배송비</span>
                   <span>+{shippingFee.toLocaleString()}원</span>
                 </div>
@@ -404,7 +399,7 @@ function Order(props) {
             </div>
             {/* 주문자 정보 */}
             <div className="order-box rounded">
-              <h4 className="mb-1 font-semibold">주문자 정보</h4>
+              <h4 className="mb-1 font-semibold text-lg">주문자 정보</h4>
               <div className="order-input-row">
                 <input
                   type="text"
@@ -439,7 +434,7 @@ function Order(props) {
 
             {/* 배송 정보 */}
             <div className="order-box rounded">
-              <h4 className="mb-1 font-semibold">배송 정보</h4>
+              <h4 className="mb-1 font-semibold text-lg">배송 정보</h4>
               <div style={{ marginBottom: "10px" }}>
                 <input
                   type="checkbox"
@@ -474,7 +469,7 @@ function Order(props) {
                 <button
                   type="button"
                   onClick={handleSearchAddress}
-                  className="order-input-full"
+                  className="order-input-full order-search-btn"
                 >
                   주소 검색
                 </button>
