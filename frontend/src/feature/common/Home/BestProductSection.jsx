@@ -30,6 +30,7 @@ function BestProductSection() {
   const [bestProducts, setBestProducts] = useState([]);
   const [selected, setSelected] = useState("전체");
   const [loading, setLoading] = useState(false);
+  const [catExpanded, setCatExpanded] = useState(false);
   const navigate = useNavigate();
 
   const cacheRef = useRef({});
@@ -100,7 +101,7 @@ function BestProductSection() {
       <h3 className="best-title">베스트</h3>
 
       {/* 카테고리 탭 */}
-      <div className="best-category-tabs">
+      <div className={`best-category-tabs ${catExpanded ? "expanded" : ""}`}>
         {CATEGORIES.map((cat) => (
           <button
             key={cat}
@@ -112,7 +113,7 @@ function BestProductSection() {
           </button>
         ))}
       </div>
-
+      
       {loading ? (
         <div className="best-loading">로딩중...</div>
       ) : (
