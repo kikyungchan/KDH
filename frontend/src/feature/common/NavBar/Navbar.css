@@ -221,13 +221,7 @@
     font-size: 1.2rem;
 }
 
-/* 모바일 레이아웃용 설정 */
-@media (max-width: 639px) {
-    .FiSearch {
-        display: none;
-    }
-}
-
+/*  (~767px) */
 @media (max-width: 767px) {
     .hamburger-icon {
         display: block;
@@ -238,35 +232,44 @@
         position: absolute;
         left: 50%;
         transform: translateX(-50%);
+        width: max-content;
     }
 
     .navbar-left {
         display: none !important;
         flex-wrap: nowrap;
     }
+
+    .FiSearch {
+        display: none;
+    }
+
+    .navbar-logo {
+        margin: 0;
+        display: inline-block;
+        white-space: nowrap;
+    }
 }
 
-/*  sm (~767) */
-@media (min-width: 768px) {
+/* (768px~1023px) */
+@media (max-width: 1023px) {
     .navbar-left {
         display: flex;
         gap: 0.9rem;
         font-size: 1.2rem;
-
     }
-}
 
-/*  md (768~1023) */
-@media (min-width: 769px) {
     .navbar-container {
         display: flex;
         font-size: 1rem;
     }
+
 }
 
-/* lg (1024~) */
+/* (1024px~) */
 @media (min-width: 1024px) {
     .navbar-left {
+        display: flex;
         gap: 2.7rem;
         font-size: 1.4rem;
     }
