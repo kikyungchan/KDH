@@ -1,8 +1,7 @@
-
-import {useContext, useEffect, useState} from "react";
+import { useContext, useEffect, useState } from "react";
 import axios from "axios";
-import {useNavigate} from "react-router";
-import {AuthenticationContext} from "../common/AuthenticationContextProvider.jsx";
+import { useNavigate } from "react-router";
+import { AuthenticationContext } from "../common/AuthenticationContextProvider.jsx";
 import PrivacyModal from "./Modal/PrivacyModal.jsx";
 
 export function MemberSignup() {
@@ -74,7 +73,7 @@ export function MemberSignup() {
   const [privacyAgreed, setPrivacyAgreed] = useState(false);
 
   // 로그인 여부
-  const {user} = useContext(AuthenticationContext);
+  const { user } = useContext(AuthenticationContext);
 
   const navigate = useNavigate();
 
@@ -217,8 +216,7 @@ export function MemberSignup() {
         setLoginIdCheckMessage("확인 중 오류가 발생했습니다");
         console.log("error", err.response?.data || err.message);
       })
-      .finally(() => {
-      });
+      .finally(() => {});
   }
 
   // 주소 확인
@@ -236,7 +234,7 @@ export function MemberSignup() {
   const handleEmailSendButton = () => {
     axios
       .get("/api/member/check-email", {
-        params: {email: fullEmail},
+        params: { email: fullEmail },
       })
       .then((res) => {
         if (res.data.exists) {
@@ -258,7 +256,7 @@ export function MemberSignup() {
 
     axios
       .get("/api/email/auth", {
-        params: {address: fullEmail},
+        params: { address: fullEmail },
       })
       .then((res) => {
         if (res.data.success) {
@@ -324,358 +322,375 @@ export function MemberSignup() {
   };
 
   return (
-    <div className="min-h-screen overflow-y-auto bg-gray-100">
-      <div className="flex justify-center">
-        <div className="w-full max-w-[600px] mx-auto px-4 py-10">
-          <div className="px-8 py-6 shadow rounded-2xl bg-white">
-            <div className="w-full">
-
-            <h2 className="mb-6 text-center text-2xl font-semibold">회원 등록</h2>
-                    {/* 아이디 */}
-                    <div className="flex items-start gap-6 mb-2">
-                      <div className="w-full">
-                        <label className="block font-semibold mb-1">아이디</label>
-                        <p className="text-sm text-muted mb-1">
-                          아이디는 영문으로 시작하며 4~20자, 영문+숫자 조합만 가능합니다.
-                        </p>
-                        <div className="flex gap-2">
-                          <input
-                            type="text"
-                            value={loginId}
-                            placeholder="아이디"
-                            autoComplete="username"
-                            onChange={(e) => {
-                              setLoginId(e.target.value);
-                              setLoginIdChecked(false);
-                              setLoginIdCheckMessage("");
-                            }}
-                            className={`w-full rounded px-3 py-2 bg-gray-100 mb-2 ${
-                              isSubmitted && !loginIdValid ? "border-red-500" : "border-gray-300"
-                            }`}
-                          />
-                        </div>
-                        <div className="flex items-center gap-3">
-                          <button
-                            type="button"
-                            onClick={() => handleCheckLoginId()}
-                            className="btn btn-outline btn-sm btn-neutral mt-1 mb-2"
-                          >
-                            아이디 중복 확인
-                          </button>
-                          {/* 아이디 형식이 맞지않을때 (정규식은 최상단 위치) */}
-                          {isSubmitted && !loginIdValid && (
-                            <p style={{color: "red", fontSize: "0.875rem"}}>
-                              유효한 아이디 형식이 아닙니다.
-                            </p>
-                          )}
-                          {/* 아이디 중복 관련 메세지 */}
-                          {loginIdCheckMessage && (
-                            <p style={{fontSize: "0.875rem"}}
-                               className={`${loginIdChecked ? "text-info" : "text-red-500"}`}>
-
-                              {loginIdCheckMessage}
-                            </p>
-                          )}
-                        </div>
-                      </div>
-                    </div>
-                    <div>
-                        <label className="block font-semibold mb-1">비밀번호</label>
-                        <p className="text-sm text-muted mb-1">
-                          비밀번호는 영문+숫자 조합, 8~20자 사이로
-                          입력해주세요.
-                        </p>
-                        <input
-                          type="password"
-                          value={password}
-                          placeholder="비밀번호"
-                          onChange={(e) => {
-                            setPassword(e.target.value);
-                          }}
-                          className={`w-full rounded px-3 py-2 bg-gray-100 mb-3 ${
-                            isSubmitted && !passwordValid ? "border-red-500" : "border-gray-300"
-                          }`}
-                        />
-                        {isSubmitted && !passwordValid && (
-                          <p style={{color: "red", fontSize: "0.875rem"}}>
-                            유효한 비밀번호 형식이 아닙니다.
-                          </p>
-                        )}
-                    </div>
-                    <div>
-                        <label className="block font-semibold mb-1">비밀번호 확인</label>
-                        <input
-                          type="password"
-                          value={password2}
-                          placeholder="비밀번호 확인"
-                          className="w-full rounded px-3 py-2 bg-gray-100 mb-2"
-                          onChange={(e) => {
-                            setPassword2(e.target.value);
-                          }}
-                        />
-                        {password2 && password !== password2 && (
-                          <p style={{color: "red", fontSize: "0.875rem"}}>
-                            비밀번호가 일치하지 않습니다.
-                          </p>
-                        )}
-                    </div>
-                    <div>
-                        <label className="block font-semibold mb-1">이름</label>
-                        <p className="text-sm text-muted mb-1">
-                          이름은 한글 또는 영문 2~20자까지 입력 가능합니다.
-                        </p>
-                        <input
-                          type="text"
-                          value={name}
-                          placeholder="이름"
-                          autoComplete="name"
-                          onChange={(e) => {
-                            setName(e.target.value);
-                          }}
-                          className={`w-full rounded px-3 py-2 bg-gray-100 mb-3 ${
-                            isSubmitted && !nameValid ? "border-red-500" : "border-gray-300"
-                          }`}
-                        />
-                        {isSubmitted && !nameValid && (
-                          <p style={{color: "red", fontSize: "0.875rem"}}>
-                            유효한 이름 형식이 아닙니다.
-                          </p>
-                        )}
-                    </div>
-                    <div>
-                        <label className="block font-semibold mb-1">생년월일</label>
-                        <input
-                          type="date"
-                          value={birthday}
-                          autoComplete="bday"
-                          className="w-full rounded px-3 py-2 bg-gray-100 mb-3"
-                          onChange={(e) => {
-                            const val = e.target.value;
-                            setBirthday(val === "" ? getToday() : val);
-                          }}
-                        />
-                    </div>
-                    <div>
-                        <label className="block font-semibold mb-1">전화번호</label>
-                        <p className="text-sm text-muted mb-1">
-                          하이픈(-)없이 숫자만 입력해주세요. (예: 01012345678)</p>
-                        <input
-                          type="text"
-                          value={phone}
-                          placeholder="전화번호"
-                          autoComplete="tel"
-                          className={`w-full rounded px-3 py-2 bg-gray-100 mb-3 ${
-                            isSubmitted && !phoneValid ? "border-red-500" : "border-gray-300"
-                          }`}
-                          onChange={(e) => {
-                            setPhone(e.target.value);
-                          }}
-                        />
-                        {isSubmitted && !phoneValid && (
-                          <p style={{color: "red", fontSize: "0.875rem"}}>
-                            유효한 전화번호 형식이 아닙니다.
-                          </p>
-                        )}
-                    </div>
-                    <div>
-                        <label className="block font-semibold mb-1">이메일</label>
-                        <p className="text-sm text-muted mb-1">
-                          예: example@domain.com 형식의 이메일을 입력하세요.
-                        </p>
-                        <div className="flex gap-2 items-center">
-                          <input
-                            type="text"
-                            value={emailId}
-                            onChange={(e) => setEmailId(e.target.value)}
-                            className="w-2/5 rounded px-3 py-2 bg-gray-100 mb-2"
-                          />
-                          <span>@</span>
-                          {customDomain ? (
-                            <>
-                              <input
-                                type="text"
-                                value={emailDomain}
-                                onChange={(e) => setEmailDomain(e.target.value)}
-                                className="flex-1 rounded px-3 py-2 bg-gray-100 mb-2"
-                              />
-                              <button
-                                type="button"
-                                className="btn btn-sm btn-ghost px-2 h-9 min-h-0 text-lg mb-2"
-                                onClick={() => setCustomDomain(false)}
-                              >
-                                x
-                              </button>
-                            </>
-                          ) : (
-                            <select
-                              className="flex-1 rounded px-3 py-2 bg-gray-100 mb-2"
-                              value={emailDomain}
-                              onChange={(e) => {
-                                const value = e.target.value;
-                                if (value === "custom") {
-                                  setCustomDomain(true);
-                                  setEmailDomain("");
-                                } else {
-                                  setEmailDomain(value);
-                                }
-                              }}
-                            >
-                              <option value="">선택해주세요</option>
-                              <option value="naver.com">naver.com</option>
-                              <option value="hanmail.net">hanmail.net</option>
-                              <option value="daum.net">daum.net</option>
-                              <option value="gmail.com">gmail.com</option>
-                              <option value="nate.com">nate.com</option>
-                              <option value="hotmail.com">hotmail.com</option>
-                              <option value="outlook.com">outlook.com</option>
-                              <option value="icloud.com">icloud.com</option>
-                              <option value="custom">직접입력</option>
-                            </select>
-                          )}
-                        </div>
-                        {isSubmitted && !emailValid && (
-                          <p style={{color: "red", fontSize: "0.875rem"}}>유효한 이메일 형식이 아닙니다.</p>
-                        )}
-                        <div className="flex items-center gap-3">
-                          <button
-                            type="button"
-                            className="btn btn-outline btn-sm mt-1 mb-2"
-                            onClick={handleEmailSendButton}
-                            disabled={
-                              emailId.trim() === "" ||
-                              !emailValid ||
-                              remainTime > 0 ||
-                              isSending ||
-                              authCompleted
-                            }
-                          >
-                            {isSending ? (
-                              <>
-                                <span className="loading loading-spinner loading-sm mr-2"/>
-                                전송 중...
-                              </>
-                            ) : (
-                              "인증번호 전송"
-                            )}
-                          </button>
-                          {remainTime > 0 && !authCompleted && (
-                            <p className="text-sm text-muted">
-                              인증번호 재전송까지 {remainTime}초 남음
-                            </p>
-                          )}
-                          {authCompleted && (
-                            <p className="text-sm text-info">
-                              이메일 인증이 완료되었습니다.
-                            </p>
-                          )}
-                        </div>
-                    </div>
-
-                    {/* 인증번호 입력 */}
-                    {emailSent && (
-                      <div>
-                          <label className="block font-semibold mb-1 mt-2">인증번호</label>
-                          <input
-                            type="text"
-                            value={authCode}
-                            onChange={(e) => setAuthCode(e.target.value)}
-                            placeholder="이메일로 전송된 인증번호를 입력하세요."
-                            className={`w-full rounded px-3 mb-2 bg-gray-100 py-2 border ${authFailed ? "border-red-500" : "border-gray-300"}`}
-                            disabled={authCompleted}
-                            readOnly={authCompleted}
-                          />
-                          <div className="flex items-center gap-3">
-                            <button
-                              type="button"
-                              className="btn btn-dark btn-sm mt-2"
-                              onClick={handleAuthCodeVerify}
-                              disabled={authCompleted}
-                            >
-                              인증번호 확인
-                            </button>
-                            {authFailed && (
-                              <p className="text-error text-sm mt-1">인증번호를 올바르게 입력하세요.</p>
-                            )}
-                          </div>
-                      </div>
+    <div className="page-wrapper">
+      <div className="center-top-container">
+        <div className="w-full max-w-[600px] mx-auto px-4">
+          <div className="rounded-card">
+            <div>
+              <h2 className="mb-6 text-center text-2xl font-semibold">
+                회원 등록
+              </h2>
+              {/* 아이디 */}
+              <div className="flex items-start gap-6 mb-2">
+                <div className="w-full">
+                  <label className="block font-semibold mb-1">아이디</label>
+                  <p className="text-sm text-muted mb-1">
+                    아이디는 영문으로 시작하며 4~20자, 영문+숫자 조합만
+                    가능합니다.
+                  </p>
+                  <div className="flex gap-2">
+                    <input
+                      type="text"
+                      value={loginId}
+                      placeholder="아이디"
+                      autoComplete="username"
+                      onChange={(e) => {
+                        setLoginId(e.target.value);
+                        setLoginIdChecked(false);
+                        setLoginIdCheckMessage("");
+                      }}
+                      className={`w-full rounded px-3 py-2 bg-gray-100 mb-2 ${
+                        isSubmitted && !loginIdValid
+                          ? "border-red-500"
+                          : "border-gray-300"
+                      }`}
+                    />
+                  </div>
+                  <div className="flex items-center gap-3">
+                    <button
+                      type="button"
+                      onClick={() => handleCheckLoginId()}
+                      className="btn btn-outline btn-sm btn-neutral mt-1 mb-2"
+                    >
+                      아이디 중복 확인
+                    </button>
+                    {/* 아이디 형식이 맞지않을때 (정규식은 최상단 위치) */}
+                    {isSubmitted && !loginIdValid && (
+                      <p style={{ color: "red", fontSize: "0.875rem" }}>
+                        유효한 아이디 형식이 아닙니다.
+                      </p>
                     )}
-                    <div>
-                        <label className="block font-semibold mb-1 mt-2">주소</label>
-                        <div className="flex items-center gap-3">
-                          <input
-                            type="text"
-                            value={zipCode}
-                            placeholder="우편번호"
-                            className="w-full rounded px-3 py-2 bg-gray-100 mb-2"
-                            readOnly
-                          />
-                          <button
-                            type="button"
-                            className="btn btn-outline btn-neutral mb-2"
-                            onClick={handleSearchAddress}
-                          >
-                            주소 검색
-                          </button>
-                        </div>
-                        <input
-                          type="text"
-                          value={address}
-                          placeholder="주소"
-                          className="w-full rounded px-3 py-2 bg-gray-100 mb-2"
-                          autoComplete="address-line1"
-                          readOnly
-                        />
-                        <input
-                          type="text"
-                          value={addressDetail}
-                          placeholder="상세주소를 입력하세요"
-                          className="w-full rounded px-3 py-2 bg-gray-100 mb-2"
-                          onChange={(e) => setAddressDetail(e.target.value)}
-                        />
+                    {/* 아이디 중복 관련 메세지 */}
+                    {loginIdCheckMessage && (
+                      <p
+                        style={{ fontSize: "0.875rem" }}
+                        className={`${loginIdChecked ? "text-info" : "text-red-500"}`}
+                      >
+                        {loginIdCheckMessage}
+                      </p>
+                    )}
+                  </div>
+                </div>
+              </div>
+              <div>
+                <label className="block font-semibold mb-1">비밀번호</label>
+                <p className="text-sm text-muted mb-1">
+                  비밀번호는 영문+숫자 조합, 8~20자 사이로 입력해주세요.
+                </p>
+                <input
+                  type="password"
+                  value={password}
+                  placeholder="비밀번호"
+                  onChange={(e) => {
+                    setPassword(e.target.value);
+                  }}
+                  className={`w-full rounded px-3 py-2 bg-gray-100 mb-3 ${
+                    isSubmitted && !passwordValid
+                      ? "border-red-500"
+                      : "border-gray-300"
+                  }`}
+                />
+                {isSubmitted && !passwordValid && (
+                  <p style={{ color: "red", fontSize: "0.875rem" }}>
+                    유효한 비밀번호 형식이 아닙니다.
+                  </p>
+                )}
+              </div>
+              <div>
+                <label className="block font-semibold mb-1">
+                  비밀번호 확인
+                </label>
+                <input
+                  type="password"
+                  value={password2}
+                  placeholder="비밀번호 확인"
+                  className="w-full rounded px-3 py-2 bg-gray-100 mb-2"
+                  onChange={(e) => {
+                    setPassword2(e.target.value);
+                  }}
+                />
+                {password2 && password !== password2 && (
+                  <p style={{ color: "red", fontSize: "0.875rem" }}>
+                    비밀번호가 일치하지 않습니다.
+                  </p>
+                )}
+              </div>
+              <div>
+                <label className="block font-semibold mb-1">이름</label>
+                <p className="text-sm text-muted mb-1">
+                  이름은 한글 또는 영문 2~20자까지 입력 가능합니다.
+                </p>
+                <input
+                  type="text"
+                  value={name}
+                  placeholder="이름"
+                  autoComplete="name"
+                  onChange={(e) => {
+                    setName(e.target.value);
+                  }}
+                  className={`w-full rounded px-3 py-2 bg-gray-100 mb-3 ${
+                    isSubmitted && !nameValid
+                      ? "border-red-500"
+                      : "border-gray-300"
+                  }`}
+                />
+                {isSubmitted && !nameValid && (
+                  <p style={{ color: "red", fontSize: "0.875rem" }}>
+                    유효한 이름 형식이 아닙니다.
+                  </p>
+                )}
+              </div>
+              <div>
+                <label className="block font-semibold mb-1">생년월일</label>
+                <input
+                  type="date"
+                  value={birthday}
+                  autoComplete="bday"
+                  className="w-full rounded px-3 py-2 bg-gray-100 mb-3"
+                  onChange={(e) => {
+                    const val = e.target.value;
+                    setBirthday(val === "" ? getToday() : val);
+                  }}
+                />
+              </div>
+              <div>
+                <label className="block font-semibold mb-1">전화번호</label>
+                <p className="text-sm text-muted mb-1">
+                  하이픈(-)없이 숫자만 입력해주세요. (예: 01012345678)
+                </p>
+                <input
+                  type="text"
+                  value={phone}
+                  placeholder="전화번호"
+                  autoComplete="tel"
+                  className={`w-full rounded px-3 py-2 bg-gray-100 mb-3 ${
+                    isSubmitted && !phoneValid
+                      ? "border-red-500"
+                      : "border-gray-300"
+                  }`}
+                  onChange={(e) => {
+                    setPhone(e.target.value);
+                  }}
+                />
+                {isSubmitted && !phoneValid && (
+                  <p style={{ color: "red", fontSize: "0.875rem" }}>
+                    유효한 전화번호 형식이 아닙니다.
+                  </p>
+                )}
+              </div>
+              <div>
+                <label className="block font-semibold mb-1">이메일</label>
+                <p className="text-sm text-muted mb-1">
+                  예: example@domain.com 형식의 이메일을 입력하세요.
+                </p>
+                <div className="flex gap-2 items-center">
+                  <input
+                    type="text"
+                    value={emailId}
+                    onChange={(e) => setEmailId(e.target.value)}
+                    className="w-2/5 rounded px-3 py-2 bg-gray-100 mb-2"
+                  />
+                  <span>@</span>
+                  {customDomain ? (
+                    <>
+                      <input
+                        type="text"
+                        value={emailDomain}
+                        onChange={(e) => setEmailDomain(e.target.value)}
+                        className="flex-1 rounded px-3 py-2 bg-gray-100 mb-2"
+                      />
+                      <button
+                        type="button"
+                        className="btn btn-sm btn-ghost px-2 h-9 min-h-0 text-lg mb-2"
+                        onClick={() => setCustomDomain(false)}
+                      >
+                        x
+                      </button>
+                    </>
+                  ) : (
+                    <select
+                      className="flex-1 rounded px-3 py-2 bg-gray-100 mb-2"
+                      value={emailDomain}
+                      onChange={(e) => {
+                        const value = e.target.value;
+                        if (value === "custom") {
+                          setCustomDomain(true);
+                          setEmailDomain("");
+                        } else {
+                          setEmailDomain(value);
+                        }
+                      }}
+                    >
+                      <option value="">선택해주세요</option>
+                      <option value="naver.com">naver.com</option>
+                      <option value="hanmail.net">hanmail.net</option>
+                      <option value="daum.net">daum.net</option>
+                      <option value="gmail.com">gmail.com</option>
+                      <option value="nate.com">nate.com</option>
+                      <option value="hotmail.com">hotmail.com</option>
+                      <option value="outlook.com">outlook.com</option>
+                      <option value="icloud.com">icloud.com</option>
+                      <option value="custom">직접입력</option>
+                    </select>
+                  )}
+                </div>
+                {isSubmitted && !emailValid && (
+                  <p style={{ color: "red", fontSize: "0.875rem" }}>
+                    유효한 이메일 형식이 아닙니다.
+                  </p>
+                )}
+                <div className="flex items-center gap-3">
+                  <button
+                    type="button"
+                    className="btn btn-outline btn-sm mt-1 mb-2"
+                    onClick={handleEmailSendButton}
+                    disabled={
+                      emailId.trim() === "" ||
+                      !emailValid ||
+                      remainTime > 0 ||
+                      isSending ||
+                      authCompleted
+                    }
+                  >
+                    {isSending ? (
+                      <>
+                        <span className="loading loading-spinner loading-sm mr-2" />
+                        전송 중...
+                      </>
+                    ) : (
+                      "인증번호 전송"
+                    )}
+                  </button>
+                  {remainTime > 0 && !authCompleted && (
+                    <p className="text-sm text-muted">
+                      인증번호 재전송까지 {remainTime}초 남음
+                    </p>
+                  )}
+                  {authCompleted && (
+                    <p className="text-sm text-info">
+                      이메일 인증이 완료되었습니다.
+                    </p>
+                  )}
+                </div>
+              </div>
 
-                    </div>
-                    <div className="d-flex justify-content-end mt-2 items-center">
-                      {privacyAgreed && (
-                        <p className="text-info me-2">
-                          개인정보 수집 및 이용에 동의 하셨습니다.
-                        </p>
-                      )}
-                      <button
-                        type="button"
-                        className={`mt-2 btn btn-outline ${
-                          privacyAgreed ? "btn-info" : "btn-neutral"
-                        }`}
-                        disabled={privacyAgreed}
-                        onClick={privacyModalShow}
-                      >
-                        {privacyAgreed ? "동의 완료" : "개인정보 수집 동의"}
-                      </button>
-                    </div>
-                    <div className="text-end mt-2">
-                      <button
-                        type="button"
-                        onClick={handleSignUpClick}
-                        className="mt-2 btn btn-outline btn-neutral"
-                        disabled={disabled || isProcessing}
-                      >
-                        {isProcessing ? (
-                          <>
-                            <span className="loading loading-spinner loading-sm mr-2"/>
-                            전송 중...
-                          </>
-                        ) : (
-                          "회원 등록"
-                        )}
-                      </button>
-                    </div>
+              {/* 인증번호 입력 */}
+              {emailSent && (
+                <div>
+                  <label className="block font-semibold mb-1 mt-2">
+                    인증번호
+                  </label>
+                  <input
+                    type="text"
+                    value={authCode}
+                    onChange={(e) => setAuthCode(e.target.value)}
+                    placeholder="이메일로 전송된 인증번호를 입력하세요."
+                    className={`w-full rounded px-3 mb-2 bg-gray-100 py-2 border ${authFailed ? "border-red-500" : "border-gray-300"}`}
+                    disabled={authCompleted}
+                    readOnly={authCompleted}
+                  />
+                  <div className="flex items-center gap-3">
+                    <button
+                      type="button"
+                      className="btn btn-dark btn-sm mt-2"
+                      onClick={handleAuthCodeVerify}
+                      disabled={authCompleted}
+                    >
+                      인증번호 확인
+                    </button>
+                    {authFailed && (
+                      <p className="text-error text-sm mt-1">
+                        인증번호를 올바르게 입력하세요.
+                      </p>
+                    )}
+                  </div>
+                </div>
+              )}
+              <div>
+                <label className="block font-semibold mb-1 mt-2">주소</label>
+                <div className="flex items-center gap-3">
+                  <input
+                    type="text"
+                    value={zipCode}
+                    placeholder="우편번호"
+                    className="w-full rounded px-3 py-2 bg-gray-100 mb-2"
+                    readOnly
+                  />
+                  <button
+                    type="button"
+                    className="btn btn-outline btn-neutral mb-2"
+                    onClick={handleSearchAddress}
+                  >
+                    주소 검색
+                  </button>
+                </div>
+                <input
+                  type="text"
+                  value={address}
+                  placeholder="주소"
+                  className="w-full rounded px-3 py-2 bg-gray-100 mb-2"
+                  autoComplete="address-line1"
+                  readOnly
+                />
+                <input
+                  type="text"
+                  value={addressDetail}
+                  placeholder="상세주소를 입력하세요"
+                  className="w-full rounded px-3 py-2 bg-gray-100 mb-2"
+                  onChange={(e) => setAddressDetail(e.target.value)}
+                />
+              </div>
+              <div className="d-flex justify-content-end mt-2 items-center">
+                {privacyAgreed && (
+                  <p className="text-info me-2">
+                    개인정보 수집 및 이용에 동의 하셨습니다.
+                  </p>
+                )}
+                <button
+                  type="button"
+                  className={`mt-2 btn btn-outline ${
+                    privacyAgreed ? "btn-info" : "btn-neutral"
+                  }`}
+                  disabled={privacyAgreed}
+                  onClick={privacyModalShow}
+                >
+                  {privacyAgreed ? "동의 완료" : "개인정보 수집 동의"}
+                </button>
+              </div>
+              <div className="text-end mt-2">
+                <button
+                  type="button"
+                  onClick={handleSignUpClick}
+                  className="mt-2 btn btn-outline btn-neutral"
+                  disabled={disabled || isProcessing}
+                >
+                  {isProcessing ? (
+                    <>
+                      <span className="loading loading-spinner loading-sm mr-2" />
+                      전송 중...
+                    </>
+                  ) : (
+                    "회원 등록"
+                  )}
+                </button>
+              </div>
             </div>
-              {/* 동의 모달 */
-              }
-              <PrivacyModal
-                show={showPrivacyModal}
-                onClose={() => setShowPrivacyModal(false)}
-                onAgree={(agreed) => setPrivacyAgreed(agreed)}
-              />
+            {/* 동의 모달 */}
+            <PrivacyModal
+              show={showPrivacyModal}
+              onClose={() => setShowPrivacyModal(false)}
+              onAgree={(agreed) => setPrivacyAgreed(agreed)}
+            />
           </div>
         </div>
       </div>

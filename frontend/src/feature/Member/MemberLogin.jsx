@@ -48,10 +48,10 @@ export function MemberLogin() {
   }
 
   return (
-    <div className="bg-gray-100 min-h-screen">
-      <div className="flex justify-center items-start pt-10">
+    <div className="page-wrapper">
+      <div className="center-top-container">
         <div className="w-full max-w-[400px]">
-          <div className="p-6 shadow rounded-2xl bg-white">
+          <div className="rounded-card">
             <div className="w-full justify-content-center">
               <Link
                 to="/home"

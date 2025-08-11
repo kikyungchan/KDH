@@ -37,10 +37,10 @@ export function OrderDetail() {
   }
 
   return (
-    <div className="bg-gray-100 min-h-screen">
-      <div className="flex justify-center items-start pt-10">
+    <div className="page-wrapper">
+      <div className="center-top-container">
         <div className="w-full max-w-[600px] mx-auto px-4">
-          <div className="px-8 py-6 shadow rounded-2xl bg-white">
+          <div className="rounded-card">
             <div className="mb-8">
               <h2 className="mb-6 text-center text-2xl font-bold">주문 상세</h2>
               <br />

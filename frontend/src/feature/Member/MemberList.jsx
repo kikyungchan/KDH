@@ -1,6 +1,6 @@
-import {useEffect, useState} from "react";
+import { useEffect, useState } from "react";
 import axios from "axios";
-import {useNavigate, useSearchParams} from "react-router";
+import { useNavigate, useSearchParams } from "react-router";
 
 export function MemberList() {
   const [memberList, setMemberList] = useState([]);
@@ -16,10 +16,8 @@ export function MemberList() {
         setMemberList(res.data.memberList);
         setPageInfo(res.data.pageInfo);
       })
-      .catch(() => {
-      })
-      .finally(() => {
-      });
+      .catch(() => {})
+      .finally(() => {});
   }, [searchParams]);
 
   const pageNumber = [];
@@ -35,18 +33,14 @@ export function MemberList() {
   }
 
   return (
-    <div className="bg-gray-100 min-h-screen">
-      <div className="flex justify-center items-start pt-10">
+    <div className="page-wrapper">
+      <div className="center-top-container">
         <div className="w-full max-w-[1200px] mx-auto px-4">
-          <div className="px-8 py-6 shadow rounded-2xl bg-white">
+          <div className="rounded-card">
             <div className="w-full">
-                <h2 className="mb-6 text-center text-2xl font-bold">회원 목록</h2>
-                <table
-                  hover
-                  responsive
-                  className="table table-striped"
-                >
-                  <thead className="thead-light">
+              <h2 className="mb-6 text-center text-2xl font-bold">회원 목록</h2>
+              <table hover responsive className="table table-striped">
+                <thead className="thead-light">
                   <tr>
                     <th>회원번호</th>
                     <th>아이디</th>
@@ -54,13 +48,13 @@ export function MemberList() {
                     <th>전화번호</th>
                     <th>이메일</th>
                   </tr>
-                  </thead>
-                  <tbody>
+                </thead>
+                <tbody>
                   {memberList.map((member) => (
                     <tr
                       key={member.id}
                       onClick={() => navigate(`/member?id=${member.id}`)}
-                      style={{cursor: "pointer"}}
+                      style={{ cursor: "pointer" }}
                     >
                       <td>{member.id}</td>
                       <td>{member.loginId}</td>
@@ -69,8 +63,8 @@ export function MemberList() {
                       <td>{member.email}</td>
                     </tr>
                   ))}
-                  </tbody>
-                </table>
+                </tbody>
+              </table>
             </div>
           </div>
           {/* 페이지 네이션 */}
@@ -99,7 +93,9 @@ export function MemberList() {
                   key={num}
                   onClick={() => handlePageNumberClick(num)}
                   className={`join-item btn ${
-                    pageInfo.currentPageNumber === num ? "btn-active btn-neutral" : ""
+                    pageInfo.currentPageNumber === num
+                      ? "btn-active btn-neutral"
+                      : ""
                   }`}
                 >
                   {num}
