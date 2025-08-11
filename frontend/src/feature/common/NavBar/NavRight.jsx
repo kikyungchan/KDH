@@ -5,6 +5,7 @@ import { MdSupportAgent } from "react-icons/md";
 import { useCart } from "../../Product/CartContext.jsx";
 import { NavUserMenu } from "./NavUserMenu.jsx";
 import { AuthenticationContext } from "../AuthenticationContextProvider.jsx";
+import { HiOutlineBellAlert } from "react-icons/hi2";
 
 NavUserMenu.propTypes = {};
 
@@ -30,6 +31,9 @@ function NavRight({ iconRef, onSearchToggle }) {
         </Link>
         <Link to={"/faq/list"}>
           <MdSupportAgent />
+        </Link>
+        <Link to={"/alert/list"}>
+          <HiOutlineBellAlert />
         </Link>
       </div>
     </div>

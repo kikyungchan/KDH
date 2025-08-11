@@ -34,6 +34,7 @@ import { OrderList } from "./Order/OrderList.jsx";
 import { OrderDetail } from "./Order/OrderDetail.jsx";
 import { GuestOrder } from "./Order/GuestOrder.jsx";
 import { GuestOrderDetail } from "./Order/GuestOrderDetail.jsx";
+import { AlertList } from "./feature/alert/AlertList.jsx";
 
 function App() {
   // const username = prompt("닉네임을 입력해 주세요");
@@ -88,6 +89,7 @@ function App() {
                 <Route path="/qna/view" element={<QnaView />} />
                 <Route path="/faq/list" element={<FaQList />} />
                 <Route path="chat/chatting" element={<Chat />} />
+                <Route path="alert/list" element={<AlertList />} />
               </Route>
             </Routes>
           </CartProvider>
