@@ -7,11 +7,11 @@ import { ToastContainer } from "react-toastify";
 
 createRoot(document.getElementById("root")).render(
   // todo : StrictMode 비활성화
-  // <StrictMode>
-  <>
-    <App />
-    <ToastContainer />
-  </>,
-
-  // </StrictMode>,
+  <StrictMode>
+    <>
+      <App />
+      <ToastContainer />
+    </>
+    , //{" "}
+  </StrictMode>,
 );

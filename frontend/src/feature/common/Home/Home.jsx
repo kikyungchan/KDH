@@ -16,17 +16,23 @@ function Home() {
   const [shuffledItems, setShuffledItems] = useState([]);
   const swiperRef = useRef(null);
   const [leftVisual, setLeftVisual] = useState(null);
+  const didFetchLeft = useRef(false);
+  const didFetchRight = useRef(false);
 
   // 좌측배너
   useEffect(() => {
+    if (didFetchLeft.current) return;
+    didFetchLeft.current = true;
     axios
       .get("/api/product/main-thumbnail-random")
       .then((res) => setLeftVisual(res.data))
       .catch((err) => console.error("좌측 비주얼 로딩 실패:", err));
   }, []);
 
+  // 우측배너
   useEffect(() => {
-    // 우측배너
+    if (!leftVisual || didFetchRight.current) return;
+    didFetchRight.current = true;
     axios
       .get("/api/product/hot-random")
       .then((res) => {
