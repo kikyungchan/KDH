@@ -8,7 +8,6 @@ import { useNavigate } from "react-router";
 import CategoryMenu from "./CategoryMenu.jsx";
 import BestProductSection from "./BestProductSection.jsx";
 import LeftVisual from "./LeftVisual.jsx";
-import leftVisual from "./LeftVisual.jsx";
 
 function Home() {
   const navigate = useNavigate();

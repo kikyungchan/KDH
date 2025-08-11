@@ -19,7 +19,7 @@ function LeftVisual({ data }) {
         onClick={() => navigate(`/product/view?id=${data.productId}`)}
         alt="HOT 상품"
         className="main-visual-img"
-        style={{ opacity: 1, transition: "opacity 0.4s ease-in-out" }}
+        style={{ opacity: 1 }}
       />
       <div className="main-visual-text">
         <h2>보는 맛까지 잡은 나의 요거트볼 모음 🍓</h2>

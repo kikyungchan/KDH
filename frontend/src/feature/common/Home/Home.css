@@ -13,41 +13,14 @@
     align-items: stretch;
 }
 
-@media (max-width: 1023px) {
-    .main-visual-row {
-        flex-direction: column;
-        gap: 24px;
-    }
-}
-
-
 .main-visual-box {
     width: 70%;
     height: 600px;
     border-radius: 6px;
     overflow: hidden;
     position: relative;
+    contain: paint;
 }
-
-@media (max-width: 1023px) {
-    .main-visual-box {
-        width: 100%;
-        height: 500px;
-    }
-}
-
-@media (max-width: 767px) {
-    .main-visual-box {
-        height: 400px;
-    }
-}
-
-@media (max-width: 639px) {
-    .main-visual-box {
-        height: 300px;
-    }
-}
-
 
 .main-visual-img {
     width: 100%;
@@ -55,7 +28,8 @@
     object-fit: cover;
     display: block;
     cursor: pointer;
-    transition: transform 0.2s ease;
+    transition: all 0.2s ease;
+    backface-visibility: hidden;
 }
 
 .main-visual-img:hover {
@@ -68,7 +42,7 @@
     bottom: 20px;
     left: 30px;
     color: white;
-    text-shadow: 0 0 8px rgba(0, 0, 0, 0.6);
+    text-shadow: 0 0 15px rgba(0, 0, 0, 0.6);
 }
 
 .hot-items-carousel {
@@ -77,25 +51,6 @@
     position: relative;
     overflow: hidden;
     border-radius: 6px;
-}
-
-@media (max-width: 1023px) {
-    .hot-items-carousel {
-        width: 100%;
-        height: 250px;
-    }
-}
-
-@media (max-width: 767px) {
-    .hot-items-carousel {
-        height: 200px;
-    }
-}
-
-@media (max-width: 639px) {
-    .hot-items-carousel {
-        height: 180px;
-    }
 }
 
 /* Swiper 구성요소들 높이 맞춰줌 */
@@ -195,6 +150,51 @@
 .slide-index-indicator {
     font-size: 0.85rem;
     padding: 4px 8px;
+}
+
+@media (max-width: 1023px) {
+    .main-visual-row {
+        flex-direction: column;
+        gap: 24px;
+    }
+}
+
+@media (max-width: 1023px) {
+    .main-visual-box {
+        width: 100%;
+        height: 500px;
+    }
+}
+
+@media (max-width: 767px) {
+    .main-visual-box {
+        height: 400px;
+    }
+}
+
+@media (max-width: 639px) {
+    .main-visual-box {
+        height: 300px;
+    }
+}
+
+@media (max-width: 1023px) {
+    .hot-items-carousel {
+        width: 100%;
+        height: 250px;
+    }
+}
+
+@media (max-width: 767px) {
+    .hot-items-carousel {
+        height: 200px;
+    }
+}
+
+@media (max-width: 639px) {
+    .hot-items-carousel {
+        height: 180px;
+    }
 }
 
 @media (max-width: 767px) {
