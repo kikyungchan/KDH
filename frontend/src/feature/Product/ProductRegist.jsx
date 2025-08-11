@@ -143,9 +143,9 @@ export function ProductRegist() {
   return (
     <div className="page-wrapper">
       <div className="center-top-container">
-        <div className="w-full max-w-[800px]">
+        <div className="w-full max-w-[800px] ">
           <div className="rounded-card">
-            <form onSubmit={handleSubmit}>
+            <form onSubmit={handleSubmit} className="px-2">
               <div className="product-regist-field">
                 <h2 className="text-center text-3xl font-bold mb-6">
                   상품 등록

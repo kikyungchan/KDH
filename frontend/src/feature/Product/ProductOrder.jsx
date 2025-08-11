@@ -326,9 +326,9 @@ function Order(props) {
             >
               {/* 왼쪽: 주문 상품 목록 */}
               <div style={{ flex: 2 }}>
-                <h4>주문 상품 정보</h4>
+                <h4 className="mb-1 font-semibold">주문 상품 정보</h4>
                 {items.map((item, idx) => (
-                  <div key={idx} className="order-product">
+                  <div key={idx} className="order-product mb-1">
                     <img
                       onClick={() =>
                         window.open(
@@ -338,6 +338,7 @@ function Order(props) {
                       }
                       src={item.imagePath}
                       alt="상품"
+                      className="rounded"
                       style={{
                         width: "150px",
                         height: "150px",
@@ -403,7 +404,7 @@ function Order(props) {
             </div>
             {/* 주문자 정보 */}
             <div className="order-box rounded">
-              <h4>주문자 정보</h4>
+              <h4 className="mb-1 font-semibold">주문자 정보</h4>
               <div className="order-input-row">
                 <input
                   type="text"
@@ -438,7 +439,7 @@ function Order(props) {
 
             {/* 배송 정보 */}
             <div className="order-box rounded">
-              <h4>배송 정보</h4>
+              <h4 className="mb-1 font-semibold">배송 정보</h4>
               <div style={{ marginBottom: "10px" }}>
                 <input
                   type="checkbox"
@@ -494,7 +495,7 @@ function Order(props) {
 
             {/* 배송 메모 */}
             <div className="order-box rounded">
-              <h4>배송 메모</h4>
+              <h4 className="mb-1 font-semibold">배송 메모</h4>
               <select
                 className="order-select"
                 value={memo}

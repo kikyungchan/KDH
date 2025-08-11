@@ -352,7 +352,7 @@ function ProductCart(props) {
                     {shippingFee.toLocaleString()}원 ={" "}
                     {(totalItemPrice + shippingFee).toLocaleString()}원
                   </div>
-                  <div className="text-sm text-gray-600 flex justify-center gap-8 mt-2">
+                  <div className="text-sm text-gray-600 flex justify-center gap-13 mt-2">
                     <div>상품금액</div>
                     <div>배송비</div>
                     <div>총 주문금액</div>
@@ -362,8 +362,9 @@ function ProductCart(props) {
                 {/* 주문 버튼 */}
                 <div className="text-center">
                   <button
+                    type="button"
                     onClick={handleOrderButton}
-                    className="btn btn-dark mt-2"
+                    className="btn btn-neutral w-50 text-lg mt-2"
                   >
                     주문하기
                   </button>
