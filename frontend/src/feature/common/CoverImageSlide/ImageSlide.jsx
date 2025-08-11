@@ -14,54 +14,56 @@ function ImageSlide() {
   const [slides, setSlides] = useState([]);
   const swiperRef = useRef(null);
 
-  const animateActiveSlide = (swiper) => {
-    if (!swiper) return;
-    const active = swiper.slides[swiper.activeIndex];
-    if (!active) return;
+  // slideImage Animation
 
-    const overlay = active.querySelector(".overlay");
-    const title = active.querySelector(".overlay h1");
-    const price = active.querySelector(".overlay p");
-    if (!overlay || !title || !price) return;
-
-    gsap.killTweensOf([overlay, title, price]);
-
-    const tl = gsap.timeline({ defaults: { ease: "expo.out" } });
-
-    tl.fromTo(
-      overlay,
-      { opacity: 0.8 },
-      { opacity: 1, duration: 3, ease: "power2.out" },
-      0,
-    );
-
-    tl.fromTo(
-      title,
-      { opacity: 0, y: 160, scale: 1, filter: "blur(6px)" },
-      { opacity: 1, y: 0, scale: 1, filter: "blur(0px)", duration: 3 },
-      0,
-    );
-
-    tl.fromTo(
-      price,
-      { opacity: 0, y: 80, filter: "blur(4px)" },
-      {
-        opacity: 1,
-        y: 0,
-        letterSpacing: "0em",
-        filter: "blur(0px)",
-        duration: 3,
-        force3D: true,
-      },
-      0.1,
-    );
-  };
-
-  useEffect(() => {
-    if (swiperRef.current && slides.length > 0) {
-      requestAnimationFrame(() => animateActiveSlide(swiperRef.current));
-    }
-  }, [slides]);
+  // const animateActiveSlide = (swiper) => {
+  //   if (!swiper) return;
+  //   const active = swiper.slides[swiper.activeIndex];
+  //   if (!active) return;
+  //
+  //   const overlay = active.querySelector(".overlay");
+  //   const title = active.querySelector(".overlay h1");
+  //   const price = active.querySelector(".overlay p");
+  //   if (!overlay || !title || !price) return;
+  //
+  //   gsap.killTweensOf([overlay, title, price]);
+  //
+  //   const tl = gsap.timeline({ defaults: { ease: "expo.out" } });
+  //
+  //   tl.fromTo(
+  //     overlay,
+  //     { opacity: 0.8 },
+  //     { opacity: 1, duration: 3, ease: "power2.out" },
+  //     0,
+  //   );
+  //
+  //   tl.fromTo(
+  //     title,
+  //     { opacity: 0, y: 160, scale: 1, filter: "blur(6px)" },
+  //     { opacity: 1, y: 0, scale: 1, filter: "blur(0px)", duration: 3 },
+  //     0,
+  //   );
+  //
+  //   tl.fromTo(
+  //     price,
+  //     { opacity: 0, y: 80, filter: "blur(4px)" },
+  //     {
+  //       opacity: 1,
+  //       y: 0,
+  //       letterSpacing: "0em",
+  //       filter: "blur(0px)",
+  //       duration: 3,
+  //       force3D: true,
+  //     },
+  //     0.1,
+  //   );
+  // };
+  //
+  // useEffect(() => {
+  //   if (swiperRef.current && slides.length > 0) {
+  //     requestAnimationFrame(() => animateActiveSlide(swiperRef.current));
+  //   }
+  // }, [slides]);
 
   useEffect(() => {
     document.body.style.overflow = "hidden";
@@ -89,7 +91,7 @@ function ImageSlide() {
       loop={true}
       pagination={{ clickable: true }}
       onSwiper={(swiper) => (swiperRef.current = swiper)}
-      onSlideChange={(swiper) => animateActiveSlide(swiper)}
+      // onSlideChange={(swiper) => animateActiveSlide(swiper)}
       className="mainSwiper"
     >
       {slides.map((product) => (
