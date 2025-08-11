@@ -258,7 +258,7 @@
 
 /* --- 반응형 미디어 쿼리 --- */
 
-/* 태블릿 (1023px 이하) */
+/* (1023px 이하) */
 @media (max-width: 1023px) {
     .product-main-content {
         flex-direction: column;
@@ -298,7 +298,7 @@
     }
 }
 
-/* 모바일 (767px 이하) */
+/* (767px 이하) */
 @media (max-width: 767px) {
     .container {
         padding: 1.5rem 1rem;
@@ -342,7 +342,7 @@
     }
 }
 
-/* 초소형 모바일 (480px 이하) */
+/* (480px 이하) */
 @media (max-width: 480px) {
     .container {
         padding: 1rem 0.5rem;

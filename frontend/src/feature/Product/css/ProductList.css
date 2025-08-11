@@ -1,18 +1,16 @@
-/* --- 전역 스타일 및 기본 레이아웃 --- */
 #product-list-container {
     max-width: 1256px;
     width: 100%;
     margin: 0 auto;
-    padding: 2rem 1rem; /* 모바일에서 좌우 여백을 줄여줍니다. */
+    padding: 2rem 1rem;
 }
 
-/* --- 상품 목록 헤더 --- */
 .product-list-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
     margin-bottom: 2rem;
-    flex-wrap: wrap; /* 작은 화면에서 요소가 넘치지 않도록 합니다. */
+    flex-wrap: wrap;
 }
 
 .product-list-header .title {
@@ -28,12 +26,11 @@
     border-radius: 4px;
 }
 
-/* --- 상품 카드 그리드 --- */
 .product-grid {
     display: grid;
     grid-gap: 2rem;
     justify-content: center;
-    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); /* 더 유연한 그리드 레이아웃 */
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
     margin-bottom: 2rem;
 }
 
@@ -95,7 +92,6 @@
     gap: 0.5rem;
 }
 
-/* --- 뱃지 스타일 --- */
 .new-badge, .hot-badge, .sold-out-badge, .low-stock-badge {
     font-size: 0.75rem;
     padding: 0.25rem 0.5rem;
@@ -108,24 +104,19 @@
     background-color: #38a169;
 }
 
-/* Tailwind green-600 */
 .hot-badge {
     background-color: #e53e3e;
 }
 
-/* Tailwind red-600 */
 .sold-out-badge {
     background-color: #718096;
 }
 
-/* Tailwind gray-600 */
 .low-stock-badge {
     background-color: #f6ad55;
 }
 
-/* Tailwind orange-400 */
 
-/* --- 로딩 및 결과 없음 상태 --- */
 .loading-state, .empty-state {
     text-align: center;
     padding: 4rem 0;
@@ -153,7 +144,6 @@
     }
 }
 
-/* --- 페이지네이션 --- */
 .pagination {
     display: flex;
     justify-content: center;
@@ -186,16 +176,13 @@
     opacity: 0.5;
 }
 
-/* --- 반응형 미디어 쿼리 (통합 및 수정) --- */
 
-/* 모바일 (639px 이하) */
+/* (639px 이하) */
 @media (max-width: 639px) {
-    /* 상품 목록 전체 컨테이너 패딩 */
     #product-list-container {
         padding: 1rem;
     }
 
-    /* 헤더 (상품 목록 제목, 정렬 드롭다운) */
     .product-list-header {
         flex-direction: column;
         align-items: flex-start;
@@ -210,20 +197,18 @@
         width: 100%;
     }
 
-    /* 상품 그리드 (한 줄에 1개씩) */
     .product-grid {
-        grid-template-columns: repeat(1, 1fr);
+        grid-template-columns: 1fr;
         gap: 1rem;
     }
 
-    /* 상품명, 가격, 뱃지 폰트 사이즈 축소 */
     .product-name {
-        font-size: 0.5rem !important; /* !important 추가 */
+        font-size: 0.5rem !important;
         margin-bottom: 0.1rem;
     }
 
     .product-price {
-        font-size: 0.4rem !important; /* !important 추가 */
+        font-size: 0.4rem !important;
         margin-bottom: 0.2rem;
     }
 
@@ -232,19 +217,19 @@
     }
 
     .new-badge, .hot-badge, .sold-out-badge, .low-stock-badge {
-        font-size: 0.6rem !important; /* !important 추가 */
-        padding: 0.15rem 0.3rem;
+        font-size: 0.25rem !important;
+        padding: 0.05em 0.15rem;
     }
 }
 
-/* 태블릿 (640px ~ 767px) */
+/* ===== 640–767px (스몰 태블릿) ===== */
 @media (min-width: 640px) and (max-width: 767px) {
     .product-grid {
         grid-template-columns: repeat(2, 1fr);
     }
 }
 
-/* 태블릿 (768px ~ 1023px) */
+/* ===== 768–1023px (태블릿) ===== */
 @media (min-width: 768px) and (max-width: 1023px) {
     .product-grid {
         grid-template-columns: repeat(2, 1fr);
@@ -254,13 +239,11 @@
     }
 }
 
-/* PC (1024px 이상) */
+/* ===== ≥1024px (데스크탑) ===== */
 @media (min-width: 1024px) {
     .product-grid {
         grid-template-columns: repeat(4, 1fr);
     }
 
-    #product-list-container {
-        padding: 2rem 1rem;
-    }
+    /* #product-list-container 패딩은 Base에서 이미 지정됨 */
 }

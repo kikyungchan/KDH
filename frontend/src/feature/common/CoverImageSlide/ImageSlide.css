@@ -12,11 +12,11 @@
 
 .overlay {
     position: absolute;
-    bottom: 250px;
-    left: 150px;
+    bottom: 200px;
+    left: 140px;
     color: white;
     font-size: 3rem;
-    text-shadow: 1px 1px 8px rgba(0, 0, 0, 0.8);
+    text-shadow: 2px 2px 15px rgba(0, 0, 0, 0.8);
 }
 
 .slide-img {

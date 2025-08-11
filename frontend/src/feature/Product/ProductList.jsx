@@ -1,7 +1,8 @@
 import { Link, useSearchParams } from "react-router";
 import { useEffect, useState } from "react";
 import axios from "axios";
-import "./css/ProductList.css"; // CSS 파일명은 동일하게 유지합니다.
+import "./css/ProductList.css";
+import "../../style.css";
 
 export function ProductList() {
   const [searchParams, setSearchParams] = useSearchParams();
