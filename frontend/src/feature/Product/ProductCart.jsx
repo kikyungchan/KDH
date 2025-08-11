@@ -239,6 +239,7 @@ function ProductCart(props) {
   }
 
   return (
+    // TODO : 결제 금액 및 버튼 사이드바로 이동
     <div className="page-wrapper">
       <div className="center-top-container">
         <div className="w-full max-w-[800px]">

@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router";
 import { AuthenticationContext } from "../common/AuthenticationContextProvider.jsx";
@@ -327,9 +327,14 @@ export function MemberSignup() {
         <div className="w-full max-w-[600px] mx-auto px-4">
           <div className="rounded-card">
             <div>
-              <h2 className="mb-6 text-center text-2xl font-semibold">
-                회원 등록
-              </h2>
+              <div className="flex items-center justify-center mb-5">
+                <img
+                  src="../../../../public/logo/kdh.png"
+                  style={{ width: "50px" }}
+                  className="mr-1"
+                />
+                <span className="text-center text-2xl font-bold">회원등록</span>
+              </div>
               {/* 아이디 */}
               <div className="flex items-start gap-6 mb-2">
                 <div className="w-full">

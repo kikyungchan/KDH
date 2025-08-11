@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 import axios from "axios";
 
@@ -232,9 +232,16 @@ export function FindPassword() {
           <div className="rounded-card">
             <div className="w-full">
               <div>
-                <h3 className="text-center text-xl font-bold mb-3">
-                  비밀번호 찾기
-                </h3>
+                <div className="flex items-center justify-center mb-3">
+                  <img
+                    src="../../../../public/logo/kdh.png"
+                    style={{ width: "50px" }}
+                    className="mr-1"
+                  />
+                  <span className="text-center text-xl font-bold">
+                    비밀번호 찾기
+                  </span>
+                </div>
                 <label htmlFor="loginId" className="block text-sm ml-1 mb-2">
                   회원가입시 등록한 아이디를 입력해주세요.
                 </label>

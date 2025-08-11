@@ -10,7 +10,7 @@ import {
   Row,
   Spinner,
 } from "react-bootstrap";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router";
 
@@ -154,9 +154,16 @@ export function FindLoginId() {
           <div className="rounded-card">
             <div className="w-full">
               <div>
-                <h3 className="text-center text-xl font-bold mb-3">
-                  아이디 찾기
-                </h3>
+                <div className="flex items-center justify-center mb-3">
+                  <img
+                    src="../../../../public/logo/kdh.png"
+                    style={{ width: "50px" }}
+                    className="mr-1"
+                  />
+                  <span className="text-center text-xl font-bold">
+                    아이디 찾기
+                  </span>
+                </div>
                 {!authCompleted && (
                   <div>
                     <label className="block text-sm ml-1 mb-2">
