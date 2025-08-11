@@ -378,18 +378,15 @@ function ProductCart(props) {
                         옵션 / 수량 변경
                       </h5>
                       {/* 상품 이미지 및 이름 */}
-                      <div
-                        style={{
-                          display: "flex",
-                          alignItems: "center",
-                          gap: "12px",
-                          marginBottom: 16,
-                        }}
-                      >
+                      <div className="flex items-center gap-5 mb-3">
                         <img
                           src={selectedItem.imagePath}
                           alt="상품"
-                          style={{ width: 80, height: 80, objectFit: "cover" }}
+                          style={{
+                            width: 80,
+                            height: 80,
+                            objectFit: "cover",
+                          }}
                           className="rounded"
                         />
                         <span>{selectedItem.productName}</span>
@@ -534,9 +531,15 @@ function ProductCart(props) {
 
               <button
                 onClick={handleOrderButton}
-                className="btn btn-dark w-full mt-5"
+                className="btn btn-neutral w-full mt-5"
               >
                 {`주문하기${checkedIds?.length ? ` (${checkedIds.length}개)` : ""}`}
+              </button>
+              <button
+                onClick={() => navigate("/home")}
+                className="btn w-full mt-2"
+              >
+                쇼핑 계속하기
               </button>
             </div>
           </aside>
@@ -553,7 +556,7 @@ function ProductCart(props) {
                 </div>
               </div>
               <button onClick={handleOrderButton} className="btn btn-dark">
-                결제하기
+                주문하기
               </button>
             </div>
           </div>
