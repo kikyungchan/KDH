@@ -96,11 +96,21 @@ public interface ProductRepository extends JpaRepository<Product, Integer> {
 
     //    누적판매량 제일 많은 아이템 3개
     @Query("""
-                SELECT p FROM Product p
-                LEFT JOIN OrderItem oi ON oi.product = p
-                GROUP BY p
-                ORDER BY SUM(oi.quantity) DESC
+            SELECT p
+            FROM Product p
+            LEFT JOIN OrderItem oi ON oi.product = p
+            GROUP BY p.id
+            ORDER BY COALESCE(SUM(oi.quantity), 0) DESC
             """)
     List<Product> findTopSellingProducts(Pageable pageable);
 
+    @Query("""
+            SELECT p
+            FROM Product p
+            LEFT JOIN OrderItem oi ON oi.product = p
+            WHERE p.category = :category
+            GROUP BY p.id
+            ORDER BY COALESCE(SUM(oi.quantity), 0) DESC
+            """)
+    List<Product> findTopSellingProductsByCategory(@Param("category") String category, Pageable pageable);
 }

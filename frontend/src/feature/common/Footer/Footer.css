@@ -105,24 +105,3 @@
 .footer-sns a:hover {
     color: #333;
 }
-
-/* 모바일 반응형 */
-@media (max-width: 768px) {
-    .footer-content {
-        flex-direction: column;
-        align-items: flex-start;
-    }
-
-    .footer-info {
-        text-align: left;
-    }
-
-    .footer-bottom {
-        flex-direction: column;
-        align-items: flex-start;
-    }
-
-    .footer-sns {
-        justify-content: flex-start;
-    }
-}

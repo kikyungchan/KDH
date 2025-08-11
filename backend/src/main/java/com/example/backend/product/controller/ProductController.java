@@ -253,8 +253,9 @@ public class ProductController {
 
     // 누적판매량 제일 많은 아이템 3개
     @GetMapping("/best")
-    public ResponseEntity<List<ProductBestDto>> getTopProducts() {
-        List<ProductBestDto> topProducts = productService.getTopSellingProducts();
+    public ResponseEntity<List<ProductBestDto>> getTopProducts(@RequestParam(required = false) String category,
+                                                               @RequestParam(required = false, defaultValue = "3") Integer limit) {
+        List<ProductBestDto> topProducts = productService.getTopSellingProducts(category, limit);
         return ResponseEntity.ok(topProducts);
     }
 

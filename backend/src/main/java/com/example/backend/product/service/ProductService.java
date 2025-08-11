@@ -411,15 +411,19 @@ public class ProductService {
     }
 
 
-    public List<ProductBestDto> getTopSellingProducts() {
-        Pageable pageable = PageRequest.of(0, 3);
-        List<Product> topProducts = productRepository.findTopSellingProducts(pageable);
+    public List<ProductBestDto> getTopSellingProducts(String category, Integer limit) {
+        Pageable pageable = PageRequest.of(0, (limit == null || limit <= 0) ? 3 : limit);
+
+        List<Product> topProducts =
+                (category == null || category.isBlank() || "전체".equals(category))
+                        ? productRepository.findTopSellingProducts(pageable)
+                        : productRepository.findTopSellingProductsByCategory(category, pageable);
+
         List<ProductBestDto> result = new ArrayList<>();
-        for (Product product : topProducts) {
-            Double avg = productCommentRepository.getAverageRating(product.getId());
-            Integer cnt = productCommentRepository.getReviewCount(product.getId());
-            ProductBestDto dto = ProductBestDto.from(product, avg, cnt);
-            result.add(dto);
+        for (Product p : topProducts) {
+            Double avg = productCommentRepository.getAverageRating(p.getId());
+            Integer cnt = productCommentRepository.getReviewCount(p.getId());
+            result.add(ProductBestDto.from(p, avg, cnt));
         }
         return result;
     }
