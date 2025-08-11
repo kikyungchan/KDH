@@ -63,40 +63,59 @@
 }
 
 @media (max-width: 767px) {
+    .category-list-scroll {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        column-gap: 0.8rem;
+        row-gap: 1rem;
+        overflow-x: visible; /* 가로 스크롤 제거 */
+        padding-bottom: 0;
+    }
+
+    /* 고정 폭/높이 줄여서 그리드에 잘 맞게 */
     .category-item {
-        width: 70px;
-        height: 100px;
+        width: auto; /* 고정폭 해제 */
+        height: auto; /* 고정높이 완화 */
+        text-align: center;
+        display: flex;
+        flex-direction: column;
+        align-items: center; /* 가운데 정렬 */
+        justify-content: center;
+        gap: 1rem;
     }
 
     .category-img {
-        height: 60px;
+        height: 60px; /* 적당한 크기 */
     }
 
     .category-label {
         font-size: 0.8rem;
+        margin-top: .25rem;
     }
 }
 
 @media (max-width: 639px) {
     .category-list-scroll {
         display: grid;
-        grid-template-columns: repeat(4, 80px); /* 한 줄에 4개 */
-        gap: 1rem;
-        overflow-x: hidden; /* 가로 스크롤 제거 */
-        justify-content: left; /* 전체 가운데 정렬 */
+        grid-template-columns: repeat(4, 1fr);
+        column-gap: 0.5rem;
+        row-gap: 0.8rem;
+        overflow-x: hidden;
+        justify-items: center;
     }
 
     .category-item {
-        width: 60px;
-        height: 80px;
+        width: 55px;
+        height: 90px;
     }
 
     .category-img {
-        width: 60px;
-        height: 60px;
+        height: 45px;
     }
 
     .category-label {
-        font-size: 0.75rem;
+        font-size: 0.7rem;
+        margin-top: 0.25rem;
+        text-align: center;
     }
 }
