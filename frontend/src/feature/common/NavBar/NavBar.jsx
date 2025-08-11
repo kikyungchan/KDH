@@ -158,6 +158,15 @@ function NavBar(props) {
               onClick={handleMobileSearch}
             />
           </div>
+          {user !== null && (
+            <Link
+              to={`/member?id=${user.id}`}
+              onClick={() => setIsMobileMenuOpen(false)}
+              className="btn btn-ghost w-full justify-start text-left text-xl"
+            >
+              {user.name}
+            </Link>
+          )}
           <div>
             <div
               className="btn btn-sm btn-ghost text-left cursor-pointer text-xl"
@@ -200,13 +209,13 @@ function NavBar(props) {
               </div>
             )}
           </div>
-          <Link
-            to="/product/regist"
-            onClick={() => setIsMobileMenuOpen(false)}
-            className="btn btn-ghost w-full justify-start text-left text-xl"
-          >
-            상품등록
-          </Link>
+          {/*<Link*/}
+          {/*  to="/product/regist"*/}
+          {/*  onClick={() => setIsMobileMenuOpen(false)}*/}
+          {/*  className="btn btn-ghost w-full justify-start text-left text-xl"*/}
+          {/*>*/}
+          {/*  상품등록*/}
+          {/*</Link>*/}
           {user !== null && isAdmin && (
             <Link
               to="/member/list"
@@ -232,15 +241,6 @@ function NavBar(props) {
               className="btn btn-ghost w-full justify-start text-left text-xl"
             >
               로그아웃
-            </Link>
-          )}
-          {user !== null && (
-            <Link
-              to={`/member?id=${user.id}`}
-              onClick={() => setIsMobileMenuOpen(false)}
-              className="btn btn-ghost w-full justify-start text-left text-xl"
-            >
-              {user.name}
             </Link>
           )}
           {user !== null && (

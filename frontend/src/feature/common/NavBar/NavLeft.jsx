@@ -130,9 +130,9 @@ function NavLeft({ user, isAdmin, handleCategoryClick }) {
           <Link to="/logout" className="btn btn-ghost text-xl">
             로그아웃
           </Link>
-          <Link to={`/member?id=${user.id}`} className="btn btn-ghost text-xl">
-            {user.name}
-          </Link>
+          {/*<Link to={`/member?id=${user.id}`} className="btn btn-ghost text-xl">*/}
+          {/*  {user.name}*/}
+          {/*</Link>*/}
           <Link to="/qna/list" className="btn btn-ghost text-xl">
             문의 내역
           </Link>
