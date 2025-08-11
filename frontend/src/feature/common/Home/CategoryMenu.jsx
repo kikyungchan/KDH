@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useRef } from "react";
 import "./CategoryMenu.css";
 import { useNavigate } from "react-router";
 
@@ -15,7 +15,14 @@ const categories = [
 
 function CategoryMenu() {
   const navigate = useNavigate();
-
+  const scrollRef = useRef(null);
+  const handleScrollRight = () => {
+    const el = scrollRef.current;
+    if (!el) return;
+    // 화면 폭 기준으로 살짝 크게 이동 (끝까지 안가게)
+    const step = Math.max(200, Math.floor(el.clientWidth * 0.8));
+    el.scrollBy({ left: step, behavior: "smooth" });
+  };
   const handleClick = (categoryValue) => {
     navigate(`/product/list?category=${encodeURIComponent(categoryValue)}`);
   };
@@ -23,7 +30,9 @@ function CategoryMenu() {
   return (
     <div className="category-menu-wrapper">
       <h3 className="category-title">카테고리별 상품 찾기</h3>
-      <div className="category-list-scroll">
+
+      {/* 스크롤 영역 */}
+      <div className="category-list-scroll" ref={scrollRef}>
         {categories.map((cat, idx) => (
           <div
             className="category-item"
@@ -35,6 +44,16 @@ function CategoryMenu() {
           </div>
         ))}
       </div>
+
+      {/* 작은 화면에서만 보이는 오른쪽 스크롤 버튼 */}
+      <button
+        type="button"
+        className="cat-scroll-btn right"
+        aria-label="오른쪽으로 이동"
+        onClick={handleScrollRight}
+      >
+        ›
+      </button>
     </div>
   );
 }

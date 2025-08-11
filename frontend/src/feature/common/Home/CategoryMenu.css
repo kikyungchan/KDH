@@ -1,7 +1,6 @@
 .category-menu-wrapper {
     padding: 2rem 1rem;
     background-color: white;
-
 }
 
 .category-title {
@@ -18,7 +17,6 @@
 }
 
 .category-img {
-    /*width: 100%;*/
     height: 80px;
     object-fit: contain;
     border-radius: 8px;
@@ -32,8 +30,6 @@
     cursor: pointer;
     width: 120px;
     height: 100px;
-    /*border: 1px solid;*/
-
 }
 
 .category-icon {
@@ -47,18 +43,50 @@
     white-space: nowrap;
 }
 
-@media (max-width: 1023px) {
-    .category-item {
-        width: 80px;
-        height: 110px;
+.cat-scroll-btn {
+    display: none;
+}
+
+/* 768px ~ 1263px 버튼/숨김 */
+@media (min-width: 768px) and (max-width: 1263px) {
+    .category-menu-wrapper {
+        position: relative;
     }
 
-    .category-img {
-        height: 70px;
+    .category-list-scroll {
+        overflow-x: auto;
+        padding-right: 48px;
+        scroll-behavior: smooth;
+
+
+        -ms-overflow-style: none;
+        scrollbar-width: none;
     }
 
-    .category-label {
-        font-size: 0.85rem;
+    .category-list-scroll::-webkit-scrollbar {
+        display: none;
+    }
+
+    /* 오른쪽 버튼 보이기 */
+    .cat-scroll-btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        position: absolute;
+        right: 8px;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 36px;
+        height: 36px;
+        border-radius: 9999px;
+        background: rgba(255, 255, 255, 0.95);
+        border: 1px solid #ddd;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+        cursor: pointer;
+        z-index: 5;
+        font-size: 20px;
+        line-height: 1;
+        user-select: none;
     }
 }
 
@@ -68,29 +96,29 @@
         grid-template-columns: repeat(4, 1fr);
         column-gap: 0.8rem;
         row-gap: 1rem;
-        overflow-x: visible; /* 가로 스크롤 제거 */
+        overflow-x: visible;
         padding-bottom: 0;
     }
 
-    /* 고정 폭/높이 줄여서 그리드에 잘 맞게 */
     .category-item {
-        width: auto; /* 고정폭 해제 */
-        height: auto; /* 고정높이 완화 */
+        width: 100px;
+        height: 100px;
         text-align: center;
         display: flex;
         flex-direction: column;
-        align-items: center; /* 가운데 정렬 */
+        align-items: center;
         justify-content: center;
         gap: 1rem;
     }
 
     .category-img {
-        height: 60px; /* 적당한 크기 */
+        width: 100px;
+        height: 80px;
     }
 
     .category-label {
         font-size: 0.8rem;
-        margin-top: .25rem;
+        margin-top: 0.25rem;
     }
 }
 
@@ -105,12 +133,12 @@
     }
 
     .category-item {
-        width: 55px;
-        height: 90px;
+        width: 75px;
+        height: 100px;
     }
 
     .category-img {
-        height: 45px;
+        height: 55px;
     }
 
     .category-label {
