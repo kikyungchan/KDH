@@ -255,6 +255,8 @@ public class ProductService {
 
     public void delete(Integer id) {
         Product product = productRepository.findById(id).orElseThrow();
+        //guest_order_item 먼저 삭제
+        guestOrderItemRepository.deleteByProduct(product);
 
         // 장바구니 관련 데이터 삭제
         List<Cart> carts = cartRepository.findByProduct(product);
