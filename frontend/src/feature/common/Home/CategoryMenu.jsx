@@ -16,6 +16,7 @@ const categories = [
 function CategoryMenu() {
   const navigate = useNavigate();
   const scrollRef = useRef(null);
+
   const handleScrollRight = () => {
     const el = scrollRef.current;
     if (!el) return;
@@ -23,6 +24,14 @@ function CategoryMenu() {
     const step = Math.max(200, Math.floor(el.clientWidth * 0.8));
     el.scrollBy({ left: step, behavior: "smooth" });
   };
+
+  const handleScrollLeft = () => {
+    const el = scrollRef.current;
+    if (!el) return;
+    const step = Math.max(200, Math.floor(el.clientWidth * 0.8));
+    el.scrollBy({ left: -step, behavior: "smooth" });
+  };
+
   const handleClick = (categoryValue) => {
     navigate(`/product/list?category=${encodeURIComponent(categoryValue)}`);
   };
@@ -45,7 +54,15 @@ function CategoryMenu() {
         ))}
       </div>
 
-      {/* 작은 화면에서만 보이는 오른쪽 스크롤 버튼 */}
+      {/* 작은 화면에서만 보이는 좌/우 스크롤 버튼 */}
+      <button
+        type="button"
+        className="cat-scroll-btn left"
+        aria-label="왼쪽으로 이동"
+        onClick={handleScrollLeft}
+      >
+        ‹
+      </button>
       <button
         type="button"
         className="cat-scroll-btn right"
