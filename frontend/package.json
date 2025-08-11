@@ -16,6 +16,7 @@
     "axios": "^1.10.0",
     "bootstrap": "^5.3.7",
     "daisyui": "^5.0.50",
+    "gsap": "^3.13.0",
     "jwt-decode": "^4.0.0",
     "prettier": "^3.6.2",
     "react": "^19.1.0",

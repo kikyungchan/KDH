@@ -15,21 +15,21 @@
     bottom: 250px;
     left: 150px;
     color: white;
-    font-size: 2rem;
+    font-size: 3rem;
     text-shadow: 1px 1px 8px rgba(0, 0, 0, 0.8);
 }
 
 .slide-img {
     max-width: 100%;
     max-height: 100%;
-    object-fit: contain; /* 🔥 비율 유지 + 자르지 않음 */
+    object-fit: contain;
 }
 
 .slide-container {
     position: relative;
     width: 100vw;
     height: 100vh;
-    background-color: black; /* 남는 영역 배경 */
+    background-color: black;
     display: flex;
     justify-content: center;
     align-items: center;
