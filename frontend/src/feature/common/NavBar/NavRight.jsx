@@ -9,7 +9,7 @@ import { HiOutlineBellAlert } from "react-icons/hi2";
 
 NavUserMenu.propTypes = {};
 
-function NavRight({ iconRef, onSearchToggle }) {
+function NavRight({ iconRef, onSearchToggle, alertidcator }) {
   const { cartCount } = useCart();
   const { user, isAdmin, logout } = useContext(AuthenticationContext);
 
@@ -32,9 +32,14 @@ function NavRight({ iconRef, onSearchToggle }) {
         <Link to={"/faq/list"}>
           <MdSupportAgent />
         </Link>
-        <Link to={"/alert/list"}>
-          <HiOutlineBellAlert />
-        </Link>
+        <div className="indicator">
+          <span className="indicator-item badge badge-secondary text-[0.5rem] py-[0px] px-[6px]">
+            {alertidcator}
+          </span>
+          <Link to={"/alert/list"}>
+            <HiOutlineBellAlert />
+          </Link>
+        </div>
       </div>
     </div>
   );

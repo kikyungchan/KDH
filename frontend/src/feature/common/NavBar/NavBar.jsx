@@ -17,6 +17,7 @@ import "bootstrap/dist/css/bootstrap-grid.min.css";
 import SearchBar from "./SearchBar.jsx";
 import SockJS from "sockjs-client";
 import { Client } from "@stomp/stompjs";
+import { toast } from "react-toastify";
 
 function NavBar(props) {
   const [showMobileCategory, setShowMobileCategory] = useState(false);
@@ -30,6 +31,7 @@ function NavBar(props) {
   const navigate = useNavigate();
   const location = useLocation();
   const [keyword, setKeyword] = useState("");
+  const [alertCount, setAlertCount] = useState(1);
 
   const clientRef = useRef(null); // STOMP 인스턴스 담아 둘 상자
   const [target, setTarget] = useState(""); //수신자 id
@@ -146,6 +148,8 @@ function NavBar(props) {
   const sendMessage = () => {
     // 보낼 메시지 객체
     const chatMsg = { from: user.name, to: "admin1", message: "test" };
+    setAlertCount(alertCount + 1);
+    toast("알림을 확인해 주세요");
     // SEND_DEST로 파일 전송
 
     clientRef.current.publish({
@@ -190,6 +194,7 @@ function NavBar(props) {
           />
           {/* 오른쪽 아이콘 */}
           <NavRight
+            alertidcator={alertCount}
             // user={user}
             iconRef={iconRef}
             onSearchToggle={() => setShowSearch((prev) => !prev)}
