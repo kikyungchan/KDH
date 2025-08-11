@@ -38,6 +38,7 @@ public class ProductService {
     private final OrderRepository orderRepository;
     private final OrderItemRepository orderItemRepository;
     private final GuestOrderRepository guestOrderRepository;
+    private final GuestOrderItemRepository guestOrderItemRepository;
     private final ProductCommentRepository productCommentRepository;
     private final ProductThumbnailRepository productThumbnailRepository;
     private final CartRepository cartRepository;
@@ -254,11 +255,22 @@ public class ProductService {
 
     public void delete(Integer id) {
         Product product = productRepository.findById(id).orElseThrow();
+
+        // 장바구니 관련 데이터 삭제
         List<Cart> carts = cartRepository.findByProduct(product);
         for (Cart cart : carts) {
             cartRepository.delete(cart);
         }
-// 썸네일 이미지 삭제
+        // . 관련 guest_order_item 먼저 삭제 (옵션 참조 때문에)
+        for (ProductOption option : product.getOptions()) {
+            guestOrderItemRepository.deleteByOption(option);
+        }
+
+        // . 상품 옵션 삭제
+        for (ProductOption option : product.getOptions()) {
+            productOptionRepository.delete(option);
+        }
+        // 썸네일 이미지 삭제
         List<ProductThumbnail> thumbnails = product.getThumbnails();
         for (ProductThumbnail thumb : thumbnails) {
             s3Uploader.delete(extractS3Key(thumb.getStoredPath())); // S3에서 삭제
