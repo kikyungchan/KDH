@@ -31,27 +31,15 @@ const Footer = () => {
             <p>문의: support@kdhshop.com | 1234-5678</p>
           </div>
           <div className="footer-sns">
-            <a
-              href="https://instagram.com"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
+            <a href="/Home" rel="noopener noreferrer">
               Instagram
               <img src="../../../../public/logo/insta.webp" alt="Instagram" />
             </a>
-            <a
-              href="https://youtube.com"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
+            <a href="/Home" rel="noopener noreferrer">
               Youtube
               <img src="../../../../public/logo/Youtube.png" alt="YouTube" />
             </a>
-            <a
-              href="https://pf.kakao.com"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
+            <a href="/Home" rel="noopener noreferrer">
               Kakao
               <img src="../../../../public/logo/KakaoTalk.svg" alt="Kakao" />
             </a>

@@ -25,6 +25,8 @@
 }
 
 .category-item {
+    display: flex;
+    flex-direction: column;
     flex: 0 0 auto;
     text-align: center;
     cursor: pointer;
@@ -40,7 +42,7 @@
 }
 
 .category-label {
-    font-size: 1rem;
+    font-size: 1.2rem;
     color: #333;
     white-space: nowrap;
 }
@@ -76,39 +78,25 @@
 }
 
 @media (max-width: 639px) {
+    .category-list-scroll {
+        display: grid;
+        grid-template-columns: repeat(4, 80px); /* 한 줄에 4개 */
+        gap: 1rem;
+        overflow-x: hidden; /* 가로 스크롤 제거 */
+        justify-content: left; /* 전체 가운데 정렬 */
+    }
+
     .category-item {
         width: 60px;
-        height: 90px;
+        height: 80px;
     }
 
     .category-img {
-        height: 50px;
+        width: 60px;
+        height: 60px;
     }
 
     .category-label {
         font-size: 0.75rem;
     }
 }
-
-/*@media screen and (max-width: 640px) {*/
-/*    !*.category-title {*!*/
-/*    !*    font-size: 1.1rem;*!*/
-/*    !*    margin-bottom: 1.2rem;*!*/
-/*    !*}*!*/
-/*    .category-item {*/
-/*        width: 60px;*/
-/*        height: 160px;*/
-/*    }*/
-
-/*    .category-img {*/
-/*        height: 100px;*/
-/*    }*/
-
-/*    .category-label {*/
-/*        font-size: 0.85rem;*/
-/*    }*/
-
-/*    .category-icon {*/
-/*        font-size: 2rem;*/
-/*    }*/
-/*}*/
