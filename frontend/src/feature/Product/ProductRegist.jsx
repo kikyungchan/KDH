@@ -147,7 +147,7 @@ export function ProductRegist() {
           <div className="rounded-card">
             <form onSubmit={handleSubmit}>
               <div className="product-regist-field">
-                <h2 className="text-center text-4xl font-bold mb-6">
+                <h2 className="text-center text-3xl font-bold mb-6">
                   상품 등록
                 </h2>
                 <label className="product-regist-label mt-3">상품명</label>
