@@ -80,10 +80,11 @@ function NavBar(props) {
       params.set("sort", "recent"); // 기본 정렬값
     }
     navigate(`/product/list?${params.toString()}`);
+    setShowMobileCategory(false);
     setIsMobileMenuOpen(false);
   };
 
-  // ⭐ 모바일 메뉴 내 검색 기능 처리 함수
+  // 모바일 메뉴 내 검색 기능 처리 함수
   const handleMobileSearch = () => {
     if (keyword.trim() !== "") {
       navigate(`/product/list?keyword=${keyword.trim()}`);
@@ -99,7 +100,13 @@ function NavBar(props) {
           {/* 모바일 메뉴 아이콘 */}
           <FiMenu
             className="hamburger-icon"
-            onClick={() => setIsMobileMenuOpen((prev) => !prev)}
+            onClick={() =>
+              setIsMobileMenuOpen((prev) => {
+                const next = !prev;
+                if (!next) setShowMobileCategory(false); // 닫힐 때 서브 드롭다운도 접기
+                return next; // <-- 항상 반환
+              })
+            }
           />
           <div className="navbar-center">
             <Link to="/Home" className="navbar-logo">
@@ -205,6 +212,30 @@ function NavBar(props) {
                   onClick={() => handleCategoryClick("hat")}
                 >
                   모자
+                </button>
+                <button
+                  className="text-lg btn btn-sm btn-ghost text-left cursor-pointer"
+                  onClick={() => handleCategoryClick("bag")}
+                >
+                  가방
+                </button>
+                <button
+                  className="text-lg btn btn-sm btn-ghost text-left cursor-pointer"
+                  onClick={() => handleCategoryClick("shoes")}
+                >
+                  신발
+                </button>
+                <button
+                  className="text-lg btn btn-sm btn-ghost text-left cursor-pointer"
+                  onClick={() => handleCategoryClick("socks")}
+                >
+                  양말
+                </button>
+                <button
+                  className="text-lg btn btn-sm btn-ghost text-left cursor-pointer"
+                  onClick={() => handleCategoryClick("belt")}
+                >
+                  벨트
                 </button>
               </div>
             )}
