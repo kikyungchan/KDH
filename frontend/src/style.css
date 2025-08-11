@@ -43,7 +43,7 @@ td, tr, th {
 
 /* 중앙 정렬(위쪽 정렬) 컨테이너 */
 .center-top-container {
-    @apply flex justify-center items-start pt-10;
+    @apply flex justify-center items-start py-10;
 }
 
 /* 카드 스타일 */
