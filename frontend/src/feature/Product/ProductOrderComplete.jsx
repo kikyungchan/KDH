@@ -18,9 +18,48 @@ export function ProductOrderComplete() {
         <div className="w-full max-w-[800px]">
           <div className="rounded-card">
             <h2 className="text-center text-3xl font-bold mb-6">주문 완료</h2>
-            <p className="mb-4">
+            <p className="text-lg mb-4">
               <strong>주문번호: {orderToken}</strong>
             </p>
+
+            {/* 주문자 정보 */}
+            <div className="order-box rounded">
+              <h4 className="font-semibold mb-2">주문자 정보</h4>
+              <div className="flex">
+                <div className="w-40 mt-1 space-y-1">
+                  <div>이름</div>
+                  <div>연락처</div>
+                  <div>주소</div>
+                </div>
+                <div className="space-y-1">
+                  <div>{orderer.name}</div>
+                  <div>{orderer.phone}</div>
+                  <div>{orderer.address}</div>
+                </div>
+              </div>
+            </div>
+
+            {/* 배송 정보 */}
+            <div className="order-box rounded">
+              <h4 className="font-semibold mb-2">배송 정보</h4>
+              <div className="flex">
+                <div className="w-40 space-y-1">
+                  <div>받는사람</div>
+                  <div>연락처</div>
+                  <div>주소</div>
+                  <div>배송메모</div>
+                </div>
+                <div className="space-y-1">
+                  <div>{receiver.name}</div>
+                  <div>{receiver.phone}</div>
+                  <div>
+                    {receiver.address} {receiver.detailedAddress}({" "}
+                    {receiver.postalCode} )
+                  </div>
+                  <div>{memo || "없음"}</div>
+                </div>
+              </div>
+            </div>
 
             {/* 주문 상품 정보 */}
             <div className="order-box rounded">
@@ -53,53 +92,10 @@ export function ProductOrderComplete() {
                   </div>
                 </div>
               ))}
-              <hr />
+              <hr className="border-t border-gray-300 my-4" />
               <div className="text-end fw-bold mt-2 text-lg">
                 총 주문금액: {(totalItemPrice + shippingFee).toLocaleString()}원
               </div>
-            </div>
-
-            {/* 주문자 정보 */}
-            <div className="order-box rounded">
-              <h4 className="font-semibold mb-3">주문자 정보</h4>
-              <div className="flex">
-                <div className="w-40">
-                  <div>이름</div>
-                  <div>연락처</div>
-                  <div>주소</div>
-                </div>
-                <div>
-                  <div>{orderer.name}</div>
-                  <div>{orderer.phone}</div>
-                  <div>{orderer.address}</div>
-                </div>
-              </div>
-            </div>
-
-            {/* 배송 정보 */}
-            <div className="order-box rounded">
-              <h4 className="font-semibold mb-3">배송 정보</h4>
-              <div className="flex">
-                <div className="w-40">
-                  <div>받는사람</div>
-                  <div>연락처</div>
-                  <div>주소</div>
-                </div>
-                <div>
-                  <div>{receiver.name}</div>
-                  <div>{receiver.phone}</div>
-                  <div>
-                    {receiver.address} {receiver.detailedAddress}({" "}
-                    {receiver.postalCode} )
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* 배송 메모 */}
-            <div className="order-box rounded">
-              <h4 className="font-semibold mb-3">배송 메모</h4>
-              <div>{memo || "없음"}</div>
             </div>
 
             {/* 버튼 */}

@@ -16,5 +16,4 @@ public class OrderRequest {
     private String addressDetail;
     private String orderToken;
 
-
 }
