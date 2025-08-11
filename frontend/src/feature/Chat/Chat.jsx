@@ -8,6 +8,7 @@ import { v4 as uuidv4 } from "uuid";
 const WS_URL = "http://localhost:8080/ws-chat";
 const WS_PATH = "/ws-chat";
 const SEND_DEST = "/app/chat/private";
+const SEND_DEST_GROUP = "/topic/chat/";
 const SUBSCRIBE_DEST = "/user/queue/messages";
 
 export function Chat() {
@@ -15,10 +16,12 @@ export function Chat() {
   const [target, setTarget] = useState(""); //수신자 id
   const [text, setText] = useState(""); // 보낼 텍스트
   const [msgs, setMsgs] = useState([]); // 주고 받은 메시지들
-  const clientRef = useRef(null); // STOMP 인스턴스 담아 둘 상자
+  const [roomUsers, setRoomUsers] = useState([]); // 현재 방의 접속자들1
   const [count, setCount] = useState(0);
+  const clientRef = useRef(null); // STOMP 인스턴스 담아 둘 상자
   const effectRan = useRef(false);
-  const roomId = uuidv4();
+  // const roomId = uuidv4();
+  const roomId = "2222";
 
   useEffect(() => {
     console.log("chat user : ", user);
@@ -55,6 +58,46 @@ export function Chat() {
             setMsgs((prev) => [...prev, JSON.parse(message.body)]);
           });
 
+          client.subscribe(`/topic/chat/${roomId}`, (message) => {
+            const data = JSON.parse(message.body);
+            console.log("📨 방 메시지 받음:", data);
+            if (data.type === "CHAT") {
+              setMsgs((prev) => [...prev, JSON.parse(message.body)]);
+            } else if (data.type === "ENTER") {
+              console.log(`roomId : ${roomId}`);
+              if (data.currentUsers) {
+                setRoomUsers(data.currentUsers);
+              }
+              // 입장 메시지도 채팅창에 표시
+              setMsgs((prev) => [
+                ...prev,
+                {
+                  from: "SYSTEM",
+                  message: data.message,
+                  timestamp: data.timestamp,
+                  type: "SYSTEM",
+                },
+              ]);
+            } else if (
+              data.type === "LEAVE" ||
+              data.type === "USER_DISCONNECTED"
+            ) {
+              if (data.currentUsers) {
+                setRoomUsers(data.currentUsers);
+              }
+              // 퇴장 메시지도 채팅창에 표시
+              setMsgs((prev) => [
+                ...prev,
+                {
+                  from: "SYSTEM",
+                  message: data.message,
+                  timestamp: data.timestamp,
+                  type: "SYSTEM",
+                },
+              ]);
+            }
+          });
+
           client.publish({
             destination: "/app/chat/enter", // 서버의 MessageMapping 경로
             body: JSON.stringify({
@@ -64,6 +107,10 @@ export function Chat() {
               // 필요하면 다른 필드도 추가
             }),
           });
+        };
+
+        client.onDisconnect = () => {
+          console.log("서버 연결이 끊어졌습니다");
         };
 
         // 연결 활성화(connect 시도)
@@ -117,6 +164,21 @@ export function Chat() {
     setText(""); // 입력창 초기화
   };
 
+  const sendGroupMessage = () => {
+    if (!text.trim()) return;
+    const chatMsg = {
+      from: user.name,
+      to: target,
+      message: text,
+      type: "CHAT",
+    };
+    clientRef.current.publish({
+      destination: SEND_DEST_GROUP + roomId,
+      body: JSON.stringify(chatMsg),
+    });
+    setText(""); // 입력창 초기화
+  };
+
   if (!user) {
     return <span className="loading loading-spinner"></span>;
   }
@@ -126,7 +188,7 @@ export function Chat() {
       <Row className="justify-content-center">
         <Col md={8} lg={9} className="mt-5">
           <div className="container">
-            <h2>1:1 상담 ({user.name})</h2>
+            {/*<h2>1:1 상담 ({user.name})</h2>*/}
 
             {/*채팅 로그*/}
             <div className="border rounded-lg border-gray-200  h-150 overflow-y-auto mb-2.5">
@@ -138,14 +200,23 @@ export function Chat() {
                 {/*삭제 x */}
                 <div className="chat chat-start"></div>
                 <div className="chat chat-end"></div>
-                {msgs.map((m, i) => (
-                  <div
-                    key={i}
-                    className={`chat chat-${user.name == m.from ? "end" : "start"}`}
-                  >
-                    <div className="chat-bubble">{m.message}</div>
-                  </div>
-                ))}
+                {msgs.map((m, i) =>
+                  m.type == "CHAT" ? (
+                    <div
+                      key={i}
+                      className={`chat chat-${user.name == m.from ? "end" : "start"}`}
+                    >
+                      <div className="chat-header">{m.from}</div>
+                      <div className="chat-bubble">{m.message}</div>
+                    </div>
+                  ) : (
+                    <div className="flex w-full flex-col">
+                      <div className="divider border-gray-200 text-gray-400 text-xs">
+                        {m.message}
+                      </div>
+                    </div>
+                  ),
+                )}
               </div>
             </div>
             <input
@@ -166,6 +237,12 @@ export function Chat() {
               onClick={sendMessage}
             >
               전송
+            </button>
+            <button
+              className={"btn btn-outline btn-primary"}
+              onClick={sendGroupMessage}
+            >
+              그룹 전송
             </button>
             {clientRef.current && (
               <button

@@ -1,6 +1,7 @@
 package com.example.backend.chat.controller;
 
 import com.example.backend.chat.dto.ChatForm;
+import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
@@ -24,9 +25,21 @@ public class ChatController {
     @MessageMapping("/chat/private")
     @SendToUser("/queue/messages")
     public ChatForm sendPrivateMessage(ChatForm msg, Principal principal) {
+        msg.setType(ChatForm.MessageType.CHAT);
         template.convertAndSendToUser(
                 msg.getTo(),                // 받는 사용자 ID
                 "/queue/messages",          // 구독 경로
+                msg                         // 메시지 payload
+        );
+        return msg;
+    }
+
+    @MessageMapping("/topic/chat/{roomId}")
+    public ChatForm sendTopicMessage(@DestinationVariable String roomId, ChatForm msg, Principal principal) {
+        msg.setType(ChatForm.MessageType.CHAT);
+        template.convertAndSendToUser(
+                msg.getTo(),                // 받는 사용자 ID
+                "/topic/chat/" + roomId,          // 구독 경로
                 msg                         // 메시지 payload
         );
         return msg;
