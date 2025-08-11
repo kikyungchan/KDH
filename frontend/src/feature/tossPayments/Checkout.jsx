@@ -11,6 +11,7 @@ export function CheckoutPage() {
     currency: "KRW",
     // value: 50_000,
     value: 200,
+    // value: widgets.amount,
   });
   const [paymentData, setPaymentData] = useState(null);
   const [ready, setReady] = useState(false);
@@ -67,7 +68,7 @@ export function CheckoutPage() {
       return;
     }
 
-    widgets.setAmount(amount);
+    // widgets.setAmount(amount);
 
     const handleMessage = (event) => {
       // 보안: 출처 확인
@@ -84,7 +85,11 @@ export function CheckoutPage() {
         case "CHECKOUT_DATA":
           console.log("결제 데이터 받음:", event.data.data);
           setPaymentData(event.data.data); // state 업데이트
-          widgets.setAmount(event.data.data.amount);
+
+          widgets.setAmount({
+            value: Number(event.data.data.amount),
+            currency: "KRW",
+          });
 
           break;
         case "CLOSE_POPUP":
@@ -109,6 +114,16 @@ export function CheckoutPage() {
 
     // 클린업: 컴포넌트 언마운트시 리스너 제거
     return () => {
+      // 부모 윈도우에게 언마운트 알림
+      if (window.opener && !window.opener.closed) {
+        window.opener.postMessage(
+          {
+            type: "POPUP_CLOSING", //
+            timestamp: new Date().toISOString(),
+          },
+          window.location.origin,
+        );
+      }
       window.removeEventListener("message", handleMessage);
     };
   }, [widgets, amount]);
@@ -120,28 +135,7 @@ export function CheckoutPage() {
         <div id="payment-method" />
         {/* 이용약관 UI */}
         <div id="agreement" />
-        {/* 쿠폰 체크박스 */}
-        {/*<div>
-          <div>
-            <label htmlFor="coupon-box">
-              <input
-                id="coupon-box"
-                type="checkbox"
-                aria-checked="true"
-                disabled={!ready}
-                onChange={(event) => {
-                  // ------  주문서의 결제 금액이 변경되었을 경우 결제 금액 업데이트 ------
-                  setAmount(
-                    event.target.checked ? amount - 5_000 : amount + 5_000,
-                  );
-                }}
-              />
-              <span>5,000원 쿠폰 적용</span>
-            </label>
-          </div>
-        </div>*/}
         {/* 결제하기 버튼 */}
-        {/*todo : 결제 처리하기 (현재 기존요청을 처리중이라며 결제가 안됨 서버에도 접속 못하는것 같음)*/}
         <button
           className="button btn primary w-full"
           disabled={!ready}
@@ -152,12 +146,12 @@ export function CheckoutPage() {
               // 결제 과정에서 악의적으로 결제 금액이 바뀌는 것을 확인하는 용도입니다.
               await widgets.requestPayment({
                 orderId: orderId,
-                orderName: "토스 티셔츠 외 2건",
+                orderName: paymentData.productName,
                 successUrl: window.location.origin + "/pay/success",
                 failUrl: window.location.origin + "/pay/fail",
-                customerEmail: "customer123@gmail.com",
-                customerName: "김토스",
-                customerMobilePhone: "01012341234",
+                customerEmail: paymentData.emailAddr,
+                customerName: paymentData.username,
+                customerMobilePhone: paymentData.phoneNum,
               });
             } catch (error) {
               // 에러 처리하기

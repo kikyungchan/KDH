@@ -1,8 +1,9 @@
 import { useLocation, useNavigate } from "react-router";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import axios from "axios";
 import "./css/ProductOrder.css";
 import { useCart } from "./CartContext.jsx";
+import { AuthenticationContext } from "../common/AuthenticationContextProvider.jsx";
 
 function Order(props) {
   const [postalCode, setPostalCode] = useState("");
@@ -17,6 +18,8 @@ function Order(props) {
   const [address, setAddress] = useState("");
   const [phone, setPhone] = useState("");
   const [addressDetail, setAddressDetail] = useState("");
+  const [email, setEmail] = useState(null);
+  const [isProcessing, setIsProcessing] = useState(false);
   const { state } = useLocation();
   const { setCartCount } = useCart();
   // items가 배열이 아니더라도 자동으로 배열로 감싸줌.
@@ -28,6 +31,27 @@ function Order(props) {
   const shippingFee = totalItemPrice >= 100000 ? 0 : 3000;
   const navigate = useNavigate();
   const checkoutWindow = useRef(null);
+  const formDataRef = useRef({});
+
+  useEffect(() => {
+    formDataRef.current = {
+      receiverName,
+      receiverPhone,
+      receiverAddress,
+      receiverDetailAddress,
+      postalCode,
+      memo,
+      customMemo,
+    };
+  }, [
+    receiverName,
+    receiverPhone,
+    receiverAddress,
+    receiverDetailAddress,
+    postalCode,
+    memo,
+    customMemo,
+  ]);
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -42,41 +66,108 @@ function Order(props) {
           setAddress(res.data.address);
           setName(res.data.name);
           setPhone(res.data.phone);
+          setEmail(res.data.email);
           setAddressDetail(res.data.addressDetail);
         })
         .catch((err) => {});
     }
-    window.addEventListener("message", (event) => {
-      // if (event.origin !== "https://yourdomain.com") return;
-      /*      if (event.data?.type === "PAY_SUCCESS") {
-              // 원하는 처리
-              console.log("팝업에서 데이터 받음!", event.data);
-            }*/
-      switch (event.data.type) {
-        case "POPUP_READY":
-          console.log("팝업 준비 완료!");
-          // 팝업이 준비되면 데이터 전송
-          sendDataToPopup();
-          break;
-
-        case "PAY_SUCCESS":
-          console.log("결제 완료:", event.data.data);
-          // 결제 완료 처리
-          handlePaymentResult(event.data.data);
-          break;
-      }
-    });
   }, []);
 
+  useEffect(() => {
+    if (email != null) {
+      const handlePopupMessage = (event) => {
+        switch (event.data.type) {
+          case "POPUP_READY":
+            console.log("팝업 준비 완료!");
+            // 팝업이 준비되면 데이터 전송
+            sendDataToPopup();
+            break;
+
+          case "PAY_SUCCESS":
+            // 결제 완료 처리
+            handleOrderButton();
+            setIsProcessing(false);
+            break;
+
+          case "PAY_FAIL":
+            // 결제 실패 처리
+            alert("결제에 실패하였습니다 다시 시도해 주세요");
+            setIsProcessing(false);
+            break;
+        }
+      };
+      window.addEventListener("message", handlePopupMessage);
+
+      // cleanup 함수로 이벤트 리스너 제거
+      return () => {
+        window.removeEventListener("message", handlePopupMessage);
+      };
+    }
+  }, [email]);
+
   function handlePaymentConnection() {
-    checkoutWindow.current = window.open(
-      "/pay/Checkout", // 새 창에서 열 주소
-      "_blank", // 새 창
-      "width=600,height=800",
-    );
+    // 폼 검증
+    if (!validateForm()) {
+      return;
+    }
+
+    setIsProcessing(true);
+    if (!isProcessing) {
+      checkoutWindow.current = window.open(
+        "/pay/Checkout", // 새 창에서 열 주소
+        "_blank", // 새 창
+        "width=600,height=800",
+      );
+
+      // 팝업 창 확인
+      if (!checkoutWindow.current) {
+        alert("팝업이 차단되었습니다. 팝업 차단을 해제해 주세요.");
+        setIsProcessing(false);
+        return;
+      }
+
+      // 팝업이 닫혔을 때를 감지 (혹시 사용자가 직접 닫을 경우 대비)
+      // setinterval (일정 시간 간격으로 함수를 반복해서 실행)
+      const checkClosed = setInterval(() => {
+        if (checkoutWindow.current && checkoutWindow.current.closed) {
+          setIsProcessing(false);
+          checkoutWindow.current = null;
+          clearInterval(checkClosed);
+        }
+      }, 1000);
+
+      // 10분 뒤 인터벌 정리 (메모리 누수 방지)
+      const forceCloseTimeout = setTimeout(() => {
+        // 팝업이 아직 열려있다면 강제로 닫기
+        if (checkoutWindow.current && !checkoutWindow.current.closed) {
+          checkoutWindow.current.close(); // 팝업 강제 종료!
+          checkoutWindow.current = null;
+        }
+
+        // 사용자에게 알림
+        alert("결제 시간이 초과되었습니다. 다시 시도해 주세요.");
+
+        // 상태 정리
+        setIsProcessing(false);
+        clearInterval(checkClosed); // 인터벌도 정리
+      }, 600000); // 10분 = 3,600,000ms
+
+      // 팝업이 정상적으로 닫혔을 때는 강제 종료 타이머도 취소
+      // const originalInterval = checkClosed;
+      const enhancedCheckClosed = setInterval(() => {
+        if (checkoutWindow.current && checkoutWindow.current.closed) {
+          setIsProcessing(false);
+          checkoutWindow.current = null;
+          clearInterval(enhancedCheckClosed);
+          clearTimeout(forceCloseTimeout); // 강제 종료 타이머 취소
+        }
+      }, 1000);
+    }
   }
 
   function sendDataToPopup() {
+    console.log("items : ", items);
+    console.log("items length", items.length);
     if (checkoutWindow.current && !checkoutWindow.current.closed) {
       checkoutWindow.current.postMessage(
         {
@@ -84,20 +175,18 @@ function Order(props) {
           data: {
             orderId: "12345",
             amount: totalItemPrice + shippingFee,
-            productName: items[0].productName,
+            productName:
+              items[0].productName +
+              (items.length > 1 ? ` 외 ${items.length - 1}건` : ""),
+            username: name,
+            phoneNum: phone,
+            emailAddr: email,
           },
         },
         window.location.origin,
       );
     }
   }
-
-  const handlePaymentResult = (result) => {
-    if (result.success) {
-      alert("결제가 완료되었습니다!");
-      // 페이지 새로고침이나 상태 업데이트
-    }
-  };
 
   if (!state || items.length === 0) {
     return <div>잘못된 접근입니다.</div>;
@@ -111,22 +200,33 @@ function Order(props) {
     navigate(-1);
   }
 
-  function handleOrderButton() {
+  function validateForm() {
     // 입력값 유효성 검사
     // 주문자 정보
     if (!name.trim() || !phone.trim() || !address.trim()) {
       alert("주문자 정보를 모두 입력해 주세요.");
-      return;
+      return false;
     }
+
+    const currentData = formDataRef.current;
     // 배송 정보
     if (
-      !receiverName.trim() ||
-      !receiverPhone.trim() ||
-      !receiverAddress.trim() ||
-      !receiverDetailAddress.trim() ||
-      !postalCode.trim()
+      !currentData.receiverName.trim() ||
+      !currentData.receiverPhone.trim() ||
+      !currentData.receiverAddress.trim() ||
+      !currentData.receiverDetailAddress.trim() ||
+      !currentData.postalCode.trim()
     ) {
       alert("배송지 정보를 모두 입력해 주세요.");
+
+      return false;
+    }
+    return true;
+  }
+
+  function handleOrderButton() {
+    const currentData = formDataRef.current;
+    if (!validateForm()) {
       return;
     }
     const token = localStorage.getItem("token");
@@ -141,10 +241,13 @@ function Order(props) {
       quantity: item.quantity,
       price: item.price,
       shippingAddress: address,
-      memo: memo === "직접 작성" ? customMemo : memo,
+      memo:
+        currentData.memo === "직접 작성"
+          ? currentData.customMemo
+          : currentData.memo,
       totalPrice: item.price * item.quantity,
-      zipcode: postalCode,
-      addressDetail: receiverDetailAddress,
+      zipcode: currentData.postalCode,
+      addressDetail: currentData.receiverDetailAddress,
     }));
 
     if (token) {
@@ -181,14 +284,6 @@ function Order(props) {
         })
         .then((res) => {
           setCartCount(res.data);
-          /*return new Promise((resolve) => {
-            const checkoutWindow = window.open(
-              "/pay/Checkout", // 새 창에서 열 주소
-              "_blank", // 새 창
-              "width=600,height=800",
-            );
-            console.log("checkoutWindow", checkoutWindow);
-          });*/
         })
         .then((res) => {
           alert("주문이 완료되었습니다.");
@@ -198,13 +293,16 @@ function Order(props) {
               orderToken,
               orderer: { name, phone, address },
               receiver: {
-                name: receiverName,
-                phone: receiverPhone,
-                address: receiverAddress,
-                postalCode,
-                receiverDetailAddress,
+                name: currentData.receiverName,
+                phone: currentData.receiverPhone,
+                address: currentData.receiverAddress,
+                postalCode: currentData.postalCode,
+                receiverDetailAddress: currentData.receiverDetailAddress,
               },
-              memo: memo === "직접 작성" ? customMemo : memo,
+              memo:
+                currentData.memo === "직접 작성"
+                  ? currentData.customMemo
+                  : currentData.memo,
             },
           });
         })
@@ -222,15 +320,18 @@ function Order(props) {
         quantity: item.quantity,
         price: item.price,
         shippingAddress: address,
-        memo: memo === "직접 작성" ? customMemo : memo,
+        memo:
+          currentData.memo === "직접 작성"
+            ? currentData.customMemo
+            : currentData.memo,
         totalPrice: item.price * item.quantity,
         guestName: name,
         guestPhone: phone,
-        receiverName: receiverName,
-        receiverPhone: receiverPhone,
-        receiverAddress: receiverAddress,
-        zipcode: postalCode,
-        addressDetail: receiverDetailAddress,
+        receiverName: currentData.receiverName,
+        receiverPhone: currentData.receiverPhone,
+        receiverAddress: currentData.receiverAddress,
+        zipcode: currentData.postalCode,
+        addressDetail: currentData.receiverDetailAddress,
       }));
       axios.post("/api/product/order/guest", payloadList).then((res) => {
         const token = res.data.guestOrderToken;
@@ -253,13 +354,16 @@ function Order(props) {
             orderToken: token,
             orderer: { name, phone, address },
             receiver: {
-              name: receiverName,
-              phone: receiverPhone,
-              address: receiverAddress,
-              postalCode,
-              receiverDetailAddress,
+              name: currentData.receiverName,
+              phone: currentData.receiverPhone,
+              address: currentData.receiverAddress,
+              postalCode: currentData.postalCode,
+              receiverDetailAddress: currentData.receiverDetailAddress,
             },
-            memo: memo === "직접 작성" ? customMemo : memo,
+            memo:
+              currentData.memo === "직접 작성"
+                ? currentData.customMemo
+                : currentData.memo,
           },
         });
       });
@@ -311,6 +415,10 @@ function Order(props) {
         console.log("작동");
       },
     }).open();
+  }
+
+  if (!email) {
+    return <span className="loading loading-spinner"></span>;
   }
 
   return (
@@ -515,29 +623,29 @@ function Order(props) {
               )}
             </div>
 
-            {/* 버튼 영역 */}
-            <div className="order-buttons justify-content-end">
-              <button
-                onClick={handleOrderButton}
-                className="btn order-button confirm"
-              >
-                결제하기
-              </button>
-              <button
-                onClick={handleCancelButton}
-                className="btn order-button cancel"
-              >
-                취소
-              </button>
-              <button
-                className={"btn btn-primary"}
-                onClick={() => {
-                  handlePaymentConnection();
-                }}
-              >
-                토스 페이먼츠
-              </button>
-            </div>
+      {/* 버튼 영역 */}
+      <div className="order-buttons justify-content-end">
+        {/*<button onClick={handleOrderButton} className="order-button confirm">
+          결제하기
+        </button>*/}
+        {isProcessing ? (
+          <button className={"order-button confirm"}>
+            <span className="loading loading-spinner"></span>
+          </button>
+        ) : (
+          <button
+            className="order-button confirm"
+            onClick={() => {
+              validateForm() && handlePaymentConnection();
+            }}
+          >
+            결제하기
+          </button>
+        )}
+        <button onClick={handleCancelButton} className="order-button cancel">
+          취소
+        </button>
+      </div>
           </div>
         </div>
       </div>

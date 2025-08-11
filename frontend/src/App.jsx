@@ -41,6 +41,13 @@ function App() {
     <AlertProvider>
       <AuthenticationContextProvider>
         <BrowserRouter>
+          {/*결제 관련 페이지는 다른 정보가 넘어가지 않도록 별고 관리*/}
+          <Routes>
+            <Route path="pay/Checkout" element={<CheckoutPage />} />
+            <Route path="pay/success" element={<SuccessPage />} />
+            <Route path="pay/fail" element={<FailPage />} />
+          </Routes>
+
           <CartProvider>
             <Routes>
               <Route path="/" element={<Main />}>
@@ -84,11 +91,6 @@ function App() {
               </Route>
             </Routes>
           </CartProvider>
-          <Routes>
-            <Route path="pay/Checkout" element={<CheckoutPage />} />
-            <Route path="pay/success" element={<SuccessPage />} />
-            <Route path="pay/fail" element={<FailPage />} />
-          </Routes>
         </BrowserRouter>
       </AuthenticationContextProvider>
     </AlertProvider>

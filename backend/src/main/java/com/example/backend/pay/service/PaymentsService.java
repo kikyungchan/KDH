@@ -11,6 +11,9 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.OffsetDateTime;
+import java.time.ZoneId;
+
 @Service
 @Transactional
 @RequiredArgsConstructor
@@ -18,6 +21,12 @@ public class PaymentsService {
 
     private final PaymentRepository paymentRepository;
     private final MemberRepository memberRepository;
+    private static final ZoneId KOREA = ZoneId.of("Asia/Seoul");
+
+    private OffsetDateTime toKoreanTime(OffsetDateTime dateTime) {
+        if (dateTime == null) return null;
+        return dateTime.atZoneSameInstant(KOREA).toOffsetDateTime();
+    }
 
 //    private final ModelMapper modelmapper;
 
@@ -34,8 +43,8 @@ public class PaymentsService {
         payment.setPaymentMethod(dto.getMethod());
         payment.setOrderId(dto.getOrderId());
         payment.setOrderName(dto.getOrderName());
-        payment.setRequestedAt(dto.getRequestedAt());
-        payment.setApprovedAt(dto.getApprovedAt());
+        payment.setRequestedAt(toKoreanTime(dto.getRequestedAt()));
+        payment.setApprovedAt(toKoreanTime(dto.getApprovedAt()));
         payment.setVirtualAccountInfo(String.valueOf(dto.getVirtualAccount()));
         payment.setErrorCode(dto.getCode());
         payment.setErrorMessage(dto.getMessage());
@@ -44,6 +53,9 @@ public class PaymentsService {
         Member user = memberRepository.findById(Integer.valueOf(authentication.getName())).get();
         payment.setUserid(user);
 
+
         paymentRepository.save(payment);
     }
+
+
 }

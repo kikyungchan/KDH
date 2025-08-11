@@ -146,9 +146,9 @@ export function FaQList() {
                     <li className="mb-2 py-1">
                       <a
                         href="/faq/list?c=2&#4"
-                        className="flex items-center text-[#1B64DA] hover:underline"
+                        className="flex items-center text-[#1B64DA] hover:underline sm:text-base text-[3.5vw]"
                       >
-                        <span className="bg-blue-100 text-[#1B64DA] rounded-full w-5 h-5 flex items-center justify-center mr-2 text-xs font-bold">
+                        <span className="bg-blue-100 text-[#1B64DA] rounded-full w-5 h-5 flex items-center justify-center mr-2 sm:text-xs text-[2vw] font-bold">
                           Q
                         </span>
                         배송은 얼마나 걸리나요?
@@ -157,9 +157,9 @@ export function FaQList() {
                     <li className="mb-2 py-1">
                       <a
                         href="/faq/list?c=3&#9"
-                        className="flex items-center text-[#1B64DA] hover:underline"
+                        className="flex items-center text-[#1B64DA] hover:underline sm:text-base text-[3.5vw]"
                       >
-                        <span className="bg-blue-100 text-[#1B64DA] rounded-full w-5 h-5 flex items-center justify-center mr-2 text-xs font-bold">
+                        <span className="bg-blue-100 text-[#1B64DA] rounded-full w-5 h-5 flex items-center justify-center mr-2 sm:text-xs text-[2vw] font-bold">
                           Q
                         </span>
                         주문 취소는 어떻게 하나요?
@@ -168,9 +168,9 @@ export function FaQList() {
                     <li className="mb-2 py-1">
                       <a
                         href="/faq/list?c=7&#7"
-                        className="flex items-center text-[#1B64DA] hover:underline"
+                        className="flex items-center text-[#1B64DA] hover:underline sm:text-base text-[3.5vw]"
                       >
-                        <span className="bg-blue-100 text-[#1B64DA] rounded-full w-5 h-5 flex items-center justify-center mr-2 text-xs font-bold">
+                        <span className="bg-blue-100 text-[#1B64DA] rounded-full w-5 h-5 flex items-center justify-center mr-2 sm:text-xs text-[2vw] font-bold">
                           Q
                         </span>
                         제품의 자세한 정보를 알고 싶어요.
@@ -179,9 +179,9 @@ export function FaQList() {
                     <li className="mb-2 py-1">
                       <a
                         href="/faq/list?c=4&#10"
-                        className="flex items-center text-blue-600 hover:underline"
+                        className="flex items-center text-blue-600 hover:underline sm:text-base text-[3.5vw]"
                       >
-                        <span className="bg-blue-100 text-blue-600 rounded-full w-5 h-5 flex items-center justify-center mr-2 text-xs font-bold">
+                        <span className="bg-blue-100 text-blue-600 rounded-full w-5 h-5 flex items-center justify-center mr-2 sm:text-xs text-[2vw] font-bold">
                           Q
                         </span>
                         제품의 교환 또는 반품을 할 수 있나요?
@@ -190,9 +190,9 @@ export function FaQList() {
                     <li className="mb-2 py-1">
                       <a
                         href="/faq/list?c=6&#8"
-                        className="flex items-center text-blue-600 hover:underline"
+                        className="flex items-center text-blue-600 hover:underline sm:text-base text-[3.5vw]"
                       >
-                        <span className="bg-blue-100 text-blue-600 rounded-full w-5 h-5 flex items-center justify-center mr-2 text-xs font-bold">
+                        <span className="bg-blue-100 text-blue-600 rounded-full w-5 h-5 flex items-center justify-center mr-2 sm:text-xs text-[2vw] font-bold">
                           Q
                         </span>
                         비밀번호 변겅은 어떻게 하나요?

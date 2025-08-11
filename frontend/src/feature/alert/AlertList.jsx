@@ -1,0 +1,76 @@
+import { Col, Row } from "react-bootstrap";
+import { useEffect, useState } from "react";
+import axios from "axios";
+import { useSearchParams } from "react-router";
+
+export function AlertList() {
+  const [alertList, setAlertList] = useState(null);
+  const [searchParams, setSearchParams] = useSearchParams("1");
+
+  useEffect(() => {
+    axios
+      .get(`/api/alert/list?${searchParams}`)
+      .then((res) => {
+        console.log("잘 될 때 코드");
+        setAlertList(res.data.alertList);
+        console.log(res.data);
+      })
+      .catch((err) => {
+        console.log("잘 안될 때 코드");
+      })
+      .finally(() => {
+        console.log("항상 실행 코드");
+      });
+  }, [searchParams]);
+
+  /*
+  useEffect(() => {
+    axios.get(`/api/qna/add?id=${params.id}`).then((res) => {
+      console.log(res.data);
+      setProductId(res.data.id);
+      console.log(res.data.id);
+      setImage(res.data.image?.[0]);
+      setProductPrice(res.data.price);
+      setProductName(res.data.productName);
+    });
+    console.log("user : ", user);
+    console.log("productName : ", productName);
+  }, []);
+  */
+
+  if (!alertList) {
+    return <span className="loading loading-spinner"></span>;
+  }
+
+  return (
+    <div>
+      <Row>
+        <Col>
+          <div className={"container"}>
+            <h2>알림</h2>
+
+            {alertList.length > 0 ? (
+              <div>
+                {alertList.map((alert) => (
+                  <div
+                    tabIndex={0}
+                    className="collapse bg-base-100 border-base-300 border"
+                  >
+                    <div className="collapse-title font-semibold">
+                      {alert.title}
+                    </div>
+                    <div className="collapse-content text-sm">
+                      {alert.content}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <p>새로운 소식이 없습니다.</p>
+            )}
+          </div>
+        </Col>
+      </Row>
+    </div>
+  );
+}

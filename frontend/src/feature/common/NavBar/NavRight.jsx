@@ -1,6 +1,7 @@
 import React, { useContext } from "react";
 import { Link, useNavigate } from "react-router";
 import { FiSearch, FiUser, FiShoppingCart } from "react-icons/fi";
+import { MdSupportAgent } from "react-icons/md";
 import { useCart } from "../../Product/CartContext.jsx";
 import { NavUserMenu } from "./NavUserMenu.jsx";
 import { AuthenticationContext } from "../AuthenticationContextProvider.jsx";
@@ -26,6 +27,9 @@ function NavRight({ iconRef, onSearchToggle }) {
         <Link to="/product/cart" className="cart-icon-wrapper">
           <FiShoppingCart className="navbar-icon" />
           {cartCount > 0 && <span className="cart-badge">{cartCount}</span>}
+        </Link>
+        <Link to={"/faq/list"}>
+          <MdSupportAgent />
         </Link>
       </div>
     </div>

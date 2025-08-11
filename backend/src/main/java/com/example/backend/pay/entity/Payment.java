@@ -10,6 +10,7 @@ import org.hibernate.annotations.OnDeleteAction;
 
 import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
+import java.time.ZoneId;
 
 @Getter
 @Setter
@@ -37,10 +38,25 @@ public class Payment {
     private String paymentMethod;
 
     @Column(name = "requested_at", nullable = false)
-    private OffsetDateTime requestedAt;
+    private LocalDateTime requestedAt;
 
     @Column(name = "approved_at")
-    private OffsetDateTime approvedAt;
+    private LocalDateTime approvedAt;
+
+    public void setRequestedAt(OffsetDateTime dateTime) {
+        if (dateTime != null) {
+            // 한국 시간으로 변환 후 LocalDateTime으로 저장
+            this.requestedAt = dateTime.atZoneSameInstant(ZoneId.of("Asia/Seoul"))
+                    .toLocalDateTime();
+        }
+    }
+
+    public void setApprovedAt(OffsetDateTime dateTime) {
+        if (dateTime != null) {
+            this.approvedAt = dateTime.atZoneSameInstant(ZoneId.of("Asia/Seoul"))
+                    .toLocalDateTime();
+        }
+    }
 
     @ManyToOne
     @OnDelete(action = OnDeleteAction.CASCADE)
