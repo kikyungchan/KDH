@@ -14,34 +14,53 @@ function Home() {
   const [currentIndex, setCurrentIndex] = useState(1);
   const [shuffledItems, setShuffledItems] = useState([]);
   const swiperRef = useRef(null);
+  const [leftVisual, setLeftVisual] = useState(null);
+  const didFetchLeft = useRef(false);
+  const didFetchRight = useRef(false);
 
+  // 좌측배너
   useEffect(() => {
-    // 우측배너
+    if (didFetchLeft.current) return;
+    didFetchLeft.current = true;
+    axios
+      .get("/api/product/main-thumbnail-random")
+      .then((res) => setLeftVisual(res.data))
+      .catch((err) => console.error("좌측 비주얼 로딩 실패:", err));
+  }, []);
+
+  // 우측배너
+  useEffect(() => {
+    if (!leftVisual || didFetchRight.current) return;
+    didFetchRight.current = true;
     axios
       .get("/api/product/hot-random")
       .then((res) => {
-        const sliced = res.data.slice(0, 10);
+        const leftId = leftVisual?.productId; // 좌측 상품 ID
+
+        const filtered = res.data.filter((it) => it.id !== leftId);
+
+        const shuffled = [...filtered].sort(() => Math.random() - 0.5);
+
         const messages = [
           "첫구매 최대 2만원 할인!",
           "인기상품 특가!",
           "한정 수량 할인!",
         ];
-        const shuffled = [...sliced]
-          .sort(() => Math.random() - 0.5)
-          .map((item) => ({
-            ...item,
-            message: messages[Math.floor(Math.random() * messages.length)],
-          }));
-        setShuffledItems(shuffled);
+        const withMsg = shuffled.map((item) => ({
+          ...item,
+          message: messages[Math.floor(Math.random() * messages.length)],
+        }));
+
+        setShuffledItems(withMsg.slice(0, 4));
       })
       .catch((err) => console.error("HOT 상품 불러오기 실패:", err));
-  }, []);
+  }, [leftVisual]); // 좌측배너 먼저 로딩 후 중복 상품 표시안되게.
 
   return (
     <>
       <div className="container">
         <section className="main-visual-row">
-          <LeftVisual />
+          <LeftVisual data={leftVisual} />
 
           {/* 우측 HOT 슬라이드 */}
           <div className="hot-items-carousel">

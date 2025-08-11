@@ -110,15 +110,16 @@ function NavLeft({ user, isAdmin, handleCategoryClick }) {
           </li>
         </ul>
       </div>
-
-      <Link to="/product/regist" className="btn btn-ghost text-xl">
-        상품등록
-      </Link>
       {user !== null && isAdmin && (
-        <Link to="/member/list" className="btn btn-ghost text-xl">
-          회원목록
+        <Link to="/product/regist" className="btn btn-ghost text-xl">
+          상품등록
         </Link>
       )}
+      {/*{user !== null && isAdmin && (*/}
+      {/*  <Link to="/member/list" className="btn btn-ghost text-xl">*/}
+      {/*    회원목록*/}
+      {/*  </Link>*/}
+      {/*)}*/}
       {user === null && (
         <Link to="/signup" className="btn btn-ghost text-xl">
           회원가입
@@ -129,9 +130,9 @@ function NavLeft({ user, isAdmin, handleCategoryClick }) {
           <Link to="/logout" className="btn btn-ghost text-xl">
             로그아웃
           </Link>
-          <Link to={`/member?id=${user.id}`} className="btn btn-ghost text-xl">
-            {user.name}
-          </Link>
+          {/*<Link to={`/member?id=${user.id}`} className="btn btn-ghost text-xl">*/}
+          {/*  {user.name}*/}
+          {/*</Link>*/}
           <Link to="/qna/list" className="btn btn-ghost text-xl">
             문의 내역
           </Link>

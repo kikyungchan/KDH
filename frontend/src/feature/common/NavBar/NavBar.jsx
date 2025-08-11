@@ -80,7 +80,17 @@ function NavBar(props) {
       params.set("sort", "recent"); // 기본 정렬값
     }
     navigate(`/product/list?${params.toString()}`);
+    setShowMobileCategory(false);
     setIsMobileMenuOpen(false);
+  };
+
+  // 모바일 메뉴 내 검색 기능 처리 함수
+  const handleMobileSearch = () => {
+    if (keyword.trim() !== "") {
+      navigate(`/product/list?keyword=${keyword.trim()}`);
+      setKeyword("");
+      setIsMobileMenuOpen(false); // 검색 후 메뉴 닫기
+    }
   };
 
   return (
@@ -90,7 +100,13 @@ function NavBar(props) {
           {/* 모바일 메뉴 아이콘 */}
           <FiMenu
             className="hamburger-icon"
-            onClick={() => setIsMobileMenuOpen((prev) => !prev)}
+            onClick={() =>
+              setIsMobileMenuOpen((prev) => {
+                const next = !prev;
+                if (!next) setShowMobileCategory(false); // 닫힐 때 서브 드롭다운도 접기
+                return next; // <-- 항상 반환
+              })
+            }
           />
           <div className="navbar-center">
             <Link to="/Home" className="navbar-logo">
@@ -102,7 +118,11 @@ function NavBar(props) {
             </Link>
           </div>
           {/*왼쪽 메뉴*/}
-          <NavLeft handleCategoryClick={handleCategoryClick} />
+          <NavLeft
+            user={user}
+            isAdmin={isAdmin}
+            handleCategoryClick={handleCategoryClick}
+          />
           {/* 오른쪽 아이콘 */}
           <NavRight
             // user={user}
@@ -129,6 +149,31 @@ function NavBar(props) {
       {/* 모바일 메뉴 드롭다운 */}
       {isMobileMenuOpen && (
         <div className="mobile-menu" ref={menuRef}>
+          <div className="mobile-search-form">
+            <input
+              type="text"
+              placeholder="키워드로 검색"
+              className="mobile-search-input"
+              value={keyword}
+              onChange={(e) => setKeyword(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") handleMobileSearch();
+              }}
+            />
+            <FiSearch
+              className="mobile-search-icon"
+              onClick={handleMobileSearch}
+            />
+          </div>
+          {user !== null && (
+            <Link
+              to={`/member?id=${user.id}`}
+              onClick={() => setIsMobileMenuOpen(false)}
+              className="btn btn-ghost w-full justify-start text-left text-xl"
+            >
+              {user.name}
+            </Link>
+          )}
           <div>
             <div
               className="btn btn-sm btn-ghost text-left cursor-pointer text-xl"
@@ -168,16 +213,40 @@ function NavBar(props) {
                 >
                   모자
                 </button>
+                <button
+                  className="text-lg btn btn-sm btn-ghost text-left cursor-pointer"
+                  onClick={() => handleCategoryClick("bag")}
+                >
+                  가방
+                </button>
+                <button
+                  className="text-lg btn btn-sm btn-ghost text-left cursor-pointer"
+                  onClick={() => handleCategoryClick("shoes")}
+                >
+                  신발
+                </button>
+                <button
+                  className="text-lg btn btn-sm btn-ghost text-left cursor-pointer"
+                  onClick={() => handleCategoryClick("socks")}
+                >
+                  양말
+                </button>
+                <button
+                  className="text-lg btn btn-sm btn-ghost text-left cursor-pointer"
+                  onClick={() => handleCategoryClick("belt")}
+                >
+                  벨트
+                </button>
               </div>
             )}
           </div>
-          <Link
-            to="/product/regist"
-            onClick={() => setIsMobileMenuOpen(false)}
-            className="btn btn-ghost w-full justify-start text-left text-xl"
-          >
-            상품등록
-          </Link>
+          {/*<Link*/}
+          {/*  to="/product/regist"*/}
+          {/*  onClick={() => setIsMobileMenuOpen(false)}*/}
+          {/*  className="btn btn-ghost w-full justify-start text-left text-xl"*/}
+          {/*>*/}
+          {/*  상품등록*/}
+          {/*</Link>*/}
           {user !== null && isAdmin && (
             <Link
               to="/member/list"
@@ -203,15 +272,6 @@ function NavBar(props) {
               className="btn btn-ghost w-full justify-start text-left text-xl"
             >
               로그아웃
-            </Link>
-          )}
-          {user !== null && (
-            <Link
-              to={`/member?id=${user.id}`}
-              onClick={() => setIsMobileMenuOpen(false)}
-              className="btn btn-ghost w-full justify-start text-left text-xl"
-            >
-              {user.name}
             </Link>
           )}
           {user !== null && (

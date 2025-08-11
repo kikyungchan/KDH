@@ -11,6 +11,7 @@ public class ProductBestDto {
     private String thumbnailUrl;
     private Double averageRating;
     private Integer reviewCount;
+    private String category;
 
     public static ProductBestDto from(Product product, Double avgRating, Integer reviewCnt) {
         ProductBestDto dto = new ProductBestDto();

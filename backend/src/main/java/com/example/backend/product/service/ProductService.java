@@ -38,6 +38,7 @@ public class ProductService {
     private final OrderRepository orderRepository;
     private final OrderItemRepository orderItemRepository;
     private final GuestOrderRepository guestOrderRepository;
+    private final GuestOrderItemRepository guestOrderItemRepository;
     private final ProductCommentRepository productCommentRepository;
     private final ProductThumbnailRepository productThumbnailRepository;
     private final CartRepository cartRepository;
@@ -130,7 +131,7 @@ public class ProductService {
             default:
                 sortOption = Sort.by(Sort.Direction.DESC, "id"); // 최신순
         }
-        pageable = PageRequest.of(pageNumber - 1, 16, sortOption);
+        pageable = PageRequest.of(pageNumber - 1, 15, sortOption);
 
         boolean hasKeyword = keyword != null && !keyword.trim().isEmpty();
         boolean hasCategory = category != null && !category.trim().isEmpty();
@@ -254,11 +255,24 @@ public class ProductService {
 
     public void delete(Integer id) {
         Product product = productRepository.findById(id).orElseThrow();
+        //guest_order_item 먼저 삭제
+        guestOrderItemRepository.deleteByProduct(product);
+
+        // 장바구니 관련 데이터 삭제
         List<Cart> carts = cartRepository.findByProduct(product);
         for (Cart cart : carts) {
             cartRepository.delete(cart);
         }
-// 썸네일 이미지 삭제
+        // . 관련 guest_order_item 먼저 삭제 (옵션 참조 때문에)
+        for (ProductOption option : product.getOptions()) {
+            guestOrderItemRepository.deleteByOption(option);
+        }
+
+        // . 상품 옵션 삭제
+        for (ProductOption option : product.getOptions()) {
+            productOptionRepository.delete(option);
+        }
+        // 썸네일 이미지 삭제
         List<ProductThumbnail> thumbnails = product.getThumbnails();
         for (ProductThumbnail thumb : thumbnails) {
             s3Uploader.delete(extractS3Key(thumb.getStoredPath())); // S3에서 삭제
@@ -397,15 +411,19 @@ public class ProductService {
     }
 
 
-    public List<ProductBestDto> getTopSellingProducts() {
-        Pageable pageable = PageRequest.of(0, 3);
-        List<Product> topProducts = productRepository.findTopSellingProducts(pageable);
+    public List<ProductBestDto> getTopSellingProducts(String category, Integer limit) {
+        Pageable pageable = PageRequest.of(0, (limit == null || limit <= 0) ? 3 : limit);
+
+        List<Product> topProducts =
+                (category == null || category.isBlank() || "전체".equals(category))
+                        ? productRepository.findTopSellingProducts(pageable)
+                        : productRepository.findTopSellingProductsByCategory(category, pageable);
+
         List<ProductBestDto> result = new ArrayList<>();
-        for (Product product : topProducts) {
-            Double avg = productCommentRepository.getAverageRating(product.getId());
-            Integer cnt = productCommentRepository.getReviewCount(product.getId());
-            ProductBestDto dto = ProductBestDto.from(product, avg, cnt);
-            result.add(dto);
+        for (Product p : topProducts) {
+            Double avg = productCommentRepository.getAverageRating(p.getId());
+            Integer cnt = productCommentRepository.getReviewCount(p.getId());
+            result.add(ProductBestDto.from(p, avg, cnt));
         }
         return result;
     }

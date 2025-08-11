@@ -52,3 +52,36 @@
     background-color: orange;
     height: 100%;
 }
+
+/* 639px 이하 반응형 스타일 */
+@media (max-width: 639px) {
+    .review-stats {
+        padding: 1rem 1.5rem;
+        gap: 20px;
+    }
+
+    .score {
+        font-size: 36px;
+    }
+
+    .stars {
+        font-size: 16px;
+    }
+
+    .bar {
+        width: 140px;
+    }
+
+    .average {
+        min-width: auto;
+    }
+
+    .label {
+        width: 40px;
+        font-size: 13px;
+    }
+
+    .count {
+        font-size: 13px;
+    }
+}

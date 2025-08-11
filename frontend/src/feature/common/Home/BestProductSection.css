@@ -1,5 +1,6 @@
 .best-product-section {
-    margin-top: 50px;
+    max-width: 1256px;
+    margin: 0 auto;
     padding: 0 1rem;
 }
 
@@ -9,39 +10,32 @@
     margin-bottom: 2rem;
 }
 
-.best-product-list {
-    display: flex;
-    gap: 24px;
-    overflow-x: auto;
+.best-product-img {
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    object-fit: cover;
+    border-radius: 6px;
+}
 
+.best-product-card {
+    width: 100%;
+    box-sizing: border-box;
+    cursor: pointer;
+    max-width: 260px;
+    margin: 0 auto;
+}
+
+.best-product-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 1.5rem;
+    justify-content: center;
 }
 
 .best-product-rating {
     font-size: 14px;
     color: black;
     margin-top: 5px;
-}
-
-
-.best-product-card {
-    width: 350px;
-    height: auto;
-    gap: 1rem;
-    /*border: 1px solid #ddd;*/
-    border-radius: 12px;
-    overflow: hidden;
-    /*background-color: black;*/
-    cursor: pointer;
-    padding: 10px;
-    flex-shrink: 0;
-    border: 1px solid;
-}
-
-.best-product-img {
-    width: 100%;
-    height: 270px;
-    object-fit: cover;
-    border-radius: 8px;
 }
 
 .best-product-name {
@@ -55,4 +49,69 @@
     font-weight: bold;
     margin-top: 4px;
     color: #111;
+}
+
+.best-category-tabs {
+    display: flex;
+    gap: 10px;
+    margin: 8px 0 16px;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
+.best-tag {
+    padding: 6px 12px;
+    border-radius: 9999px;
+    border: 1px solid #ddd;
+    background: #fafafa;
+    font-size: 0.9rem;
+    cursor: pointer;
+    white-space: nowrap;
+}
+
+.best-tag.active {
+    background: #111;
+    color: #fff;
+    border-color: #111;
+}
+
+.best-loading {
+    padding: 16px 0;
+    color: #666;
+}
+
+.best-empty {
+    padding: 24px 0;
+    color: #888;
+    text-align: center;
+}
+
+
+@media (max-width: 639px) {
+    .best-category-tabs {
+        flex-wrap: wrap;
+        gap: 10px;
+        max-height: 84px;
+        overflow: hidden;
+        padding-bottom: 0;
+        -webkit-overflow-scrolling: auto;
+        transition: max-height .2s ease;
+    }
+
+
+    .best-category-tabs::after {
+        content: none !important;
+        display: none !important;
+    }
+
+    .best-cat-more {
+        display: inline-block;
+        border: 1px solid #ddd;
+        background: #fff;
+        border-radius: 9999px;
+        font-size: 0.9rem;
+        padding: 6px 12px;
+        cursor: pointer;
+        margin-bottom: 8px;
+    }
 }

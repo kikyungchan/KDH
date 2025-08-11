@@ -6,7 +6,7 @@
 
 .main-visual-row {
     display: flex;
-    width: 100%;
+    flex-direction: row;
     gap: 16px;
     margin-top: 20px;
     margin-bottom: 60px;
@@ -14,12 +14,12 @@
 }
 
 .main-visual-box {
-    position: relative;
     width: 70%;
     height: 600px;
-    overflow: hidden;
     border-radius: 6px;
-    border: 1px solid black;
+    overflow: hidden;
+    position: relative;
+    contain: paint;
 }
 
 .main-visual-img {
@@ -28,29 +28,28 @@
     object-fit: cover;
     display: block;
     cursor: pointer;
-    transition: transform 0.2s ease;
+    transition: all 0.2s ease;
+    backface-visibility: hidden;
 }
 
 .main-visual-img:hover {
-    transform: scale(1.05); /* 확대 효과 */
+    transform: scale(1.05);
 }
 
 .main-visual-text {
-    font-size: 1.2rem;
+    font-size: 1.4rem;
     position: absolute;
     bottom: 20px;
     left: 30px;
     color: white;
-    text-shadow: 0 0 8px rgba(0, 0, 0, 0.6);
+    text-shadow: 0 0 15px rgba(0, 0, 0, 0.6);
 }
 
-/* 우측 HOT 슬라이드 영역 */
 .hot-items-carousel {
     width: 30%;
-    height: 600px; /* 왼쪽 메인 비주얼 박스 높이에 맞춤 */
+    height: 600px;
     position: relative;
     overflow: hidden;
-    border: 1px solid black;
     border-radius: 6px;
 }
 
@@ -131,16 +130,104 @@
 
 .hot-slide-text {
     position: absolute;
-    top: 10px;
-    left: 16px;
-    color: white;
-    background: rgba(0, 0, 0, 0.5);
-    padding: 8px 12px;
-    border-radius: 4px;
-    font-size: 1rem;
+    left: 12px;
+    top: 12px;
+    padding: 6px 10px;
+    border-radius: 8px;
+    background: rgba(0, 0, 0, 0.55);
+    color: #fff;
     font-weight: 600;
-    z-index: 10;
-    text-shadow: 0 1px 4px rgba(0, 0, 0, 0.7);
+    z-index: 2;
+    pointer-events: none; /* 클릭은 이미지로 통과 */
 }
+
+.custom-nav-btn {
+    width: 32px;
+    height: 32px;
+    font-size: 18px;
+}
+
+.slide-index-indicator {
+    font-size: 0.85rem;
+    padding: 4px 8px;
+}
+
+@media (max-width: 1023px) {
+    .main-visual-row {
+        flex-direction: column;
+        gap: 24px;
+    }
+
+    .main-visual-box {
+        width: 100%;
+        height: 500px;
+    }
+
+    .hot-items-carousel {
+        width: 100%;
+        height: 250px;
+    }
+}
+
+@media (max-width: 767px) {
+    .product-grid {
+        grid-template-columns: repeat(4, 1fr);
+        gap: 1rem; /* 필요 시 간격 조절 */
+        display: grid;
+    }
+
+    .main-visual-box {
+        height: 400px;
+    }
+
+    .hot-items-carousel {
+        height: 200px;
+    }
+
+    .hot-slide-text {
+        font-size: 0.9rem;
+        padding: 6px 10px;
+    }
+
+    .custom-nav-btn {
+        width: 28px;
+        height: 28px;
+        font-size: 16px;
+    }
+
+    .slide-index-indicator {
+        font-size: 0.75rem;
+        padding: 3px 6px;
+    }
+}
+
+@media (max-width: 639px) {
+    .main-visual-box {
+        height: 300px;
+    }
+
+    .hot-items-carousel {
+        height: 180px;
+    }
+
+    .hot-slide-text {
+        font-size: 0.75rem;
+        padding: 4px 8px;
+    }
+
+    .custom-nav-btn {
+        width: 24px;
+        height: 24px;
+        font-size: 14px;
+    }
+
+    .slide-index-indicator {
+        font-size: 0.65rem;
+        padding: 2px 5px;
+    }
+}
+
+
+
 
 

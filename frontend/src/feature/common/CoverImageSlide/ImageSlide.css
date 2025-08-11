@@ -12,24 +12,24 @@
 
 .overlay {
     position: absolute;
-    bottom: 250px;
-    left: 150px;
+    bottom: 200px;
+    left: 140px;
     color: white;
-    font-size: 2rem;
-    text-shadow: 1px 1px 8px rgba(0, 0, 0, 0.8);
+    font-size: 3rem;
+    text-shadow: 2px 2px 15px rgba(0, 0, 0, 0.8);
 }
 
 .slide-img {
     max-width: 100%;
     max-height: 100%;
-    object-fit: contain; /* 🔥 비율 유지 + 자르지 않음 */
+    object-fit: contain;
 }
 
 .slide-container {
     position: relative;
     width: 100vw;
     height: 100vh;
-    background-color: black; /* 남는 영역 배경 */
+    background-color: black;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -55,15 +55,20 @@
 }
 
 .swiper-pagination-bullet {
-    background: white;
-    opacity: 0.5;
-    width: 8px;
-    height: 8px;
-    border-radius: 50%;
+    width: 6px;
+    height: 6px;
+    margin: 0 !important;
+    background: rgba(255, 255, 255, 0.6);
+    border-radius: 9999px;
+    opacity: 1;
+    transition: height 180ms ease,
+    background 180ms ease,
+    opacity 180ms ease;
 }
 
 .swiper-pagination-bullet-active {
-    opacity: 1;
-    height: 12px;
-    border-radius: 6px;
+    width: 6px;
+    height: 26px;
+    background: #fff;
+    border-radius: 5px;
 }

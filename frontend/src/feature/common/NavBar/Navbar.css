@@ -1,12 +1,12 @@
 .navbar-container {
     position: fixed;
-    max-width: 1256px;
     margin: 0 auto;
     top: 0;
     left: 0;
     right: 0;
     z-index: 1000;
-    background-color: white;
+    background-color: #ffffff;
+    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.1), 0 3px 10px 0 rgba(0, 0, 0, 0.09);
 }
 
 
@@ -74,9 +74,9 @@
 
 .search-bar-popup {
     position: absolute;
-    top: 100%;
+    top: 53%;
     transform: translateY(-50%);
-    right: 0%;
+    right: 13%;
     display: none;
     align-items: center;
     background: #f1f1f1;
@@ -198,7 +198,33 @@
     display: flex;
 }
 
-/* 모바일 레이아웃용 설정 */
+.mobile-search-form {
+    display: flex;
+    align-items: center;
+    border: 1px solid #ddd;
+    border-radius: 20px;
+    padding: 0.5rem 1rem;
+    gap: 8px;
+    background-color: #f8f8f8;
+    width: 100%;
+    /*flex-direction: row-reverse;*/
+}
+
+.mobile-search-input {
+    flex: 1;
+    border: none;
+    background: transparent;
+    outline: none;
+    font-size: 1rem;
+}
+
+.mobile-search-icon {
+    cursor: pointer;
+    color: #555;
+    font-size: 1.2rem;
+}
+
+/*  (~767px) */
 @media (max-width: 767px) {
     .hamburger-icon {
         display: block;
@@ -209,35 +235,44 @@
         position: absolute;
         left: 50%;
         transform: translateX(-50%);
+        width: max-content;
     }
 
     .navbar-left {
         display: none !important;
         flex-wrap: nowrap;
     }
+
+    .FiSearch {
+        display: none;
+    }
+
+    .navbar-logo {
+        margin: 0;
+        display: inline-block;
+        white-space: nowrap;
+    }
 }
 
-/*  sm (~767) */
-@media (min-width: 768px) {
+/* (768px~1023px) */
+@media (max-width: 1023px) {
     .navbar-left {
         display: flex;
         gap: 0.9rem;
         font-size: 1.2rem;
-
     }
-}
 
-/*  md (768~1023) */
-@media (min-width: 769px) {
     .navbar-container {
         display: flex;
         font-size: 1rem;
     }
+
 }
 
-/* lg (1024~) */
+/* (1024px~) */
 @media (min-width: 1024px) {
     .navbar-left {
+        display: flex;
         gap: 2.7rem;
         font-size: 1.4rem;
     }
