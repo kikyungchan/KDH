@@ -37,14 +37,14 @@ function ImageSlide() {
 
     tl.fromTo(
       title,
-      { opacity: 0, y: 60, scale: 0.98, filter: "blur(6px)" },
+      { opacity: 0, y: 160, scale: 1, filter: "blur(6px)" },
       { opacity: 1, y: 0, scale: 1, filter: "blur(0px)", duration: 3 },
       0,
     );
 
     tl.fromTo(
       price,
-      { opacity: 0, y: 28, filter: "blur(4px)" },
+      { opacity: 0, y: 80, filter: "blur(4px)" },
       {
         opacity: 1,
         y: 0,
