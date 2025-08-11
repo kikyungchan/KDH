@@ -114,7 +114,7 @@ export function OrderDetail() {
                         <img
                           src={item.thumbnailUrl || "/default.png"}
                           alt={item.productName}
-                          className="w-32 h-32"
+                          className="w-32 h-32 rounded"
                         />
                       </div>
                       <ul className="content-center">

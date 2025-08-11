@@ -296,7 +296,7 @@ function ProductCart(props) {
                         onClick={() =>
                           navigate(`/product/view?id=${item.productId}`)
                         }
-                        className="w-28 h-24 object-cover cursor-pointer"
+                        className="w-28 h-24 object-cover cursor-pointer rounded"
                       />
                       <div>
                         <div className="font-bold">{item.productName}</div>

@@ -73,7 +73,10 @@ export function OrderList() {
                           <img
                             src={item.thumbnailUrl || "/default.png"}
                             alt={item.productName}
-                            className="w-32 h-32"
+                            onClick={() =>
+                              navigate(`/product/view?id=${item.productId}`)
+                            }
+                            className="w-32 h-32 rounded"
                           />
                         </div>
                         <div>

@@ -6,6 +6,8 @@ import lombok.Data;
 
 @Data
 public class OrderItemDto {
+    private Integer productId;
+
     private String productName;
 
     private Integer quantity;
@@ -18,6 +20,7 @@ public class OrderItemDto {
 
     // 생성자
     public OrderItemDto(OrderItem item) {
+        this.productId = item.getProduct().getId();
         this.productName = item.getProduct().getProductName();
         this.productOption = item.getOption() != null
                 ? item.getOption().getOptionName()
