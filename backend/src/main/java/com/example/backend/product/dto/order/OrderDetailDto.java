@@ -36,9 +36,9 @@ public class OrderDetailDto {
                 .mapToInt(item -> item.getPrice() * item.getQuantity())
                 .sum();
 
-        this.shippingAddress = order.getShippingAddress();
-        this.zipcode = order.getZipcode();
-        this.addressDetail = order.getAddressDetail();
+        this.shippingAddress = order.getReceiverAddress();
+        this.zipcode = order.getReceiverZipcode();
+        this.addressDetail = order.getReceiverAddressDetail();
         this.memo = order.getMemo();
 
         this.orderItems = allItems;
