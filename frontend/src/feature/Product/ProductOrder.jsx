@@ -10,7 +10,7 @@ function Order(props) {
   const [receiverPhone, setReceiverPhone] = useState("");
   const [receiverZipcode, setReceiverZipcode] = useState("");
   const [receiverAddress, setReceiverAddress] = useState("");
-  const [receiverDetailAddress, setReceiverDetailAddress] = useState("");
+  const [receiverAddressDetail, setReceiverAddressDetail] = useState("");
   const [memo, setMemo] = useState("");
   const [customMemo, setCustomMemo] = useState("");
   const [sameAsOrderer, setSameAsOrderer] = useState(false);
@@ -19,6 +19,7 @@ function Order(props) {
   const [ordererPhone, setOrdererPhone] = useState("");
   const [ordererAddressDetail, setOrdererAddressDetail] = useState("");
   const [ordererEmail, setOrdererEmail] = useState(null);
+  const [shippingFee, setShippingFee] = useState(0);
   const [isProcessing, setIsProcessing] = useState(false);
   const { state } = useLocation();
   const { setCartCount } = useCart();
@@ -28,18 +29,22 @@ function Order(props) {
     (sum, item) => sum + item.price * item.quantity,
     0,
   );
-  const shippingFee = totalItemPrice >= 100000 ? 0 : 3000;
   const navigate = useNavigate();
   const checkoutWindow = useRef(null);
   const formDataRef = useRef({});
+
+  useEffect(() => {
+    const fee = totalItemPrice >= 100000 ? 0 : 3000;
+    setShippingFee(fee);
+  }, [totalItemPrice]);
 
   useEffect(() => {
     formDataRef.current = {
       receiverName,
       receiverPhone,
       receiverAddress,
-      receiverDetailAddress,
-      postalCode: receiverZipcode,
+      receiverAddressDetail,
+      receiverZipcode,
       memo,
       customMemo,
     };
@@ -47,7 +52,7 @@ function Order(props) {
     receiverName,
     receiverPhone,
     receiverAddress,
-    receiverDetailAddress,
+    receiverAddressDetail,
     receiverZipcode,
     memo,
     customMemo,
@@ -169,18 +174,21 @@ function Order(props) {
     console.log("items : ", items);
     console.log("items length", items.length);
     if (checkoutWindow.current && !checkoutWindow.current.closed) {
+      const fee = Number(shippingFee) || 0;
+      const amount = totalItemPrice + fee;
+
       checkoutWindow.current.postMessage(
         {
           type: "CHECKOUT_DATA",
           data: {
             orderId: "12345",
-            amount: totalItemPrice + shippingFee,
+            amount,
             productName:
               items[0].productName +
               (items.length > 1 ? ` 외 ${items.length - 1}건` : ""),
             username: ordererName,
             phoneNum: ordererPhone,
-            emailAddr: ordererEmail,
+            emailAddr: ordererEmail ?? "",
           },
         },
         window.location.origin,
@@ -214,8 +222,8 @@ function Order(props) {
       !currentData.receiverName.trim() ||
       !currentData.receiverPhone.trim() ||
       !currentData.receiverAddress.trim() ||
-      !currentData.receiverDetailAddress.trim() ||
-      !currentData.postalCode.trim()
+      !currentData.receiverAddressDetail.trim() ||
+      !currentData.receiverZipcode.trim()
     ) {
       alert("배송지 정보를 모두 입력해 주세요.");
 
@@ -240,14 +248,23 @@ function Order(props) {
       optionName: item.optionName ?? item.option,
       quantity: item.quantity,
       price: item.price,
-      shippingAddress: ordererAddress,
+
+      // 주문자 정보
+      ordererName: ordererName,
+      ordererPhone: ordererPhone,
+
+      // 수령인 정보
+      receiverName: currentData.receiverName,
+      receiverPhone: currentData.receiverPhone,
+      receiverZipcode: currentData.receiverZipcode,
+      receiverAddress: currentData.receiverAddress,
+      receiverAddressDetail: currentData.receiverAddressDetail,
+
       memo:
         currentData.memo === "직접 작성"
           ? currentData.customMemo
           : currentData.memo,
       totalPrice: item.price * item.quantity,
-      zipcode: currentData.postalCode,
-      addressDetail: currentData.receiverDetailAddress,
     }));
 
     if (token) {
@@ -300,8 +317,8 @@ function Order(props) {
                 name: currentData.receiverName,
                 phone: currentData.receiverPhone,
                 address: currentData.receiverAddress,
-                postalCode: currentData.postalCode,
-                receiverDetailAddress: currentData.receiverDetailAddress,
+                zipcode: currentData.receiverZipcode,
+                addressDetail: currentData.receiverAddressDetail,
               },
               memo:
                 currentData.memo === "직접 작성"
@@ -323,7 +340,6 @@ function Order(props) {
         optionName: item.optionName ?? item.option,
         quantity: item.quantity,
         price: item.price,
-        shippingAddress: ordererAddress,
         memo:
           currentData.memo === "직접 작성"
             ? currentData.customMemo
@@ -334,8 +350,8 @@ function Order(props) {
         receiverName: currentData.receiverName,
         receiverPhone: currentData.receiverPhone,
         receiverAddress: currentData.receiverAddress,
-        zipcode: currentData.postalCode,
-        addressDetail: currentData.receiverDetailAddress,
+        receiverZipcode: currentData.receiverZipcode,
+        addressDetail: currentData.receiverAddressDetail,
       }));
       axios.post("/api/product/order/guest", payloadList).then((res) => {
         const token = res.data.guestOrderToken;
@@ -365,8 +381,8 @@ function Order(props) {
               name: currentData.receiverName,
               phone: currentData.receiverPhone,
               address: currentData.receiverAddress,
-              postalCode: currentData.postalCode,
-              receiverDetailAddress: currentData.receiverDetailAddress,
+              zipcode: currentData.receiverZipcode,
+              addressDetail: currentData.receiverAddressDetail,
             },
             memo:
               currentData.memo === "직접 작성"
@@ -388,7 +404,7 @@ function Order(props) {
       setReceiverPhone("");
       setReceiverAddress("");
       setReceiverZipcode("");
-      setReceiverDetailAddress("");
+      setReceiverAddressDetail("");
       return;
     }
     if (token) {
@@ -404,14 +420,14 @@ function Order(props) {
           setReceiverPhone(res.data.phone);
           setReceiverAddress(res.data.address);
           setReceiverZipcode(res.data.zipCode);
-          setReceiverDetailAddress(res.data.addressDetail);
+          setReceiverAddressDetail(res.data.addressDetail);
         });
     } else {
       setReceiverName(ordererName);
       setReceiverPhone(ordererPhone);
       setReceiverAddress(ordererAddress);
-      setReceiverZipcode("");
-      setReceiverDetailAddress("");
+      setReceiverZipcode((prev) => prev || "");
+      setReceiverAddressDetail(ordererAddressDetail || "");
     }
   }
 
@@ -466,7 +482,9 @@ function Order(props) {
                         <strong>{item.productName}</strong>
                       </div>
                       <div>
-                        {item.optionName ?? item.option} / {item.quantity}개
+                        {(item.optionName ?? item.option)
+                          ? `${item.optionName ?? item.option} / ${item.quantity}개`
+                          : `${item.quantity}개`}
                       </div>
                       <div>
                         {(item.price * item.quantity).toLocaleString()}원
@@ -599,8 +617,8 @@ function Order(props) {
               <input
                 placeholder="상세주소"
                 className="order-input-full"
-                value={receiverDetailAddress}
-                onChange={(e) => setReceiverDetailAddress(e.target.value)}
+                value={receiverAddressDetail}
+                onChange={(e) => setReceiverAddressDetail(e.target.value)}
               />
             </div>
 
