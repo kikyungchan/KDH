@@ -6,19 +6,19 @@ import { useCart } from "./CartContext.jsx";
 import { AuthenticationContext } from "../common/AuthenticationContextProvider.jsx";
 
 function Order(props) {
-  const [postalCode, setPostalCode] = useState("");
-  const [memo, setMemo] = useState("");
-  const [customMemo, setCustomMemo] = useState("");
   const [receiverName, setReceiverName] = useState("");
   const [receiverPhone, setReceiverPhone] = useState("");
+  const [receiverZipcode, setReceiverZipcode] = useState("");
   const [receiverAddress, setReceiverAddress] = useState("");
   const [receiverDetailAddress, setReceiverDetailAddress] = useState("");
+  const [memo, setMemo] = useState("");
+  const [customMemo, setCustomMemo] = useState("");
   const [sameAsOrderer, setSameAsOrderer] = useState(false);
-  const [name, setName] = useState("");
-  const [address, setAddress] = useState("");
-  const [phone, setPhone] = useState("");
-  const [addressDetail, setAddressDetail] = useState("");
-  const [email, setEmail] = useState(null);
+  const [ordererName, setOrdererName] = useState("");
+  const [ordererAddress, setOrdererAddress] = useState("");
+  const [ordererPhone, setOrdererPhone] = useState("");
+  const [ordererAddressDetail, setOrdererAddressDetail] = useState("");
+  const [ordererEmail, setOrdererEmail] = useState(null);
   const [isProcessing, setIsProcessing] = useState(false);
   const { state } = useLocation();
   const { setCartCount } = useCart();
@@ -39,7 +39,7 @@ function Order(props) {
       receiverPhone,
       receiverAddress,
       receiverDetailAddress,
-      postalCode,
+      postalCode: receiverZipcode,
       memo,
       customMemo,
     };
@@ -48,7 +48,7 @@ function Order(props) {
     receiverPhone,
     receiverAddress,
     receiverDetailAddress,
-    postalCode,
+    receiverZipcode,
     memo,
     customMemo,
   ]);
@@ -63,18 +63,18 @@ function Order(props) {
           },
         })
         .then((res) => {
-          setAddress(res.data.address);
-          setName(res.data.name);
-          setPhone(res.data.phone);
-          setEmail(res.data.email);
-          setAddressDetail(res.data.addressDetail);
+          setOrdererAddress(res.data.address);
+          setOrdererName(res.data.name);
+          setOrdererPhone(res.data.phone);
+          setOrdererEmail(res.data.email);
+          setOrdererAddressDetail(res.data.addressDetail);
         })
         .catch((err) => {});
     }
   }, []);
 
   useEffect(() => {
-    if (email != null) {
+    if (ordererEmail != null) {
       const handlePopupMessage = (event) => {
         switch (event.data.type) {
           case "POPUP_READY":
@@ -103,7 +103,7 @@ function Order(props) {
         window.removeEventListener("message", handlePopupMessage);
       };
     }
-  }, [email]);
+  }, [ordererEmail]);
 
   function handlePaymentConnection() {
     // 폼 검증
@@ -178,9 +178,9 @@ function Order(props) {
             productName:
               items[0].productName +
               (items.length > 1 ? ` 외 ${items.length - 1}건` : ""),
-            username: name,
-            phoneNum: phone,
-            emailAddr: email,
+            username: ordererName,
+            phoneNum: ordererPhone,
+            emailAddr: ordererEmail,
           },
         },
         window.location.origin,
@@ -203,7 +203,7 @@ function Order(props) {
   function validateForm() {
     // 입력값 유효성 검사
     // 주문자 정보
-    if (!name.trim() || !phone.trim() || !address.trim()) {
+    if (!ordererName.trim() || !ordererPhone.trim() || !ordererAddress.trim()) {
       alert("주문자 정보를 모두 입력해 주세요.");
       return false;
     }
@@ -240,7 +240,7 @@ function Order(props) {
       optionName: item.optionName ?? item.option,
       quantity: item.quantity,
       price: item.price,
-      shippingAddress: address,
+      shippingAddress: ordererAddress,
       memo:
         currentData.memo === "직접 작성"
           ? currentData.customMemo
@@ -291,7 +291,11 @@ function Order(props) {
             state: {
               items,
               orderToken,
-              orderer: { name, phone, address },
+              orderer: {
+                name: ordererName,
+                phone: ordererPhone,
+                address: ordererAddress,
+              },
               receiver: {
                 name: currentData.receiverName,
                 phone: currentData.receiverPhone,
@@ -319,14 +323,14 @@ function Order(props) {
         optionName: item.optionName ?? item.option,
         quantity: item.quantity,
         price: item.price,
-        shippingAddress: address,
+        shippingAddress: ordererAddress,
         memo:
           currentData.memo === "직접 작성"
             ? currentData.customMemo
             : currentData.memo,
         totalPrice: item.price * item.quantity,
-        guestName: name,
-        guestPhone: phone,
+        guestName: ordererName,
+        guestPhone: ordererPhone,
         receiverName: currentData.receiverName,
         receiverPhone: currentData.receiverPhone,
         receiverAddress: currentData.receiverAddress,
@@ -352,7 +356,11 @@ function Order(props) {
           state: {
             items,
             orderToken: token,
-            orderer: { name, phone, address },
+            orderer: {
+              name: ordererName,
+              phone: ordererPhone,
+              address: ordererAddress,
+            },
             receiver: {
               name: currentData.receiverName,
               phone: currentData.receiverPhone,
@@ -379,7 +387,7 @@ function Order(props) {
       setReceiverName("");
       setReceiverPhone("");
       setReceiverAddress("");
-      setPostalCode("");
+      setReceiverZipcode("");
       setReceiverDetailAddress("");
       return;
     }
@@ -395,14 +403,14 @@ function Order(props) {
           setReceiverName(res.data.name);
           setReceiverPhone(res.data.phone);
           setReceiverAddress(res.data.address);
-          setPostalCode(res.data.zipCode);
+          setReceiverZipcode(res.data.zipCode);
           setReceiverDetailAddress(res.data.addressDetail);
         });
     } else {
-      setReceiverName(name);
-      setReceiverPhone(phone);
-      setReceiverAddress(address);
-      setPostalCode("");
+      setReceiverName(ordererName);
+      setReceiverPhone(ordererPhone);
+      setReceiverAddress(ordererAddress);
+      setReceiverZipcode("");
       setReceiverDetailAddress("");
     }
   }
@@ -411,13 +419,13 @@ function Order(props) {
     new window.daum.Postcode({
       oncomplete: function (data) {
         setReceiverAddress(data.address); // 도로명 주소
-        setPostalCode(data.zonecode); // 우편번호 필요하면 이것도
+        setReceiverZipcode(data.zonecode); // 우편번호 필요하면 이것도
         console.log("작동");
       },
     }).open();
   }
 
-  if (!email) {
+  if (!ordererEmail) {
     return <span className="loading loading-spinner"></span>;
   }
 
@@ -511,31 +519,31 @@ function Order(props) {
               <div className="order-input-row">
                 <input
                   type="text"
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
+                  value={ordererName}
+                  onChange={(e) => setOrdererName(e.target.value)}
                   placeholder="이름"
                   className="order-input-half"
                 />
                 <input
                   type="text"
-                  value={phone}
-                  onChange={(e) => setPhone(e.target.value)}
+                  value={ordererPhone}
+                  onChange={(e) => setOrdererPhone(e.target.value)}
                   placeholder="연락처"
                   className="order-input-half"
                 />
               </div>
               <input
                 type="text"
-                value={address}
+                value={ordererAddress}
                 placeholder="주소"
-                onChange={(e) => setAddress(e.target.value)}
+                onChange={(e) => setOrdererAddress(e.target.value)}
                 className="order-input-full"
               />
               <input
                 type="text"
-                value={addressDetail}
+                value={ordererAddressDetail}
                 placeholder="상세주소"
-                onChange={(e) => setAddressDetail(e.target.value)}
+                onChange={(e) => setOrdererAddressDetail(e.target.value)}
                 className="order-input-full"
               />
             </div>
@@ -571,8 +579,8 @@ function Order(props) {
                 <input
                   placeholder="우편번호"
                   className="order-input-full"
-                  value={postalCode}
-                  onChange={(e) => setPostalCode(e.target.value)}
+                  value={receiverZipcode}
+                  onChange={(e) => setReceiverZipcode(e.target.value)}
                 />
                 <button
                   type="button"
@@ -623,29 +631,32 @@ function Order(props) {
               )}
             </div>
 
-      {/* 버튼 영역 */}
-      <div className="order-buttons justify-content-end">
-        {/*<button onClick={handleOrderButton} className="order-button confirm">
+            {/* 버튼 영역 */}
+            <div className="order-buttons justify-content-end">
+              {/*<button onClick={handleOrderButton} className="order-button confirm">
           결제하기
         </button>*/}
-        {isProcessing ? (
-          <button className={"order-button confirm"}>
-            <span className="loading loading-spinner"></span>
-          </button>
-        ) : (
-          <button
-            className="order-button confirm"
-            onClick={() => {
-              validateForm() && handlePaymentConnection();
-            }}
-          >
-            결제하기
-          </button>
-        )}
-        <button onClick={handleCancelButton} className="order-button cancel">
-          취소
-        </button>
-      </div>
+              {isProcessing ? (
+                <button className={"order-button confirm"}>
+                  <span className="loading loading-spinner"></span>
+                </button>
+              ) : (
+                <button
+                  className="order-button confirm"
+                  onClick={() => {
+                    validateForm() && handlePaymentConnection();
+                  }}
+                >
+                  결제하기
+                </button>
+              )}
+              <button
+                onClick={handleCancelButton}
+                className="order-button cancel"
+              >
+                취소
+              </button>
+            </div>
           </div>
         </div>
       </div>

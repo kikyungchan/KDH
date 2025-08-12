@@ -32,11 +32,26 @@ public class Order {
     @Column(name = "login_id", nullable = false)
     private String loginId;
 
-    @Column(name = "member_name", nullable = false)
-    private String memberName;
+    @Column(name = "orderer_name", nullable = false)
+    private String ordererName;
 
-    @Column(nullable = false)
-    private String phone;
+    @Column(name = "orderer_phone", nullable = false)
+    private String ordererPhone;
+
+    @Column(name = "receiver_name", nullable = false)
+    private String receiverName;
+
+    @Column(name = "receiver_phone", nullable = false)
+    private String receiverPhone;
+
+    @Column(name = "receiver_zipcode", nullable = false)
+    private String receiverZipcode;
+
+    @Column(name = "receiver_address", nullable = false)
+    private String receiverAddress;
+
+    @Column(name = "receiver_address_detail")
+    private String receiverAddressDetail;
 
     @ColumnDefault("current_timestamp()")
     @Column(name = "order_date", updatable = false, insertable = false, nullable = false)
@@ -45,6 +60,27 @@ public class Order {
     @Column(name = "order_token")
     private String orderToken;
 
+    //    여기서부터
+    @Column(name = "member_name", nullable = false)
+    private String memberName;
+
+    @Column(nullable = false)
+    private String phone;
+
+    @Column(name = "zipcode", nullable = false)
+    private String zipcode;
+
+    @Column(name = "shipping_address", nullable = false)
+    private String shippingAddress;
+
+    @Column(name = "address_detail")
+    private String addressDetail;
+
+    @Column(name = "memo", nullable = false)
+    private String memo;
+//    여기까지 삭제
+
+    
     @Column(name = "items_subtotal", nullable = false)
     private Integer itemsSubtotal;
 
@@ -54,17 +90,6 @@ public class Order {
     @Column(name = "total_price", nullable = false)
     private Integer totalPrice;
 
-    @Column(name = "zipcode", nullable = false)
-    private String zipcode;
-
-    @Column(name = "shipping_address", nullable = false)
-    private String shippingAddress;
-
-    @Column(name = "address_detail", nullable = false)
-    private String addressDetail;
-
-    @Column(name = "memo", nullable = false)
-    private String memo;
 
     @Column(name = "created_at", nullable = false)
     private LocalDateTime createdAt;
