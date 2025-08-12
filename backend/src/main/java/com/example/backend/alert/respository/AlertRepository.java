@@ -16,7 +16,8 @@ public interface AlertRepository extends JpaRepository<Alert, Integer> {
                                     a.content,
                                     a.status,
                                     a.createdAt,
-                                    a.updatedAt)
+                                    a.updatedAt,
+                                    a.link)
                         FROM Alert a JOIN Member m
                                     ON a.user.loginId = m.loginId
                         WHERE (a.title LIKE %:keyword%

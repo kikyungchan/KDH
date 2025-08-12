@@ -17,22 +17,22 @@ import java.time.LocalDateTime;
 public class Alert {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", nullable = false)
+    @Column(name = "id")
     private Integer id;
 
     @ManyToOne(optional = false)
-    @JoinColumn(name = "user_id", nullable = false, referencedColumnName = "login_id")
+    @JoinColumn(name = "user_id", referencedColumnName = "login_id")
     private Member user;
 
-    @Column(name = "title", nullable = false, length = 50)
+    @Column(name = "title", length = 50)
     private String title;
 
-    @Column(name = "content", nullable = false)
+    @Column(name = "content")
     private String content;
 
     @ColumnDefault("'open'")
     @Lob
-    @Column(name = "status", nullable = false)
+    @Column(name = "status")
     private String status;
 
     @ColumnDefault("current_timestamp()")
@@ -42,5 +42,8 @@ public class Alert {
     @ColumnDefault("current_timestamp()")
     @Column(name = "updated_at", insertable = false)
     private LocalDateTime updatedAt;
+
+    @Column(name = "link")
+    private String link;
 
 }

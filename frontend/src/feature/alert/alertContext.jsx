@@ -1,0 +1,155 @@
+// contexts/WebSocketContext.jsx
+import React, {
+  createContext,
+  useContext,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
+import { Client } from "@stomp/stompjs";
+import SockJS from "sockjs-client";
+import { toast } from "react-toastify";
+import { AuthenticationContext } from "../common/AuthenticationContextProvider.jsx";
+import axios from "axios";
+import link from "daisyui/components/link/index.js";
+
+const WebSocketContext = createContext();
+
+export const AlertWebSocketProvider = ({ children }) => {
+  const { user } = useContext(AuthenticationContext);
+  const clientRef = useRef(null); // STOMP 인스턴스 담아 둘 상자
+  const [alertCount, setAlertCount] = useState(0);
+  const [target, setTarget] = useState(""); //수신자 id
+  const [text, setText] = useState(""); // 보낼 텍스트
+  const WS_PATH = "/ws-chat";
+
+  useEffect(() => {
+    if (!user?.name) return;
+
+    console.log(user);
+    const client = new Client({
+      webSocketFactory: () => {
+        const token = localStorage.getItem("token");
+        console.log("token : ", token);
+        console.log("WS_PATH : ", WS_PATH);
+        const url = token
+          ? `${WS_PATH}?Authorization=Bearer%20${token}`
+          : WS_PATH;
+        return new SockJS(url);
+      },
+      debug: (str) => console.log("[STOMP]", str),
+      reconnectDelay: 5000, // 끊기면 5초후 재연결
+      connectHeaders: {
+        username: user.name,
+      },
+    });
+
+    client.onConnect = (frame) => {
+      console.log("연결됨!", frame);
+      client.subscribe("/user/queue/alert", (message) => {
+        console.log(JSON.parse(message.body));
+        let msg = JSON.parse(message.body);
+        toast(`알림을 확인해 주세요 : ${msg.title} + ${msg.content}`);
+        setAlertCount((cnt) => {
+          console.log("alertCount : " + cnt);
+          return cnt + 1;
+        });
+      });
+    };
+
+    // 연결 활성화(connect 시도)
+    client.activate();
+    // 훅 박에서도 쓰기 위해 ref에 저장
+    clientRef.current = client;
+
+    return () => {
+      if (client.connected) {
+        client.disconnect();
+      }
+    };
+  }, [user && user.name]);
+
+  /*clientRef.current.publish({
+    destination: "/app/chat/alert",
+    body: JSON.stringify(chatMsg),
+  });
+  setText(""); // 입력창 초기화*/
+
+  // 메시지 보내기 함수 (다른 컴포넌트에서 사용 가능)
+  const sendMessage = (destination, message) => {
+    if (clientRef.current?.connected) {
+      clientRef.current.publish({
+        destination,
+        body: JSON.stringify(message),
+      });
+    } else {
+      console.error("WebSocket이 연결되지 않았습니다.");
+    }
+  };
+
+  // 알림 메시지 보내기 함수
+  const sendAlert = async (to, title, content, link) => {
+    await axios.post("/api/alert/add", {
+      user: to,
+      title: title,
+      content: content,
+      link: link,
+    });
+
+    const chatMsg = {
+      from: user?.name || "unknown",
+      to,
+      title,
+      content,
+    };
+    sendMessage("/app/chat/alert", chatMsg);
+  };
+
+  // 간단한 알림 보내기
+  const sendTestAlert = async () => {
+    try {
+      await axios.post("/api/alert/add", {
+        user: "admin1",
+        title: "제목",
+        content: "내용",
+        link: "/chat/chatting?rid=2222",
+      });
+    } catch (error) {
+      console.error("DB 저장 실패:", error);
+    }
+
+    const chatMsg = {
+      from: user?.name || "unknown",
+      to: "admin1",
+      title: "제목",
+      content: "내용",
+    };
+    sendMessage("/app/chat/alert", chatMsg);
+  };
+
+  const value = {
+    alertCount,
+    setAlertCount,
+    sendMessage,
+    sendAlert,
+    sendTestAlert,
+    isConnected: clientRef.current?.connected || false,
+    clientRef: clientRef.current,
+  };
+
+  return (
+    <WebSocketContext.Provider value={value}>
+      {children}
+    </WebSocketContext.Provider>
+  );
+};
+
+export const useAlertWebSocket = () => {
+  const context = useContext(WebSocketContext);
+  if (!context) {
+    throw new Error(
+      "useWebSocket은 AlertWebSocketProvider 안에서 사용해야 합니다",
+    );
+  }
+  return context;
+};

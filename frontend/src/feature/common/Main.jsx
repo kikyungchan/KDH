@@ -3,6 +3,7 @@ import { Outlet, useLocation } from "react-router";
 import { useContext, useEffect, useRef, useState } from "react";
 import Footer from "./Footer/Footer.jsx";
 import { AuthenticationContext } from "./AuthenticationContextProvider.jsx";
+import { AlertWebSocketProvider } from "../alert/alertContext.jsx";
 
 function Main() {
   const location = useLocation();
@@ -16,10 +17,12 @@ function Main() {
 
   return (
     <>
-      <NavBar />
-      <div style={{ paddingTop: "80px" }}></div>
-      <Outlet />
-      {!hideFooter && <Footer />}
+      <AlertWebSocketProvider>
+        <NavBar />
+        <div style={{ paddingTop: "80px" }}></div>
+        <Outlet />
+        {!hideFooter && <Footer />}
+      </AlertWebSocketProvider>
     </>
   );
 }

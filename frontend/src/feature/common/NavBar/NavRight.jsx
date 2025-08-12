@@ -33,9 +33,11 @@ function NavRight({ iconRef, onSearchToggle, alertidcator }) {
           <MdSupportAgent />
         </Link>
         <div className="indicator">
-          <span className="indicator-item badge badge-secondary text-[0.5rem] py-[0px] px-[6px]">
-            {alertidcator}
-          </span>
+          {alertidcator != 0 && (
+            <span className="indicator-item badge badge-secondary text-[0.5rem] py-[0px] px-[6px]">
+              {alertidcator}
+            </span>
+          )}
           <Link to={"/alert/list"}>
             <HiOutlineBellAlert />
           </Link>

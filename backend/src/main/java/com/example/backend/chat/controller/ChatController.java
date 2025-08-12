@@ -1,5 +1,6 @@
 package com.example.backend.chat.controller;
 
+import com.example.backend.chat.dto.AlertMsgForm;
 import com.example.backend.chat.dto.ChatForm;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
@@ -35,12 +36,11 @@ public class ChatController {
     }
 
     @MessageMapping("/chat/alert")
-    @SendToUser("/queue/alert")
-    public ChatForm sendAlertMessage(ChatForm msg, Principal principal) {
-        msg.setType(ChatForm.MessageType.CHAT);
+//    @SendToUser("/queue/alert")
+    public AlertMsgForm sendAlertMessage(AlertMsgForm msg, Principal principal) {
         template.convertAndSendToUser(
                 msg.getTo(),                // 받는 사용자 ID
-                "/queue/messages",          // 구독 경로
+                "/queue/alert",             // 구독 경로
                 msg                         // 메시지 payload
         );
         return msg;

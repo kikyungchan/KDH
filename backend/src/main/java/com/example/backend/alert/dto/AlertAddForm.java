@@ -5,7 +5,8 @@ import lombok.Data;
 
 @Data
 public class AlertAddForm {
-    MemberDto user;
+    String user;
     String title;
     String content;
+    String link;
 }

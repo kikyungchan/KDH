@@ -1,7 +1,7 @@
 import { Col, Row } from "react-bootstrap";
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { useSearchParams } from "react-router";
+import { Link, useSearchParams } from "react-router";
 
 export function AlertList() {
   const [alertList, setAlertList] = useState(null);
@@ -60,7 +60,7 @@ export function AlertList() {
                       {alert.title}
                     </div>
                     <div className="collapse-content text-sm">
-                      {alert.content}
+                      <Link to={alert.link}>{alert.content}</Link>
                     </div>
                   </div>
                 ))}

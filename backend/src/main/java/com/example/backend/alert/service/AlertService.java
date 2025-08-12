@@ -21,6 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 @Service
 @Transactional
@@ -79,8 +80,9 @@ public class AlertService {
         Alert alert = new Alert();
         alert.setTitle(dto.getTitle());
         alert.setContent(dto.getContent());
-
-        Member user = memberRepository.findById(Integer.valueOf(authentication.getName())).get();
+        alert.setLink(dto.getLink());
+        
+        Member user = memberRepository.findByLoginId(dto.getUser()).get();
         alert.setUser(user);
 
         alert.setStatus("open");

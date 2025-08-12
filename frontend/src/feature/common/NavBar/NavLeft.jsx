@@ -127,9 +127,9 @@ function NavLeft({ user, isAdmin, handleCategoryClick }) {
       )}
       {user && (
         <>
-          <Link to="/logout" className="btn btn-ghost text-xl">
+          {/*<Link to="/logout" className="btn btn-ghost text-xl">
             로그아웃
-          </Link>
+          </Link>*/}
           {/*<Link to={`/member?id=${user.id}`} className="btn btn-ghost text-xl">*/}
           {/*  {user.name}*/}
           {/*</Link>*/}
