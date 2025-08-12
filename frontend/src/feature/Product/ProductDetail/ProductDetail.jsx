@@ -103,7 +103,7 @@ export function ProductDetail() {
 
   // 본문 이미지 배열
   const detailImages = product.detailImagePaths ?? [];
-  
+
   return (
     <div className="container">
       <div className="product-detail-layout">
@@ -373,20 +373,22 @@ export function ProductDetail() {
                 />
               ))}
             </div>
+          </div>
 
-            {/* 접힌 상태일 때 오버레이 위 중앙 버튼 */}
-            {showDetailToggle && !isDetailOpen && (
+          {/* 접힌 상태: 아래쪽에 버튼 노출 */}
+          {showDetailToggle && !isDetailOpen && (
+            <div className="detail-toggle-bottom">
               <button
                 type="button"
-                className="detail-toggle-btn"
+                className="detail-toggle-btn-out"
                 onClick={() => setIsDetailOpen(true)}
               >
                 상세정보 펼쳐보기
               </button>
-            )}
-          </div>
+            </div>
+          )}
 
-          {/* 펼친 뒤에는 아래로 '접기' 버튼 노출 */}
+          {/* 펼친 상태: 아래쪽에 접기 버튼 */}
           {showDetailToggle && isDetailOpen && (
             <div className="detail-toggle-bottom">
               <button
@@ -394,7 +396,7 @@ export function ProductDetail() {
                 className="detail-toggle-btn-out"
                 onClick={() => setIsDetailOpen(false)}
               >
-                접기
+                상세정보 접기
               </button>
             </div>
           )}

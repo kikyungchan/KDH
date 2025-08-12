@@ -408,45 +408,43 @@
     max-height: none;
 }
 
-/* 오버레이 위 중앙 버튼 */
-.detail-toggle-btn {
-    position: absolute;
-    left: 50%;
-    bottom: 10px;
-    transform: translateX(-50%);
-    padding: 12px 22px;
-    border: 1px solid #ddd;
-    background: #fff;
-    border-radius: 6px;
-    cursor: pointer;
-    font-size: 0.95rem;
-}
-
-.detail-toggle-btn:hover {
-    background: #f7f7f7;
-}
-
-/* 펼친 뒤 아래쪽 '접기' 버튼 */
+/* 접힘/펼침 공통: 아래쪽 버튼 영역 */
 .detail-toggle-bottom {
     display: flex;
     justify-content: center;
-    margin-top: 16px;
+    margin-top: 20px; /* 더 아래로 내리고 싶으면 수치 키워 */
 }
 
 .detail-toggle-btn-out {
-    padding: 12px 22px;
+    padding: 22px 42px;
     border: 1px solid #ddd;
     background: #fff;
     border-radius: 6px;
     cursor: pointer;
-    font-size: 0.95rem;
+    font-size: 1.1rem;
 }
 
 .detail-toggle-btn-out:hover {
     background: #f7f7f7;
 }
 
-/* 반응형: 접힌 높이만 단계적으로 낮춤 */
+/* 접힌 상태 오버레이(블러 금지, 그라데이션만) */
+.detail-collapsible.is-closed {
+    max-height: 1200px; /* 필요시 조절 */
+    overflow: hidden;
+}
+
+.detail-collapsible.is-closed::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 140px;
+    background: linear-gradient(to bottom, rgba(255, 255, 255, 0), #fff);
+    /* backdrop-filter: blur(...) 쓰지 마! */
+}
+
 @media (max-width: 1023px) {
     .detail-collapsible.is-closed {
         max-height: 900px;
@@ -476,3 +474,4 @@
         height: 90px;
     }
 }
+
