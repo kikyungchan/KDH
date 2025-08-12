@@ -549,7 +549,7 @@ function ProductCart(props) {
 
         {/* 모바일: 하단 고정 CTA */}
         {cartItems.length > 0 && (
-          <div className="lg:hidden fixed inset-x-0 bottom-0 z-50 border-t bg-white p-4 shadow-lg">
+          <div className="xl:hidden fixed inset-x-0 bottom-0 z-50 border-t bg-white p-4 shadow-lg">
             <div className="flex items-center justify-between">
               <div className="text-base">
                 <div className="text-gray-600 text-sm">총 주문금액</div>
