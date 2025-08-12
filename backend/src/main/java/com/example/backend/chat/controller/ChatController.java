@@ -33,7 +33,7 @@ public class ChatController {
 
     @PostMapping("/api/chat/list")
     @PreAuthorize("isAuthenticated()")
-    public Map<String, String> getAllChats(@RequestBody Map<String, String> params,
+    public Map<String, Object> getAllChats(@RequestBody Map<String, String> params,
                                            Authentication authentication) {
         String roomId = params.get("roomId");
         String userid = params.get("userid");

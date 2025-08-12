@@ -33,10 +33,19 @@ export function Chat() {
       if (user?.name && !effectRan.current) {
         setCount(count + 1);
         console.log("user : ", user);
-        axios.post("/api/chat/list", {
-          roomId,
-          userid: user.loginId,
-        });
+        console.log("axios");
+        axios
+          .post("/api/chat/list", {
+            roomId,
+            userid: user.loginId,
+          })
+          .then((res) => {
+            console.log("res", res.data);
+          })
+          .catch((err) => {
+            console.log("오류");
+          })
+          .finally();
         const client = new Client({
           // webSocketFactory: () => new SockJS(WS_PATH), // SockJS 연결
           webSocketFactory: () => {

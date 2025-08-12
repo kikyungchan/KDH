@@ -38,8 +38,24 @@ public class ChatService {
 
     }
 
-    public Map<String, String> list(String roomId, String userid, Authentication authentication) {
+    public Map<String, Object> list(String roomId, String userid, Authentication authentication) {
+        int pageNumber = 10;
         Page<ChatListDto> chatListDtoPage =
-                chatLogRepository.findAllBy(roomId, userid, PageRequest.of(10 - 1, 10));
+                chatLogRepository.findAllBy(roomId, userid, PageRequest.of(pageNumber - 1, 10));
+        int totalPages = chatListDtoPage.getTotalPages(); // 마지막 페이지
+        int rightPageNumber = ((pageNumber - 1) / 10 + 1) * 10;
+        int leftPageNumber = rightPageNumber - 9;
+        rightPageNumber = Math.min(rightPageNumber, totalPages);
+        leftPageNumber = Math.max(leftPageNumber, 1);
+
+        System.out.println("chatList" + chatListDtoPage.getContent());
+
+        var pageInfo = Map.of("totalPages", totalPages,
+                "rightPageNumber", rightPageNumber,
+                "leftPageNumber", leftPageNumber,
+                "currentPageNumber", pageNumber);
+
+        return Map.of("pageInfo", pageInfo,
+                "chatList", chatListDtoPage.getContent());
     }
 }
