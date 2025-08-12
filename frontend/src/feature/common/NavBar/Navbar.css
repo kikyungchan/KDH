@@ -20,7 +20,6 @@
     gap: 1.5rem;
     font-size: 1.4rem;
     align-items: center;
-    /*margin-right: 10rem;*/
 }
 
 .navbar-icon {
@@ -40,7 +39,7 @@
     height: 80px;
     max-width: 1600px;
     margin: 0 auto;
-    padding: 0 1rem; /* = px-4 */
+    padding: 0 1rem;
     width: 100%;
 }
 
@@ -49,8 +48,6 @@
     font-weight: bold;
     text-decoration: none;
     margin-right: 3rem;
-    /*margin-right: 1.8rem;*/
-    /*margin-left: 10rem;*/
 
 }
 
@@ -64,10 +61,9 @@
 
 .navbar-container,
 .navbar-left {
-    overflow: visible !important; /* 잘리는 현상 방지 */
+    overflow: visible !important;
 }
 
-/*장바구니 뱃지용*/
 .cart-icon-wrapper {
     position: relative;
 }
@@ -97,9 +93,9 @@
     border: none;
     outline: none;
     background: transparent;
-    font-size: 1.25rem; /* 글자 크기 키움 */
-    padding: 0.75rem 1rem 0.5rem; /* 상, 좌우, 하 */
-    height: 3rem; /* 고정 높이 */
+    font-size: 1.25rem;
+    padding: 0.75rem 1rem 0.5rem;
+    height: 3rem;
 }
 
 .search-close-icon {
@@ -127,7 +123,6 @@
     z-index: 10;
 }
 
-/* 햄버거 아이콘 기본 숨김 */
 .hamburger-icon {
     display: none;
     font-size: 1.6rem;
@@ -136,7 +131,6 @@
 }
 
 
-/* 모바일 메뉴 드롭다운 */
 .mobile-menu {
     position: absolute;
     top: 80px;
@@ -159,8 +153,6 @@
     margin-top: 0.5rem;
 }
 
-
-/* 드롭다운 메뉴 스타일 */
 .dropdown {
     position: relative;
 }
@@ -207,7 +199,6 @@
     gap: 8px;
     background-color: #f8f8f8;
     width: 100%;
-    /*flex-direction: row-reverse;*/
 }
 
 .mobile-search-input {
@@ -224,11 +215,12 @@
     font-size: 1.2rem;
 }
 
-/*  (~767px) */
+
+/*  (640~767px) */
 @media (max-width: 767px) {
     .hamburger-icon {
         display: block;
-        order: -1; /* 햄버거를 맨 앞쪽으로 */
+        order: -1;
     }
 
     .navbar-center {
@@ -275,5 +267,11 @@
         display: flex;
         gap: 2.7rem;
         font-size: 1.4rem;
+    }
+}
+
+@media (max-width: 639px) {
+    .navbar-right .avatar {
+        display: none !important;
     }
 }
