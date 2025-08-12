@@ -119,7 +119,25 @@ export function ProductDetail() {
           <div className="product-info-section">
             <div className="product-title-header">
               <h2 className="product-name-title">{product.productName}</h2>
-              <div className="product-actions">
+              <div className="product-badges-detail">
+                {(() => {
+                  const insertedAt = new Date(product.insertedAt);
+                  const now = new Date();
+                  const diffInSeconds = (now - insertedAt) / 1000;
+                  const isNew = diffInSeconds <= 60 * 60 * 24 * 7;
+                  return isNew ? <span className="new-badge">NEW</span> : null;
+                })()}
+                {product.hot && <span className="hot-badge">HOT</span>}
+                {product.quantity === 0 && (
+                  <span className="sold-out-badge">SOLD OUT</span>
+                )}
+                {product.quantity > 0 && product.quantity < 5 && (
+                  <span className="low-stock-badge">
+                    🔥 {product.quantity}개 남음
+                  </span>
+                )}
+              </div>
+              <div className="product-actions universal-actions">
                 <RxShare1
                   className="action-icon"
                   onClick={() => setShowShareModal(true)}
@@ -132,25 +150,6 @@ export function ProductDetail() {
             <p className="product-price-detail">
               {product.price.toLocaleString()}원
             </p>
-
-            <div className="product-badges-detail">
-              {(() => {
-                const insertedAt = new Date(product.insertedAt);
-                const now = new Date();
-                const diffInSeconds = (now - insertedAt) / 1000;
-                const isNew = diffInSeconds <= 60 * 60 * 24 * 7;
-                return isNew ? <span className="new-badge">NEW</span> : null;
-              })()}
-              {product.hot && <span className="hot-badge">HOT</span>}
-              {product.quantity === 0 && (
-                <span className="sold-out-badge">SOLD OUT</span>
-              )}
-              {product.quantity > 0 && product.quantity < 5 && (
-                <span className="low-stock-badge">
-                  🔥 {product.quantity}개 남음
-                </span>
-              )}
-            </div>
 
             <hr className="divider" />
 

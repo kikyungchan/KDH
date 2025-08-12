@@ -48,14 +48,15 @@
 
 .product-title-header {
     display: flex;
-    justify-content: flex-start;
+    flex-wrap: wrap;
+    grid-template-columns: 1fr auto auto;
     align-items: center;
     margin-bottom: 0.5rem;
-    gap: 5rem;
+    column-gap: 12px;
 }
 
 .product-name-title {
-    font-size: 2.5rem;
+    font-size: 2.2rem;
     font-weight: 700;
     margin: 0;
 }
@@ -64,6 +65,7 @@
     display: flex;
     align-items: center;
     gap: 16px;
+    margin-left: 16px;
 }
 
 .action-icon {
@@ -256,6 +258,12 @@
     height: 3rem;
 }
 
+.universal-actions {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
 /* --- 반응형 미디어 쿼리 --- */
 
 /* (1023px 이하) */
@@ -298,10 +306,10 @@
     }
 }
 
-/* (767px 이하) */
-@media (max-width: 767px) {
-    .container {
-        padding: 1.5rem 1rem;
+/* (639px 이하: 텍스트/여백만 소폭 축소) */
+@media (max-width: 639px) {
+    .product-detail-layout {
+        width: 98%;
     }
 
     .product-main-content {
@@ -309,75 +317,65 @@
     }
 
     .product-title-header {
-        flex-direction: column;
-        align-items: flex-start;
+        flex-wrap: wrap;
+        column-gap: 8px;
     }
 
     .product-name-title {
-        font-size: 1.5rem;
+        font-size: 1.6rem;
     }
 
     .product-price-detail {
         font-size: 1.1rem;
     }
 
-    .product-badges-detail {
-        margin-top: 5px;
-    }
-
     .product-info-text {
-        font-size: 0.9rem;
+        font-size: 0.95rem;
+        line-height: 1.5;
     }
 
-    .product-main-thumbnail {
-        max-height: 400px;
+    .product-badges-detail {
+        gap: 6px;
     }
 
-    .product-body-section {
-        margin-top: 3rem;
+    .new-badge, .hot-badge, .sold-out-badge, .low-stock-badge {
+        font-size: 0.68rem;
+        padding: 0.25rem 0.5rem;
     }
 
-    .product-detail-image {
-        width: 100%;
-    }
-}
-
-/* (480px 이하) */
-@media (max-width: 480px) {
-    .container {
-        padding: 1rem 0.5rem;
-    }
-
-    .product-main-content {
-        gap: 15px;
-    }
-
-    .product-name-title {
-        font-size: 1.3rem;
-    }
-
-    .product-price-detail {
-        font-size: 1rem;
-    }
-
-    .small-thumbnail {
-        width: 50px;
-        height: 50px;
-    }
-
-    .product-main-thumbnail {
-        max-height: 300px;
-    }
-
-    .buy-button, .cart-button {
-        padding: 0.8rem;
+    .action-icon {
+        font-size: 20px;
     }
 
     .quantity-control-box {
-        flex-wrap: wrap;
+        gap: 8px;
     }
 
     .quantity-control-box .quantity-label {
-        width: 100%;
+        font-size: 0.95rem;
     }
+
+    .quantity-control-box button,
+    .quantity-control-box input {
+        width: 36px;
+        height: 36px;
+        font-size: 0.95rem;
+    }
+
+    .total-price {
+        font-size: 1.2rem;
+    }
+
+    .buy-button, .cart-button {
+        font-size: 0.95rem;
+        padding: 0.9rem;
+    }
+
+    .product-actions-mobile {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin: 10px 0 6px;
+    }
+
 }
