@@ -12,6 +12,29 @@ export function ProductOrderComplete() {
   );
   const shippingFee = totalItemPrice >= 100000 ? 0 : 3000;
 
+  // state 유실 가드
+  if (!state) {
+    return (
+      <div className="page-wrapper">
+        <div className="center-top-container">
+          <div className="w-full max-w-[800px]">
+            <div className="rounded-card p-6 text-center">
+              잘못된 접근입니다. 홈으로 이동합니다.
+              <div className="mt-4">
+                <button
+                  className="order-button btn w-40 confirm"
+                  onClick={() => navigate("/home")}
+                >
+                  홈으로
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="page-wrapper">
       <div className="center-top-container">
@@ -53,8 +76,8 @@ export function ProductOrderComplete() {
                   <div>{receiver.name}</div>
                   <div>{receiver.phone}</div>
                   <div>
-                    {receiver.address} {receiver.detailedAddress}({" "}
-                    {receiver.postalCode} )
+                    {receiver.address} {receiver.addressDetail}({" "}
+                    {receiver.zipcode} )
                   </div>
                   <div>{memo || "없음"}</div>
                 </div>
@@ -86,15 +109,17 @@ export function ProductOrderComplete() {
                     <div className="text-sm">
                       {(item.price * item.quantity).toLocaleString()}원
                     </div>
-                    <div className="text-sm text-gray-500">
-                      배송비: {shippingFee.toLocaleString()}원
-                    </div>
                   </div>
                 </div>
               ))}
               <hr className="border-t border-gray-300 my-4" />
-              <div className="text-end fw-bold mt-2 text-lg">
-                총 주문금액: {(totalItemPrice + shippingFee).toLocaleString()}원
+              <div className="text-end mt-2 text-lg">
+                <div>상품합계 : {totalItemPrice.toLocaleString()}원</div>
+                <div>배송비: {shippingFee.toLocaleString()}원</div>
+                <div className="font-bold mt-2">
+                  총 주문금액: {(totalItemPrice + shippingFee).toLocaleString()}
+                  원
+                </div>
               </div>
             </div>
 

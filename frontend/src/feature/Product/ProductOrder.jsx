@@ -200,9 +200,6 @@ function Order(props) {
     return <div>잘못된 접근입니다.</div>;
   }
 
-  // const totalPrice = state.price * state.quantity;
-  // const shippingFee = totalPrice >= 100000 ? 0 : 3000;
-
   function handleCancelButton() {
     alert("주문이 취소되었습니다.");
     navigate(-1);
