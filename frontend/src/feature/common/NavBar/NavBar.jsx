@@ -20,12 +20,12 @@ import SearchOverlay from "./SearchOverlay.jsx";
 function NavBar(props) {
   const [showMobileCategory, setShowMobileCategory] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  // const { cartCount } = useCart();
+  const { cartCount } = useCart();
   const { user, isAdmin } = useContext(AuthenticationContext);
   const [showSearch, setShowSearch] = useState(false);
   const menuRef = useRef(null);
-  // const searchRef = useRef(null);
-  // const iconRef = useRef(null);
+  const searchRef = useRef(null);
+  const iconRef = useRef(null);
   const navigate = useNavigate();
   const location = useLocation();
   const [keyword, setKeyword] = useState("");
@@ -77,7 +77,7 @@ function NavBar(props) {
     return null;
   };
 
-  // 카테고리 한글로 검색 가능하도록.
+  // 카테고리 한글로 검색 가능하도록.(모바일/데스크톱)
   const routeSearch = () => {
     const q = keyword.trim();
     if (!q) return;
@@ -133,22 +133,6 @@ function NavBar(props) {
     setShowMobileCategory(false);
     setIsMobileMenuOpen(false);
   };
-
-  // 모바일 메뉴 내 검색 기능 처리 함수
-  // const handleMobileSearch = () => {
-  //   if (keyword.trim() !== "") {
-  //     navigate(`/product/list?keyword=${keyword.trim()}`);
-  //     setKeyword("");
-  //     setIsMobileMenuOpen(false);
-  //   }
-  // };
-  //
-  // const submitSearch = () => {
-  //   if (keyword.trim() === "") return;
-  //   navigate(`/product/list?keyword=${encodeURIComponent(keyword.trim())}`);
-  //   setKeyword("");
-  //   setShowSearch(false);
-  // };
 
   const goCategory = (catKey) => {
     const params = new URLSearchParams(location.search);

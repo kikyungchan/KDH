@@ -185,6 +185,10 @@
 }
 
 .dropdown:hover .dropdown-content {
+    display: none;
+}
+
+.dropdown.dropdown-open .dropdown-content {
     display: flex;
 }
 

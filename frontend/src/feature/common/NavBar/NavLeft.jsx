@@ -26,6 +26,7 @@ function NavLeft({ user, isAdmin, handleCategoryClick }) {
         <ul
           tabIndex={0}
           className="menu dropdown-content z-[1000] p-2 shadow bg-base-100 rounded-box w-52"
+          onClick={() => setDropdownOpen(false)}
         >
           <li>
             <button
