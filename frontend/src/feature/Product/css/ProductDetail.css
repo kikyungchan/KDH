@@ -1,6 +1,6 @@
 /* --- 상품 상세 레이아웃 --- */
 .product-detail-layout {
-    width: 100%;
+    width: 95%;
 }
 
 .product-main-content {
@@ -48,9 +48,10 @@
 
 .product-title-header {
     display: flex;
-    justify-content: space-between;
+    justify-content: flex-start;
     align-items: center;
     margin-bottom: 0.5rem;
+    gap: 5rem;
 }
 
 .product-name-title {
@@ -184,7 +185,6 @@
 }
 
 .buy-button, .cart-button {
-    width: 100%;
     padding: 1rem;
     font-weight: bold;
     border-radius: 6px;

@@ -109,8 +109,8 @@
 
 .cart-badge {
     position: absolute;
-    top: -6px;
-    right: -6px;
+    top: 3px;
+    right: -3px;
     background-color: red;
     color: white;
     font-size: 10px;
