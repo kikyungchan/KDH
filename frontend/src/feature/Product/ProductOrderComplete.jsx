@@ -52,12 +52,10 @@ export function ProductOrderComplete() {
                 <div className="w-40 mt-1 space-y-1">
                   <div>이름</div>
                   <div>연락처</div>
-                  <div>주소</div>
                 </div>
                 <div className="space-y-1">
                   <div>{orderer.name}</div>
                   <div>{orderer.phone}</div>
-                  <div>{orderer.address}</div>
                 </div>
               </div>
             </div>

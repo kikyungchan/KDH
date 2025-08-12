@@ -19,7 +19,8 @@ function ProductCart(props) {
     (sum, item) => sum + item.price * item.quantity,
     0,
   );
-  const shippingFee = totalItemPrice >= 100000 ? 0 : 3000;
+  const shippingFee =
+    checkedIds.length > 0 ? (totalItemPrice >= 100000 ? 0 : 3000) : 0;
 
   useEffect(() => {
     const token = localStorage.getItem("token");

@@ -365,7 +365,7 @@ public class ProductService {
         order.setMember(member);
         order.setOrderToken(orderToken);
         order.setLoginId(member.getLoginId());
-        
+
         // 주문자 필드 분리
         order.setOrdererName(member.getName());
         order.setOrdererPhone(member.getPhone());
