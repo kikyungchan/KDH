@@ -60,27 +60,9 @@ public class Order {
     @Column(name = "order_token")
     private String orderToken;
 
-    //    여기서부터
-    @Column(name = "member_name", nullable = false)
-    private String memberName;
-
-    @Column(nullable = false)
-    private String phone;
-
-    @Column(name = "zipcode", nullable = false)
-    private String zipcode;
-
-    @Column(name = "shipping_address", nullable = false)
-    private String shippingAddress;
-
-    @Column(name = "address_detail")
-    private String addressDetail;
-
     @Column(name = "memo", nullable = false)
     private String memo;
-//    여기까지 삭제
 
-    
     @Column(name = "items_subtotal", nullable = false)
     private Integer itemsSubtotal;
 
@@ -89,7 +71,6 @@ public class Order {
 
     @Column(name = "total_price", nullable = false)
     private Integer totalPrice;
-
 
     @Column(name = "created_at", nullable = false)
     private LocalDateTime createdAt;
