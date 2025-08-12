@@ -2,11 +2,8 @@
 .footer {
     background-color: #f8f8f8;
     border-top: 1px solid #e0e0e0;
-    padding: 40px 20px;
+    padding: 10px 10px;
     color: #555;
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto",
-    "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans",
-    "Helvetica Neue", sans-serif;
 }
 
 /* 상단 섹션 */
@@ -16,7 +13,6 @@
     flex-wrap: wrap;
     gap: 30px;
     padding-bottom: 30px;
-    /*border-bottom: 1px solid #e0e0e0;*/
 }
 
 .footer-brand {
@@ -104,4 +100,72 @@
 
 .footer-sns a:hover {
     color: #333;
+}
+
+@media (max-width: 639px) {
+    .footer {
+        padding: 20px 14px;
+    }
+
+    .footer-content {
+        gap: 16px;
+        padding-bottom: 16px;
+    }
+
+    .footer-brand {
+        gap: 12px;
+        margin-right: 0;
+    }
+
+    .footer-logo {
+        font-size: 1.2rem;
+    }
+
+    .footer-links {
+        gap: 10px;
+    }
+
+    .footer-links a {
+        font-size: 0.8rem;
+    }
+
+    .footer-info {
+        text-align: left;
+        line-height: 1.4;
+    }
+
+    .info-title {
+        font-size: 0.95rem;
+        margin-bottom: 4px;
+    }
+
+    .info-text {
+        font-size: 0.8rem;
+    }
+
+    .footer-bottom {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 16px;
+        padding-top: 16px;
+    }
+
+    .footer-sns {
+        gap: 12px;
+    }
+
+    .footer-sns img {
+        width: 28px;
+        height: 28px;
+        margin-left: 4px;
+    }
+
+    .footer-sns a {
+        font-size: 0.8rem;
+    }
+
+    .footer-copyright {
+        font-size: 0.8rem;
+        line-height: 1.4;
+    }
 }
