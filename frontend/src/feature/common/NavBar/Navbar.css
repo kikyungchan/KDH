@@ -17,7 +17,7 @@
 
 .navbar-icons {
     display: flex;
-    gap: 0.75rem;
+    gap: 1rem;
     font-size: 1.4rem;
     align-items: center;
 }
@@ -184,11 +184,19 @@
     background-color: #f0f0f0;
 }
 
-.dropdown:hover .dropdown-content {
+/* 기본 숨김 */
+.dropdown .dropdown-content {
     display: none;
 }
 
-.dropdown.dropdown-open .dropdown-content {
+
+/* 상태로만 열기 */
+.navbar-left .dropdown.dropdown-open .dropdown-content {
+    display: flex;
+}
+
+/* 유저 메뉴는 포커스 열림 */
+.navbar-right .dropdown:hover .dropdown-content {
     display: flex;
 }
 
@@ -276,6 +284,26 @@
 @media (max-width: 639px) {
     .navbar-right .avatar {
         display: none !important;
+    }
+
+    .navbar-icons {
+        gap: 0.5rem;
+    }
+
+    .navbar-right .btn-circle {
+        width: 36px;
+        height: 36px;
+        min-height: 36px;
+    }
+
+    .navbar-right .btn-circle,
+    .navbar-right .navbar-icon {
+        font-size: 1.3rem !important; /* 약 17~18px */
+        line-height: 1;
+    }
+
+    .hamburger-icon {
+        font-size: 1.4rem;
     }
 }
 

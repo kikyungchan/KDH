@@ -19,7 +19,7 @@ function NavRight({ iconRef, onSearchToggle }) {
         <div className="FiSearch btn btn-ghost btn-circle text-2xl">
           <FiSearch
             ref={iconRef}
-            className="navbar-icon "
+            className="navbar-icon"
             onClick={() => onSearchToggle()}
           />
         </div>
