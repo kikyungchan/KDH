@@ -1,5 +1,5 @@
 import { useLocation, useNavigate } from "react-router";
-import React, { useContext, useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import axios from "axios";
 import "./css/ProductOrder.css";
 import { useCart } from "./CartContext.jsx";
@@ -81,40 +81,38 @@ function Order(props) {
     }
   }, []);
 
-  if (loadingMember) {
-    return <span className="loading loading-spinner"></span>;
-  }
-
   useEffect(() => {
-    if (ordererEmail != null) {
-      const handlePopupMessage = (event) => {
-        switch (event.data.type) {
-          case "POPUP_READY":
-            console.log("팝업 준비 완료!");
-            // 팝업이 준비되면 데이터 전송
-            sendDataToPopup();
-            break;
+    if (ordererEmail == null) return;
+    const handlePopupMessage = (event) => {
+      switch (event.data.type) {
+        case "POPUP_READY":
+          console.log("팝업 준비 완료!");
+          // 팝업이 준비되면 데이터 전송
+          sendDataToPopup();
+          break;
 
-          case "PAY_SUCCESS":
-            // 결제 완료 처리
-            handleOrderButton();
-            setIsProcessing(false);
-            break;
+        case "PAY_SUCCESS":
+          // 결제 완료 처리
+          handleOrderButton();
+          setIsProcessing(false);
+          break;
 
-          case "PAY_FAIL":
-            // 결제 실패 처리
-            alert("결제에 실패하였습니다 다시 시도해 주세요");
-            setIsProcessing(false);
-            break;
-        }
-      };
-      window.addEventListener("message", handlePopupMessage);
+        case "PAY_FAIL":
+          // 결제 실패 처리
+          alert("결제에 실패하였습니다 다시 시도해 주세요");
+          setIsProcessing(false);
+          break;
 
-      // cleanup 함수로 이벤트 리스너 제거
-      return () => {
-        window.removeEventListener("message", handlePopupMessage);
-      };
-    }
+        default:
+          console.log("알 수 없는 오류:", event.data.type);
+      }
+    };
+    window.addEventListener("message", handlePopupMessage);
+
+    // cleanup 함수로 이벤트 리스너 제거
+    return () => {
+      window.removeEventListener("message", handlePopupMessage);
+    };
   }, [ordererEmail]);
 
   function handlePaymentConnection() {
@@ -449,6 +447,10 @@ function Order(props) {
   // if (!ordererEmail) {
   //   return <span className="loading loading-spinner"></span>;
   // }
+
+  if (loadingMember) {
+    return <span className="loading loading-spinner"></span>;
+  }
 
   return (
     <div className="page-wrapper">
