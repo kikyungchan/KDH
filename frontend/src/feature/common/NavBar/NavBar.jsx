@@ -20,25 +20,22 @@ import SearchOverlay from "./SearchOverlay.jsx";
 function NavBar(props) {
   const [showMobileCategory, setShowMobileCategory] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const { cartCount } = useCart();
   const { user, isAdmin } = useContext(AuthenticationContext);
   const [showSearch, setShowSearch] = useState(false);
   const menuRef = useRef(null);
-  const searchRef = useRef(null);
-  const iconRef = useRef(null);
   const navigate = useNavigate();
   const location = useLocation();
   const [keyword, setKeyword] = useState("");
 
   const RECO_CATEGORIES = [
-    { label: "겉옷", key: "outer", image: "/CategoryImage/outer.png" },
-    { label: "상의", key: "top", image: "/CategoryImage/top.png" },
-    { label: "하의", key: "bottom", image: "/CategoryImage/bottom.png" },
+    { label: "신발", key: "shoes", image: "/CategoryImage/shoes.png" },
     { label: "모자", key: "hat", image: "/CategoryImage/hat.png" },
     { label: "가방", key: "bag", image: "/CategoryImage/bag.png" },
-    { label: "신발", key: "shoes", image: "/CategoryImage/shoes.png" },
-    { label: "양말", key: "socks", image: "/CategoryImage/socks.png" },
-    { label: "벨트", key: "belt", image: "/CategoryImage/belt.png" },
+    // { label: "겉옷", key: "outer", image: "/CategoryImage/outer.png" },
+    // { label: "상의", key: "top", image: "/CategoryImage/top.png" },
+    // { label: "하의", key: "bottom", image: "/CategoryImage/bottom.png" },
+    // { label: "양말", key: "socks", image: "/CategoryImage/socks.png" },
+    // { label: "벨트", key: "belt", image: "/CategoryImage/belt.png" },
   ];
 
   // 카테고리 키 → 한글/영문 별칭들
@@ -63,7 +60,7 @@ function NavBar(props) {
     belt: ["belt", "벨트", "허리띠"],
   };
 
-  // 공백 제거+소문자 변환
+  // 카테고리명과 별칭 매칭시 소문자변환 및 공백제거
   const normalize = (s) => s.replace(/\s+/g, "").toLowerCase();
 
   // 입력문구에서 별칭(카테고리)이 포함되면 매칭
@@ -173,17 +170,7 @@ function NavBar(props) {
             handleCategoryClick={handleCategoryClick}
           />
           {/* 오른쪽 아이콘 */}
-          <NavRight
-            // user={user}
-            // iconRef={iconRef}
-            onSearchToggle={() => setShowSearch((prev) => !prev)}
-            // showSearch={showSearch}
-            // setShowSearch={setShowSearch}
-            // keyword={keyword}
-            // setKeyword={setKeyword}
-            // searchRef={searchRef}
-            // navigate={navigate}
-          />
+          <NavRight onSearchToggle={() => setShowSearch((prev) => !prev)} />
         </div>
         {showSearch && (
           <SearchOverlay
