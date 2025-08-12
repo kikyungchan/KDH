@@ -29,26 +29,42 @@ public class Order {
     @JoinColumn(name = "member_id", nullable = false)
     private Member member;
 
-    @ColumnDefault("current_timestamp()")
-    @Column(name = "order_date", updatable = false, insertable = false, nullable = false)
-    private LocalDateTime orderDate;
-
-    @Column(name = "total_price", nullable = false)
-    private Integer totalPrice;
-
-    @Column(name = "shipping_address", nullable = false)
-    private String shippingAddress;
-
     @Column(name = "login_id", nullable = false)
     private String loginId;
 
     @Column(name = "member_name", nullable = false)
     private String memberName;
 
-    private String memo;
-
     @Column(nullable = false)
     private String phone;
+
+    @ColumnDefault("current_timestamp()")
+    @Column(name = "order_date", updatable = false, insertable = false, nullable = false)
+    private LocalDateTime orderDate;
+
+    @Column(name = "order_token")
+    private String orderToken;
+
+    @Column(name = "items_subtotal", nullable = false)
+    private Integer itemsSubtotal;
+
+    @Column(name = "shipping_fee", nullable = false)
+    private Integer shippingFee;
+
+    @Column(name = "total_price", nullable = false)
+    private Integer totalPrice;
+
+    @Column(name = "zipcode", nullable = false)
+    private String zipcode;
+
+    @Column(name = "shipping_address", nullable = false)
+    private String shippingAddress;
+
+    @Column(name = "address_detail", nullable = false)
+    private String addressDetail;
+
+    @Column(name = "memo", nullable = false)
+    private String memo;
 
     @Column(name = "created_at", nullable = false)
     private LocalDateTime createdAt;
@@ -67,11 +83,5 @@ public class Order {
         item.setOrder(this);
     }
 
-    private String zipcode;
-
-    private String addressDetail;
-
-    @Column(name = "order_token")
-    private String orderToken;
 
 }
