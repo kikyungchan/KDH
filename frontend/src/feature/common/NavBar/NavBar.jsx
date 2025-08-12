@@ -15,43 +15,93 @@ import NavRight from "./NavRight.jsx";
 import Search from "./SearchBar.jsx";
 import "bootstrap/dist/css/bootstrap-grid.min.css";
 import SearchBar from "./SearchBar.jsx";
+import SearchOverlay from "./SearchOverlay.jsx";
 
 function NavBar(props) {
   const [showMobileCategory, setShowMobileCategory] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const { cartCount } = useCart();
+  // const { cartCount } = useCart();
   const { user, isAdmin } = useContext(AuthenticationContext);
   const [showSearch, setShowSearch] = useState(false);
   const menuRef = useRef(null);
-  const searchRef = useRef(null);
-  const iconRef = useRef(null);
+  // const searchRef = useRef(null);
+  // const iconRef = useRef(null);
   const navigate = useNavigate();
   const location = useLocation();
   const [keyword, setKeyword] = useState("");
 
-  // 검색창 아이콘 한번더 누르거나 바깥영역누르면 검색창닫히도록
-  useEffect(() => {
-    function handleClickOutside(e) {
-      if (
-        searchRef.current &&
-        !searchRef.current.contains(e.target) &&
-        iconRef.current &&
-        !iconRef.current.contains(e.target)
-      ) {
-        setShowSearch(false);
+  const RECO_CATEGORIES = [
+    { label: "겉옷", key: "outer", image: "/CategoryImage/outer.png" },
+    { label: "상의", key: "top", image: "/CategoryImage/top.png" },
+    { label: "하의", key: "bottom", image: "/CategoryImage/bottom.png" },
+    { label: "모자", key: "hat", image: "/CategoryImage/hat.png" },
+    { label: "가방", key: "bag", image: "/CategoryImage/bag.png" },
+    { label: "신발", key: "shoes", image: "/CategoryImage/shoes.png" },
+    { label: "양말", key: "socks", image: "/CategoryImage/socks.png" },
+    { label: "벨트", key: "belt", image: "/CategoryImage/belt.png" },
+  ];
+
+  // 카테고리 키 → 한글/영문 별칭들
+  const CATEGORY_ALIASES = {
+    outer: ["outer", "겉옷", "아우터", "자켓", "코트", "패딩", "가디건"],
+    top: [
+      "top",
+      "상의",
+      "티",
+      "반팔",
+      "긴팔",
+      "맨투맨",
+      "후드",
+      "셔츠",
+      "니트",
+    ],
+    bottom: ["bottom", "하의", "바지", "청바지", "데님", "슬랙스", "트레이닝"],
+    hat: ["hat", "모자", "캡", "버킷햇", "비니"],
+    bag: ["bag", "가방", "백", "백팩", "토트", "크로스백", "숄더백"],
+    shoes: ["shoes", "신발", "스니커즈", "구두", "샌들", "부츠", "로퍼"],
+    socks: ["socks", "양말"],
+    belt: ["belt", "벨트", "허리띠"],
+  };
+
+  // 공백 제거+소문자 변환
+  const normalize = (s) => s.replace(/\s+/g, "").toLowerCase();
+
+  // 입력문구에서 별칭(카테고리)이 포함되면 매칭
+  const resolveCategory = (raw) => {
+    const q = normalize(raw);
+    for (const [cat, aliases] of Object.entries(CATEGORY_ALIASES)) {
+      for (const a of aliases) {
+        if (q.includes(normalize(a))) return cat;
       }
     }
+    return null;
+  };
 
-    if (showSearch) {
-      document.addEventListener("mousedown", handleClickOutside);
+  // 카테고리 한글로 검색 가능하도록.
+  const routeSearch = () => {
+    const q = keyword.trim();
+    if (!q) return;
+
+    const cat = resolveCategory(q);
+    if (cat) {
+      const params = new URLSearchParams(location.search);
+      params.set("category", cat);
+      if (!params.get("sort")) params.set("sort", "recent");
+      navigate(`/product/list?${params.toString()}`);
     } else {
-      document.removeEventListener("mousedown", handleClickOutside);
+      navigate(`/product/list?keyword=${encodeURIComponent(q)}`);
     }
 
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, [showSearch]);
+    setKeyword("");
+    setShowSearch(false);
+  };
+
+  const submitSearch = routeSearch;
+
+  const handleMobileSearch = () => {
+    routeSearch();
+    setIsMobileMenuOpen(false);
+  };
 
   useEffect(() => {
     function handleClickOutside(e) {
@@ -77,7 +127,7 @@ function NavBar(props) {
     const params = new URLSearchParams(location.search);
     params.set("category", category);
     if (!params.get("sort")) {
-      params.set("sort", "recent"); // 기본 정렬값
+      params.set("sort", "recent");
     }
     navigate(`/product/list?${params.toString()}`);
     setShowMobileCategory(false);
@@ -85,12 +135,27 @@ function NavBar(props) {
   };
 
   // 모바일 메뉴 내 검색 기능 처리 함수
-  const handleMobileSearch = () => {
-    if (keyword.trim() !== "") {
-      navigate(`/product/list?keyword=${keyword.trim()}`);
-      setKeyword("");
-      setIsMobileMenuOpen(false); // 검색 후 메뉴 닫기
-    }
+  // const handleMobileSearch = () => {
+  //   if (keyword.trim() !== "") {
+  //     navigate(`/product/list?keyword=${keyword.trim()}`);
+  //     setKeyword("");
+  //     setIsMobileMenuOpen(false);
+  //   }
+  // };
+  //
+  // const submitSearch = () => {
+  //   if (keyword.trim() === "") return;
+  //   navigate(`/product/list?keyword=${encodeURIComponent(keyword.trim())}`);
+  //   setKeyword("");
+  //   setShowSearch(false);
+  // };
+
+  const goCategory = (catKey) => {
+    const params = new URLSearchParams(location.search);
+    params.set("category", catKey);
+    if (!params.get("sort")) params.set("sort", "recent");
+    navigate(`/product/list?${params.toString()}`);
+    setShowSearch(false);
   };
 
   return (
@@ -103,8 +168,8 @@ function NavBar(props) {
             onClick={() =>
               setIsMobileMenuOpen((prev) => {
                 const next = !prev;
-                if (!next) setShowMobileCategory(false); // 닫힐 때 서브 드롭다운도 접기
-                return next; // <-- 항상 반환
+                if (!next) setShowMobileCategory(false);
+                return next;
               })
             }
           />
@@ -126,23 +191,25 @@ function NavBar(props) {
           {/* 오른쪽 아이콘 */}
           <NavRight
             // user={user}
-            iconRef={iconRef}
+            // iconRef={iconRef}
             onSearchToggle={() => setShowSearch((prev) => !prev)}
-            showSearch={showSearch}
-            setShowSearch={setShowSearch}
-            keyword={keyword}
-            setKeyword={setKeyword}
-            searchRef={searchRef}
-            navigate={navigate}
+            // showSearch={showSearch}
+            // setShowSearch={setShowSearch}
+            // keyword={keyword}
+            // setKeyword={setKeyword}
+            // searchRef={searchRef}
+            // navigate={navigate}
           />
         </div>
         {showSearch && (
-          <SearchBar
-            setShowSearch={setShowSearch}
+          <SearchOverlay
+            open={showSearch}
+            onClose={() => setShowSearch(false)}
             keyword={keyword}
             setKeyword={setKeyword}
-            searchRef={searchRef}
-            navigate={navigate}
+            onSubmit={submitSearch}
+            onSelectCategory={goCategory}
+            categories={RECO_CATEGORIES}
           />
         )}
       </nav>
@@ -172,6 +239,24 @@ function NavBar(props) {
               className="btn btn-ghost w-full justify-start text-left text-xl"
             >
               {user.name}
+            </Link>
+          )}
+          {user === null && (
+            <Link
+              to="/login"
+              onClick={() => setIsMobileMenuOpen(false)}
+              className="btn btn-ghost w-full justify-start text-left text-xl"
+            >
+              로그인
+            </Link>
+          )}
+          {user !== null && (
+            <Link
+              to="/logout"
+              onClick={() => setIsMobileMenuOpen(false)}
+              className="btn btn-ghost w-full justify-start text-left text-xl"
+            >
+              로그아웃
             </Link>
           )}
           <div>
@@ -265,15 +350,7 @@ function NavBar(props) {
               회원가입
             </Link>
           )}
-          {user !== null && (
-            <Link
-              to="/logout"
-              onClick={() => setIsMobileMenuOpen(false)}
-              className="btn btn-ghost w-full justify-start text-left text-xl"
-            >
-              로그아웃
-            </Link>
-          )}
+
           {user !== null && (
             <Link
               to="/qna/list"

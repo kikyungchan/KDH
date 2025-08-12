@@ -276,3 +276,105 @@
         display: none !important;
     }
 }
+
+/* ===== Search Overlay ===== */
+.search-overlay {
+    justify-content: center;
+    justify-items: center;
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, .35);
+    z-index: 2000;
+    display: block;
+}
+
+.search-sheet {
+    width: 50%;
+    position: absolute;
+    top: 0;
+    background: #fff;
+    border-bottom-left-radius: 16px;
+    border-bottom-right-radius: 16px;
+    padding: 12px 16px 16px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, .12);
+}
+
+.search-input-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: #f1f1f1;
+    border-radius: 9999px;
+    padding: 10px 14px;
+}
+
+.search-close {
+    cursor: pointer;
+    font-size: 1.2rem;
+    color: #666;
+}
+
+.search-go {
+    cursor: pointer;
+    font-size: 1.2rem;
+    color: #666;
+}
+
+.search-wide-input {
+    flex: 1;
+    border: none;
+    outline: none;
+    background: transparent;
+    font-size: 1rem;
+    height: 2.4rem;
+}
+
+.suggest-title {
+    margin-top: 12px;
+    font-weight: 600;
+    color: #333;
+}
+
+.suggest-scroll {
+    display: flex;
+    gap: 12px;
+    overflow-x: auto;
+    padding: 10px 0 2px;
+}
+
+.category-chip {
+    flex: 0 0 auto;
+    width: 80px;
+    background: transparent;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    text-align: center;
+}
+
+.chip-thumb {
+    display: inline-flex;
+    width: 64px;
+    height: 64px;
+    border-radius: 20px;
+    background: #f7f7f7;
+    overflow: hidden;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, .05) inset;
+}
+
+.chip-thumb img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.chip-label {
+    display: block;
+    margin-top: 6px;
+    font-size: 12px;
+    color: #333;
+    white-space: nowrap;
+}
+

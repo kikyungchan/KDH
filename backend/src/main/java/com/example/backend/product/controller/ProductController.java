@@ -62,9 +62,9 @@ public class ProductController {
             return ResponseEntity.badRequest().body("주문 항목이 없습니다.");
         }
 
-        // 공통 GuestOrder 생성
+        // GuestOrder 생성
         GuestOrder order = new GuestOrder();
-        GuestOrderRequestDto first = dtoList.get(0); // 공통 배송/주문자 정보 기준
+        GuestOrderRequestDto first = dtoList.get(0);
 
         order.setGuestName(first.getGuestName());
         order.setGuestPhone(first.getGuestPhone());
