@@ -18,6 +18,7 @@ function NavLeft({ user, isAdmin, handleCategoryClick }) {
           <button
             tabIndex={0}
             className="btn btn-ghost text-xl whitespace-nowrap"
+            onClick={() => setDropdownOpen(false)}
           >
             모든상품
           </button>
