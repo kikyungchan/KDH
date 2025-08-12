@@ -270,6 +270,7 @@
     }
 }
 
+/* (~639px) */
 @media (max-width: 639px) {
     .navbar-right .avatar {
         display: none !important;
