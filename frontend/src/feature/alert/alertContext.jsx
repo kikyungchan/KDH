@@ -25,13 +25,9 @@ export const AlertWebSocketProvider = ({ children }) => {
 
   useEffect(() => {
     if (!user?.name) return;
-
-    console.log(user);
     const client = new Client({
       webSocketFactory: () => {
         const token = localStorage.getItem("token");
-        console.log("token : ", token);
-        console.log("WS_PATH : ", WS_PATH);
         const url = token
           ? `${WS_PATH}?Authorization=Bearer%20${token}`
           : WS_PATH;
@@ -45,13 +41,11 @@ export const AlertWebSocketProvider = ({ children }) => {
     });
 
     client.onConnect = (frame) => {
-      console.log("연결됨!", frame);
       client.subscribe("/user/queue/alert", (message) => {
-        console.log(JSON.parse(message.body));
         let msg = JSON.parse(message.body);
-        toast(`알림을 확인해 주세요 : ${msg.title} + ${msg.content}`);
+        // toast(`${msg.title} + ${msg.content}`);
+        toast(`${msg.content}`);
         setAlertCount((cnt) => {
-          console.log("alertCount : " + cnt);
           return cnt + 1;
         });
       });
@@ -123,6 +117,24 @@ export const AlertWebSocketProvider = ({ children }) => {
       to: "admin1",
       title: "제목",
       content: "내용",
+      link: "/chat/chatting?rid=2222",
+    };
+    sendMessage("/app/chat/alert", chatMsg);
+  };
+
+  const sendChatAlert = async (link) => {
+    await axios.post("/api/alert/add", {
+      user: "admin1",
+      title: "1:1 상담 문의",
+      content: "1:1 상담 문의가 들어왔습니다",
+      link: link,
+    });
+    const chatMsg = {
+      from: user?.name || "unknown",
+      to: "admin1",
+      title: "1:1 상담 문의",
+      content: "1:1 상담 문의가 들어왔습니다",
+      link: link,
     };
     sendMessage("/app/chat/alert", chatMsg);
   };
@@ -132,6 +144,7 @@ export const AlertWebSocketProvider = ({ children }) => {
     setAlertCount,
     sendMessage,
     sendAlert,
+    sendChatAlert,
     sendTestAlert,
     isConnected: clientRef.current?.connected || false,
     clientRef: clientRef.current,

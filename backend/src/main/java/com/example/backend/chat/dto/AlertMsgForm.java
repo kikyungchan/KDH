@@ -10,5 +10,6 @@ public class AlertMsgForm {
     private String to;          // 누구한테
     private String title;          // 제목
     private String content;          // 내용
+    private String link;
     private LocalDateTime CreateAt;      // 전송 시간
 }

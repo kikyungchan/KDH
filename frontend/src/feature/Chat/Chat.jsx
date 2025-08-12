@@ -4,6 +4,8 @@ import SockJS from "sockjs-client";
 import { AuthenticationContext } from "../common/AuthenticationContextProvider.jsx";
 import { Col, Row } from "react-bootstrap";
 import { v4 as uuidv4 } from "uuid";
+import { useSearchParams } from "react-router";
+import axios from "axios";
 
 const WS_URL = "http://localhost:8080/ws-chat";
 const WS_PATH = "/ws-chat";
@@ -20,25 +22,25 @@ export function Chat() {
   const [count, setCount] = useState(0);
   const clientRef = useRef(null); // STOMP 인스턴스 담아 둘 상자
   const effectRan = useRef(false);
+  const [searchParams] = useSearchParams();
+  const roomId = searchParams.get("rid") || "2222";
   // const roomId = uuidv4();
-  const roomId = "2222";
+  // const roomId = "2222";
 
   useEffect(() => {
-    console.log("chat user : ", user);
-    console.log("username : ", user?.name);
     if (user?.name) {
       // 두번 실행 막기
       if (user?.name && !effectRan.current) {
-        console.log("name2 : ", user.name);
         setCount(count + 1);
-        console.log("count : ", count);
-
+        console.log("user : ", user);
+        axios.post("/api/chat/list", {
+          roomId,
+          userid: user.loginId,
+        });
         const client = new Client({
           // webSocketFactory: () => new SockJS(WS_PATH), // SockJS 연결
           webSocketFactory: () => {
             const token = localStorage.getItem("token");
-            console.log("token : ", token);
-            console.log("WS_PATH : ", WS_PATH);
             const url = token
               ? `${WS_PATH}?Authorization=Bearer%20${token}`
               : WS_PATH;
@@ -57,6 +59,9 @@ export function Chat() {
             // 서버의 json 메시지를 파싱해서 msgs 배열에 추가
             setMsgs((prev) => [...prev, JSON.parse(message.body)]);
           });
+
+          console.log("rid : ", searchParams.get("rid"));
+          console.log("roomId : ", roomId);
 
           client.subscribe(`/topic/chat/${roomId}`, (message) => {
             const data = JSON.parse(message.body);
@@ -168,16 +173,19 @@ export function Chat() {
     if (!text.trim()) return;
     const chatMsg = {
       from: user.name,
-      to: target,
+      userid: user.id,
       message: text,
       type: "CHAT",
     };
     clientRef.current.publish({
-      destination: SEND_DEST_GROUP + roomId,
+      destination: "/app/chat/" + roomId,
+      // destination: SEND_DEST_GROUP + roomId,
       body: JSON.stringify(chatMsg),
     });
     setText(""); // 입력창 초기화
   };
+
+  useEffect(() => {}, []);
 
   if (!user) {
     return <span className="loading loading-spinner"></span>;

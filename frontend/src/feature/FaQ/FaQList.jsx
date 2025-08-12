@@ -19,9 +19,12 @@ import axios from "axios";
 import { toast } from "react-toastify";
 import { AuthenticationContext } from "../common/AuthenticationContextProvider.jsx";
 import "./faqList.css";
+import { useAlertWebSocket } from "../alert/alertContext.jsx";
+import { v4 as uuidv4 } from "uuid";
 
 export function FaQList() {
   const { user, isAdmin } = useContext(AuthenticationContext);
+  const { alertCount, sendChatAlert } = useAlertWebSocket();
   const navigate = useNavigate();
   const [pageInfo, setPageInfo] = useState(null);
   const [faqList, setFaQList] = useState(null);
@@ -32,8 +35,16 @@ export function FaQList() {
   const [searchCategory, setsearchCategory] = useState("");
   const [searchParams, setSearchParams] = useSearchParams("1");
   const [openId, setOpenId] = useState(null); // 열린 아이디(id)만 저장
+  const uuid = uuidv4();
   const radios = [
-    { name: "1:1 문의하기", value: "1", path: "/chat/chatting" },
+    {
+      name: "1:1 문의하기",
+      value: "1",
+      path: `/chat/chatting?rid=${uuid}`,
+      fnc: () => {
+        sendChatAlert(`/chat/chatting?rid=${uuid}`);
+      },
+    },
     { name: "문의내역", value: "2", path: "/qna/list" },
     { name: "자주 묻는 질문", value: "3", path: "/faq/list" },
   ];
@@ -224,8 +235,9 @@ export function FaQList() {
                           className={`btn w-full py-2  ${idx === 2 ? "btn-primary lg:w-full block mx-0" : "btn-outline px-[clamp(16px,calc(9vw-60px),90px)]"}
                            my-1
                           btn-block lg:w-auto lg:my-auto`}
-                          // onClick={radio.fnc}
+                          {...(idx === 0 && { onClick: radio.fnc })}
                           to={radio.path}
+                          // onClick={radio.fnc}
                         >
                           {radio.name}
                         </Link>
