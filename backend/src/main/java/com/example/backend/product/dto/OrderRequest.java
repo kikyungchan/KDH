@@ -12,7 +12,6 @@ public class OrderRequest {
     private Integer price;
 
     private String shippingAddress;
-    private String memo;
     private String addressDetail;
     private String zipcode;
 
@@ -27,5 +26,6 @@ public class OrderRequest {
     private String receiverZipcode;
     private String receiverAddress;
     private String receiverAddressDetail;
+    private String memo;
 
 }

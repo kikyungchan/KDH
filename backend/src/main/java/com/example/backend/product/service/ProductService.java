@@ -376,9 +376,9 @@ public class ProductService {
         order.setMemo(first.getMemo());
         order.setReceiverName(first.getReceiverName());
         order.setReceiverPhone(first.getReceiverPhone());
-        order.setReceiverZipcode(first.getZipcode());
-        order.setReceiverAddress(first.getShippingAddress());
-        order.setReceiverAddressDetail(first.getAddressDetail());
+        order.setReceiverZipcode(first.getReceiverZipcode());
+        order.setReceiverAddress(first.getReceiverAddress());
+        order.setReceiverAddressDetail(first.getReceiverAddressDetail());
 
         int setItemsSubtotal = 0;
         List<OrderItem> itemList = new ArrayList<>();
