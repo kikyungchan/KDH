@@ -180,7 +180,9 @@ CREATE TABLE guest_orders
 ALTER TABLE guest_orders
     ADD COLUMN total_price INT;
 
-
+ALTER TABLE guest_orders
+    ADD COLUMN items_subtotal          INT          NULL,
+    ADD COLUMN shipping_fee            INT          NULL;
 
 #
 order_item(주문상세)

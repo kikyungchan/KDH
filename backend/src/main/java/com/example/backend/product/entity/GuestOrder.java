@@ -42,6 +42,13 @@ public class GuestOrder {
     @Column(name = "zipcode", length = 20)
     private String zipcode;
 
+    @Column(name = "items_subtotal", nullable = false)
+    private Integer itemsSubtotal;
+
+    @Column(name = "shipping_fee", nullable = false)
+    private Integer shippingFee;
+
+    @Column(name = "total_price", nullable = false)
     private Integer totalPrice;
 
     @Column(name = "memo")

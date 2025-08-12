@@ -20,6 +20,7 @@ function Order(props) {
   const [ordererAddressDetail, setOrdererAddressDetail] = useState("");
   const [ordererEmail, setOrdererEmail] = useState(null);
   const [shippingFee, setShippingFee] = useState(0);
+  const [loadingMember, setLoadingMember] = useState(false);
   const [isProcessing, setIsProcessing] = useState(false);
   const { state } = useLocation();
   const { setCartCount } = useCart();
@@ -61,6 +62,7 @@ function Order(props) {
   useEffect(() => {
     const token = localStorage.getItem("token");
     if (token) {
+      setLoadingMember(true);
       axios
         .get("/api/product/member/info", {
           headers: {
@@ -74,9 +76,14 @@ function Order(props) {
           setOrdererEmail(res.data.email);
           setOrdererAddressDetail(res.data.addressDetail);
         })
-        .catch((err) => {});
+        .catch((err) => {})
+        .finally(() => setLoadingMember(false));
     }
   }, []);
+
+  if (loadingMember) {
+    return <span className="loading loading-spinner"></span>;
+  }
 
   useEffect(() => {
     if (ordererEmail != null) {
@@ -438,9 +445,10 @@ function Order(props) {
     }).open();
   }
 
-  if (!ordererEmail) {
-    return <span className="loading loading-spinner"></span>;
-  }
+  //
+  // if (!ordererEmail) {
+  //   return <span className="loading loading-spinner"></span>;
+  // }
 
   return (
     <div className="page-wrapper">
