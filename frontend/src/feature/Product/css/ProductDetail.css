@@ -1,4 +1,3 @@
-/* --- 상품 상세 레이아웃 --- */
 .product-detail-layout {
     width: 95%;
 }
@@ -264,9 +263,8 @@
     gap: 12px;
 }
 
-/* --- 반응형 미디어 쿼리 --- */
 
-/* (1023px 이하) */
+/* 768px~1023px */
 @media (max-width: 1023px) {
     .product-main-content {
         flex-direction: column;
@@ -306,7 +304,7 @@
     }
 }
 
-/* (639px 이하: 텍스트/여백만 소폭 축소) */
+/* ~639px */
 @media (max-width: 639px) {
     .product-detail-layout {
         width: 98%;
@@ -380,16 +378,14 @@
 
 }
 
-/* 상세정보 접기/펼치기 */
 .detail-collapsible {
     position: relative;
     overflow: hidden;
     transition: max-height 0.35s ease;
 }
 
-/* 접힌 상태: 높이 제한 + 페이드 오버레이 */
 .detail-collapsible.is-closed {
-    max-height: 1200px; /* 데스크톱 기본 */
+    max-height: 1200px;
 }
 
 .detail-collapsible.is-closed::after {
@@ -403,16 +399,14 @@
     pointer-events: none;
 }
 
-/* 펼친 상태: 제한 해제 */
 .detail-collapsible.is-open {
     max-height: none;
 }
 
-/* 접힘/펼침 공통: 아래쪽 버튼 영역 */
 .detail-toggle-bottom {
     display: flex;
     justify-content: center;
-    margin-top: 20px; /* 더 아래로 내리고 싶으면 수치 키워 */
+    margin-top: 20px;
 }
 
 .detail-toggle-btn-out {
@@ -428,9 +422,8 @@
     background: #f7f7f7;
 }
 
-/* 접힌 상태 오버레이(블러 금지, 그라데이션만) */
 .detail-collapsible.is-closed {
-    max-height: 1200px; /* 필요시 조절 */
+    max-height: 1200px;
     overflow: hidden;
 }
 
@@ -442,7 +435,6 @@
     bottom: 0;
     height: 140px;
     background: linear-gradient(to bottom, rgba(255, 255, 255, 0), #fff);
-    /* backdrop-filter: blur(...) 쓰지 마! */
 }
 
 @media (max-width: 1023px) {

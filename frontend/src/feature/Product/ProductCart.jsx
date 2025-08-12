@@ -32,7 +32,6 @@ function ProductCart(props) {
           },
         })
         .then((res) => {
-          console.log("응답 데이터:", res.data);
           setCartItems(res.data);
         })
         .catch((err) => console.log(err));
