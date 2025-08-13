@@ -12,17 +12,20 @@ public class OrderDetailDto {
 
     private String orderToken;
     private LocalDateTime orderDate;
-    private String memberName;
-    private String phone;
 
-    private Integer totalPrice;
+    private String ordererName;
+    private String ordererPhone;
 
-    private String shippingAddress;
-    private String zipcode;
-    private String addressDetail;
-
-
+    private String receiverName;
+    private String receiverPhone;
+    private String receiverAddress;
+    private String receiverAddressDetail;
+    private String receiverZipcode;
     private String memo;
+
+    private Integer itemsSubtotal;
+    private Integer shippingFee;
+    private Integer totalPrice;
 
     private List<OrderItemDto> orderItems;
 
@@ -30,16 +33,20 @@ public class OrderDetailDto {
     public OrderDetailDto(Order order, List<OrderItemDto> allItems) {
         this.orderToken = order.getOrderToken();
         this.orderDate = order.getCreatedAt();
-        this.memberName = order.getMember().getName();
-        this.phone = order.getMember().getPhone();
-        this.totalPrice = allItems.stream()
-                .mapToInt(item -> item.getPrice() * item.getQuantity())
-                .sum();
 
-        this.shippingAddress = order.getReceiverAddress();
-        this.zipcode = order.getReceiverZipcode();
-        this.addressDetail = order.getReceiverAddressDetail();
+        this.ordererName = order.getOrdererName();
+        this.ordererPhone = order.getOrdererPhone();
+
+        this.receiverName = order.getReceiverName();
+        this.receiverPhone = order.getReceiverPhone();
+        this.receiverAddress = order.getReceiverAddress();
+        this.receiverAddressDetail = order.getReceiverAddressDetail();
+        this.receiverZipcode = order.getReceiverZipcode();
         this.memo = order.getMemo();
+
+        this.itemsSubtotal = order.getItemsSubtotal();
+        this.shippingFee = order.getShippingFee();
+        this.totalPrice = order.getTotalPrice();
 
         this.orderItems = allItems;
     }

@@ -18,6 +18,10 @@ public class OrderDto {
 
     private String memberName;
 
+    private Integer itemsSubtotal;
+
+    private Integer shippingFee;
+
     private Integer totalPrice;
 
     private String imageUrl;
@@ -35,9 +39,10 @@ public class OrderDto {
                 .map(OrderItemDto::new)
                 .collect(Collectors.toList());
 
-        this.totalPrice = order.getOrderItems().stream()
-                .mapToInt(item -> item.getPrice() * item.getQuantity())
-                .sum();
+        this.itemsSubtotal = order.getItemsSubtotal();
+        this.shippingFee = order.getShippingFee();
+        this.totalPrice = order.getTotalPrice();
+
 
         this.imageUrl = order.getOrderItems().isEmpty()
                 ? null

@@ -36,45 +36,43 @@ public class OrderService {
 
     public Page<OrderDto> getOrdersByUsersLoginId(Integer memberId, Pageable pageable) {
         // 전체 orderToken 리스트
-            List<String> allTokens = orderRepository.findDistinctOrderTokensByMemberId(memberId);
+        List<String> allTokens = orderRepository.findDistinctOrderTokensByMemberId(memberId);
 
-            // 페이징 처리 수동 적용 (subList)
-            int start = (int) pageable.getOffset();
-            int end = Math.min((start + pageable.getPageSize()), allTokens.size());
+        // 페이징 처리 수동 적용 (subList)
+        int start = (int) pageable.getOffset();
+        int end = Math.min((start + pageable.getPageSize()), allTokens.size());
 
-            List<String> pageTokens = allTokens.subList(start, end);
+        List<String> pageTokens = allTokens.subList(start, end);
 
-            List<OrderDto> dtoList = new ArrayList<>();
+        List<OrderDto> dtoList = new ArrayList<>();
 
-            for (String token : pageTokens) {
-                List<Order> orders = orderRepository.findAllByOrderToken(token);
+        for (String token : pageTokens) {
+            List<Order> orders = orderRepository.findAllByOrderToken(token);
 
-                if (!orders.isEmpty()) {
-                    Order representative = orders.get(0); // 임의 대표
-                    List<OrderItemDto> allItems = orders.stream()
-                            .flatMap(o -> o.getOrderItems().stream())
-                            .map(OrderItemDto::new)
-                            .toList();
+            if (!orders.isEmpty()) {
+                Order representative = orders.get(0); // 임의 대표
+                List<OrderItemDto> allItems = orders.stream()
+                        .flatMap(o -> o.getOrderItems().stream())
+                        .map(OrderItemDto::new)
+                        .toList();
 
-                    OrderDto dto = new OrderDto(representative);
-                    dto.setOrderId(representative.getId());
-                    dto.setOrderToken(token);
-                    dto.setOrderDate(representative.getCreatedAt());
-                    dto.setMemberName(representative.getMember().getName());
-                    dto.setTotalPrice(
-                            allItems.stream()
-                                    .mapToInt(item -> item.getPrice() * item.getQuantity())
-                                    .sum()
-                    );
-                    dto.setOrderItems(allItems);
-                    dto.setStatus("구매 확정");
+                OrderDto dto = new OrderDto(representative);
 
-                    dtoList.add(dto);
-                }
+                dto.setOrderId(representative.getId());
+                dto.setOrderToken(token);
+                dto.setOrderDate(representative.getCreatedAt());
+                dto.setMemberName(representative.getMember().getName());
+                dto.setItemsSubtotal(representative.getItemsSubtotal());
+                dto.setShippingFee(representative.getShippingFee());
+                dto.setTotalPrice(representative.getTotalPrice());
+                dto.setOrderItems(allItems);
+                dto.setStatus("구매 확정");
+
+                dtoList.add(dto);
             }
-            return new PageImpl<>(dtoList, pageable, allTokens.size());
+        }
+        return new PageImpl<>(dtoList, pageable, allTokens.size());
     }
-
 
 
     // 주문 상세 조회
