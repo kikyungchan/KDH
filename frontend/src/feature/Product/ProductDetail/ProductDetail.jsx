@@ -56,7 +56,7 @@ export function ProductDetail() {
     let recent = JSON.parse(localStorage.getItem("recentProducts")) || [];
     recent = recent.filter((p) => p.id !== productData.id);
     recent.unshift(productData);
-    if (recent.length > 5) recent.pop();
+    if (recent.length > 10) recent.pop();
     localStorage.setItem("recentProducts", JSON.stringify(recent));
   }, [product]);
 
