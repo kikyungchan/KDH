@@ -11,12 +11,12 @@ public interface ChatLogRepository extends JpaRepository<ChatLog, Integer> {
     @Query(value = """
                         SELECT new com.example.backend.chat.dto.ChatListDto(
                                     c.id,
-                                    m.name,
+                                    c.user.name,
                                     c.message)
                         FROM ChatLog c JOIN Member m
                                     ON c.user.loginId = m.loginId
                         WHERE (c.roomId = :roomId)
                         ORDER BY c.id DESC
             """)
-    Page<ChatListDto> findAllBy(String roomId, String userid, PageRequest of);
+    Page<ChatListDto> findAllBy(String roomId, PageRequest of);
 }

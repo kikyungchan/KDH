@@ -41,7 +41,7 @@ public class ChatService {
     public Map<String, Object> list(String roomId, String userid, Authentication authentication) {
         int pageNumber = 10;
         Page<ChatListDto> chatListDtoPage =
-                chatLogRepository.findAllBy(roomId, userid, PageRequest.of(pageNumber - 1, 10));
+                chatLogRepository.findAllBy(roomId, PageRequest.of(pageNumber - 1, 10));
         int totalPages = chatListDtoPage.getTotalPages(); // 마지막 페이지
         int rightPageNumber = ((pageNumber - 1) / 10 + 1) * 10;
         int leftPageNumber = rightPageNumber - 9;
@@ -49,6 +49,7 @@ public class ChatService {
         leftPageNumber = Math.max(leftPageNumber, 1);
 
         System.out.println("chatList" + chatListDtoPage.getContent());
+        System.out.println("chatListDtoPage" + chatListDtoPage);
 
         var pageInfo = Map.of("totalPages", totalPages,
                 "rightPageNumber", rightPageNumber,

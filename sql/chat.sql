@@ -15,3 +15,13 @@ CREATE TABLE chat_log
             ON DELETE RESTRICT
             ON UPDATE CASCADE
 );
+
+
+SELECT c.id,
+       m.login_id,
+       c.message
+FROM chat_log c
+         JOIN member m
+              ON c.user_id = m.login_id
+where room_id = "b300c649-d1b6-46a7-8021-afc838f807ef"
+ORDER BY c.id DESC;
