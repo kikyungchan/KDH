@@ -32,7 +32,7 @@ public class ChatService {
         chatLog.setUser(user);
         chatLog.setType(String.valueOf(msg.getType()));
         chatLog.setMessage(msg.getMessage());
-
+        
         System.out.println("chatLog: " + chatLog);
         chatLogRepository.save(chatLog);
 

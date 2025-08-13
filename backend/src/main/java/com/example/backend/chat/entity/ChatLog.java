@@ -31,7 +31,7 @@ public class ChatLog {
     private String message;
 
     @Lob
-    @Column(name = "type", insertable = false)
+    @Column(name = "type")
     private String type;
 
     @ColumnDefault("current_timestamp()")
