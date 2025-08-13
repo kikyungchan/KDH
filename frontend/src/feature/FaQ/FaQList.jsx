@@ -16,7 +16,8 @@ import {
 import { Link, useNavigate, useSearchParams } from "react-router";
 import { useContext, useEffect, useState } from "react";
 import axios from "axios";
-import { toast } from "react-toastify";
+// import { toast } from "react-toastify";
+import { toast } from "sonner";
 import { AuthenticationContext } from "../common/AuthenticationContextProvider.jsx";
 import "./faqList.css";
 import { useAlertWebSocket } from "../alert/alertContext.jsx";
@@ -235,8 +236,19 @@ export function FaQList() {
                           className={`btn w-full py-2  ${idx === 2 ? "btn-primary lg:w-full block mx-0" : "btn-outline px-[clamp(16px,calc(9vw-60px),90px)]"}
                            my-1
                           btn-block lg:w-auto lg:my-auto`}
-                          {...(idx === 0 && { onClick: radio.fnc })}
-                          to={radio.path}
+                          {...(!user && {
+                            onClick: (e) => {
+                              e.preventDefault(); // 네비게이션 막기
+                              toast("로그인 후 이용해 주세요");
+                            },
+                          })}
+                          {...(user &&
+                            idx === 0 &&
+                            radio.fnc && {
+                              onClick: radio.fnc,
+                            })}
+                          to={user && radio.path}
+
                           // onClick={radio.fnc}
                         >
                           {radio.name}

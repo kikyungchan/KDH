@@ -7,6 +7,7 @@ import { v4 as uuidv4 } from "uuid";
 import { useSearchParams } from "react-router";
 import axios from "axios";
 import { polluteGlobalNamespace } from "sockjs-client/lib/utils/iframe.js";
+import { toast } from "sonner";
 
 const WS_URL = "http://localhost:8080/ws-chat";
 const WS_PATH = "/ws-chat";
@@ -46,7 +47,13 @@ export function Chat() {
           console.log("res", res.data);
         })
         .catch((err) => {
-          console.log("오류");
+          if (err.response && err.response.status === 401) {
+            alert("로그인 후 이용해주세요.");
+            console.log("로그인 오류");
+            // window.history.back();
+          } else {
+            console.log("오류");
+          }
         });
     }
     if (user?.name) {
