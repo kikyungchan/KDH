@@ -25,6 +25,7 @@ function Order(props) {
   const [isProcessing, setIsProcessing] = useState(false);
   const { state } = useLocation();
   const { setCartCount } = useCart();
+  const isMember = !!localStorage.getItem("token");
   // items가 배열이 아니더라도 자동으로 배열로 감싸줌.
   const items = state?.items ?? (state ? [state] : []);
   const totalItemPrice = items.reduce(
@@ -71,10 +72,11 @@ function Order(props) {
           },
         })
         .then((res) => {
-          setOrdererAddress(res.data.address);
           setOrdererName(res.data.name);
           setOrdererPhone(res.data.phone);
           setOrdererEmail(res.data.email);
+          setOrdererZipcode(res.data.zipCode ?? "");
+          setOrdererAddress(res.data.address);
           setOrdererAddressDetail(res.data.addressDetail);
         })
         .catch((err) => {})
@@ -568,6 +570,16 @@ function Order(props) {
                   className="order-input-half"
                 />
               </div>
+
+              {!isMember && (
+                <input
+                  type="email"
+                  placeholder="이메일"
+                  className="order-input-full"
+                  value={ordererEmail ?? ""}
+                  onChange={(e) => setOrdererEmail(e.target.value)}
+                />
+              )}
               <div className="order-input-zipcode">
                 <input
                   placeholder="우편번호"
@@ -695,7 +707,7 @@ function Order(props) {
                 </button>
               ) : (
                 <button
-                  className="order-button confirm"
+                  className="order-button confirm btn btn-lg"
                   onClick={() => {
                     validateForm() && handlePaymentConnection();
                   }}
@@ -705,7 +717,7 @@ function Order(props) {
               )}
               <button
                 onClick={handleCancelButton}
-                className="order-button cancel"
+                className="order-button cancel btn btn-lg"
               >
                 취소
               </button>
