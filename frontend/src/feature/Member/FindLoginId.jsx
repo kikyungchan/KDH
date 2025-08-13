@@ -1,18 +1,7 @@
-import {
-  Button,
-  Card,
-  Col,
-  Container,
-  FormControl,
-  FormGroup,
-  FormLabel,
-  FormText,
-  Row,
-  Spinner,
-} from "react-bootstrap";
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router";
+import { useAlert } from "../common/AlertContext.jsx";
 
 export function FindLoginId() {
   // 이메일 정규식
@@ -41,6 +30,8 @@ export function FindLoginId() {
   const [emailValid, setEmailValid] = useState(true);
 
   const navigate = useNavigate();
+
+  const { showAlert } = useAlert();
 
   // 이메일 입력 실시간 검사
   useEffect(() => {
@@ -79,18 +70,19 @@ export function FindLoginId() {
       })
       .then((res) => {
         if (res.data.success) {
-          console.log("인증번호 전송에 성공했습니다.", res.data.message);
-          alert(res.data.message);
+          showAlert(res.data.message, "info");
           setEmailSent(true);
           setRemainTime(res.data.remainTimeInSec);
         } else {
-          alert(res?.data?.message || "인증번호 전송에 실패했습니다.");
+          showAlert(
+            res?.data?.message || "인증번호 전송에 실패했습니다.",
+            "error",
+          );
           setRemainTime(res.data.remainTimeInSec);
         }
       })
       .catch((err) => {
-        console.log("인증번호 전송에 실패했습니다.", err.response?.data);
-        alert(err.response?.data || err.message);
+        showAlert(err.response?.data || err.message, "error");
       })
       .finally(() => {
         setIsSending(false);
@@ -114,19 +106,19 @@ export function FindLoginId() {
       })
       .then((res) => {
         if (res.data.success) {
-          alert("이메일 인증이 완료되었습니다.");
+          showAlert("이메일 인증이 완료되었습니다.", "info");
           setAuthCompleted(true); // 이메일 인증 완료 처리
           setIsSubmitted(false); // 경고 문구 방지
           setAuthFailed(false);
           showFoundId();
         } else {
-          alert("인증번호가 일치하지 않습니다.");
+          showAlert("인증번호가 일치하지 않습니다.", "error");
           setAuthFailed(true);
         }
       })
       .catch((err) => {
         console.error("인증번호 검증 실패", err.response?.data || err.message);
-        alert("서버 오류로 인증번호 확인에 실패했습니다.");
+        showAlert("서버 오류로 인증번호 확인에 실패했습니다.", "error");
         setAuthFailed(true);
       });
   };
@@ -140,7 +132,7 @@ export function FindLoginId() {
         if (res.data.success) {
           setFoundLoginId(res.data.loginId); // 마스킹된 ID
         } else {
-          alert(res.data.message || "아이디를 찾을 수 없습니다.");
+          showAlert(res.data.message || "아이디를 찾을 수 없습니다.", "error");
         }
       })
       .catch(() => {})
@@ -150,7 +142,7 @@ export function FindLoginId() {
   return (
     <div className="page-wrapper">
       <div className="center-top-container">
-        <div className="w-full max-w-[400px]">
+        <div className="w-full max-w-[400px] mx-auto px-4 sm:px-3">
           <div className="rounded-card">
             <div className="w-full">
               <div>
@@ -263,7 +255,7 @@ export function FindLoginId() {
                   <div className="mt-5">
                     <p className="text-info fw-bold">
                       가입된 아이디는
-                      <span className="text-dark">{foundLoginId}</span>
+                      <span className="text-dark"> {foundLoginId} </span>
                       입니다.
                     </p>
                   </div>

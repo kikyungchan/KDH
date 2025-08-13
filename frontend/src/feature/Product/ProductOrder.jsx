@@ -3,9 +3,8 @@ import React, { useEffect, useRef, useState } from "react";
 import axios from "axios";
 import "./css/ProductOrder.css";
 import { useCart } from "./CartContext.jsx";
-import { AuthenticationContext } from "../common/AuthenticationContextProvider.jsx";
 
-function Order(props) {
+function Order() {
   const [receiverName, setReceiverName] = useState("");
   const [receiverPhone, setReceiverPhone] = useState("");
   const [receiverZipcode, setReceiverZipcode] = useState("");
@@ -79,7 +78,7 @@ function Order(props) {
           setOrdererAddress(res.data.address);
           setOrdererAddressDetail(res.data.addressDetail);
         })
-        .catch((err) => {})
+        .catch(() => {})
         .finally(() => setLoadingMember(false));
     }
   }, []);
@@ -140,7 +139,7 @@ function Order(props) {
       }
 
       // 팝업이 닫혔을 때를 감지 (혹시 사용자가 직접 닫을 경우 대비)
-      // setinterval (일정 시간 간격으로 함수를 반복해서 실행)
+      // setInterval (일정 시간 간격으로 함수를 반복해서 실행)
       const checkClosed = setInterval(() => {
         if (checkoutWindow.current && checkoutWindow.current.closed) {
           setIsProcessing(false);
@@ -307,7 +306,7 @@ function Order(props) {
         .then((res) => {
           setCartCount(res.data);
         })
-        .then((res) => {
+        .then(() => {
           alert("주문이 완료되었습니다.");
           navigate("/product/order/complete", {
             state: {
@@ -413,7 +412,7 @@ function Order(props) {
       return;
     }
     if (token) {
-      // 회원: DB에서 배송정보 불러오기
+      // 회원: DB 에서 배송정보 불러오기
       axios
         .get("/api/product/member/info", {
           headers: {
