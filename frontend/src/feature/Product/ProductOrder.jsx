@@ -15,9 +15,10 @@ function Order(props) {
   const [customMemo, setCustomMemo] = useState("");
   const [sameAsOrderer, setSameAsOrderer] = useState(false);
   const [ordererName, setOrdererName] = useState("");
+  const [ordererZipcode, setOrdererZipcode] = useState("");
   const [ordererAddress, setOrdererAddress] = useState("");
-  const [ordererPhone, setOrdererPhone] = useState("");
   const [ordererAddressDetail, setOrdererAddressDetail] = useState("");
+  const [ordererPhone, setOrdererPhone] = useState("");
   const [ordererEmail, setOrdererEmail] = useState(null);
   const [shippingFee, setShippingFee] = useState(0);
   const [loadingMember, setLoadingMember] = useState(false);
@@ -428,12 +429,12 @@ function Order(props) {
       setReceiverName(ordererName);
       setReceiverPhone(ordererPhone);
       setReceiverAddress(ordererAddress);
-      setReceiverZipcode((prev) => prev || "");
+      setReceiverZipcode(ordererZipcode || "");
       setReceiverAddressDetail(ordererAddressDetail || "");
     }
   }
 
-  function handleSearchAddress() {
+  function handleSearchReceiverAddress() {
     new window.daum.Postcode({
       oncomplete: function (data) {
         setReceiverAddress(data.address); // 도로명 주소
@@ -450,6 +451,16 @@ function Order(props) {
 
   if (loadingMember) {
     return <span className="loading loading-spinner"></span>;
+  }
+
+  function handleSearchOrdererAddress() {
+    new window.daum.Postcode({
+      oncomplete: function (data) {
+        setOrdererAddress(data.address); // 도로명 주소
+        setOrdererZipcode(data.zonecode); // 우편번호 필요하면 이것도
+        console.log("작동");
+      },
+    }).open();
   }
 
   return (
@@ -557,19 +568,34 @@ function Order(props) {
                   className="order-input-half"
                 />
               </div>
+              <div className="order-input-zipcode">
+                <input
+                  placeholder="우편번호"
+                  className="order-input-full"
+                  readOnly
+                  value={ordererZipcode}
+                  onChange={(e) => setOrdererZipcode(e.target.value)}
+                />
+                <button
+                  type="button"
+                  onClick={handleSearchOrdererAddress}
+                  className="order-input-full order-search-btn"
+                >
+                  주소 검색
+                </button>
+              </div>
               <input
-                type="text"
-                value={ordererAddress}
                 placeholder="주소"
-                onChange={(e) => setOrdererAddress(e.target.value)}
                 className="order-input-full"
+                readOnly
+                value={ordererAddress}
+                onChange={(e) => setOrdererAddress(e.target.value)}
               />
               <input
-                type="text"
-                value={ordererAddressDetail}
                 placeholder="상세주소"
-                onChange={(e) => setOrdererAddressDetail(e.target.value)}
                 className="order-input-full"
+                value={ordererAddressDetail}
+                onChange={(e) => setOrdererAddressDetail(e.target.value)}
               />
             </div>
 
@@ -604,12 +630,13 @@ function Order(props) {
                 <input
                   placeholder="우편번호"
                   className="order-input-full"
+                  readOnly
                   value={receiverZipcode}
                   onChange={(e) => setReceiverZipcode(e.target.value)}
                 />
                 <button
                   type="button"
-                  onClick={handleSearchAddress}
+                  onClick={handleSearchReceiverAddress}
                   className="order-input-full order-search-btn"
                 >
                   주소 검색
@@ -618,6 +645,7 @@ function Order(props) {
               <input
                 placeholder="주소"
                 className="order-input-full"
+                readOnly
                 value={receiverAddress}
                 onChange={(e) => setReceiverAddress(e.target.value)}
               />
