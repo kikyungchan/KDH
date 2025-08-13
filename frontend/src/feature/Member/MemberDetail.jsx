@@ -90,7 +90,7 @@ export function MemberDetail() {
                     id="loginId"
                     readOnly
                     value={member.loginId}
-                    className=" input input-bordered px-3 py-2 ml-1"
+                    className=" input input-bordered px-3 py-2 ml-1 flex-1"
                   />
                 </div>
 
@@ -107,7 +107,7 @@ export function MemberDetail() {
                     id="name"
                     readOnly
                     value={member.name}
-                    className=" input input-bordered px-3 py-2 ml-1"
+                    className=" input input-bordered px-3 py-2 ml-1 flex-1"
                   />
                 </div>
 
@@ -124,7 +124,7 @@ export function MemberDetail() {
                     id="birthDate"
                     readOnly
                     value={member.birthday}
-                    className=" input input-bordered px-3 py-2 ml-1"
+                    className=" input input-bordered px-3 py-2 ml-1 flex-1"
                   />
                 </div>
 
@@ -141,7 +141,7 @@ export function MemberDetail() {
                     id="phone"
                     readOnly
                     value={member.phone}
-                    className="input input-bordered px-3 py-2 ml-1"
+                    className="input input-bordered px-3 py-2 ml-1 flex-1"
                   />
                 </div>
 
@@ -158,36 +158,46 @@ export function MemberDetail() {
                     id="email"
                     readOnly
                     value={member.email}
-                    className="input input-bordered px-3 py-2 ml-1"
+                    className="input input-bordered px-3 py-2 ml-1 flex-1"
                   />
                 </div>
 
                 {/* 주소 */}
                 <div className="flex items-start gap-4 mb-4">
-                  <label
-                    htmlFor="email"
-                    className="label w-24 font-semibold mr-7"
-                  >
-                    주소
-                  </label>
+                  <label className="label w-24 font-semibold mr-7">주소</label>
                   <div className="flex flex-col flex-1 gap-2">
                     <input
                       type="text"
                       readOnly
                       value={member.zipCode}
-                      className=" input input-bordered px-3 py-2"
+                      className="input input-bordered px-3 py-2 w-full"
                     />
                     <input
                       type="text"
                       readOnly
                       value={member.address}
-                      className=" input input-bordered px-3 py-2"
+                      className="input input-bordered px-3 py-2 w-full hidden md:block"
+                    />
+                    {/* 주소: md 미만에서는 textarea(두 줄) */}
+                    <textarea
+                      readOnly
+                      rows={2} // 두 줄
+                      value={member.address}
+                      className="textarea textarea-bordered w-full px-3 py-2
+                       resize-none md:hidden break-words"
                     />
                     <input
                       type="text"
                       readOnly
                       value={member.addressDetail}
-                      className=" input input-bordered px-3 py-2"
+                      className="input input-bordered px-3 py-2 w-full hidden md:block"
+                    />
+                    <textarea
+                      readOnly
+                      rows={2}
+                      value={member.addressDetail}
+                      className="textarea textarea-bordered w-full px-3 py-2
+                       resize-none md:hidden break-words"
                     />
                   </div>
                 </div>
