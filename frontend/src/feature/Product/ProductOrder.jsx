@@ -580,35 +580,39 @@ function Order(props) {
                   onChange={(e) => setOrdererEmail(e.target.value)}
                 />
               )}
-              <div className="order-input-zipcode">
-                <input
-                  placeholder="우편번호"
-                  className="order-input-full"
-                  readOnly
-                  value={ordererZipcode}
-                  onChange={(e) => setOrdererZipcode(e.target.value)}
-                />
-                <button
-                  type="button"
-                  onClick={handleSearchOrdererAddress}
-                  className="order-input-full order-search-btn"
-                >
-                  주소 검색
-                </button>
-              </div>
-              <input
-                placeholder="주소"
-                className="order-input-full"
-                readOnly
-                value={ordererAddress}
-                onChange={(e) => setOrdererAddress(e.target.value)}
-              />
-              <input
-                placeholder="상세주소"
-                className="order-input-full"
-                value={ordererAddressDetail}
-                onChange={(e) => setOrdererAddressDetail(e.target.value)}
-              />
+              {isMember && (
+                <>
+                  <div className="order-input-zipcode">
+                    <input
+                      placeholder="우편번호"
+                      className="order-input-full"
+                      readOnly
+                      value={ordererZipcode}
+                      onChange={(e) => setOrdererZipcode(e.target.value)}
+                    />
+                    <button
+                      type="button"
+                      onClick={handleSearchOrdererAddress}
+                      className="order-input-full order-search-btn"
+                    >
+                      주소 검색
+                    </button>
+                  </div>
+                  <input
+                    placeholder="주소"
+                    className="order-input-full"
+                    readOnly
+                    value={ordererAddress}
+                    onChange={(e) => setOrdererAddress(e.target.value)}
+                  />
+                  <input
+                    placeholder="상세주소"
+                    className="order-input-full"
+                    value={ordererAddressDetail}
+                    onChange={(e) => setOrdererAddressDetail(e.target.value)}
+                  />
+                </>
+              )}
             </div>
 
             {/* 배송 정보 */}
