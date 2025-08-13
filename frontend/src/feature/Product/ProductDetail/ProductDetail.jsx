@@ -21,12 +21,10 @@ import ShareModal from "./util/ShareModal.jsx";
 import { RxShare1 } from "react-icons/rx";
 import LikeButton from "./util/LikeButton.jsx";
 import { AuthenticationContext } from "../../common/AuthenticationContextProvider.jsx";
+import ProductDetailToggle from "./util/ProductDetailToggle.jsx";
 
 export function ProductDetail() {
   const [relatedProducts, setRelatedProducts] = useState([]);
-  const [isDetailOpen, setIsDetailOpen] = useState(false);
-  const [showDetailToggle, setShowDetailToggle] = useState(false);
-  const detailRef = useRef(null);
   const [selectedThumbnail, setSelectedThumbnail] = useState(null);
   const [showShareModal, setShowShareModal] = useState(false);
   const { setCartCount } = useCart();
@@ -42,18 +40,6 @@ export function ProductDetail() {
   const [searchParams] = useSearchParams();
   const id = searchParams.get("id");
   const navigate = useNavigate();
-
-  // 이미지 로드 후 실제 높이가 기준보다 크면 토글 버튼 보이게
-  const COLLAPSED_MAX = 1200; // 데스크톱 기준. (아래 CSS와 값 맞춤)
-  const recheckDetailHeight = () => {
-    if (detailRef.current) {
-      setShowDetailToggle(detailRef.current.scrollHeight > COLLAPSED_MAX);
-    }
-  };
-
-  useEffect(() => {
-    recheckDetailHeight();
-  }, [product?.detailImagePaths?.length]);
 
   useEffect(() => {
     axios
@@ -114,9 +100,6 @@ export function ProductDetail() {
     setIsProcessing(true);
     navigate(`/qna/add/${product.id}`);
   }
-
-  // 본문 이미지 배열
-  const detailImages = product.detailImagePaths ?? [];
 
   return (
     <div className="container">
@@ -372,48 +355,7 @@ export function ProductDetail() {
 
         <hr className="mt-5" />
         <div className="product-body-section">
-          <div
-            ref={detailRef}
-            className={`detail-collapsible ${isDetailOpen ? "is-open" : "is-closed"}`}
-          >
-            <div className="detail-images-container">
-              {detailImages?.map((path, index) => (
-                <img
-                  key={index}
-                  src={path}
-                  alt={`상세 이미지 ${index + 1}`}
-                  className="product-detail-image"
-                  onLoad={recheckDetailHeight}
-                />
-              ))}
-            </div>
-          </div>
-
-          {/* 접힌 상태: 아래쪽에 버튼 노출 */}
-          {showDetailToggle && !isDetailOpen && (
-            <div className="detail-toggle-bottom">
-              <button
-                type="button"
-                className="detail-toggle-btn-out"
-                onClick={() => setIsDetailOpen(true)}
-              >
-                상세정보 펼쳐보기
-              </button>
-            </div>
-          )}
-
-          {/* 펼친 상태: 아래쪽에 접기 버튼 */}
-          {showDetailToggle && isDetailOpen && (
-            <div className="detail-toggle-bottom">
-              <button
-                type="button"
-                className="detail-toggle-btn-out"
-                onClick={() => setIsDetailOpen(false)}
-              >
-                상세정보 접기
-              </button>
-            </div>
-          )}
+          <ProductDetailToggle detailImagePaths={product.detailImagePaths} />
           <NoticeSection />
           <hr className="divider" />
           <ReviewStats productId={product.id} refreshTrigger={reviewChanged} />
