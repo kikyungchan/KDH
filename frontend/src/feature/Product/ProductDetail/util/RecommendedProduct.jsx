@@ -7,8 +7,6 @@ import "swiper/css/navigation";
 export default function RecommendedProduct({ products }) {
   if (!products?.length) return null;
 
-  const slidesToShow = Math.min(products.length, 4); // 최대 4개 표시
-
   return (
     <div className="related-product-section">
       <Swiper
@@ -17,8 +15,15 @@ export default function RecommendedProduct({ products }) {
           nextEl: ".custom-nav-btn.right",
           prevEl: ".custom-nav-btn.left",
         }}
-        slidesPerView={slidesToShow}
         spaceBetween={20}
+        breakpointsBase="window"
+        breakpoints={{
+          0: { slidesPerView: 2 }, // 모바일
+          768: { slidesPerView: 4 }, // 태블릿 이상
+        }}
+        watchOverflow
+        observer
+        observeParents
       >
         {products.map((item) => (
           <SwiperSlide key={item.id}>
