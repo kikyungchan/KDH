@@ -24,15 +24,16 @@ function NavBar(props) {
   const location = useLocation();
   const [keyword, setKeyword] = useState("");
 
+  // 추천 카테고리
   const RECO_CATEGORIES = [
     { label: "신발", key: "shoes", image: "/CategoryImage/shoes.png" },
     { label: "모자", key: "hat", image: "/CategoryImage/hat.png" },
     { label: "가방", key: "bag", image: "/CategoryImage/bag.png" },
     // { label: "겉옷", key: "outer", image: "/CategoryImage/outer.png" },
-    // { label: "상의", key: "top", image: "/CategoryImage/top.png" },
+    { label: "상의", key: "top", image: "/CategoryImage/top.png" },
     // { label: "하의", key: "bottom", image: "/CategoryImage/bottom.png" },
-    // { label: "양말", key: "socks", image: "/CategoryImage/socks.png" },
-    // { label: "벨트", key: "belt", image: "/CategoryImage/belt.png" },
+    { label: "양말", key: "socks", image: "/CategoryImage/socks.png" },
+    { label: "벨트", key: "belt", image: "/CategoryImage/belt.png" },
   ];
 
   // 카테고리 키 → 한글/영문 별칭들
