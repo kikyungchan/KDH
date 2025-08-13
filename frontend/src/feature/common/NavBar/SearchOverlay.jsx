@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { FiChevronLeft, FiSearch } from "react-icons/fi";
 
 function SearchOverlay({
@@ -10,6 +10,22 @@ function SearchOverlay({
   onSelectCategory,
   categories = [],
 }) {
+  const [recentProducts, setRecentProducts] = useState([]);
+
+  useEffect(() => {
+    if (open) {
+      try {
+        const data = JSON.parse(localStorage.getItem("recentProducts"));
+        if (Array.isArray(data)) {
+          setRecentProducts(data);
+        } else {
+          setRecentProducts([]); // 데이터가 배열이 아니면 빈 배열
+        }
+      } catch (err) {
+        setRecentProducts([]);
+      }
+    }
+  }, [open]);
   if (!open) return null;
 
   return (
@@ -51,6 +67,25 @@ function SearchOverlay({
                   </span>
                   <span className="chip-label">{c.label}</span>
                 </button>
+              ))}
+            </div>
+          </>
+        )}
+        {/* 최근 본 상품 */}
+        {recentProducts.length > 0 && (
+          <>
+            <div className="suggest-title">최근 본 상품</div>
+            <div className="recent-products-scroll">
+              {recentProducts.map((p) => (
+                <a
+                  key={p.id}
+                  href={`/product/view?id=${p.id}`}
+                  className="recent-product-card"
+                  onClick={onClose}
+                >
+                  <img src={p.thumbnail} alt={p.productName} />
+                  <span className="recent-name">{p.productName}</span>
+                </a>
               ))}
             </div>
           </>

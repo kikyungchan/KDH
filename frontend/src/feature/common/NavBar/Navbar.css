@@ -408,3 +408,33 @@
     white-space: nowrap;
 }
 
+.recent-products-scroll {
+    display: flex;
+    overflow-x: auto;
+    gap: 12px;
+    padding: 8px 0;
+}
+
+.recent-product-card {
+    display: flex;
+    flex-direction: column;
+    width: 80px;
+    text-align: center;
+    font-size: 0.85rem;
+    color: inherit;
+    text-decoration: none;
+}
+
+.recent-product-card img {
+    width: 80px;
+    height: 80px;
+    object-fit: cover;
+    border-radius: 6px;
+}
+
+.recent-name {
+    margin-top: 4px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}

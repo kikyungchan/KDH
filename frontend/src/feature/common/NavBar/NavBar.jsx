@@ -9,12 +9,9 @@ import {
   FiUser,
 } from "react-icons/fi";
 import "./Navbar.css";
-import { useCart } from "../../Product/CartContext.jsx";
 import NavLeft from "./NavLeft.jsx";
 import NavRight from "./NavRight.jsx";
-import Search from "./SearchBar.jsx";
 import "bootstrap/dist/css/bootstrap-grid.min.css";
-import SearchBar from "./SearchBar.jsx";
 import SearchOverlay from "./SearchOverlay.jsx";
 
 function NavBar(props) {
