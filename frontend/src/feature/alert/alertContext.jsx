@@ -8,7 +8,8 @@ import React, {
 } from "react";
 import { Client } from "@stomp/stompjs";
 import SockJS from "sockjs-client";
-import { toast } from "react-toastify";
+// import { toast } from "react-toastify";
+import { toast } from "sonner";
 import { AuthenticationContext } from "../common/AuthenticationContextProvider.jsx";
 import axios from "axios";
 import link from "daisyui/components/link/index.js";
@@ -44,7 +45,14 @@ export const AlertWebSocketProvider = ({ children }) => {
       client.subscribe("/user/queue/alert", (message) => {
         let msg = JSON.parse(message.body);
         // toast(`${msg.title} + ${msg.content}`);
-        toast(`${msg.content}`);
+        // toast(`${msg.content}`);
+        toast(msg.title, {
+          description: msg.content,
+          action: {
+            label: "이동", // 액션 버튼에 표시될 텍스트
+            onClick: () => (location.href = msg.link),
+          },
+        });
         setAlertCount((cnt) => {
           return cnt + 1;
         });
