@@ -68,19 +68,29 @@ export function AlertList() {
 
             {alertList.length > 0 ? (
               <div>
-                {alertList.map((alert) => (
-                  <div
-                    tabIndex={0}
-                    className="collapse bg-base-100 border-base-300 border"
-                  >
-                    <div className="collapse-title font-semibold">
-                      {alert.title}
-                    </div>
-                    <div className="collapse-content text-sm">
-                      <Link to={alert.link}>{alert.content}</Link>
-                    </div>
-                  </div>
-                ))}
+                <ul className="list bg-base-100 rounded-box shadow-md">
+                  {alertList.map((alert) => (
+                    <li className="list-row">
+                      {/*<div
+                        tabIndex={0}
+                        className="collapse bg-base-100 border-base-300 border"
+                      >
+                        <div className="collapse-title font-semibold">
+                          {alert.title}
+                        </div>
+                        <div className="collapse-content text-sm">
+                          <Link to={alert.link}>{alert.content}</Link>
+                        </div>
+                      </div>*/}
+                      <Link className="list-col-grow" to={alert.link}>
+                        <div className="m-1">{alert.title}</div>
+                        <div className="text-xs uppercase font-semibold opacity-60 m-1">
+                          {alert.content}
+                        </div>
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
               </div>
             ) : (
               <p>새로운 소식이 없습니다.</p>
