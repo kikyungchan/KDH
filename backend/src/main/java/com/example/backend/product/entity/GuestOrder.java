@@ -58,6 +58,10 @@ public class GuestOrder {
     private String guestOrderToken;
 
     @ColumnDefault("current_timestamp()")
+    @Column(name = "order_date", updatable = false, insertable = false, nullable = false)
+    private LocalDateTime orderDate;
+
+    @ColumnDefault("current_timestamp()")
     @Column(name = "created_at", insertable = false, updatable = false)
     private LocalDateTime createdAt;
 

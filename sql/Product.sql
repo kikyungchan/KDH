@@ -1,27 +1,29 @@
 #
-상품 테이블
+상품
+테이블
 CREATE TABLE product
 (
     id           INT AUTO_INCREMENT NOT NULL,
-    product_name VARCHAR(500) NOT NULL,
-    price        INT          NOT NULL,
-    category     VARCHAR(255) NOT NULL,
-    info         VARCHAR(10000) NULL,
-    quantity     INT          NOT NULL,
-    inserted_at  datetime     NOT NULL DEFAULT NOW(),
+    product_name VARCHAR(500)       NOT NULL,
+    price        INT                NOT NULL,
+    category     VARCHAR(255)       NOT NULL,
+    info         VARCHAR(10000)     NULL,
+    quantity     INT                NOT NULL,
+    inserted_at  datetime           NOT NULL DEFAULT NOW(),
     CONSTRAINT pk_product PRIMARY KEY (id)
 );
 ALTER TABLE product
     MODIFY price INT NOT NULL;
 
 #상품
-이미지를저장할 테이블
+이미지를저장할
+테이블
 CREATE TABLE product_image
 (
     id                 INT AUTO_INCREMENT NOT NULL,
-    stored_path        VARCHAR(500) NOT NULL,
-    original_file_name VARCHAR(500) NOT NULL,
-    product_id         INT          NOT NULL,
+    stored_path        VARCHAR(500)       NOT NULL,
+    original_file_name VARCHAR(500)       NOT NULL,
+    product_id         INT                NOT NULL,
     CONSTRAINT pk_productimage PRIMARY KEY (id)
 );
 
@@ -38,9 +40,9 @@ FROM product;
 CREATE TABLE product_option
 (
     id          INT AUTO_INCREMENT NOT NULL,
-    option_name VARCHAR(255) NOT NULL,
-    price       INT          NOT NULL,
-    product_id  INT          NOT NULL,
+    option_name VARCHAR(255)       NOT NULL,
+    price       INT                NOT NULL,
+    product_id  INT                NOT NULL,
     CONSTRAINT pk_product_option PRIMARY KEY (id)
 );
 
@@ -52,14 +54,15 @@ ALTER TABLE product_option
 
 
 #
-장바구니 테이블
+장바구니
+테이블
 CREATE TABLE cart
 (
     id          INT AUTO_INCREMENT NOT NULL,
-    product_id  INT      NOT NULL,
-    option_id   INT      NOT NULL,
-    quantity    INT      NOT NULL,
-    inserted_at datetime NOT NULL DEFAULT NOW(),
+    product_id  INT                NOT NULL,
+    option_id   INT                NOT NULL,
+    quantity    INT                NOT NULL,
+    inserted_at datetime           NOT NULL DEFAULT NOW(),
     CONSTRAINT pk_cart PRIMARY KEY (id)
 );
 ALTER TABLE cart
@@ -94,7 +97,7 @@ ALTER TABLE orders
 ALTER TABLE orders
     ADD COLUMN address_detail VARCHAR(255);
 ALTER TABLE orders
-    ADD COLUMN login_id VARCHAR(30) NOT NULL,
+    ADD COLUMN login_id    VARCHAR(30) NOT NULL,
     ADD COLUMN member_name VARCHAR(50) NOT NULL;
 ALTER TABLE orders
     ADD COLUMN product_name VARCHAR(255),
@@ -104,58 +107,55 @@ ALTER TABLE orders
     ADD COLUMN product_id INT;
 
 ALTER TABLE orders
-DROP
-COLUMN product_id;
+    DROP
+        COLUMN product_id;
 
 ALTER TABLE orders
     ADD COLUMN created_at DATETIME NOT NULL DEFAULT NOW();
 
 ALTER TABLE orders
-DROP
-COLUMN product_name,
     DROP
-COLUMN option_name;
+        COLUMN product_name,
+    DROP
+        COLUMN option_name;
 
 # 새 컬럼 추가
 ALTER TABLE prj4.orders
-    ADD COLUMN orderer_name VARCHAR(50) NULL,
-  ADD COLUMN orderer_phone           VARCHAR(30)  NULL,
-  ADD COLUMN receiver_name           VARCHAR(50)  NULL,
-  ADD COLUMN receiver_phone          VARCHAR(30)  NULL,
-  ADD COLUMN receiver_zipcode        VARCHAR(20)  NULL,
-  ADD COLUMN receiver_address        VARCHAR(255) NULL,
-  ADD COLUMN receiver_address_detail VARCHAR(255) NULL,
-  ADD COLUMN items_subtotal          INT          NULL,
-  ADD COLUMN shipping_fee            INT          NULL;
+    ADD COLUMN orderer_name            VARCHAR(50)  NULL,
+    ADD COLUMN orderer_phone           VARCHAR(30)  NULL,
+    ADD COLUMN receiver_name           VARCHAR(50)  NULL,
+    ADD COLUMN receiver_phone          VARCHAR(30)  NULL,
+    ADD COLUMN receiver_zipcode        VARCHAR(20)  NULL,
+    ADD COLUMN receiver_address        VARCHAR(255) NULL,
+    ADD COLUMN receiver_address_detail VARCHAR(255) NULL,
+    ADD COLUMN items_subtotal          INT          NULL,
+    ADD COLUMN shipping_fee            INT          NULL;
 
 # 기존 데이터 백필
 UPDATE prj4.orders
-SET
-    orderer_name            = COALESCE(orderer_name,            member_name),
-    orderer_phone           = COALESCE(orderer_phone,           phone),
-    receiver_name           = COALESCE(receiver_name,           member_name), -- 기본값: 주문자=수령인
-    receiver_phone          = COALESCE(receiver_phone,          phone),
-    receiver_address        = COALESCE(receiver_address,        shipping_address),
-    receiver_zipcode        = COALESCE(receiver_zipcode,        zipcode),
+SET orderer_name            = COALESCE(orderer_name, member_name),
+    orderer_phone           = COALESCE(orderer_phone, phone),
+    receiver_name           = COALESCE(receiver_name, member_name),  -- 기본값: 주문자=수령인
+    receiver_phone          = COALESCE(receiver_phone, phone),
+    receiver_address        = COALESCE(receiver_address, shipping_address),
+    receiver_zipcode        = COALESCE(receiver_zipcode, zipcode),
     receiver_address_detail = COALESCE(receiver_address_detail, address_detail),
-    items_subtotal          = COALESCE(items_subtotal,          total_price), -- 과거 주문은 총액=소계 가정
-    shipping_fee            = COALESCE(shipping_fee,            0);
+    items_subtotal          = COALESCE(items_subtotal, total_price), -- 과거 주문은 총액=소계 가정
+    shipping_fee            = COALESCE(shipping_fee, 0);
 
 
 ALTER TABLE prj4.orders
-    ADD COLUMN member_name    VARCHAR(50)  GENERATED ALWAYS AS (orderer_name) VIRTUAL,
+    ADD COLUMN member_name      VARCHAR(50) GENERATED ALWAYS AS (orderer_name) VIRTUAL,
     ADD COLUMN shipping_address VARCHAR(255) GENERATED ALWAYS AS (receiver_address) VIRTUAL,
-    ADD COLUMN zipcode        VARCHAR(20)  GENERATED ALWAYS AS (receiver_zipcode) VIRTUAL,
-    ADD COLUMN address_detail VARCHAR(255) GENERATED ALWAYS AS (receiver_address_detail) VIRTUAL;
+    ADD COLUMN zipcode          VARCHAR(20) GENERATED ALWAYS AS (receiver_zipcode) VIRTUAL,
+    ADD COLUMN address_detail   VARCHAR(255) GENERATED ALWAYS AS (receiver_address_detail) VIRTUAL;
 
 SHOW CREATE TABLE prj4.orders;
 
 
-
-
-
 #
-비회원 주문정보 테이블
+비회원
+주문정보 테이블
 CREATE TABLE guest_orders
 (
     id                INT PRIMARY KEY AUTO_INCREMENT,
@@ -181,8 +181,13 @@ ALTER TABLE guest_orders
     ADD COLUMN total_price INT;
 
 ALTER TABLE guest_orders
-    ADD COLUMN items_subtotal          INT          NULL,
-    ADD COLUMN shipping_fee            INT          NULL;
+    ADD COLUMN items_subtotal INT NULL,
+    ADD COLUMN shipping_fee   INT NULL;
+
+ALTER TABLE guest_orders
+    ADD COLUMN order_date DATETIME NOT NULL DEFAULT NOW();
+
+
 
 #
 order_item(주문상세)
@@ -216,14 +221,15 @@ ALTER TABLE product
     ADD detail_text VARCHAR(5000) NULL;
 
 #
-리뷰 테이블
+리뷰
+테이블
 CREATE TABLE product_comment
 (
     id         INT AUTO_INCREMENT NOT NULL,
-    product_id INT NULL,
-    member_id  INT NULL,
-    content    TEXT NOT NULL,
-    created_at datetime NULL,
+    product_id INT                NULL,
+    member_id  INT                NULL,
+    content    TEXT               NOT NULL,
+    created_at datetime           NULL,
     CONSTRAINT pk_product_comment PRIMARY KEY (id)
 );
 
@@ -231,18 +237,20 @@ ALTER TABLE product_comment
     MODIFY created_at datetime null default now();
 
 #
-리뷰테이블에 별점칼럼 추가
+리뷰테이블에
+별점칼럼 추가
 ALTER TABLE product_comment
     ADD COLUMN rating INT NOT NULL;
 
 
 #
-좋아요 테이블
+좋아요
+테이블
 CREATE TABLE product_like
 (
     id         INT AUTO_INCREMENT NOT NULL,
-    member_id  INT NULL,
-    product_id INT NULL,
+    member_id  INT                NULL,
+    product_id INT                NULL,
     CONSTRAINT pk_product_like PRIMARY KEY (id)
 );
 
@@ -258,10 +266,10 @@ ALTER TABLE product_like
 CREATE TABLE product_thumbnail
 (
     id                 INT AUTO_INCREMENT NOT NULL,
-    stored_path        VARCHAR(1000) NOT NULL,
-    original_file_name VARCHAR(1000) NOT NULL,
-    product_id         INT           NOT NULL,
-    is_main            BOOLEAN       NOT NULL DEFAULT FALSE,
+    stored_path        VARCHAR(1000)      NOT NULL,
+    original_file_name VARCHAR(1000)      NOT NULL,
+    product_id         INT                NOT NULL,
+    is_main            BOOLEAN            NOT NULL DEFAULT FALSE,
     PRIMARY KEY (id),
     CONSTRAINT fk_product_thumbnail_product
         FOREIGN KEY (product_id)
@@ -278,22 +286,22 @@ WHERE is_main = true;
 
 ALTER TABLE prj4.order_item
     ADD COLUMN product_name VARCHAR(255),
-ADD COLUMN option_name VARCHAR(255),
-ADD COLUMN total_price INT;
+    ADD COLUMN option_name  VARCHAR(255),
+    ADD COLUMN total_price  INT;
 
 #
 게스트오더아이템테이블
 CREATE TABLE prj4.guest_order_item
 (
     id             INT AUTO_INCREMENT NOT NULL,
-    guest_order_id INT NOT NULL,
-    product_id     INT NULL,
-    option_id      INT NULL,
-    product_name   VARCHAR(255) NULL,
-    option_name    VARCHAR(255) NULL,
-    quantity       INT NOT NULL,
-    price          INT NOT NULL,
-    total_price    INT NOT NULL,
+    guest_order_id INT                NOT NULL,
+    product_id     INT                NULL,
+    option_id      INT                NULL,
+    product_name   VARCHAR(255)       NULL,
+    option_name    VARCHAR(255)       NULL,
+    quantity       INT                NOT NULL,
+    price          INT                NOT NULL,
+    total_price    INT                NOT NULL,
     CONSTRAINT pk_guest_order_item PRIMARY KEY (id)
 );
 
@@ -307,22 +315,22 @@ ALTER TABLE prj4.guest_order_item
     ADD CONSTRAINT FK_GUEST_ORDER_ITEM_ON_PRODUCT FOREIGN KEY (product_id) REFERENCES product (id);
 
 ALTER TABLE guest_orders
-    CHANGE detailed_address address_detail VARCHAR (255);
+    CHANGE detailed_address address_detail VARCHAR(255);
 
 ALTER TABLE guest_orders
-    CHANGE postal_code zipcode VARCHAR (20);
+    CHANGE postal_code zipcode VARCHAR(20);
 
 
 ALTER TABLE guest_orders
-DROP
-COLUMN product_id,
     DROP
-COLUMN product_name,
+        COLUMN product_id,
     DROP
-COLUMN option_id,
+        COLUMN product_name,
     DROP
-COLUMN option_name,
+        COLUMN option_id,
     DROP
-COLUMN quantity,
+        COLUMN option_name,
     DROP
-COLUMN price;
+        COLUMN quantity,
+    DROP
+        COLUMN price;

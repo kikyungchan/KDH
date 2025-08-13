@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -15,6 +16,9 @@ public class GuestOrderDetailDto {
     private String guestOrderToken;
     private String guestName;
     private String guestPhone;
+
+    private LocalDateTime orderDate;
+
 
     private String receiverName;
     private String receiverPhone;
@@ -35,6 +39,7 @@ public class GuestOrderDetailDto {
                 guestOrder.getGuestOrderToken(),
                 guestOrder.getGuestName(),
                 guestOrder.getGuestPhone(),
+                guestOrder.getOrderDate(),
                 guestOrder.getReceiverName(),
                 guestOrder.getReceiverPhone(),
                 guestOrder.getReceiverAddress(),
