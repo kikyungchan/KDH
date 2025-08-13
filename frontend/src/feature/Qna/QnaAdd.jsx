@@ -11,7 +11,7 @@ import {
 } from "react-bootstrap";
 import Form from "react-bootstrap/Form";
 import { useContext, useEffect, useRef, useState } from "react";
-import { toast } from "react-toastify";
+import { toast } from "sonner";
 import axios from "axios";
 import { useNavigate, useParams } from "react-router";
 
@@ -51,21 +51,31 @@ export function QnaAdd() {
   useEffect(() => {}, [category]);
 
   useEffect(() => {
-    axios.get(`/api/qna/add?id=${params.id}`).then((res) => {
-      console.log(res.data);
-      setProductId(res.data.id);
-      console.log(res.data.id);
-      setImage(res.data.image?.[0]);
-      setProductPrice(res.data.price);
-      setProductName(res.data.productName);
-    });
+    axios
+      .get(`/api/qna/add?id=${params.id}`)
+      .then((res) => {
+        console.log(res.data);
+        setProductId(res.data.id);
+        console.log(res.data.id);
+        setImage(res.data.image);
+        setProductPrice(res.data.price);
+        setProductName(res.data.productName);
+      })
+      .catch((err) => {
+        if (err.response && err.response.status === 401) {
+          alert("로그인 후 이용해주세요.");
+          window.location.href = "/login";
+        } else {
+          console.log("잘 안될 때 코드");
+        }
+      });
     console.log("user : ", user);
     console.log("productName : ", productName);
   }, []);
 
   function handleSaveButtonClick() {
     if (category.trim() === "" || category === "0") {
-      toast("상담유형을 선택해 주세요", { type: "error" });
+      toast.error("상담유형을 선택해 주세요");
       if (categoryRef.current) {
         console.log("moved");
         categoryRef.current.scrollIntoView({
@@ -74,7 +84,7 @@ export function QnaAdd() {
         });
       }
     } else if (title.trim() === "") {
-      toast("제목을 입력해 주세요", { type: "error" });
+      toast.error("제목을 입력해 주세요");
       if (titleRef.current) {
         console.log("moved");
         titleRef.current.scrollIntoView({
@@ -83,7 +93,7 @@ export function QnaAdd() {
         });
       }
     } else if (content.trim() === "") {
-      toast("문의 내용를 입력해 주세요", { type: "error" });
+      toast.error("문의 내용를 입력해 주세요");
       if (contentRef.current) {
         console.log("moved");
         contentRef.current.scrollIntoView({
@@ -160,7 +170,7 @@ export function QnaAdd() {
                   name="바로가기"
                   aria-label={radio.name}
                   value={radio.value}
-                  checked={idx === 0}
+                  defaultChecked={idx === 0}
                   onClick={radio.fnc}
                 />
               ))}
@@ -173,13 +183,11 @@ export function QnaAdd() {
               <fieldset className="fieldset category1">
                 <legend className="fieldset-legend">상담유형</legend>
                 <select
-                  defaultValue="Pick a browser"
+                  defaultValue=""
                   className="select"
                   onChange={(e) => setCategory(e.target.value)}
                 >
-                  <option selected disabled hidden>
-                    유형을 선택하세요
-                  </option>
+                  <option hidden>유형을 선택하세요</option>
                   <option value="1">기능 관련</option>
                   <option value="2">크기·무게 관련</option>
                   <option value="3">배송 관련</option>

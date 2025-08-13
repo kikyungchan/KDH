@@ -16,7 +16,12 @@ export function AlertList() {
         // console.log(res.data);
       })
       .catch((err) => {
-        console.log("잘 안될 때 코드");
+        if (err.response && err.response.status === 401) {
+          alert("로그인 후 이용해주세요.");
+          window.location.href = "/login";
+        } else {
+          console.log("잘 안될 때 코드");
+        }
       });
   }, [searchParams]);
 
@@ -45,7 +50,7 @@ export function AlertList() {
         <Col>
           <div className={"container"}>
             <h2>알림</h2>
-            <button
+            {/*<button
               className="btn btn-primary"
               onClick={() => toast("버튼이 클릭되었습니다!")}
             >
@@ -63,7 +68,7 @@ export function AlertList() {
               }
             >
               액션 토스트
-            </button>
+            </button>*/}
             {/*<Toaster />*/}
 
             {alertList.length > 0 ? (

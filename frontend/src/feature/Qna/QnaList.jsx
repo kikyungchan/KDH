@@ -45,7 +45,12 @@ export function QnaList() {
         setPageInfo(res.data.pageInfo);
       })
       .catch((err) => {
-        console.log("잘 안될 때 코드");
+        if (err.response && err.response.status === 401) {
+          alert("로그인 후 이용해주세요.");
+          window.location.href = "/login";
+        } else {
+          console.log("잘 안될 때 코드");
+        }
       })
       .finally(() => {
         console.log("항상 실행 코드");

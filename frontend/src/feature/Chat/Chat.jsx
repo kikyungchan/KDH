@@ -49,10 +49,9 @@ export function Chat() {
         .catch((err) => {
           if (err.response && err.response.status === 401) {
             alert("로그인 후 이용해주세요.");
-            console.log("로그인 오류");
-            // window.history.back();
+            window.location.href = "/login";
           } else {
-            console.log("오류");
+            console.log("잘 안될 때 코드");
           }
         });
     }
