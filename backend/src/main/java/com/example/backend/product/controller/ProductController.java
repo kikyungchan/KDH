@@ -78,19 +78,25 @@ public class ProductController {
         String token = OrderTokenGenerator.generateToken();
         order.setGuestOrderToken(token);
 
-        int totalOrderPrice = 0;
+        int itemsSubtotal = 0;
         List<GuestOrderItem> itemList = new ArrayList<>();
 
         for (GuestOrderRequestDto dto : dtoList) {
             Product product = productRepository.findById(dto.getProductId())
                     .orElseThrow(() -> new RuntimeException("상품이 존재하지 않습니다."));
 
-            if (product.getQuantity() < dto.getQuantity()) {
+            Integer qty = dto.getQuantity();
+            if (product.getQuantity() < qty) {
                 throw new RuntimeException("재고가 부족합니다.");
             }
 
+            Integer unitPrice = product.getPrice();
+
+            Integer lineTotal = unitPrice * qty;
+            itemsSubtotal += lineTotal;
+
             // 재고 차감
-            product.setQuantity(product.getQuantity() - dto.getQuantity());
+            product.setQuantity(product.getQuantity() - qty);
             productRepository.save(product);
 
             // GuestOrderItem 생성
@@ -98,9 +104,9 @@ public class ProductController {
             item.setGuestOrder(order);
             item.setProduct(product);
             item.setProductName(product.getProductName());
-            item.setQuantity(dto.getQuantity());
-            item.setPrice(dto.getPrice());
-            item.setTotalPrice(dto.getQuantity() * dto.getPrice());
+            item.setQuantity(qty);
+            item.setPrice(unitPrice);
+            item.setTotalPrice(lineTotal);
 
             if (dto.getOptionId() != null) {
                 ProductOption option = productOptionRepository.findById(dto.getOptionId()).orElse(null);
@@ -108,14 +114,19 @@ public class ProductController {
                 item.setOptionName(option != null ? option.getOptionName() : null);
             }
 
-            totalOrderPrice += item.getTotalPrice();
             itemList.add(item);
         }
 
-        order.setTotalPrice(totalOrderPrice);
-        order.setItems(itemList);
+        Integer shippingFee = (itemsSubtotal >= 100000) ? 0 : 3000;
 
+        order.setItemsSubtotal(itemsSubtotal);
+        order.setShippingFee(shippingFee);
+        order.setTotalPrice(itemsSubtotal + shippingFee);
+
+        order.setItems(itemList);
         guestOrderRepository.save(order); // 로 item도 같이 저장됨
+
+//        session.setAttribute("guestOrderToken", token);
 
         return ResponseEntity.ok(Map.of(
                 "guestOrderToken", order.getGuestOrderToken()
