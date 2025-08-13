@@ -467,3 +467,47 @@
     }
 }
 
+.related-products-section {
+    margin-top: 40px;
+}
+
+.related-products-section h3 {
+    font-size: 1.4rem;
+    font-weight: 600;
+    margin-bottom: 20px;
+}
+
+.related-products-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 20px;
+}
+
+.related-product-card {
+    text-decoration: none;
+    color: inherit;
+    display: block;
+}
+
+.related-product-image {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    border-radius: 6px;
+}
+
+.related-product-info {
+    margin-top: 8px;
+    text-align: center;
+}
+
+.related-product-info .name {
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.related-product-info .price {
+    font-size: 14px;
+    color: #666;
+}
+

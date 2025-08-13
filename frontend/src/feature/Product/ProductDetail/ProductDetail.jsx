@@ -1,5 +1,5 @@
 import { Button, Col, Container, Row, Spinner } from "react-bootstrap";
-import { useNavigate, useSearchParams } from "react-router";
+import { Link, useNavigate, useSearchParams } from "react-router";
 import NoticeSection from "./util/NoticeSection.jsx";
 import ProductComment from "./ProductComment.jsx";
 import { useContext, useEffect, useRef, useState } from "react";
@@ -23,6 +23,7 @@ import LikeButton from "./util/LikeButton.jsx";
 import { AuthenticationContext } from "../../common/AuthenticationContextProvider.jsx";
 
 export function ProductDetail() {
+  const [relatedProducts, setRelatedProducts] = useState([]);
   const [isDetailOpen, setIsDetailOpen] = useState(false);
   const [showDetailToggle, setShowDetailToggle] = useState(false);
   const detailRef = useRef(null);
@@ -68,6 +69,19 @@ export function ProductDetail() {
         console.log(err);
       });
   }, [id]);
+
+  useEffect(() => {
+    if (product?.category) {
+      axios
+        .get(`/api/product/best?category=${product.category}&limit=6`)
+        .then((res) => {
+          // 현재 상품은 제외
+          const filtered = res.data.filter((p) => p.id !== product.id);
+          setRelatedProducts(filtered);
+        })
+        .catch(console.error);
+    }
+  }, [product]);
 
   if (!product) {
     return <Spinner />;
@@ -407,6 +421,32 @@ export function ProductDetail() {
             productId={product.id}
             onReviewChange={() => setReviewChanged((prev) => !prev)}
           />
+        </div>
+        <hr className="divider" />
+        <div className="related-products-section">
+          <div className="related-products-grid">
+            {relatedProducts.map((item) => (
+              <Link
+                key={item.id}
+                to={`/product/view?id=${item.id}`}
+                className="related-product-card"
+                onClick={() => {
+                  window.scrollTo({ top: 0, behavior: "instant" });
+                }}
+              >
+                <img
+                  src={item.thumbnailPaths?.[0]}
+                  alt={item.productName}
+                  className="related-product-image"
+                />
+
+                <div className="related-product-info">
+                  <p className="name">{item.productName}</p>
+                  <p className="price">{item.price.toLocaleString()}원</p>
+                </div>
+              </Link>
+            ))}
+          </div>
         </div>
       </div>
       <CartAdded show={showModal} onHide={() => setShowModal(false)} />
