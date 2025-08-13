@@ -298,7 +298,7 @@
 
     .navbar-right .btn-circle,
     .navbar-right .navbar-icon {
-        font-size: 1.3rem !important; /* 약 17~18px */
+        font-size: 1.3rem !important;
         line-height: 1;
     }
 
@@ -410,30 +410,36 @@
 
 .recent-products-scroll {
     display: flex;
-    overflow-x: auto;
     gap: 12px;
-    padding: 8px 0;
+    overflow-x: auto;
+    padding: 10px 0 2px;
 }
 
 .recent-product-card {
-    display: flex;
-    flex-direction: column;
+    flex: 0 0 auto;
     width: 80px;
+    background: transparent;
+    border: none;
+    padding: 0;
+    cursor: pointer;
     text-align: center;
-    font-size: 0.85rem;
-    color: inherit;
-    text-decoration: none;
 }
 
 .recent-product-card img {
-    width: 80px;
-    height: 80px;
+    width: 64px;
+    height: 64px;
+    border-radius: 20px;
+    background: #f7f7f7;
     object-fit: cover;
-    border-radius: 6px;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, .05) inset;
+    margin: 0 auto;
 }
 
 .recent-name {
-    margin-top: 4px;
+    display: block;
+    margin-top: 6px;
+    font-size: 12px;
+    color: #333;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
