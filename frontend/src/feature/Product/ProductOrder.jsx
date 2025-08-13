@@ -226,9 +226,7 @@ function Order() {
     if (
       !ordererName.trim() ||
       !ordererPhone.trim() ||
-      (isMember
-        ? !ordererAddress.trim()
-        : !formDataRef.current.receiverAddress.trim())
+      (isMember && !ordererAddress.trim())
     ) {
       alert("주문자 정보를 모두 입력해 주세요.");
       return false;
@@ -239,9 +237,9 @@ function Order() {
     if (
       !currentData.receiverName.trim() ||
       !currentData.receiverPhone.trim() ||
+      !currentData.receiverZipcode.trim() ||
       !currentData.receiverAddress.trim() ||
-      !currentData.receiverAddressDetail.trim() ||
-      !currentData.receiverZipcode.trim()
+      !currentData.receiverAddressDetail.trim()
     ) {
       alert("배송지 정보를 모두 입력해 주세요.");
 
@@ -449,6 +447,16 @@ function Order() {
     }
   }
 
+  function handleSearchOrdererAddress() {
+    new window.daum.Postcode({
+      oncomplete: function (data) {
+        setOrdererAddress(data.address); // 도로명 주소
+        setOrdererZipcode(data.zonecode); // 우편번호 필요하면 이것도
+        console.log("작동");
+      },
+    }).open();
+  }
+
   function handleSearchReceiverAddress() {
     new window.daum.Postcode({
       oncomplete: function (data) {
@@ -459,23 +467,8 @@ function Order() {
     }).open();
   }
 
-  //
-  // if (!ordererEmail) {
-  //   return <span className="loading loading-spinner"></span>;
-  // }
-
   if (loadingMember) {
     return <span className="loading loading-spinner"></span>;
-  }
-
-  function handleSearchOrdererAddress() {
-    new window.daum.Postcode({
-      oncomplete: function (data) {
-        setOrdererAddress(data.address); // 도로명 주소
-        setOrdererZipcode(data.zonecode); // 우편번호 필요하면 이것도
-        console.log("작동");
-      },
-    }).open();
   }
 
   return (

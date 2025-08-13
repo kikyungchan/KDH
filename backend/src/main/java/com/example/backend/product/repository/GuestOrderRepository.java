@@ -1,6 +1,7 @@
 package com.example.backend.product.repository;
 
 import com.example.backend.product.entity.GuestOrder;
+import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -19,6 +20,6 @@ public interface GuestOrderRepository extends JpaRepository<GuestOrder, Integer>
             """, nativeQuery = true)
     Integer getWeeklySales(@Param("productId") Integer productId, @Param("since") LocalDateTime since);
 
-
+    @EntityGraph(attributePaths = {"items", "items.product", "items.option"})
     Optional<GuestOrder> findByGuestOrderToken(String guestOrderToken);
 }

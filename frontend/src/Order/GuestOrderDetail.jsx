@@ -14,6 +14,7 @@ export function GuestOrderDetail() {
       })
       .catch((err) => {
         alert("조회권한이 없습니다.");
+        navigate("/home");
       });
   }, []);
 
@@ -58,29 +59,37 @@ export function GuestOrderDetail() {
                 </div>
               </div>
               <hr className="border-t border-gray-300 my-3" />
-              {/* TODO : 비회원 주문도 orderItem set 되면 구현 */}
-              {/*<div>*/}
-              {/*  <div className="mb-2">주문 상품 {order.orderItems.length}개</div>*/}
-              {/*  <div>*/}
-              {/*    {order.orderItems.map((item, index) => (*/}
-              {/*      <div key={index} className="flex gap-3">*/}
-              {/*        <div className="mb-2">*/}
-              {/*          <img src={item.thumbnailUrl || "/default.png"}*/}
-              {/*               alt={item.productName}*/}
-              {/*               className="w-32 h-32"/>*/}
-              {/*        </div>*/}
-              {/*        <div>*/}
-              {/*          <div className="font-semibold text-lg">{item.productName}</div>*/}
-              {/*          <div className="text-sm text-gray-600">옵션: {item.productOption}</div>*/}
-              {/*          <div className="text-sm">수량: {item.quantity}</div>*/}
-              {/*          <div className="text-sm">가격: {item.price.toLocaleString()}원</div>*/}
-              {/*        </div>*/}
-              {/*        <br/>*/}
-              {/*      </div>*/}
-
-              {/*    ))}*/}
-              {/*  </div>*/}
-              {/*</div>*/}
+              <div>
+                <div className="mb-2">
+                  주문 상품 {order.orderItems.length}개
+                </div>
+                <div>
+                  {order.orderItems.map((item, index) => (
+                    <div key={index} className="flex gap-3">
+                      <div className="mb-2">
+                        <img
+                          src={item.thumbnailUrl || "/default.png"}
+                          alt={item.productName}
+                          className="w-32 h-32"
+                        />
+                      </div>
+                      <div>
+                        <div className="font-semibold text-lg">
+                          {item.productName}
+                        </div>
+                        <div className="text-sm text-gray-600">
+                          옵션: {item.productOption}
+                        </div>
+                        <div className="text-sm">수량: {item.quantity}</div>
+                        <div className="text-sm">
+                          가격: {item.price.toLocaleString()}원
+                        </div>
+                      </div>
+                      <br />
+                    </div>
+                  ))}
+                </div>
+              </div>
               <hr className="border-t border-gray-300 my-3" />
               <div>
                 <div>결제정보</div>

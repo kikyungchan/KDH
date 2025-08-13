@@ -5,6 +5,9 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -24,6 +27,9 @@ public class GuestOrderDetailDto {
     private Integer itemSubtotal;
     private Integer totalPrice;
 
+    private List<OrderItemDto> orderItems;
+
+
     public static GuestOrderDetailDto fromEntity(GuestOrder guestOrder) {
         return new GuestOrderDetailDto(
                 guestOrder.getGuestOrderToken(),
@@ -37,7 +43,10 @@ public class GuestOrderDetailDto {
                 guestOrder.getMemo(),
                 guestOrder.getShippingFee(),
                 guestOrder.getItemsSubtotal(),
-                guestOrder.getTotalPrice()
+                guestOrder.getTotalPrice(),
+                guestOrder.getItems() == null ? List.of() :
+                        guestOrder.getItems().stream().map(OrderItemDto::fromEntity).collect(Collectors.toList())
+
         );
     }
 }
