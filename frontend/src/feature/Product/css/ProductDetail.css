@@ -467,6 +467,54 @@
     }
 }
 
+.custom-nav-btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 20;
+    background-color: rgba(255, 255, 255, 0.9);
+    border: none;
+    width: 32px;
+    height: 32px;
+    border-radius: 9999px;
+    font-size: 18px;
+    font-weight: bold;
+    cursor: pointer;
+    opacity: 0;
+    pointer-events: none;
+    transition: all 0.3s ease;
+}
+
+/* hover 시 나타남 */
+.related-product-section:hover .custom-nav-btn {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.custom-nav-btn.left {
+    left: 8px;
+}
+
+.custom-nav-btn.right {
+    right: 8px;
+}
+
+@media (max-width: 767px) {
+    .custom-nav-btn {
+        width: 28px;
+        height: 28px;
+        font-size: 16px;
+    }
+}
+
+@media (max-width: 639px) {
+    .custom-nav-btn {
+        width: 24px;
+        height: 24px;
+        font-size: 14px;
+    }
+}
+
 .recommended-products {
     display: flex;
     flex-wrap: wrap;
