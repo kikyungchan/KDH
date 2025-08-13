@@ -37,12 +37,13 @@ public class ChatController {
                                            Authentication authentication) {
         String roomId = params.get("roomId");
         String userid = params.get("userid");
+        Integer pageNumber = Integer.valueOf(params.get("pageNum"));
 
         System.out.println("roomId = " + roomId);
         System.out.println("userid = " + userid);
         System.out.println("authentication = " + authentication);
 
-        return chatservice.list(roomId, userid, authentication);
+        return chatservice.list(roomId, userid, pageNumber, authentication);
     }
 
 

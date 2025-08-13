@@ -18,6 +18,7 @@ export function Chat() {
   const [target, setTarget] = useState(""); //수신자 id
   const [text, setText] = useState(""); // 보낼 텍스트
   const [msgs, setMsgs] = useState([]); // 주고 받은 메시지들
+  const [lastMsgs, setLastMsgs] = useState([]); // 주고 받은 메시지들
   const [roomUsers, setRoomUsers] = useState([]); // 현재 방의 접속자들1
   const [count, setCount] = useState(0);
   const clientRef = useRef(null); // STOMP 인스턴스 담아 둘 상자
@@ -38,8 +39,10 @@ export function Chat() {
           .post("/api/chat/list", {
             roomId,
             userid: user.loginId,
+            pageNum: 1,
           })
           .then((res) => {
+            setLastMsgs(res.data.chatList);
             console.log("res", res.data);
           })
           .catch((err) => {
@@ -217,6 +220,15 @@ export function Chat() {
                 {/*삭제 x */}
                 <div className="chat chat-start"></div>
                 <div className="chat chat-end"></div>
+                {lastMsgs.toReversed().map((m, i) => (
+                  <div
+                    key={i}
+                    className={`chat chat-${user.name == m.user ? "end" : "start"}`}
+                  >
+                    <div className="chat-header">{m.user}</div>
+                    <div className="chat-bubble">{m.message}</div>
+                  </div>
+                ))}
                 {msgs.map((m, i) =>
                   m.type == "CHAT" ? (
                     <div

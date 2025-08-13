@@ -32,16 +32,15 @@ public class ChatService {
         chatLog.setUser(user);
         chatLog.setType(String.valueOf(msg.getType()));
         chatLog.setMessage(msg.getMessage());
-        
+
         System.out.println("chatLog: " + chatLog);
         chatLogRepository.save(chatLog);
 
     }
 
-    public Map<String, Object> list(String roomId, String userid, Authentication authentication) {
-        int pageNumber = 10;
+    public Map<String, Object> list(String roomId, String userid, Integer pageNumber, Authentication authentication) {
         Page<ChatListDto> chatListDtoPage =
-                chatLogRepository.findAllBy(roomId, PageRequest.of(pageNumber - 1, 10));
+                chatLogRepository.findAllBy(roomId, PageRequest.of(pageNumber - 1, 30));
         int totalPages = chatListDtoPage.getTotalPages(); // 마지막 페이지
         int rightPageNumber = ((pageNumber - 1) / 10 + 1) * 10;
         int leftPageNumber = rightPageNumber - 9;
