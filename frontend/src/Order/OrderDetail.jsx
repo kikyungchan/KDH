@@ -63,8 +63,8 @@ export function OrderDetail() {
                     <div>연락처</div>
                   </div>
                   <div className="w-full">
-                    <div>{order.memberName}</div>
-                    <div>{order.phone}</div>
+                    <div>{order.ordererName}</div>
+                    <div>{order.ordererPhone}</div>
                   </div>
                 </div>
               </div>
@@ -80,11 +80,11 @@ export function OrderDetail() {
                     <div>배송메세지</div>
                   </div>
                   <div className="w-full">
-                    <div>{order.memberName}</div>
-                    <div>{order.phone}</div>
-                    <div>{order.zipcode}</div>
-                    <div>{order.shippingAddress}</div>
-                    <div>{order.addressDetail}</div>
+                    <div>{order.receiverName}</div>
+                    <div>{order.receiverPhone}</div>
+                    <div>{order.receiverZipcode}</div>
+                    <div>{order.receiverAddress}</div>
+                    <div>{order.receiverAddressDetail}</div>
                     <div>{order.memo}</div>
                   </div>
                 </div>
@@ -121,9 +121,12 @@ export function OrderDetail() {
                 </div>
               </div>
               <div className="border border-white px-3 py-1">
-                <div>
-                  <div>주문 상품 : {order.orderItems.length}개</div>
-                  <div>총 금액 : {order.totalPrice}</div>
+                <div className="text-right py-2">
+                  <div>상품금액 : {order.itemsSubtotal.toLocaleString()}원</div>
+                  <div>배송비 : {order.shippingFee.toLocaleString()}원</div>
+                  <div className="mt-2">
+                    총 결제금액 : {order.totalPrice.toLocaleString()}원
+                  </div>
                 </div>
               </div>
             </div>
