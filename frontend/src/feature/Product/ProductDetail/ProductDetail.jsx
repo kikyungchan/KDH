@@ -22,6 +22,8 @@ import { RxShare1 } from "react-icons/rx";
 import LikeButton from "./util/LikeButton.jsx";
 import { AuthenticationContext } from "../../common/AuthenticationContextProvider.jsx";
 import ProductDetailToggle from "./util/ProductDetailToggle.jsx";
+import RelatedProducts from "./util/RecommendedProduct.jsx";
+import RecommendedProduct from "./util/RecommendedProduct.jsx";
 
 export function ProductDetail() {
   const [relatedProducts, setRelatedProducts] = useState([]);
@@ -365,31 +367,7 @@ export function ProductDetail() {
           />
         </div>
         <hr className="divider" />
-        <div className="related-products-section">
-          <div className="related-products-grid">
-            {relatedProducts.map((item) => (
-              <Link
-                key={item.id}
-                to={`/product/view?id=${item.id}`}
-                className="related-product-card"
-                onClick={() => {
-                  window.scrollTo({ top: 0, behavior: "instant" });
-                }}
-              >
-                <img
-                  src={item.thumbnailPaths?.[0]}
-                  alt={item.productName}
-                  className="related-product-image"
-                />
-
-                <div className="related-product-info">
-                  <p className="name">{item.productName}</p>
-                  <p className="price">{item.price.toLocaleString()}원</p>
-                </div>
-              </Link>
-            ))}
-          </div>
-        </div>
+        <RecommendedProduct products={relatedProducts} />
       </div>
       <CartAdded show={showModal} onHide={() => setShowModal(false)} />
       <BuyButton
