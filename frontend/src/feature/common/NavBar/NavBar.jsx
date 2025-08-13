@@ -103,9 +103,6 @@ function NavBar(props) {
     <>
       <nav className="navbar-container">
         <div className="navbar-inner">
-          <button className="btn btn-primary" onClick={sendMessage}>
-            전송
-          </button>
           {/* 모바일 메뉴 아이콘 */}
           <FiMenu
             className="hamburger-icon"

@@ -38,9 +38,11 @@ function NavRight({ iconRef, onSearchToggle, alertidcator }) {
               {alertidcator}
             </span>
           )}
-          <Link to={"/alert/list"}>
-            <HiOutlineBellAlert />
-          </Link>
+          {user && (
+            <Link to={"/alert/list"}>
+              <HiOutlineBellAlert />
+            </Link>
+          )}
         </div>
       </div>
     </div>
