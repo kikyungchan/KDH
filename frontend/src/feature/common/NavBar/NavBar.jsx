@@ -99,9 +99,10 @@ function NavBar(props) {
   const sendMessage = () => {
     sendTestAlert(); // Context 함수 사용
   };
+  const isRootPath = location.pathname === "/";
   return (
     <>
-      <nav className="navbar-container">
+      <nav className={`navbar-container ${isRootPath && "mainPage"} `}>
         <div className="navbar-inner">
           {/* 모바일 메뉴 아이콘 */}
           <FiMenu

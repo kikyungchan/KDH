@@ -64,7 +64,11 @@
 
 .navbar-container,
 .navbar-left {
-    overflow: visible !important; /* 잘리는 현상 방지 */
+    overflow: visible; /* 잘리는 현상 방지 */
+}
+
+.navbar-container.mainPage {
+    background-color: rgba(0, 0, 0, 0);
 }
 
 /*장바구니 뱃지용*/
