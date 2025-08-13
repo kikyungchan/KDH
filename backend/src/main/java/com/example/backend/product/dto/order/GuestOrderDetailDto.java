@@ -15,11 +15,13 @@ public class GuestOrderDetailDto {
 
     private String receiverName;
     private String receiverPhone;
-    private String shippingAddress;
-    private String addressDetail;
-    private String zipcode;
+    private String receiverAddress;
+    private String receiverAddressDetail;
+    private String receiverZipcode;
     private String memo;
 
+    private Integer shippingFee;
+    private Integer itemSubtotal;
     private Integer totalPrice;
 
     public static GuestOrderDetailDto fromEntity(GuestOrder guestOrder) {
@@ -29,10 +31,12 @@ public class GuestOrderDetailDto {
                 guestOrder.getGuestPhone(),
                 guestOrder.getReceiverName(),
                 guestOrder.getReceiverPhone(),
-                guestOrder.getShippingAddress(),
-                guestOrder.getAddressDetail(),
-                guestOrder.getZipcode(),
+                guestOrder.getReceiverAddress(),
+                guestOrder.getReceiverAddressDetail(),
+                guestOrder.getReceiverZipcode(),
                 guestOrder.getMemo(),
+                guestOrder.getShippingFee(),
+                guestOrder.getItemsSubtotal(),
                 guestOrder.getTotalPrice()
         );
     }

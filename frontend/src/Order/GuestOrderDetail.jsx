@@ -9,6 +9,7 @@ export function GuestOrderDetail() {
     axios
       .get("/api/order/guest-order/detail")
       .then((res) => {
+        console.log(res.data);
         setOrder(res.data);
       })
       .catch((err) => {
@@ -50,9 +51,9 @@ export function GuestOrderDetail() {
                 <div>
                   <div>{order.receiverName}</div>
                   <div>{order.receiverPhone}</div>
-                  <div>우편번호 : {order.zipcode}</div>
-                  <div>주소 : {order.shippingAddress}</div>
-                  <div>상세주소 : {order.addressDetail}</div>
+                  <div>우편번호 : {order.receiverZipcode}</div>
+                  <div>주소 : {order.receiverAddress}</div>
+                  <div>상세주소 : {order.receiverAddressDetail}</div>
                   <div>배송메모 : {order.memo}</div>
                 </div>
               </div>

@@ -367,8 +367,8 @@ function Order() {
         guestPhone: ordererPhone,
         receiverName: currentData.receiverName,
         receiverPhone: currentData.receiverPhone,
-        receiverAddress: currentData.receiverAddress,
-        receiverZipcode: currentData.receiverZipcode,
+        shippingAddress: currentData.receiverAddress,
+        zipcode: currentData.receiverZipcode,
         addressDetail: currentData.receiverAddressDetail,
       }));
       axios.post("/api/product/order/guest", payloadList).then((res) => {

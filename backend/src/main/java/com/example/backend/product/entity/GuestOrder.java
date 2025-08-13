@@ -34,13 +34,13 @@ public class GuestOrder {
     private String receiverPhone;
 
     @Column(name = "shipping_address")
-    private String shippingAddress;
+    private String receiverAddress;
 
     @Column(name = "address_detail")
-    private String addressDetail;
+    private String receiverAddressDetail;
 
     @Column(name = "zipcode", length = 20)
-    private String zipcode;
+    private String receiverZipcode;
 
     @Column(name = "items_subtotal", nullable = false)
     private Integer itemsSubtotal;

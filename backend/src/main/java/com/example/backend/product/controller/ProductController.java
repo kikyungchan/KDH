@@ -70,9 +70,9 @@ public class ProductController {
         order.setGuestPhone(first.getGuestPhone());
         order.setReceiverName(first.getReceiverName());
         order.setReceiverPhone(first.getReceiverPhone());
-        order.setShippingAddress(first.getShippingAddress());
-        order.setAddressDetail(first.getAddressDetail());
-        order.setZipcode(first.getZipcode());
+        order.setReceiverAddress(first.getShippingAddress());
+        order.setReceiverAddressDetail(first.getAddressDetail());
+        order.setReceiverZipcode(first.getZipcode());
         order.setMemo(first.getMemo());
 
         String token = OrderTokenGenerator.generateToken();
