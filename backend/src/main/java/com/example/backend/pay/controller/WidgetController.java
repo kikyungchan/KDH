@@ -29,7 +29,6 @@ public class WidgetController {
     private final PaymentsService paymentsService;
 
     @PostMapping("confirm")
-    @PreAuthorize("isAuthenticated()")
     public ResponseEntity<TossPaymentResDto> confirm(@RequestBody PaymentConfirmDto request,
                                                      Authentication authentication) throws Exception {
 

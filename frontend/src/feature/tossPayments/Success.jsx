@@ -47,7 +47,7 @@ export function SuccessPage() {
           .finally(() => {
             console.log("always");
             hasCalled.current = false;
-            setTimeout(() => window.close(), 100);
+            setTimeout(() => window.close(), 10);
           });
       }
     }
