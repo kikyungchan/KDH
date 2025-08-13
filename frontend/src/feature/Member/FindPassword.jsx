@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 import axios from "axios";
+import { useAlert } from "../common/AlertContext.jsx";
 
 export function FindPassword() {
   const [loginId, setLoginId] = useState("");
@@ -36,6 +37,8 @@ export function FindPassword() {
   const [emailValid, setEmailValid] = useState(true);
 
   const navigate = useNavigate();
+
+  const { showAlert } = useAlert();
 
   // 이메일 입력 실시간 검사
   useEffect(() => {
@@ -107,7 +110,6 @@ export function FindPassword() {
       .catch((err) => {
         setLoginIdExists(false);
         setLoginIdCheckMessage("확인 중 오류가 발생했습니다");
-        console.log("error", err.response?.data || err.message);
       })
       .finally(() => {
         setIsLoginIdChecked(true);
@@ -122,17 +124,13 @@ export function FindPassword() {
       })
       .then((res) => {
         if (!res.data.matched) {
-          alert("입력하신 아이디와 이메일이 일치하지 않습니다.");
+          showAlert("입력하신 아이디와 이메일이 일치하지 않습니다.", "error");
           return;
         }
         sendEmail();
       })
-      .catch((err) => {
-        console.log(
-          "아이디-이메일 확인 실패",
-          err.response?.data || err.message,
-        );
-        alert("서버 오류로 이메일 확인에 실패했습니다.");
+      .catch(() => {
+        showAlert("서버 오류로 이메일 확인에 실패했습니다.", "error");
       });
   };
 
@@ -155,18 +153,19 @@ export function FindPassword() {
       })
       .then((res) => {
         if (res.data.success) {
-          console.log("인증번호 전송에 성공했습니다.", res.data.message);
-          alert(res.data.message);
+          showAlert(res.data.message, "info");
           setEmailSent(true);
           setRemainTime(res.data.remainTimeInSec);
         } else {
-          alert(res?.data?.message || "인증번호 전송에 실패했습니다.");
+          showAlert(
+            res?.data?.message || "인증번호 전송에 실패했습니다.",
+            "error",
+          );
           return;
         }
       })
       .catch((err) => {
-        console.log("인증번호 전송에 실패했습니다.", err.response?.data);
-        alert(err.response?.data || err.message);
+        showAlert(err.response?.data || err.message, "error");
       })
       .finally(() => {
         setIsSending(false);
@@ -190,18 +189,18 @@ export function FindPassword() {
       })
       .then((res) => {
         if (res.data.success) {
-          alert("이메일 인증이 완료되었습니다.");
+          showAlert("이메일 인증이 완료되었습니다.", "info");
           setAuthCompleted(true); // 이메일 인증 완료 처리
           setIsSubmitted(false); // 경고 문구 방지
           setAuthFailed(false);
         } else {
-          alert("인증번호가 일치하지 않습니다.");
+          showAlert("인증번호가 일치하지 않습니다.", "error");
           setAuthFailed(true);
         }
       })
       .catch((err) => {
         console.error("인증번호 검증 실패", err.response?.data || err.message);
-        alert("서버 오류로 인증번호 확인에 실패했습니다.");
+        showAlert("서버 오류로 인증번호 확인에 실패했습니다.", "error");
         setAuthFailed(true);
       });
   };
@@ -221,14 +220,17 @@ export function FindPassword() {
         });
       })
       .catch((err) => {
-        alert("토큰 발급 실패: " + (err.response?.data || err.message));
+        showAlert(
+          "토큰 발급 실패: " + (err.response?.data || err.message),
+          "error",
+        );
       });
   };
 
   return (
     <div className="page-wrapper">
       <div className="center-top-container">
-        <div className="w-full max-w-[400px]">
+        <div className="w-full max-w-[400px] mx-auto px-4 sm:px-3">
           <div className="rounded-card">
             <div className="w-full">
               <div>
