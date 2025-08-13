@@ -4,8 +4,8 @@ export default function RecommendedProduct({ products }) {
   if (!products?.length) return null;
 
   return (
-    <div className="related-products-section">
-      <div className="related-products-grid">
+    <div className="related-product-section">
+      <div className="related-product-grid">
         {products.map((item) => (
           <Link
             key={item.id}

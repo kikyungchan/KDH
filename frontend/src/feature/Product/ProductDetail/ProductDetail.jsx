@@ -22,7 +22,6 @@ import { RxShare1 } from "react-icons/rx";
 import LikeButton from "./util/LikeButton.jsx";
 import { AuthenticationContext } from "../../common/AuthenticationContextProvider.jsx";
 import ProductDetailToggle from "./util/ProductDetailToggle.jsx";
-import RelatedProducts from "./util/RecommendedProduct.jsx";
 import RecommendedProduct from "./util/RecommendedProduct.jsx";
 
 export function ProductDetail() {
