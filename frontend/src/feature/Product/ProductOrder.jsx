@@ -216,7 +216,21 @@ function Order(props) {
   function validateForm() {
     // 입력값 유효성 검사
     // 주문자 정보
-    if (!ordererName.trim() || !ordererPhone.trim() || !ordererAddress.trim()) {
+    console.log("Name : ", ordererName);
+    console.log("Phone : ", ordererPhone);
+    console.log(isMember ? "ordererAddress" : "receiverAddress");
+    console.log("Address : ", isMember ? ordererAddress : receiverAddress);
+    console.log(
+      "Address : ",
+      isMember ? ordererAddress : formDataRef.current.receiverAddress,
+    );
+    if (
+      !ordererName.trim() ||
+      !ordererPhone.trim() ||
+      (isMember
+        ? !ordererAddress.trim()
+        : !formDataRef.current.receiverAddress.trim())
+    ) {
       alert("주문자 정보를 모두 입력해 주세요.");
       return false;
     }

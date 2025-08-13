@@ -50,8 +50,12 @@ public class PaymentsService {
         payment.setErrorMessage(dto.getMessage());
         payment.setAmount(dto.getTotalAmount());
         payment.setMid(dto.getMid());
-        Member user = memberRepository.findById(Integer.valueOf(authentication.getName())).get();
-        payment.setUserid(user);
+        if (authentication != null && authentication.isAuthenticated()) {
+            Member user = memberRepository.findById(Integer.valueOf(authentication.getName())).get();
+            payment.setUserid(user);
+        } else {
+            payment.setUserid(null);
+        }
 
 
         paymentRepository.save(payment);
