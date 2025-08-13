@@ -325,8 +325,8 @@
 
 .custom-nav-btn {
     position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
+    top: 100px !important;
+    transform: translateY(-10%);
     z-index: 20;
     background-color: rgba(255, 255, 255, 0.9);
     border: none;
@@ -356,6 +356,7 @@
 
 
 .related-product-section {
+    position: relative;
     width: 100%;
     margin-top: 2rem;
 }
@@ -363,7 +364,6 @@
 .related-product-grid {
     display: grid;
     gap: 20px;
-    /*grid-template-columns: repeat(4, 1fr);*/
 }
 
 .related-product-card {

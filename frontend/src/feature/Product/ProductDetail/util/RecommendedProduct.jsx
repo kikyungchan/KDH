@@ -18,8 +18,8 @@ export default function RecommendedProduct({ products }) {
         spaceBetween={20}
         breakpointsBase="window"
         breakpoints={{
-          0: { slidesPerView: 2 }, // 모바일
-          768: { slidesPerView: 4 }, // 태블릿 이상
+          0: { slidesPerView: 2 },
+          768: { slidesPerView: 4 },
         }}
         watchOverflow
         observer
