@@ -201,161 +201,184 @@ export function MemberEdit() {
   return (
     <div className="page-wrapper">
       <div className="center-top-container">
-        <div className="w-full max-w-[600px] mx-auto px-4">
+        <div className="w-full max-w-[600px] mx-auto px-4 max-[500px]:px-4">
           <div className="rounded-card">
             <div className="w-full">
               <h2 className="mb-6 text-center text-2xl font-bold">
                 회원 정보 수정
               </h2>
-              <div className="space-y-4">
-                {/* 아이디 (읽기 전용) */}
-                <div className="flex items-center gap-4 mb-4">
-                  <label className="label w-24 font-semibold mr-6">
-                    아이디
-                  </label>
-                  <input
-                    type="text"
-                    value={member.loginId || ""}
-                    readOnly
-                    className="font-semibold input input-bordered bg-gray-100 px-3 py-2 ml-1"
-                  />
-                </div>
+              {/* 아이디 (읽기 전용) */}
+              <div
+                className="flex md:items-center gap-4 mb-4
+               max-[500px]:flex-col max-[500px]:items-start"
+              >
+                <label className="label w-24 shrink-0 font-semibold px-0 py-0 min-h-0">
+                  아이디
+                </label>
+                <input
+                  type="text"
+                  value={member.loginId || ""}
+                  readOnly
+                  className="font-semibold input input-bordered bg-gray-100 flex-1 w-full px-3 py-2"
+                />
+              </div>
 
-                {/* 이름 */}
-                <div className="flex items-center gap-4 mb-4">
-                  <label className="label w-24 font-semibold mr-6">이름</label>
-                  <input
-                    type="text"
-                    value={member.name || ""}
-                    onChange={(e) =>
-                      setMember({ ...member, name: e.target.value })
-                    }
-                    className="input input-bordered px-3 py-2 ml-1"
-                  />
-                  {isSubmitted && !nameValid && (
-                    <span className="text-error text-sm mt-1">
-                      이름 형식이 올바르지 않습니다.
-                    </span>
-                  )}
-                </div>
+              {/* 이름 */}
+              <div
+                className="flex md:items-center gap-4 mb-4
+               max-[500px]:flex-col max-[500px]:items-start"
+              >
+                <label className="label w-24 shrink-0 font-semibold px-0 py-0 min-h-0">
+                  이름
+                </label>
+                <input
+                  type="text"
+                  value={member.name || ""}
+                  onChange={(e) =>
+                    setMember({ ...member, name: e.target.value })
+                  }
+                  className="input input-bordered flex-1 w-full px-3 py-2"
+                />
+                {isSubmitted && !nameValid && (
+                  <span className="text-error text-sm mt-1">
+                    이름 형식이 올바르지 않습니다.
+                  </span>
+                )}
+              </div>
 
-                {/* 생년월일 */}
-                <div className="flex items-center gap-4 mb-4">
-                  <label className="label w-24 font-semibold mr-6">
-                    생년월일
-                  </label>
-                  <input
-                    type="date"
-                    value={member.birthday || ""}
-                    onChange={(e) =>
-                      setMember({ ...member, birthday: e.target.value })
-                    }
-                    className="input input-bordered px-3 py-2 ml-1"
-                  />
-                </div>
+              {/* 생년월일 */}
+              <div
+                className="flex md:items-center gap-4 mb-4
+               max-[500px]:flex-col max-[500px]:items-start"
+              >
+                <label className="label w-24 shrink-0 font-semibold px-0 py-0 min-h-0">
+                  생년월일
+                </label>
+                <input
+                  type="date"
+                  value={member.birthday || ""}
+                  onChange={(e) =>
+                    setMember({ ...member, birthday: e.target.value })
+                  }
+                  className="input input-bordered flex-1 w-full px-3 py-2"
+                />
+              </div>
 
-                {/* 전화번호 */}
-                <div className="flex items-center gap-4 mb-4">
-                  <label className="label w-24 font-semibold mr-6">
-                    전화번호
-                  </label>
-                  <input
-                    type="text"
-                    value={member.phone || ""}
-                    onChange={(e) =>
-                      setMember({ ...member, phone: e.target.value })
-                    }
-                    className="input input-bordered px-3 py-2 ml-1"
-                  />
-                  {isSubmitted && !phoneValid && (
-                    <span className="text-error text-sm mt-1">
-                      전화번호 형식이 올바르지 않습니다.
-                    </span>
-                  )}
-                </div>
+              {/* 전화번호 */}
+              <div
+                className="flex md:items-center gap-4 mb-4
+               max-[500px]:flex-col max-[500px]:items-start"
+              >
+                <label className="label w-24 shrink-0 font-semibold px-0 py-0 min-h-0">
+                  전화번호
+                </label>
+                <input
+                  type="text"
+                  value={member.phone || ""}
+                  onChange={(e) =>
+                    setMember({ ...member, phone: e.target.value })
+                  }
+                  className="input input-bordered flex-1 w-full px-3 py-2"
+                />
+                {isSubmitted && !phoneValid && (
+                  <span className="text-error text-sm mt-1">
+                    전화번호 형식이 올바르지 않습니다.
+                  </span>
+                )}
+              </div>
 
-                {/* 이메일 (읽기 전용) */}
-                <div className="flex items-center gap-4 mb-4">
-                  <label className="label w-24 font-semibold mr-6">
-                    이메일
-                  </label>
-                  <input
-                    type="email"
-                    value={member.email || ""}
-                    readOnly
-                    className="font-semibold input input-bordered bg-gray-100 px-3 py-2 ml-1"
-                  />
-                </div>
+              {/* 이메일 (읽기 전용) */}
+              <div
+                className="flex md:items-center gap-4 mb-4
+               max-[500px]:flex-col max-[500px]:items-start"
+              >
+                <label className="label w-24 shrink-0 font-semibold px-0 py-0 min-h-0">
+                  이메일
+                </label>
+                <input
+                  type="email"
+                  value={member.email || ""}
+                  readOnly
+                  className="font-semibold input input-bordered bg-gray-100 flex-1 w-full px-3 py-2"
+                />
+              </div>
 
-                {/* 주소 */}
-                <div className="flex items-start gap-4 mb-4">
-                  {/* 좌측: 고정 라벨 */}
-                  <label className="label w-24 font-semibold mr-6">주소</label>
+              {/* 주소 */}
+              <div
+                className="flex md:items-center gap-4 mb-4
+               max-[500px]:flex-col max-[500px]:items-start"
+              >
+                {/* 좌측: 고정 라벨 */}
+                <label className="label w-24 shrink-0 font-semibold px-0 py-0 min-h-0">
+                  주소
+                </label>
 
-                  {/* 우측: input 요소들 */}
-                  <div className="flex flex-col flex-1 gap-2">
-                    <div className="flex w-full">
-                      <input
-                        type="text"
-                        value={member.zipCode || ""}
-                        readOnly
-                        className="input input-bordered bg-gray-100 w-fit px-3 py-2 ml-1"
-                      />
-                      <button
-                        onClick={handleSearchAddress}
-                        className="btn btn-outline btn-neutral w-24 px-2 ml-1"
-                      >
-                        주소찾기
-                      </button>
-                    </div>
+                {/* 우측: input 요소들 */}
+                <div className="flex flex-col w-full flex-1 gap-2">
+                  <div className="flex w-full">
                     <input
                       type="text"
-                      value={member.address || ""}
+                      value={member.zipCode || ""}
                       readOnly
-                      className="input input-bordered bg-gray-100 px-3 py-2 ml-1"
+                      className="input input-bordered bg-gray-100 flex-1 px-3 py-2"
                     />
-                    <input
-                      type="text"
-                      value={member.addressDetail || ""}
-                      onChange={(e) =>
-                        setMember({ ...member, addressDetail: e.target.value })
-                      }
-                      className="input input-bordered px-3 py-2 ml-1"
-                    />
+                    <button
+                      onClick={handleSearchAddress}
+                      className="btn btn-outline btn-neutral w-24 px-2 ml-1"
+                    >
+                      주소찾기
+                    </button>
                   </div>
+                  <input
+                    type="text"
+                    value={member.address || ""}
+                    readOnly
+                    className="input input-bordered bg-gray-100 w-full px-3 py-2"
+                  />
+                  <input
+                    type="text"
+                    value={member.addressDetail || ""}
+                    onChange={(e) =>
+                      setMember({ ...member, addressDetail: e.target.value })
+                    }
+                    className="input input-bordered w-full px-3 py-2"
+                  />
                 </div>
-                {/* 하단 버튼들 */}
-                <div className="flex justify-between mt-10">
-                  {/* 왼쪽: 암호 변경 */}
-                  <button
-                    className="btn btn-neutral"
-                    onClick={() => setChangePasswordModalShow(true)}
-                  >
-                    암호 변경
-                  </button>
+              </div>
+              {/* 하단 버튼들 */}
+              <div
+                className="flex justify-between mt-10
+              max-[500px]:flex-col max-[500px]:gap-2"
+              >
+                {/* 왼쪽: 암호 변경 */}
+                <button
+                  className="btn btn-neutral max-[500px]:w-full"
+                  onClick={() => setChangePasswordModalShow(true)}
+                >
+                  암호 변경
+                </button>
 
-                  {/* 오른쪽: 저장 / 취소 */}
-                  <div className="space-x-2">
-                    <button
-                      className="btn btn-info"
-                      onClick={() => setSaveModalShow(true)}
-                      disabled={
-                        !member?.name?.trim() ||
-                        !member?.birthday?.trim() ||
-                        !member?.phone?.trim() ||
-                        !member?.email?.trim() ||
-                        !member?.address?.trim()
-                      }
-                    >
-                      저장
-                    </button>
-                    <button
-                      className="btn btn-neutral"
-                      onClick={() => setCancelSaveModalShow(true)}
-                    >
-                      취소
-                    </button>
-                  </div>
+                {/* 오른쪽: 저장 / 취소 */}
+                <div className="space-x-2 max-[500px]:space-x-0 max-[500px]:flex max-[500px]:gap-2">
+                  <button
+                    className="btn btn-info max-[500px]:flex-1"
+                    onClick={() => setSaveModalShow(true)}
+                    disabled={
+                      !member?.name?.trim() ||
+                      !member?.birthday?.trim() ||
+                      !member?.phone?.trim() ||
+                      !member?.email?.trim() ||
+                      !member?.address?.trim()
+                    }
+                  >
+                    저장
+                  </button>
+                  <button
+                    className="btn btn-neutral max-[500px]:flex-1"
+                    onClick={() => setCancelSaveModalShow(true)}
+                  >
+                    취소
+                  </button>
                 </div>
               </div>
             </div>
