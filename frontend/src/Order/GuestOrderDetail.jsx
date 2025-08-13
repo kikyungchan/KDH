@@ -38,32 +38,54 @@ export function GuestOrderDetail() {
             <div className="mb-8">
               <h2 className="mb-6 text-center text-2xl font-bold">주문 상세</h2>
               <br />
-              <div>
-                <h3>주문정보</h3>
-                {/*<div>주문일자 : {new Date(order.guestOrder).toLocaleDateString()}</div>*/}
-                <div className="text-sm">
-                  주문번호 : {order.guestOrderToken}
-                </div>
-                <div>이름 : {order.guestName}</div>
-                <div>연락처 : {order.guestPhone}</div>
-              </div>
-              <hr className="border-t border-gray-300 my-3" />
-              <div>
-                <h3>배송정보</h3>
-                <div>
-                  <div>{order.receiverName}</div>
-                  <div>{order.receiverPhone}</div>
-                  <div>우편번호 : {order.receiverZipcode}</div>
-                  <div>주소 : {order.receiverAddress}</div>
-                  <div>상세주소 : {order.receiverAddressDetail}</div>
-                  <div>배송메모 : {order.memo}</div>
+              <div className="border border-gray-100 rounded px-3 py-2 mb-2">
+                <div className="flex">
+                  <div className="w-40">
+                    <div>주문일자</div>
+                    <div>주문번호</div>
+                  </div>
+                  <div className="w-full">
+                    <div>{new Date(order.orderDate).toLocaleDateString()}</div>
+                    <div>{order.guestOrderToken}</div>
+                  </div>
                 </div>
               </div>
-              <hr className="border-t border-gray-300 my-3" />
-              <div>
-                <div className="mb-2">
-                  주문 상품 {order.orderItems.length}개
+              <div className="border border-gray-100 rounded px-3 py-2 mb-2">
+                <h4 className="font-semibold mb-2">주문 정보</h4>
+                <div className="flex">
+                  <div className="w-40 ">
+                    <div>이름</div>
+                    <div>연락처</div>
+                  </div>
+                  <div className="w-full">
+                    <div>{order.guestName}</div>
+                    <div>{order.guestPhone}</div>
+                  </div>
                 </div>
+              </div>
+              <div className="border border-gray-100 rounded px-3 py-2 mb-2">
+                <h4 className="font-semibold mb-2">배송지 정보</h4>
+                <div className="flex">
+                  <div className="w-40">
+                    <div>받는 사람</div>
+                    <div>연락처</div>
+                    <div>우편번호</div>
+                    <div>주소</div>
+                    <div>상세주소</div>
+                    <div>배송메세지</div>
+                  </div>
+                  <div className="w-full">
+                    <div>{order.receiverName}</div>
+                    <div>{order.receiverPhone}</div>
+                    <div>{order.receiverZipcode}</div>
+                    <div>{order.receiverAddress}</div>
+                    <div>{order.receiverAddressDetail}</div>
+                    <div>{order.memo}</div>
+                  </div>
+                </div>
+              </div>
+              <div className="border border-gray-100 rounded px-3 py-2 mb-2">
+                <h4 className="font-semibold mb-2">주문 상품</h4>
                 <div>
                   {order.orderItems.map((item, index) => (
                     <div key={index} className="flex gap-3">
@@ -71,19 +93,21 @@ export function GuestOrderDetail() {
                         <img
                           src={item.thumbnailUrl || "/default.png"}
                           alt={item.productName}
-                          className="w-32 h-32"
+                          className="w-32 h-32 rounded"
                         />
                       </div>
-                      <div>
-                        <div className="font-semibold text-lg">
-                          {item.productName}
+                      <div className="flex items-center">
+                        <div className="w-15">
+                          <div>상품명 :</div>
+                          <div>옵션 :</div>
+                          <div>수량 :</div>
+                          <div>가격 :</div>
                         </div>
-                        <div className="text-sm text-gray-600">
-                          옵션: {item.productOption}
-                        </div>
-                        <div className="text-sm">수량: {item.quantity}</div>
-                        <div className="text-sm">
-                          가격: {item.price.toLocaleString()}원
+                        <div>
+                          <div>{item.productName}</div>
+                          <div>{item.productOption}</div>
+                          <div>{item.quantity}</div>
+                          <div>{item.price.toLocaleString()}원</div>
                         </div>
                       </div>
                       <br />
@@ -91,11 +115,14 @@ export function GuestOrderDetail() {
                   ))}
                 </div>
               </div>
-              <hr className="border-t border-gray-300 my-3" />
-              <div>
-                <div>결제정보</div>
-                <div>결제수단</div>
-                <div>총 금액 : {order.totalPrice}</div>
+              <div className="border border-white px-3 py-1">
+                <div className="text-right py-2">
+                  <div>상품금액 : {order.itemSubtotal.toLocaleString()}원</div>
+                  <div>배송비 : {order.shippingFee.toLocaleString()}원</div>
+                  <div className="mt-2">
+                    총 결제금액 : {order.totalPrice.toLocaleString()}원
+                  </div>
+                </div>
               </div>
               <div className="text-end">
                 <button
