@@ -20,6 +20,20 @@ public interface GuestOrderRepository extends JpaRepository<GuestOrder, Integer>
             """, nativeQuery = true)
     Integer getWeeklySales(@Param("productId") Integer productId, @Param("since") LocalDateTime since);
 
-    @EntityGraph(attributePaths = {"items", "items.product", "items.option"})
-    Optional<GuestOrder> findByGuestOrderToken(String guestOrderToken);
+    @Query("""
+                select o
+                from GuestOrder o
+                where o.guestOrderToken = :token
+            """)
+    Optional<GuestOrder> findVerifyByToken(@Param("token") String token);
+
+
+    @Query("""
+              select distinct o
+              from GuestOrder o
+                join fetch o.items oi
+                join fetch oi.product p
+              where o.guestOrderToken = :token
+            """)
+    Optional<GuestOrder> findDetailByToken(@Param("token") String token);
 }

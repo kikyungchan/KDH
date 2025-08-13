@@ -1,9 +1,6 @@
 package com.example.backend.product.service;
 
-import com.example.backend.product.dto.order.GuestLookupRequest;
-import com.example.backend.product.dto.order.OrderDetailDto;
-import com.example.backend.product.dto.order.OrderDto;
-import com.example.backend.product.dto.order.OrderItemDto;
+import com.example.backend.product.dto.order.*;
 import com.example.backend.product.entity.GuestOrder;
 import com.example.backend.product.entity.Order;
 import com.example.backend.product.entity.OrderItem;
@@ -104,7 +101,7 @@ public class OrderService {
     }
 
     public void verifyGuestOrder(GuestLookupRequest request, HttpSession session) {
-        Optional<GuestOrder> guestOrder = guestOrderRepository.findByGuestOrderToken(request.getGuestOrderToken());
+        Optional<GuestOrder> guestOrder = guestOrderRepository.findVerifyByToken(request.getGuestOrderToken());
 
         if (guestOrder.isEmpty()) {
             throw new NoSuchElementException("주문을 찾을 수 없습니다.");
@@ -120,7 +117,7 @@ public class OrderService {
         session.setMaxInactiveInterval(180); // 180초 후 자동 만료
     }
 
-    public GuestOrder getGuestOrderDetail(HttpSession session) {
+    public GuestOrderDetailDto getGuestOrderDetail(HttpSession session) {
 
         String token = (String) session.getAttribute("guestOrderToken");
 
@@ -128,7 +125,10 @@ public class OrderService {
             throw new SecurityException("인증 정보가 없습니다");
         }
 
-        return guestOrderRepository.findByGuestOrderToken(token)
+        GuestOrder order = guestOrderRepository.findDetailByToken(token)
                 .orElseThrow(() -> new NoSuchElementException("주문을 찾을 수 없습니다."));
+
+        // 여기서 LAZY 컬렉션들이 이미 초기화되어 있음
+        return GuestOrderDetailDto.fromEntity(order);
     }
 }

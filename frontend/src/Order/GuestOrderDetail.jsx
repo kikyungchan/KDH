@@ -13,7 +13,8 @@ export function GuestOrderDetail() {
         setOrder(res.data);
       })
       .catch((err) => {
-        alert("조회권한이 없습니다.");
+        console.log(err.message);
+        alert("조회 권한이 없습니다.");
         navigate("/home");
       });
   }, []);
