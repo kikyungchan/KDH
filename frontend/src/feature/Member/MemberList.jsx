@@ -45,8 +45,8 @@ export function MemberList() {
                     <th>회원번호</th>
                     <th>아이디</th>
                     <th>이름</th>
-                    <th>전화번호</th>
-                    <th>이메일</th>
+                    <th className="hidden md:table-cell">전화번호</th>
+                    <th className="hidden md:table-cell">이메일</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -59,8 +59,8 @@ export function MemberList() {
                       <td>{member.id}</td>
                       <td>{member.loginId}</td>
                       <td>{member.name}</td>
-                      <td>{member.phone}</td>
-                      <td>{member.email}</td>
+                      <td className="hidden md:table-cell">{member.phone}</td>
+                      <td className="hidden md:table-cell">{member.email}</td>
                     </tr>
                   ))}
                 </tbody>
