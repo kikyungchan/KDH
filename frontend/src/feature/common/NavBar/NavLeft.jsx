@@ -4,13 +4,14 @@ import { Link, useNavigate } from "react-router";
 function NavLeft({ user, isAdmin, handleCategoryClick }) {
   const navigate = useNavigate();
   const [dropdownOpen, setDropdownOpen] = useState(false);
+  const isRootPath = location.pathname === "/";
   return (
     <div className="navbar-left flex items-center gap-2">
       <Link className="btn btn-ghost text-xl" to="/Home">
         홈
       </Link>
       <div
-        className={`dropdown ${dropdownOpen ? "dropdown-open" : ""}`}
+        className={`dropdown ${dropdownOpen && !isRootPath ? "dropdown-open" : ""}`}
         onMouseEnter={() => setDropdownOpen(true)}
         onMouseLeave={() => setDropdownOpen(false)}
       >
