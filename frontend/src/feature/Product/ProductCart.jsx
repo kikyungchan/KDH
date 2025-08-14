@@ -513,41 +513,43 @@ function ProductCart(props) {
               </div>
             </main>
             {/* 우측: 주문 요약 sticky */}
-            <aside className="hidden xl:block fixed left-1/2 top-30 ml-[416px] w-[320px] z-30">
-              <div className="rounded-card p-6 bg-white shadow">
-                <h3 className="text-xl text-center font-semibold mb-4">
-                  주문 요약
-                </h3>
+            <aside className="hidden xl:block">
+              <div className="sticky top-30">
+                <div className="rounded-card p-6 bg-white shadow">
+                  <h3 className="text-xl text-center font-semibold mb-4">
+                    주문 요약
+                  </h3>
 
-                <div className="space-y-2 text-sm">
-                  <div className="flex justify-between">
-                    <span>상품금액</span>
-                    <span>{totalItemPrice.toLocaleString()}원</span>
+                  <div className="space-y-2 text-sm">
+                    <div className="flex justify-between">
+                      <span>상품금액</span>
+                      <span>{totalItemPrice.toLocaleString()}원</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span>배송비</span>
+                      <span>{shippingFee.toLocaleString()}원</span>
+                    </div>
+                    <div className="border-t pt-3 flex justify-between text-base font-bold">
+                      <span>총 주문금액</span>
+                      <span>
+                        {(totalItemPrice + shippingFee).toLocaleString()}원
+                      </span>
+                    </div>
                   </div>
-                  <div className="flex justify-between">
-                    <span>배송비</span>
-                    <span>{shippingFee.toLocaleString()}원</span>
-                  </div>
-                  <div className="border-t pt-3 flex justify-between text-base font-bold">
-                    <span>총 주문금액</span>
-                    <span>
-                      {(totalItemPrice + shippingFee).toLocaleString()}원
-                    </span>
-                  </div>
+
+                  <button
+                    onClick={handleOrderButton}
+                    className="btn btn-neutral w-full mt-5"
+                  >
+                    {`주문하기${checkedIds?.length ? ` (${checkedIds.length}개)` : ""}`}
+                  </button>
+                  <button
+                    onClick={() => navigate("/home")}
+                    className="btn w-full mt-2"
+                  >
+                    쇼핑 계속하기
+                  </button>
                 </div>
-
-                <button
-                  onClick={handleOrderButton}
-                  className="btn btn-neutral w-full mt-5"
-                >
-                  {`주문하기${checkedIds?.length ? ` (${checkedIds.length}개)` : ""}`}
-                </button>
-                <button
-                  onClick={() => navigate("/home")}
-                  className="btn w-full mt-2"
-                >
-                  쇼핑 계속하기
-                </button>
               </div>
             </aside>
           </div>
@@ -557,9 +559,31 @@ function ProductCart(props) {
             <div className="xl:hidden fixed inset-x-0 bottom-0 z-50 border-t bg-white p-4 shadow-lg">
               <div className="flex items-center justify-between">
                 <div className="text-base">
-                  <div className="text-gray-600 text-sm">총 주문금액</div>
-                  <div className="text-lg font-bold">
-                    {(totalItemPrice + shippingFee).toLocaleString()}원
+                  <div>
+                    <div className="text-sm text-gray-600 mb-2">
+                      <div>
+                        <span>상품금액</span>
+                        <span> {totalItemPrice.toLocaleString()}원</span>
+                      </div>
+                      <div>
+                        <span> 배송비</span>
+                        <span>
+                          {" "}
+                          {shippingFee.toLocaleString()}원
+                          {shippingFee === 0 && (
+                            <span className="text-green-600 text-sm ml-2">
+                              (무료배송)
+                            </span>
+                          )}
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                  <div>
+                    <div className="text-gray-600 text-sm">총 주문금액</div>
+                    <div className="text-lg font-bold">
+                      {(totalItemPrice + shippingFee).toLocaleString()}원
+                    </div>
                   </div>
                 </div>
                 <button onClick={handleOrderButton} className="btn btn-dark">
