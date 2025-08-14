@@ -91,7 +91,7 @@ export function QnaList() {
       <Row className="justify-content-center">
         <Col md={8} lg={9} className="mt-5">
           <div className="container">
-            <h2 className="mb-4">문의 내역</h2>
+            <h2 className="text-2xl font-bold my-4">문의 내역</h2>
             <div>
               {/* todo : onclick 시 상품 질문 페이지로 넘어가게 */}
               <ButtonGroup>
