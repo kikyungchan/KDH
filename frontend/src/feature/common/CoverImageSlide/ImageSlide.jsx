@@ -2,14 +2,16 @@ import React, { useEffect, useRef, useState } from "react";
 import axios from "axios";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Mousewheel, Pagination } from "swiper/modules";
-import "swiper/css";
-import "swiper/css/pagination";
-import "swiper/css/mousewheel";
-import "./ImageSlide.css";
 import { useNavigate } from "react-router";
 import { gsap } from "gsap";
 
 function ImageSlide() {
+  useEffect(() => {
+    import("swiper/css");
+    import("swiper/css/pagination");
+    import("swiper/css/mousewheel");
+    import("./ImageSlide.css");
+  }, []);
   const navigate = useNavigate();
   const [slides, setSlides] = useState([]);
   const swiperRef = useRef(null);

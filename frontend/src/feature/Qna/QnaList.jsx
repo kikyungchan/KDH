@@ -12,9 +12,11 @@ import { useContext, useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate, useSearchParams } from "react-router";
 import { FaRegComments, FaRegImages } from "react-icons/fa";
-import "./qnaList.css";
 
 export function QnaList() {
+  useEffect(() => {
+    import("./qnaList.css");
+  }, []);
   const [questionList, setQuestionList] = useState(null);
   const [pageInfo, setPageInfo] = useState(null);
   const [searchParams, setSearchParams] = useSearchParams("1");

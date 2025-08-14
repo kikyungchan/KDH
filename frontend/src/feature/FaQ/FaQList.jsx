@@ -19,11 +19,13 @@ import axios from "axios";
 // import { toast } from "react-toastify";
 import { toast } from "sonner";
 import { AuthenticationContext } from "../common/AuthenticationContextProvider.jsx";
-import "./faqList.css";
 import { useAlertWebSocket } from "../alert/alertContext.jsx";
 import { v4 as uuidv4 } from "uuid";
 
 export function FaQList() {
+  useEffect(() => {
+    import("./faqList.css");
+  }, []);
   const { user, isAdmin } = useContext(AuthenticationContext);
   const { alertCount, sendChatAlert } = useAlertWebSocket();
   const navigate = useNavigate();

@@ -1,8 +1,10 @@
 import { useLocation, useNavigate } from "react-router";
-import "./css/ProductOrder.css";
-import React from "react";
+import React, { useEffect } from "react";
 
 export function ProductOrderComplete() {
+  useEffect(() => {
+    import("./css/ProductOrder.css");
+  }, []);
   const { state } = useLocation();
   const navigate = useNavigate();
   const { orderToken, items, orderer, receiver, memo } = state;

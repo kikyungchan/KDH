@@ -1,10 +1,11 @@
 import { Link, useSearchParams } from "react-router";
 import { useEffect, useState } from "react";
 import axios from "axios";
-import "./css/ProductList.css";
-import "../../style.css";
 
 export function ProductList() {
+  useEffect(() => {
+    import("../../style.css");
+  }, []);
   const [searchParams, setSearchParams] = useSearchParams();
   const pageParam = parseInt(searchParams.get("page")) || 1;
   const [products, setProducts] = useState([]);
@@ -13,6 +14,10 @@ export function ProductList() {
   const keyword = searchParams.get("keyword") || "";
   const category = searchParams.get("category") || "";
   const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    import("./css/ProductList.css");
+  }, []);
 
   useEffect(() => {
     setLoading(true);
@@ -91,45 +96,49 @@ export function ProductList() {
       ) : products.length === 0 ? (
         <div className="empty-state">검색 결과가 없습니다.</div>
       ) : (
-        <div className="product-grid">
+        // <div className="product-grid">
+        <ul className="productList">
           {products.map((product) => (
-            <Link
-              to={`/product/view?id=${product.id}`}
-              className="product-card"
-              key={product.id}
-            >
-              {product.thumbnailPaths?.length > 0 && (
-                <div className="product-image-wrapper">
-                  <img
-                    src={product.thumbnailPaths[0].storedPath}
-                    alt={product.productName}
-                    className="product-image"
-                  />
+            <li>
+              <Link
+                to={`/product/view?id=${product.id}`}
+                className="product-card"
+                key={product.id}
+              >
+                {product.thumbnailPaths?.length > 0 && (
+                  <div className="product-image-wrapper">
+                    <img
+                      src={product.thumbnailPaths[0].storedPath}
+                      alt={product.productName}
+                      className="product-image"
+                    />
+                  </div>
+                )}
+                <div className="product-info-wrapper">
+                  <div className="product-name">{product.productName}</div>
+                  <div className="product-price">
+                    {product.price.toLocaleString()}원
+                  </div>
+                  <div className="product-badges">
+                    {isNewProduct(product.insertedAt) && (
+                      <span className="new-badge">NEW</span>
+                    )}
+                    {product.hot && <span className="hot-badge">HOT</span>}
+                    {product.quantity === 0 && (
+                      <span className="sold-out-badge">SOLD OUT</span>
+                    )}
+                    {product.quantity > 0 && product.quantity < 5 && (
+                      <span className="low-stock-badge">
+                        🔥 {product.quantity}개 남음
+                      </span>
+                    )}
+                  </div>
                 </div>
-              )}
-              <div className="product-info-wrapper">
-                <div className="product-name">{product.productName}</div>
-                <div className="product-price">
-                  {product.price.toLocaleString()}원
-                </div>
-                <div className="product-badges">
-                  {isNewProduct(product.insertedAt) && (
-                    <span className="new-badge">NEW</span>
-                  )}
-                  {product.hot && <span className="hot-badge">HOT</span>}
-                  {product.quantity === 0 && (
-                    <span className="sold-out-badge">SOLD OUT</span>
-                  )}
-                  {product.quantity > 0 && product.quantity < 5 && (
-                    <span className="low-stock-badge">
-                      🔥 {product.quantity}개 남음
-                    </span>
-                  )}
-                </div>
-              </div>
-            </Link>
+              </Link>
+            </li>
           ))}
-        </div>
+        </ul>
+        // </div>
       )}
 
       {/* 페이지네이션 컴포넌트 */}

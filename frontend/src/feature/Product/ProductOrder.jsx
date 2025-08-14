@@ -1,10 +1,12 @@
 import { useLocation, useNavigate } from "react-router";
 import React, { useEffect, useRef, useState } from "react";
 import axios from "axios";
-import "./css/ProductOrder.css";
 import { useCart } from "./CartContext.jsx";
 
 function Order() {
+  useEffect(() => {
+    import("./css/ProductOrder.css");
+  }, []);
   const [receiverName, setReceiverName] = useState("");
   const [receiverPhone, setReceiverPhone] = useState("");
   const [receiverZipcode, setReceiverZipcode] = useState("");
@@ -93,12 +95,12 @@ function Order() {
           sendDataToPopup();
           break;
 
-          case "PAY_SUCCESS":
-            // 결제 완료 처리
-            handleOrderButton();
-            setIsProcessing(false);
-            window.onbeforeunload = null;
-            break;
+        case "PAY_SUCCESS":
+          // 결제 완료 처리
+          handleOrderButton();
+          setIsProcessing(false);
+          window.onbeforeunload = null;
+          break;
 
         case "PAY_FAIL":
           // 결제 실패 처리

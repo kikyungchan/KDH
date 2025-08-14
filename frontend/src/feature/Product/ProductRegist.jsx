@@ -1,9 +1,11 @@
 import { useNavigate } from "react-router";
-import "./css/ProductRegist.css";
 import { useEffect, useState } from "react";
 import axios from "axios";
 
 export function ProductRegist() {
+  useEffect(() => {
+    import("./css/ProductRegist.css");
+  }, []);
   const [thumbnails, setThumbnails] = useState([]);
   const [thumbnailPreview, setThumbnailPreview] = useState([]);
 
