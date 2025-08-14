@@ -611,7 +611,7 @@ function ProductCart(props) {
               </div>
             </aside>
           </div>
-
+          {/* TODO : 이거 복붙 */}
           {/* 모바일: 하단 고정 CTA */}
           {cartItems.length > 0 && (
             <div className="xl:hidden fixed inset-x-0 bottom-0 z-50 border-t bg-white p-4 shadow-lg">
