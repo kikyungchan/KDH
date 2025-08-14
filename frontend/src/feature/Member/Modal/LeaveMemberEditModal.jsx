@@ -1,12 +1,13 @@
-
 export default function LeaveMemberEditModal({ show, onClose, onLeave }) {
   if (!show) return null; // 👈 이 줄이 핵심!
   return (
     <div className="modal modal-open">
-      <div className="modal-box w-full max-w-md">
+      <div className="modal-box max-w-lg mx-4 sm:mx-auto">
         {/* 모달 헤더 */}
         <div className="flex justify-between items-center mb-2">
-          <h3 className="text-lg font-bold">변경 내용이 저장되지 않았습니다.</h3>
+          <h3 className="text-lg font-bold">
+            변경 내용이 저장되지 않았습니다.
+          </h3>
           <button className="btn btn-sm btn-circle" onClick={onClose}>
             ✕
           </button>

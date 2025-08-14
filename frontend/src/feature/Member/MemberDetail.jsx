@@ -72,7 +72,7 @@ export function MemberDetail() {
   return (
     <div className="page-wrapper">
       <div className="center-top-container">
-        <div className="w-full max-w-[600px] mx-auto px-4">
+        <div className="w-full max-w-[600px] mx-auto px-4 max-[500px]:px-4">
           <div className="rounded-card">
             <div className="w-full">
               <h2 className="mb-6 text-center text-2xl font-bold">회원 정보</h2>
@@ -81,7 +81,7 @@ export function MemberDetail() {
                 <div className="flex items-center gap-4 mb-4">
                   <label
                     htmlFor="loginId"
-                    className="label w-24 font-semibold mr-6"
+                    className="label w-24 shrink-0 font-semibold px-0 py-0 min-h-0"
                   >
                     아이디
                   </label>
@@ -90,7 +90,7 @@ export function MemberDetail() {
                     id="loginId"
                     readOnly
                     value={member.loginId}
-                    className=" input input-bordered px-3 py-2 ml-1 flex-1"
+                    className="input input-bordered flex-1 w-full px-3 py-2"
                   />
                 </div>
 
@@ -98,7 +98,7 @@ export function MemberDetail() {
                 <div className="flex items-center gap-4 mb-4">
                   <label
                     htmlFor="name"
-                    className="label w-24 font-semibold mr-6"
+                    className="label w-24 shrink-0 font-semibold px-0 py-0 min-h-0"
                   >
                     이름
                   </label>
@@ -107,7 +107,7 @@ export function MemberDetail() {
                     id="name"
                     readOnly
                     value={member.name}
-                    className=" input input-bordered px-3 py-2 ml-1 flex-1"
+                    className="input input-bordered flex-1 w-full px-3 py-2"
                   />
                 </div>
 
@@ -115,7 +115,7 @@ export function MemberDetail() {
                 <div className="flex items-center gap-4 mb-4">
                   <label
                     htmlFor="birthDate"
-                    className="label w-24 font-semibold mr-6"
+                    className="label w-24 shrink-0 font-semibold px-0 py-0 min-h-0"
                   >
                     생년월일
                   </label>
@@ -124,7 +124,7 @@ export function MemberDetail() {
                     id="birthDate"
                     readOnly
                     value={member.birthday}
-                    className=" input input-bordered px-3 py-2 ml-1 flex-1"
+                    className="input input-bordered flex-1 w-full px-3 py-2"
                   />
                 </div>
 
@@ -132,7 +132,7 @@ export function MemberDetail() {
                 <div className="flex items-center gap-4 mb-4">
                   <label
                     htmlFor="phone"
-                    className="label w-24 font-semibold mr-6"
+                    className="label w-24 shrink-0 font-semibold px-0 py-0 min-h-0"
                   >
                     전화번호
                   </label>
@@ -141,7 +141,7 @@ export function MemberDetail() {
                     id="phone"
                     readOnly
                     value={member.phone}
-                    className="input input-bordered px-3 py-2 ml-1 flex-1"
+                    className="input input-bordered flex-1 w-full px-3 py-2"
                   />
                 </div>
 
@@ -149,7 +149,7 @@ export function MemberDetail() {
                 <div className="flex items-center gap-4 mb-4">
                   <label
                     htmlFor="email"
-                    className="label w-24 font-semibold mr-6"
+                    className="label w-24 shrink-0 font-semibold px-0 py-0 min-h-0"
                   >
                     이메일
                   </label>
@@ -158,13 +158,15 @@ export function MemberDetail() {
                     id="email"
                     readOnly
                     value={member.email}
-                    className="input input-bordered px-3 py-2 ml-1 flex-1"
+                    className="input input-bordered flex-1 w-full px-3 py-2"
                   />
                 </div>
 
                 {/* 주소 */}
                 <div className="flex items-start gap-4 mb-4">
-                  <label className="label w-24 font-semibold mr-7">주소</label>
+                  <label className="label w-24 shrink-0 font-semibold px-0 py-0 min-h-0">
+                    주소
+                  </label>
                   <div className="flex flex-col flex-1 gap-2">
                     <input
                       type="text"

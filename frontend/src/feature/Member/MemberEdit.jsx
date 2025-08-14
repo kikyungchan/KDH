@@ -208,10 +208,7 @@ export function MemberEdit() {
                 회원 정보 수정
               </h2>
               {/* 아이디 (읽기 전용) */}
-              <div
-                className="flex md:items-center gap-4 mb-4
-               max-[500px]:flex-col max-[500px]:items-start"
-              >
+              <div className="flex items-center gap-4 mb-4">
                 <label className="label w-24 shrink-0 font-semibold px-0 py-0 min-h-0">
                   아이디
                 </label>
@@ -224,10 +221,7 @@ export function MemberEdit() {
               </div>
 
               {/* 이름 */}
-              <div
-                className="flex md:items-center gap-4 mb-4
-               max-[500px]:flex-col max-[500px]:items-start"
-              >
+              <div className="flex items-center gap-4 mb-4">
                 <label className="label w-24 shrink-0 font-semibold px-0 py-0 min-h-0">
                   이름
                 </label>
@@ -247,10 +241,7 @@ export function MemberEdit() {
               </div>
 
               {/* 생년월일 */}
-              <div
-                className="flex md:items-center gap-4 mb-4
-               max-[500px]:flex-col max-[500px]:items-start"
-              >
+              <div className="flex items-center gap-4 mb-4">
                 <label className="label w-24 shrink-0 font-semibold px-0 py-0 min-h-0">
                   생년월일
                 </label>
@@ -265,10 +256,7 @@ export function MemberEdit() {
               </div>
 
               {/* 전화번호 */}
-              <div
-                className="flex md:items-center gap-4 mb-4
-               max-[500px]:flex-col max-[500px]:items-start"
-              >
+              <div className="flex items-center gap-4 mb-4">
                 <label className="label w-24 shrink-0 font-semibold px-0 py-0 min-h-0">
                   전화번호
                 </label>
@@ -288,10 +276,7 @@ export function MemberEdit() {
               </div>
 
               {/* 이메일 (읽기 전용) */}
-              <div
-                className="flex md:items-center gap-4 mb-4
-               max-[500px]:flex-col max-[500px]:items-start"
-              >
+              <div className="flex items-center gap-4 mb-4">
                 <label className="label w-24 shrink-0 font-semibold px-0 py-0 min-h-0">
                   이메일
                 </label>
@@ -304,10 +289,7 @@ export function MemberEdit() {
               </div>
 
               {/* 주소 */}
-              <div
-                className="flex md:items-center gap-4 mb-4
-               max-[500px]:flex-col max-[500px]:items-start"
-              >
+              <div className="flex items-center gap-4 mb-4">
                 {/* 좌측: 고정 라벨 */}
                 <label className="label w-24 shrink-0 font-semibold px-0 py-0 min-h-0">
                   주소
@@ -346,22 +328,19 @@ export function MemberEdit() {
                 </div>
               </div>
               {/* 하단 버튼들 */}
-              <div
-                className="flex justify-between mt-10
-              max-[500px]:flex-col max-[500px]:gap-2"
-              >
+              <div className="flex space-x-2 justify-content-between mt-10">
                 {/* 왼쪽: 암호 변경 */}
                 <button
-                  className="btn btn-neutral max-[500px]:w-full"
+                  className="btn btn-neutral"
                   onClick={() => setChangePasswordModalShow(true)}
                 >
                   암호 변경
                 </button>
 
                 {/* 오른쪽: 저장 / 취소 */}
-                <div className="space-x-2 max-[500px]:space-x-0 max-[500px]:flex max-[500px]:gap-2">
+                <div className="space-x-2">
                   <button
-                    className="btn btn-info max-[500px]:flex-1"
+                    className="btn btn-info"
                     onClick={() => setSaveModalShow(true)}
                     disabled={
                       !member?.name?.trim() ||
@@ -374,7 +353,7 @@ export function MemberEdit() {
                     저장
                   </button>
                   <button
-                    className="btn btn-neutral max-[500px]:flex-1"
+                    className="btn btn-neutral"
                     onClick={() => setCancelSaveModalShow(true)}
                   >
                     취소
