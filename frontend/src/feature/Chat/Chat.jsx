@@ -4,6 +4,10 @@ import SockJS from "sockjs-client";
 import { AuthenticationContext } from "../common/AuthenticationContextProvider.jsx";
 import { Col, Row } from "react-bootstrap";
 import { v4 as uuidv4 } from "uuid";
+import { useSearchParams } from "react-router";
+import axios from "axios";
+import { polluteGlobalNamespace } from "sockjs-client/lib/utils/iframe.js";
+import { toast } from "sonner";
 
 const WS_URL = "http://localhost:8080/ws-chat";
 const WS_PATH = "/ws-chat";
@@ -16,168 +20,174 @@ export function Chat() {
   const [target, setTarget] = useState(""); //수신자 id
   const [text, setText] = useState(""); // 보낼 텍스트
   const [msgs, setMsgs] = useState([]); // 주고 받은 메시지들
+  const [lastMsgs, setLastMsgs] = useState([]); // 주고 받은 메시지들
   const [roomUsers, setRoomUsers] = useState([]); // 현재 방의 접속자들1
-  const [count, setCount] = useState(0);
   const clientRef = useRef(null); // STOMP 인스턴스 담아 둘 상자
   const effectRan = useRef(false);
+  const [searchParams] = useSearchParams();
+  const roomId = searchParams.get("rid") || "2222";
+  const [modalshow, setModalshow] = useState(false);
   // const roomId = uuidv4();
-  const roomId = "2222";
+  // const roomId = "2222";
 
   useEffect(() => {
-    console.log("chat user : ", user);
-    console.log("username : ", user?.name);
-    if (user?.name) {
-      // 두번 실행 막기
-      if (user?.name && !effectRan.current) {
-        console.log("name2 : ", user.name);
-        setCount(count + 1);
-        console.log("count : ", count);
-
-        const client = new Client({
-          // webSocketFactory: () => new SockJS(WS_PATH), // SockJS 연결
-          webSocketFactory: () => {
-            const token = localStorage.getItem("token");
-            console.log("token : ", token);
-            console.log("WS_PATH : ", WS_PATH);
-            const url = token
-              ? `${WS_PATH}?Authorization=Bearer%20${token}`
-              : WS_PATH;
-            return new SockJS(url);
-          },
-          debug: (str) => console.log("[STOMP]", str),
-          reconnectDelay: 5000, // 끊기면 5초후 재연결
-          connectHeaders: {
-            username: user.name,
-          },
-        });
-        client.onConnect = (frame) => {
-          // 연결 성공 시
-          console.log("연결됨!", frame);
-          client.subscribe(SUBSCRIBE_DEST, (message) => {
-            // 서버의 json 메시지를 파싱해서 msgs 배열에 추가
-            setMsgs((prev) => [...prev, JSON.parse(message.body)]);
-          });
-
-          client.subscribe(`/topic/chat/${roomId}`, (message) => {
-            const data = JSON.parse(message.body);
-            console.log("📨 방 메시지 받음:", data);
-            if (data.type === "CHAT") {
-              setMsgs((prev) => [...prev, JSON.parse(message.body)]);
-            } else if (data.type === "ENTER") {
-              console.log(`roomId : ${roomId}`);
-              if (data.currentUsers) {
-                setRoomUsers(data.currentUsers);
-              }
-              // 입장 메시지도 채팅창에 표시
-              setMsgs((prev) => [
-                ...prev,
-                {
-                  from: "SYSTEM",
-                  message: data.message,
-                  timestamp: data.timestamp,
-                  type: "SYSTEM",
-                },
-              ]);
-            } else if (
-              data.type === "LEAVE" ||
-              data.type === "USER_DISCONNECTED"
-            ) {
-              if (data.currentUsers) {
-                setRoomUsers(data.currentUsers);
-              }
-              // 퇴장 메시지도 채팅창에 표시
-              setMsgs((prev) => [
-                ...prev,
-                {
-                  from: "SYSTEM",
-                  message: data.message,
-                  timestamp: data.timestamp,
-                  type: "SYSTEM",
-                },
-              ]);
-            }
-          });
-
-          client.publish({
-            destination: "/app/chat/enter", // 서버의 MessageMapping 경로
-            body: JSON.stringify({
-              from: user.name, // 내 이름
-              roomId: roomId, // 방 id (props, params 등에서 받아와야 함)
-              type: "ENTER", // 필요하다면 type도 함께
-              // 필요하면 다른 필드도 추가
-            }),
-          });
-        };
-
-        client.onDisconnect = () => {
-          console.log("서버 연결이 끊어졌습니다");
-        };
-
-        // 연결 활성화(connect 시도)
-        client.activate();
-        // 훅 박에서도 쓰기 위해 ref에 저장
-        clientRef.current = client;
-
-        // 언마운트 될 때
-        return () => {
-          if (client && client.connected) {
-            client.publish({
-              destination: "/app/chat/leave", // 서버 MessageMapping 경로
-              body: JSON.stringify({
-                from: user.name,
-                roomId: roomId,
-                type: "LEAVE", // 서버 DTO와 맞추기!
-              }),
-            });
+    console.log(user);
+    // 두번 실행 막기
+    if (user?.name && !effectRan.current) {
+      effectRan.current = true;
+      // console.log("user : ", user);
+      axios
+        .post("/api/chat/list", {
+          roomId,
+          userid: user.loginId,
+          pageNum: 1,
+        })
+        .then((res) => {
+          setLastMsgs(res.data.chatList);
+          console.log("res", res.data);
+        })
+        .catch((err) => {
+          if (err.response && err.response.status === 401) {
+            alert("로그인 후 이용해주세요.");
+            window.location.href = "/login";
+          } else {
+            console.log("잘 안될 때 코드");
           }
-          client.deactivate(); //연결 해제
-        };
-      }
+        });
+    }
+    if (user?.name) {
+      const client = new Client({
+        // webSocketFactory: () => new SockJS(WS_PATH), // SockJS 연결
+        webSocketFactory: () => {
+          const token = localStorage.getItem("token");
+          const url = token
+            ? `${WS_PATH}?Authorization=Bearer%20${token}`
+            : WS_PATH;
+          return new SockJS(url);
+        },
+        debug: (str) => console.log("[STOMP]", str),
+        reconnectDelay: 5000, // 끊기면 5초후 재연결
+        connectHeaders: {
+          username: user.name,
+        },
+      });
+      client.onConnect = (frame) => {
+        // 연결 성공 시
+        console.log("연결됨!", frame);
+        client.subscribe(SUBSCRIBE_DEST, (message) => {
+          // 서버의 json 메시지를 파싱해서 msgs 배열에 추가
+          setMsgs((prev) => [...prev, JSON.parse(message.body)]);
+        });
+
+        // console.log("rid : ", searchParams.get("rid"));
+        // console.log("roomId : ", roomId);
+
+        client.subscribe(`/topic/chat/${roomId}`, (message) => {
+          const data = JSON.parse(message.body);
+          console.log("📨 방 메시지 받음:", data);
+          if (data.type === "CHAT") {
+            setMsgs((prev) => [...prev, JSON.parse(message.body)]);
+          } else if (data.type === "ENTER") {
+            /*if (data.currentUsers) {
+              setRoomUsers(data.currentUsers);
+            }
+            // 입장 메시지도 채팅창에 표시
+            setMsgs((prev) => [
+              ...prev,
+              {
+                from: "SYSTEM",
+                message: data.message,
+                timestamp: data.timestamp,
+                type: "SYSTEM",
+              },
+            ]);*/
+          } else if (/*data.type === "LEAVE" || */ data.type === "END") {
+            if (data.currentUsers) {
+              setRoomUsers(data.currentUsers);
+            }
+            // 퇴장 메시지도 채팅창에 표시
+            setMsgs((prev) => [
+              ...prev,
+              {
+                from: "SYSTEM",
+                message: data.message,
+                timestamp: data.timestamp,
+                type: "SYSTEM",
+              },
+            ]);
+          }
+        });
+
+        // 들어왔을 때 메시지 보내기
+        /*client.publish({
+          destination: "/app/chat/enter", // 서버의 MessageMapping 경로
+          body: JSON.stringify({
+            from: user.name, // 내 이름
+            roomId: roomId, // 방 id (props, params 등에서 받아와야 함)
+            type: "ENTER", // 필요하다면 type도 함께
+            // 필요하면 다른 필드도 추가
+          }),
+        });*/
+      };
+
+      client.onDisconnect = () => {
+        console.log("서버 연결이 끊어졌습니다");
+      };
+
+      // 연결 활성화(connect 시도)
+      client.activate();
+      // 훅 박에서도 쓰기 위해 ref에 저장
+      clientRef.current = client;
+
+      // 언마운트 될 때
+      return () => {
+        if (client && client.connected) {
+          /*client.publish({
+            destination: "/app/chat/leave", // 서버 MessageMapping 경로
+            body: JSON.stringify({
+              from: user.name,
+              roomId: roomId,
+              type: "LEAVE", // 서버 DTO와 맞추기!
+            }),
+          });*/
+        }
+        client.deactivate(); //연결 해제
+      };
     }
   }, [user]);
 
-  function handleChattingOutClick() {
+  function handleChattingEndClick() {
     if (clientRef.current && clientRef.current.connected) {
       clientRef.current.publish({
-        destination: "/app/chat/leave", // 서버 MessageMapping 경로
+        destination: "/app/chat/end", // 서버 MessageMapping 경로
         body: JSON.stringify({
           from: user.name,
           roomId: roomId,
-          type: "LEAVE", // 서버 DTO와 맞추기!
+          type: "END", // 서버 DTO와 맞추기!
         }),
       });
     }
     clientRef.current.deactivate(); //연결 해제
+    location.href = "/Home";
   }
-
-  const sendMessage = () => {
-    if (!text.trim()) return; // 값 업승면 그냥 반환
-    // 보낼 메시지 객체
-    const chatMsg = { from: user.name, to: target, message: text };
-    // SEND_DEST로 파일 전송
-
-    clientRef.current.publish({
-      destination: SEND_DEST,
-      body: JSON.stringify(chatMsg),
-    });
-    // setMsgs((prev) => [...prev, chatMsg]);
-    setText(""); // 입력창 초기화
-  };
 
   const sendGroupMessage = () => {
     if (!text.trim()) return;
     const chatMsg = {
       from: user.name,
-      to: target,
+      userid: user.id,
       message: text,
       type: "CHAT",
     };
     clientRef.current.publish({
-      destination: SEND_DEST_GROUP + roomId,
+      destination: "/app/chat/" + roomId,
+      // destination: SEND_DEST_GROUP + roomId,
       body: JSON.stringify(chatMsg),
     });
     setText(""); // 입력창 초기화
   };
+
+  useEffect(() => {}, []);
 
   if (!user) {
     return <span className="loading loading-spinner"></span>;
@@ -200,6 +210,15 @@ export function Chat() {
                 {/*삭제 x */}
                 <div className="chat chat-start"></div>
                 <div className="chat chat-end"></div>
+                {lastMsgs.toReversed().map((m, i) => (
+                  <div
+                    key={i}
+                    className={`chat chat-${user.name == m.user ? "end" : "start"}`}
+                  >
+                    <div className="chat-header">{m.user}</div>
+                    <div className="chat-bubble">{m.message}</div>
+                  </div>
+                ))}
                 {msgs.map((m, i) =>
                   m.type == "CHAT" ? (
                     <div
@@ -257,13 +276,49 @@ export function Chat() {
             {clientRef.current && (
               <button
                 className={"btn btn-error"}
-                onClick={() => handleChattingOutClick()}
+                onClick={() => setModalshow(true)}
               >
                 대화 종료
               </button>
             )}
           </div>
         </Col>
+        {modalshow && (
+          <div className="modal modal-open">
+            <div className="modal-box">
+              <h3 className="font-bold text-lg mb-3">대화 종료</h3>
+              <p className="mb-6">대화를 종료하시겠습니까?</p>
+              <div className="modal-action">
+                <button
+                  className="btn btn-outline btn-neutral"
+                  onClick={() => setModalshow(false)}
+                >
+                  취소
+                </button>
+                <button
+                  className="btn btn-primary"
+                  onClick={() => {
+                    handleChattingEndClick();
+                    setModalshow(false);
+                  }}
+                >
+                  대화 종료
+                </button>
+              </div>
+              <button
+                className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2"
+                onClick={() => setModalshow(false)}
+                aria-label="Close"
+              >
+                ✕
+              </button>
+            </div>
+            <label
+              className="modal-backdrop"
+              onClick={() => setModalshow(false)}
+            ></label>
+          </div>
+        )}
       </Row>
     </div>
   );

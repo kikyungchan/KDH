@@ -87,6 +87,7 @@ function Order(props) {
             // 결제 완료 처리
             handleOrderButton();
             setIsProcessing(false);
+            window.onbeforeunload = null;
             break;
 
           case "PAY_FAIL":
@@ -111,6 +112,11 @@ function Order(props) {
       return;
     }
 
+    window.onbeforeunload = (event) => {
+      event.preventDefault();
+      event.returnValue = "";
+    };
+
     setIsProcessing(true);
     if (!isProcessing) {
       checkoutWindow.current = window.open(
@@ -134,7 +140,7 @@ function Order(props) {
           checkoutWindow.current = null;
           clearInterval(checkClosed);
         }
-      }, 1000);
+      }, 1000); // 1초 간격
 
       // 10분 뒤 인터벌 정리 (메모리 누수 방지)
       const forceCloseTimeout = setTimeout(() => {
@@ -142,15 +148,14 @@ function Order(props) {
         if (checkoutWindow.current && !checkoutWindow.current.closed) {
           checkoutWindow.current.close(); // 팝업 강제 종료!
           checkoutWindow.current = null;
+          // 사용자에게 알림
+          alert("결제 시간이 초과되었습니다. 다시 시도해 주세요.");
         }
-
-        // 사용자에게 알림
-        alert("결제 시간이 초과되었습니다. 다시 시도해 주세요.");
 
         // 상태 정리
         setIsProcessing(false);
         clearInterval(checkClosed); // 인터벌도 정리
-      }, 600000); // 10분 = 3,600,000ms
+      }, 600_000); // 10분 = 600,000ms
 
       // 팝업이 정상적으로 닫혔을 때는 강제 종료 타이머도 취소
       // const originalInterval = checkClosed;
@@ -166,7 +171,7 @@ function Order(props) {
   }
 
   function sendDataToPopup() {
-    console.log("items : ", items);
+    console.log("items : " + items);
     console.log("items length", items.length);
     if (checkoutWindow.current && !checkoutWindow.current.closed) {
       checkoutWindow.current.postMessage(
@@ -623,29 +628,32 @@ function Order(props) {
               )}
             </div>
 
-      {/* 버튼 영역 */}
-      <div className="order-buttons justify-content-end">
-        {/*<button onClick={handleOrderButton} className="order-button confirm">
+            {/* 버튼 영역 */}
+            <div className="order-buttons justify-content-end">
+              {/*<button onClick={handleOrderButton} className="order-button confirm">
           결제하기
         </button>*/}
-        {isProcessing ? (
-          <button className={"order-button confirm"}>
-            <span className="loading loading-spinner"></span>
-          </button>
-        ) : (
-          <button
-            className="order-button confirm"
-            onClick={() => {
-              validateForm() && handlePaymentConnection();
-            }}
-          >
-            결제하기
-          </button>
-        )}
-        <button onClick={handleCancelButton} className="order-button cancel">
-          취소
-        </button>
-      </div>
+              {isProcessing ? (
+                <button className={"order-button confirm"}>
+                  <span className="loading loading-spinner"></span>
+                </button>
+              ) : (
+                <button
+                  className="order-button confirm"
+                  onClick={() => {
+                    validateForm() && handlePaymentConnection();
+                  }}
+                >
+                  결제하기
+                </button>
+              )}
+              <button
+                onClick={handleCancelButton}
+                className="order-button cancel"
+              >
+                취소
+              </button>
+            </div>
           </div>
         </div>
       </div>

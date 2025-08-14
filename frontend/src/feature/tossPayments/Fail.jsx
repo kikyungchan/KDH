@@ -6,14 +6,15 @@ export function FailPage() {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
   useEffect(() => {
-    toast(searchParams.get("message"), { type: "error" });
+    // toast(searchParams.get("message"), { type: "error" });
     if (window.opener) {
+      console.log(searchParams);
       window.opener.postMessage(
         {
           type: "PAY_FAIL",
           data: searchParams,
         },
-        "*", // 또는 부모 도메인
+        window.location.origin,
       );
       setTimeout(() => window.close(), 300);
     }

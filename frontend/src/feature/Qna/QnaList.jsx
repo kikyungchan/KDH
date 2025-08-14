@@ -26,12 +26,6 @@ export function QnaList() {
   };
 
   const radios = [
-    {
-      name: "상품목록",
-      value: "1",
-      class: "btn",
-      fnc: handleQnaAddButtonClick,
-    },
     { name: "문의내역", value: "2", fnc: handleQnaListButtonClick },
     { name: "자주 묻는 질문", value: "3", fnc: handleFaQListButtonClick },
   ];
@@ -45,7 +39,12 @@ export function QnaList() {
         setPageInfo(res.data.pageInfo);
       })
       .catch((err) => {
-        console.log("잘 안될 때 코드");
+        if (err.response && err.response.status === 401) {
+          alert("로그인 후 이용해주세요.");
+          window.location.href = "/login";
+        } else {
+          console.log("잘 안될 때 코드");
+        }
       })
       .finally(() => {
         console.log("항상 실행 코드");
@@ -92,7 +91,7 @@ export function QnaList() {
       <Row className="justify-content-center">
         <Col md={8} lg={9} className="mt-5">
           <div className="container">
-            <h2 className="mb-4">문의 내역</h2>
+            <h2 className="text-2xl font-bold my-4">문의 내역</h2>
             <div>
               {/* todo : onclick 시 상품 질문 페이지로 넘어가게 */}
               <ButtonGroup>
@@ -104,7 +103,7 @@ export function QnaList() {
                     name="바로가기"
                     aria-label={radio.name}
                     value={radio.value}
-                    checked={idx === 1}
+                    checked={idx === 0}
                     onClick={radio.fnc}
                     onChange={(e) => e.target.value}
                   />

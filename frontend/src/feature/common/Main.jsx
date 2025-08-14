@@ -1,7 +1,9 @@
 import NavBar from "./NavBar/NavBar.jsx";
 import { Outlet, useLocation } from "react-router";
-import { useEffect } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import Footer from "./Footer/Footer.jsx";
+import { AuthenticationContext } from "./AuthenticationContextProvider.jsx";
+import { AlertWebSocketProvider } from "../alert/alertContext.jsx";
 
 function Main() {
   const location = useLocation();
@@ -12,12 +14,16 @@ function Main() {
       document.body.style.overflow = "auto"; // 페이지 떠날 땐 항상 복구
     };
   }, []);
+  const isRootPath = location.pathname === "/";
+
   return (
     <>
-      <NavBar />
-      <div style={{ paddingTop: "80px" }}></div>
-      <Outlet />
-      {!hideFooter && <Footer />}
+      <AlertWebSocketProvider>
+        <NavBar />
+        {!isRootPath && <div style={{ paddingTop: "80px" }}></div>}
+        <Outlet />
+        {!hideFooter && <Footer />}
+      </AlertWebSocketProvider>
     </>
   );
 }

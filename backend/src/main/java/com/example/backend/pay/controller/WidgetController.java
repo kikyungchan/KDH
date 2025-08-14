@@ -7,6 +7,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
@@ -28,6 +29,9 @@ public class WidgetController {
     private final ObjectMapper objectMapper;
     private final PaymentsService paymentsService;
 
+    @Value("${toss.secret.key}")
+    private String API_KEY_FILE;
+
     @PostMapping("confirm")
     @PreAuthorize("isAuthenticated()")
     public ResponseEntity<TossPaymentResDto> confirm(@RequestBody PaymentConfirmDto request,
@@ -47,7 +51,8 @@ public class WidgetController {
         logger.info("requestBodyToToss : {}", requestBodyToToss);
 
         // 시크릭 키 나중에 등록
-        String widgetSecretKey = "test_gsk_docs_OaPz8L5KdmQXkzRz3y47BMw6";
+        String widgetSecretKey = API_KEY_FILE;
+        System.out.println("API_KEY_FILE : " + API_KEY_FILE);
         // Base64 인코딩
         Base64.Encoder encoder = Base64.getEncoder();
         byte[] encodedBytes = encoder.encode((widgetSecretKey + ":").getBytes(StandardCharsets.UTF_8));

@@ -35,6 +35,7 @@ import { OrderDetail } from "./Order/OrderDetail.jsx";
 import { GuestOrder } from "./Order/GuestOrder.jsx";
 import { GuestOrderDetail } from "./Order/GuestOrderDetail.jsx";
 import { AlertList } from "./feature/alert/AlertList.jsx";
+import { Toaster } from "sonner";
 
 function App() {
   // const username = prompt("닉네임을 입력해 주세요");
@@ -49,6 +50,7 @@ function App() {
             <Route path="pay/fail" element={<FailPage />} />
           </Routes>
 
+          <Toaster theme="light" richColors position="top-center" />
           <CartProvider>
             <Routes>
               <Route path="/" element={<Main />}>

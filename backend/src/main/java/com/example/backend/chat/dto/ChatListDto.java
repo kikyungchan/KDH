@@ -1,4 +1,4 @@
-package com.example.backend.alert.dto;
+package com.example.backend.chat.dto;
 
 import com.example.backend.member.dto.MemberDto;
 import lombok.AllArgsConstructor;
@@ -10,12 +10,8 @@ import java.time.LocalDateTime;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class AlertListDto {
+public class ChatListDto {
     Integer id;
-    String title;
-    String content;
-    String status;
-    LocalDateTime createdAt;
-    LocalDateTime updatedAt;
-    String link;
+    String user;
+    String message;
 }

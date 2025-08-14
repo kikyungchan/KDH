@@ -1,4 +1,4 @@
-package com.example.backend.alert.entity;
+package com.example.backend.chat.entity;
 
 import com.example.backend.member.entity.Member;
 import jakarta.persistence.*;
@@ -13,37 +13,29 @@ import java.time.LocalDateTime;
 @Setter
 @ToString
 @Entity
-@Table(name = "alert", schema = "prj4")
-public class Alert {
+@Table(name = "chat_log", schema = "prj4")
+public class ChatLog {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Integer id;
 
     @ManyToOne(optional = false)
-    @JoinColumn(name = "user_id", referencedColumnName = "login_id")
+    @JoinColumn(name = "user_id", nullable = false, referencedColumnName = "login_id")
     private Member user;
 
-    @Column(name = "title", length = 50)
-    private String title;
+    @Column(name = "room_id", length = 36)
+    private String roomId;
 
-    @Column(name = "content")
-    private String content;
+    @Column(name = "message")
+    private String message;
 
-    @ColumnDefault("'open'")
     @Lob
-    @Column(name = "status")
-    private String status;
+    @Column(name = "type")
+    private String type;
 
     @ColumnDefault("current_timestamp()")
     @Column(name = "created_at", insertable = false)
     private LocalDateTime createdAt;
-
-    @ColumnDefault("current_timestamp()")
-    @Column(name = "updated_at", insertable = false)
-    private LocalDateTime updatedAt;
-
-    @Column(name = "link")
-    private String link;
 
 }

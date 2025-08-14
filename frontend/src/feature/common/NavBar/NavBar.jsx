@@ -15,6 +15,7 @@ import NavRight from "./NavRight.jsx";
 import Search from "./SearchBar.jsx";
 import "bootstrap/dist/css/bootstrap-grid.min.css";
 import SearchBar from "./SearchBar.jsx";
+import { useAlertWebSocket } from "../../alert/alertContext.jsx";
 
 function NavBar(props) {
   const [showMobileCategory, setShowMobileCategory] = useState(false);
@@ -28,6 +29,8 @@ function NavBar(props) {
   const navigate = useNavigate();
   const location = useLocation();
   const [keyword, setKeyword] = useState("");
+  // const [alertCount, setAlertCount] = useState(0);
+  const { alertCount, sendTestAlert } = useAlertWebSocket();
 
   // 검색창 아이콘 한번더 누르거나 바깥영역누르면 검색창닫히도록
   useEffect(() => {
@@ -92,10 +95,14 @@ function NavBar(props) {
       setIsMobileMenuOpen(false); // 검색 후 메뉴 닫기
     }
   };
-
+  // SEND_DEST로 파일 전송
+  const sendMessage = () => {
+    sendTestAlert(); // Context 함수 사용
+  };
+  const isRootPath = location.pathname === "/";
   return (
     <>
-      <nav className="navbar-container">
+      <nav className={`navbar-container ${isRootPath && "mainPage"} `}>
         <div className="navbar-inner">
           {/* 모바일 메뉴 아이콘 */}
           <FiMenu
@@ -125,6 +132,7 @@ function NavBar(props) {
           />
           {/* 오른쪽 아이콘 */}
           <NavRight
+            alertidcator={alertCount}
             // user={user}
             iconRef={iconRef}
             onSearchToggle={() => setShowSearch((prev) => !prev)}

@@ -1,12 +1,14 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router";
 import axios from "axios";
 import { toast } from "react-toastify";
+import retro from "daisyui/theme/retro/index.js";
 
 export function SuccessPage() {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const hasCalled = useRef(false);
+  const [successPay, setSuccessPay] = useState(false);
 
   useEffect(() => {
     // 쿼리 파라미터 값이 결제 요청할 때 보낸 데이터와 동일한지 반드시 확인하세요.
@@ -27,7 +29,8 @@ export function SuccessPage() {
             headers: { "Content-Type": "application/json" },
           })
           .then((res) => {
-            toast("결제가 완료되었습니다", { type: "success" });
+            // toast("결제가 완료되었습니다", { type: "success" });
+            setSuccessPay(true);
             window.opener.postMessage(
               {
                 type: "PAY_SUCCESS",
@@ -38,11 +41,13 @@ export function SuccessPage() {
           })
           .catch((err) => {
             console.log("err : ", err);
-            const message = err.response.data.message ?? err.message;
+            setSuccessPay(false);
             window.opener.postMessage(
               { type: "PAY_FAIL", data: err.data },
               window.location.origin,
             );
+            toast(err.data);
+            // location.href = "/pay/fail";
           })
           .finally(() => {
             console.log("always");
@@ -54,6 +59,8 @@ export function SuccessPage() {
 
     confirm();
   }, []);
+
+  if (!successPay) return <></>;
 
   return (
     <div className="result wrapper">

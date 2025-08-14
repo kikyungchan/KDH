@@ -5,6 +5,7 @@ import com.example.backend.product.entity.Product;
 import com.example.backend.product.entity.ProductImage;
 import com.example.backend.product.repository.ProductImageRepository;
 import com.example.backend.product.repository.ProductRepository;
+import com.example.backend.product.repository.ProductThumbnailRepository;
 import com.example.backend.qna.dto.AnswerAddForm;
 import com.example.backend.qna.dto.QuestionAddForm;
 import com.example.backend.qna.dto.QuestionDto;
@@ -35,13 +36,15 @@ public class QuestionService {
     private final QuestionRepository questionRepository;
     private final AnswerRepository answerRepository;
     private final ProductImageRepository productImageRepository;
+    private final ProductThumbnailRepository productThumbnailRepository;
 
     public Map<String, ?> addquestion(Integer id, Authentication authentication) {
         Product product = productRepository.findById(id).get();
-        List<String> imagePaths = product.getImages().stream().map(ProductImage::getStoredPath).toList();
+        String image = productThumbnailRepository.findByProductid(product.getId());
+//        List<String> imagePaths = product.getImages().stream().map(ProductImage::getStoredPath).toList();
 
         var qnainfo = Map.of("id", product.getId(),
-                "image", imagePaths,
+                "image", image,
                 "price", product.getPrice(),
                 "productName", product.getProductName()
         );
@@ -143,9 +146,12 @@ public class QuestionService {
     public QuestionDto viewQuestion(int id, Authentication authentication) {
         QuestionDto questionById = questionRepository.findQuestionById(id);
         Integer productId = questionById.getProductId();
-        List<String> image = productImageRepository.findByProductid(productId);
+//        List<String> image = productImageRepository.findByProductid(productId);
+        String image = productThumbnailRepository.findByProductid(productId);
+        System.out.println("questionById : " + questionById);
+        System.out.println("image : " + image);
         // 하나만 필요할 것 같아서 하나만 추가
-        questionById.setImagePath(image.getFirst());
+        questionById.setImagePath(image);
         if (questionById.getStatus().equals("answered")) {
             Answer ans = answerRepository.findByQuestionId(questionById.getId());
             questionById.setAnswer(ans.getContent());
