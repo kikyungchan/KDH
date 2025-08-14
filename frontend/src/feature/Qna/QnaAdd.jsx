@@ -74,42 +74,38 @@ export function QnaAdd() {
   }, []);
 
   function handleSaveButtonClick() {
+    const scrollToCategoryWithOffset = (ref) => {
+      const categoryElement = ref;
+
+      if (categoryElement) {
+        // 요소의 위치 정보 가져오기
+        const rect = categoryElement.getBoundingClientRect();
+        const targetPosition = window.scrollY + rect.top - 100;
+        
+        window.scrollTo({
+          top: targetPosition,
+          behavior: "smooth",
+        });
+      }
+    };
     if (category.trim() === "" || category === "0") {
       toast.error("상담유형을 선택해 주세요");
-      if (categoryRef.current) {
-        console.log("moved");
-        categoryRef.current.scrollIntoView({
-          behavior: "smooth", // 부드러운 스크롤 효과를 줍니다.
-          block: "start", // 대상 요소의 상단이 뷰포트 상단에 오도록 정렬합니다. (options: 'start', 'center', 'end', 'nearest')
-        });
-      }
+      scrollToCategoryWithOffset(categoryRef.current);
     } else if (title.trim() === "") {
       toast.error("제목을 입력해 주세요");
-      if (titleRef.current) {
-        console.log("moved");
-        titleRef.current.scrollIntoView({
-          behavior: "smooth",
-          block: "start",
-        });
-      }
+      scrollToCategoryWithOffset(titleRef.current);
     } else if (content.trim() === "") {
       toast.error("문의 내용를 입력해 주세요");
-      if (contentRef.current) {
-        console.log("moved");
-        contentRef.current.scrollIntoView({
-          behavior: "smooth",
-          block: "start",
-        });
-      }
+      scrollToCategoryWithOffset(contentRef.current);
     } else {
       setIsProcessing(true);
       axios
         .post("/api/qna/add", {
-          title: title,
-          content: content,
-          category: category,
+          title,
+          content,
+          category,
           username: user,
-          productId: productId,
+          productId,
         })
         .then((res) => {
           const message = res.data.message;
@@ -120,10 +116,7 @@ export function QnaAdd() {
           navigate("/qna/list");
         })
         .catch((err) => {
-          console.log("잘 안되면 실행되는 코드");
-          console.log(err);
           const message = err.response.data.message;
-
           if (message) {
             // toast 띄우기
             toast(message.text, { type: message.type });
