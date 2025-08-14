@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 import axios from "axios";
 import { useCart } from "./CartContext.jsx";
+import { FaCheck } from "react-icons/fa";
 
 function ProductCart(props) {
   const [selectedStock, setSelectedStock] = useState(null);
@@ -265,34 +266,66 @@ function ProductCart(props) {
                     {/* md 이상에서만*/}
                     <div className="hidden md:grid grid-cols-12 font-bold border-b py-3 items-center">
                       <div className="col-span-1 flex justify-center">
-                        <input
-                          type="checkbox"
-                          checked={
-                            checkedIds.length === cartItems.length &&
-                            cartItems.length > 0
-                          }
-                          onChange={handleSelectAllCheckboxChange}
-                        />
+                        <button
+                          type="button"
+                          className={`btn btn-circle btn-xs ${checkedIds.length === cartItems.length && cartItems.length > 0 ? "btn-primary" : "btn-outline"}`}
+                          onClick={() => {
+                            // 전체 선택 / 해제 토글
+                            if (checkedIds.length === cartItems.length) {
+                              setCheckedIds([]); // 모두 해제
+                            } else {
+                              setCheckedIds(cartItems.map((_, idx) => idx)); // 모두 선택
+                            }
+                          }}
+                        >
+                          {checkedIds.length === cartItems.length &&
+                          cartItems.length > 0 ? (
+                            <FaCheck />
+                          ) : (
+                            <FaCheck />
+                          )}
+                        </button>
                       </div>
-                      <div className="col-span-5">상품 정보</div>
+                      <div className="col-span-5 text-center">상품 정보</div>
                       <div className="col-span-2 text-center">수량</div>
                       <div className="col-span-2 text-center">가격</div>
                       <div className="col-span-2 text-center">총 금액</div>
                     </div>
 
                     {/* 아이템들 */}
+                    {/* md 이하 일때 */}
+                    <div className="md:hidden flex items-center justify-content-start mb-2">
+                      <button
+                        type="button"
+                        className={`btn btn-circle btn-xs ${checkedIds.length === cartItems.length && cartItems.length > 0 ? "btn-primary" : "btn-outline"}`}
+                        onClick={() => {
+                          // 전체 선택 / 해제 토글
+                          if (checkedIds.length === cartItems.length) {
+                            setCheckedIds([]); // 모두 해제
+                          } else {
+                            setCheckedIds(cartItems.map((_, idx) => idx)); // 모두 선택
+                          }
+                        }}
+                      >
+                        {checkedIds.length === cartItems.length &&
+                        cartItems.length > 0 ? (
+                          <FaCheck />
+                        ) : (
+                          <FaCheck />
+                        )}
+                      </button>
+                    </div>
                     {cartItems.map((item, index) => (
                       <div key={index} className="border-b border-gray-200">
-                        {/* md 이하 일때 */}
                         <div className="md:hidden py-4">
-                          <div className="flex items-start gap-3">
+                          <div className="flex items-center gap-3">
                             <input
                               type="checkbox"
                               checked={checkedIds.includes(index)}
                               onChange={(e) =>
                                 handleCheckboxChange(index, e.target.checked)
                               }
-                              className="mt-1 shrink-0"
+                              className="checkbox checkbox-sm shrink-0"
                             />
                             <img
                               src={item.imagePath || "/default.jpg"}
@@ -344,6 +377,7 @@ function ProductCart(props) {
                           <div className="col-span-1 flex justify-center">
                             <input
                               type="checkbox"
+                              className="checkbox checkbox-sm"
                               checked={checkedIds.includes(index)}
                               onChange={(e) =>
                                 handleCheckboxChange(index, e.target.checked)
@@ -585,7 +619,17 @@ function ProductCart(props) {
                     </div>
                     <div className="flex justify-between">
                       <span>배송비</span>
-                      <span>{shippingFee.toLocaleString()}원</span>
+                      <div>
+                        {shippingFee === 0 && totalItemPrice > 0 && (
+                          <span className="text-green-600 text-sm ml-2">
+                            (무료배송)
+                          </span>
+                        )}
+                        <span className="ml-1">
+                          {" "}
+                          {shippingFee.toLocaleString()}원
+                        </span>
+                      </div>
                     </div>
                     <div className="border-t pt-3 flex justify-between text-base font-bold">
                       <span>총 주문금액</span>
@@ -610,7 +654,6 @@ function ProductCart(props) {
               </div>
             </aside>
           </div>
-          {/* TODO : 이거 복붙 */}
           {/* 모바일: 하단 고정 CTA */}
           {cartItems.length > 0 && (
             <div className="xl:hidden fixed inset-x-0 bottom-0 z-50 border-t bg-white p-4 shadow-lg">
@@ -630,7 +673,7 @@ function ProductCart(props) {
                         {" "}
                         {shippingFee.toLocaleString()}원
                       </span>
-                      {shippingFee === 0 && (
+                      {shippingFee === 0 && totalItemPrice > 0 && (
                         <span className="text-green-600 text-sm ml-2">
                           (무료배송)
                         </span>
