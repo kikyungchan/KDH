@@ -301,7 +301,7 @@ function ProductCart(props) {
                               onClick={() =>
                                 navigate(`/product/view?id=${item.productId}`)
                               }
-                              className="w-20 h-16 object-cover rounded cursor-pointer shrink-0"
+                              className="w-24 h-24 object-cover rounded cursor-pointer shrink-0"
                             />
                             <div className="flex-1 min-w-0">
                               <div className="font-bold break-words">
@@ -311,7 +311,7 @@ function ProductCart(props) {
                                 {item.optionName}
                               </div>
 
-                              <div className="mt-3 flex items-center justify-between">
+                              <div className="mt-1 flex items-center justify-between">
                                 <div className="text-sm">
                                   수량 {item.quantity}개
                                 </div>
@@ -319,15 +319,15 @@ function ProductCart(props) {
                                   onClick={() => handleEditOption(item)}
                                   className="btn btn-sm btn-outline"
                                 >
-                                  옵션/수량 변경
+                                  변경
                                 </button>
                               </div>
 
-                              <div className="mt-2 flex items-baseline justify-between">
+                              <div className="flex items-baseline justify-between">
                                 <div className="text-sm text-gray-600">
                                   가격 {item.price?.toLocaleString() || "-"}원
                                 </div>
-                                <div className="font-semibold">
+                                <div className="font-semibold mt-2">
                                   {item.price && item.quantity
                                     ? (
                                         item.price * item.quantity
@@ -398,16 +398,16 @@ function ProductCart(props) {
                     ))}
 
                     {/* 선택 삭제 / 유의사항 */}
-                    <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2 mt-4">
+                    <div className="grid grid-cols-[auto_1fr] items-center gap-2 mt-4">
                       <button
                         onClick={handleDeleteSelected}
-                        className="btn btn-outline"
+                        className="btn btn-outline justify-self-start"
                       >
                         선택 삭제
                       </button>
-                      <div className="sm:ms-auto text-left sm:text-right text-sm text-gray-500">
-                        <p>배송시 문제생겨도 책임안집니다.</p>
-                        <p>어쩌구 저쩌구</p>
+                      <div className="justify-self-end text-right text-sm text-gray-500 leading-tight">
+                        <p>샘플 쇼핑몰 안내 문구</p>
+                        <p>이 내용은 실제와 다를 수 있습니다.</p>
                       </div>
                     </div>
                   </>
