@@ -88,7 +88,7 @@ export function Chat() {
           if (data.type === "CHAT") {
             setMsgs((prev) => [...prev, JSON.parse(message.body)]);
           } else if (data.type === "ENTER") {
-            if (data.currentUsers) {
+            /*if (data.currentUsers) {
               setRoomUsers(data.currentUsers);
             }
             // 입장 메시지도 채팅창에 표시
@@ -100,11 +100,8 @@ export function Chat() {
                 timestamp: data.timestamp,
                 type: "SYSTEM",
               },
-            ]);
-          } else if (
-            data.type === "LEAVE" ||
-            data.type === "USER_DISCONNECTED"
-          ) {
+            ]);*/
+          } else if (/*data.type === "LEAVE" || */ data.type === "END") {
             if (data.currentUsers) {
               setRoomUsers(data.currentUsers);
             }
@@ -122,7 +119,7 @@ export function Chat() {
         });
 
         // 들어왔을 때 메시지 보내기
-        client.publish({
+        /*client.publish({
           destination: "/app/chat/enter", // 서버의 MessageMapping 경로
           body: JSON.stringify({
             from: user.name, // 내 이름
@@ -130,7 +127,7 @@ export function Chat() {
             type: "ENTER", // 필요하다면 type도 함께
             // 필요하면 다른 필드도 추가
           }),
-        });
+        });*/
       };
 
       client.onDisconnect = () => {
@@ -145,49 +142,34 @@ export function Chat() {
       // 언마운트 될 때
       return () => {
         if (client && client.connected) {
-          client.publish({
+          /*client.publish({
             destination: "/app/chat/leave", // 서버 MessageMapping 경로
             body: JSON.stringify({
               from: user.name,
               roomId: roomId,
               type: "LEAVE", // 서버 DTO와 맞추기!
             }),
-          });
+          });*/
         }
         client.deactivate(); //연결 해제
       };
     }
   }, [user]);
 
-  function handleChattingOutClick() {
-    console.log("왔다");
+  function handleChattingEndClick() {
     if (clientRef.current && clientRef.current.connected) {
       clientRef.current.publish({
-        destination: "/app/chat/leave", // 서버 MessageMapping 경로
+        destination: "/app/chat/end", // 서버 MessageMapping 경로
         body: JSON.stringify({
           from: user.name,
           roomId: roomId,
-          type: "LEAVE", // 서버 DTO와 맞추기!
+          type: "END", // 서버 DTO와 맞추기!
         }),
       });
     }
     clientRef.current.deactivate(); //연결 해제
     location.href = "/Home";
   }
-
-  const sendMessage = () => {
-    if (!text.trim()) return; // 값 없으면 그냥 반환
-    // 보낼 메시지 객체
-    const chatMsg = { from: user.name, to: target, message: text };
-    // SEND_DEST로 파일 전송
-
-    clientRef.current.publish({
-      destination: SEND_DEST,
-      body: JSON.stringify(chatMsg),
-    });
-    // setMsgs((prev) => [...prev, chatMsg]);
-    setText(""); // 입력창 초기화
-  };
 
   const sendGroupMessage = () => {
     if (!text.trim()) return;
@@ -316,7 +298,7 @@ export function Chat() {
                 <button
                   className="btn btn-primary"
                   onClick={() => {
-                    handleChattingOutClick();
+                    handleChattingEndClick();
                     setModalshow(false);
                   }}
                 >

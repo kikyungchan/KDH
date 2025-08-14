@@ -97,8 +97,6 @@ public class ChatController {
     public void enter(ChatForm message) {
         message.setMessage(message.getFrom() + "님이 입장했습니다.");
         message.setType(ChatForm.MessageType.ENTER);
-        System.out.println("채팅이 연결되었습니다");
-        System.out.println("message = " + message);
         template.convertAndSend("/topic/chat/" + message.getRoomId(), message);
     }
 
@@ -106,8 +104,13 @@ public class ChatController {
     public void leave(ChatForm message) {
         message.setMessage(message.getFrom() + "님이 퇴장했습니다.");
         message.setType(ChatForm.MessageType.LEAVE);
-        System.out.println("채팅이 연결해제되었습니다");
-        System.out.println("message = " + message);
+        template.convertAndSend("/topic/chat/" + message.getRoomId(), message);
+    }
+
+    @MessageMapping("/chat/end")
+    public void end(ChatForm message) {
+        message.setMessage(message.getFrom() + "님이 대화를 종료하였습니다.");
+        message.setType(ChatForm.MessageType.END);
         template.convertAndSend("/topic/chat/" + message.getRoomId(), message);
     }
 }

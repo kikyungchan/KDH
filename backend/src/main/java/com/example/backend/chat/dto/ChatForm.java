@@ -15,7 +15,7 @@ public class ChatForm {
     private LocalDateTime CreateAt;      // 전송 시간
 
     public enum MessageType {
-        ENTER, CHAT, LEAVE
+        ENTER, CHAT, LEAVE, END
     }
 }
 
