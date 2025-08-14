@@ -1,8 +1,8 @@
 import { Button, Col, Container, Row, Spinner } from "react-bootstrap";
-import { useNavigate, useSearchParams } from "react-router";
+import { Link, useNavigate, useSearchParams } from "react-router";
 import NoticeSection from "./util/NoticeSection.jsx";
 import ProductComment from "./ProductComment.jsx";
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import BuyButton from "./util/BuyButton.jsx";
 import CartAdded from "./util/CartAdded.jsx";
 import { useCart } from "../CartContext.jsx";
@@ -21,8 +21,11 @@ import ShareModal from "./util/ShareModal.jsx";
 import { RxShare1 } from "react-icons/rx";
 import LikeButton from "./util/LikeButton.jsx";
 import { AuthenticationContext } from "../../common/AuthenticationContextProvider.jsx";
+import ProductDetailToggle from "./util/ProductDetailToggle.jsx";
+import RecommendedProduct from "./util/RecommendedProduct.jsx";
 
 export function ProductDetail() {
+  const [relatedProducts, setRelatedProducts] = useState([]);
   const [selectedThumbnail, setSelectedThumbnail] = useState(null);
   const [showShareModal, setShowShareModal] = useState(false);
   const { setCartCount } = useCart();
@@ -39,6 +42,24 @@ export function ProductDetail() {
   const id = searchParams.get("id");
   const navigate = useNavigate();
 
+  // 상세페이지 진입시 local에 정보 저장
+  useEffect(() => {
+    if (!product) return;
+    const productData = {
+      id: product.id,
+      productName: product.productName,
+      thumbnail:
+        product.thumbnailPaths?.find((t) => t.isMain)?.storedPath ??
+        product.thumbnailPaths?.[0]?.storedPath,
+      price: product.price,
+    };
+    let recent = JSON.parse(localStorage.getItem("recentProducts")) || [];
+    recent = recent.filter((p) => p.id !== productData.id);
+    recent.unshift(productData);
+    if (recent.length > 10) recent.pop();
+    localStorage.setItem("recentProducts", JSON.stringify(recent));
+  }, [product]);
+
   useEffect(() => {
     axios
       .get(`/api/product/view?id=${id}`)
@@ -53,6 +74,19 @@ export function ProductDetail() {
         console.log(err);
       });
   }, [id]);
+
+  useEffect(() => {
+    if (product?.category) {
+      axios
+        .get(`/api/product/best?category=${product.category}&limit=6`)
+        .then((res) => {
+          // 현재 상품은 제외
+          const filtered = res.data.filter((p) => p.id !== product.id);
+          setRelatedProducts(filtered);
+        })
+        .catch(console.error);
+    }
+  }, [product]);
 
   if (!product) {
     return <Spinner />;
@@ -80,9 +114,6 @@ export function ProductDetail() {
   const thumbnail =
     product.thumbnailPaths?.find((t) => t.isMain)?.storedPath ??
     product.thumbnailPaths?.[0]?.storedPath;
-
-  // 본문 이미지 배열
-  const detailImages = product.detailImagePaths ?? [];
 
   function handleQuestionButton() {
     setIsProcessing(true);
@@ -119,7 +150,25 @@ export function ProductDetail() {
           <div className="product-info-section">
             <div className="product-title-header">
               <h2 className="product-name-title">{product.productName}</h2>
-              <div className="product-actions">
+              <div className="product-badges-detail">
+                {(() => {
+                  const insertedAt = new Date(product.insertedAt);
+                  const now = new Date();
+                  const diffInSeconds = (now - insertedAt) / 1000;
+                  const isNew = diffInSeconds <= 60 * 60 * 24 * 7;
+                  return isNew ? <span className="new-badge">NEW</span> : null;
+                })()}
+                {product.hot && <span className="hot-badge">HOT</span>}
+                {product.quantity === 0 && (
+                  <span className="sold-out-badge">SOLD OUT</span>
+                )}
+                {product.quantity > 0 && product.quantity < 5 && (
+                  <span className="low-stock-badge">
+                    🔥 {product.quantity}개 남음
+                  </span>
+                )}
+              </div>
+              <div className="product-actions universal-actions">
                 <RxShare1
                   className="action-icon"
                   onClick={() => setShowShareModal(true)}
@@ -132,25 +181,6 @@ export function ProductDetail() {
             <p className="product-price-detail">
               {product.price.toLocaleString()}원
             </p>
-
-            <div className="product-badges-detail">
-              {(() => {
-                const insertedAt = new Date(product.insertedAt);
-                const now = new Date();
-                const diffInSeconds = (now - insertedAt) / 1000;
-                const isNew = diffInSeconds <= 60 * 60 * 24 * 7;
-                return isNew ? <span className="new-badge">NEW</span> : null;
-              })()}
-              {product.hot && <span className="hot-badge">HOT</span>}
-              {product.quantity === 0 && (
-                <span className="sold-out-badge">SOLD OUT</span>
-              )}
-              {product.quantity > 0 && product.quantity < 5 && (
-                <span className="low-stock-badge">
-                  🔥 {product.quantity}개 남음
-                </span>
-              )}
-            </div>
 
             <hr className="divider" />
 
@@ -344,16 +374,7 @@ export function ProductDetail() {
 
         <hr className="mt-5" />
         <div className="product-body-section">
-          <div className="detail-images-container">
-            {detailImages?.map((path, index) => (
-              <img
-                key={index}
-                src={path}
-                alt={`상세 이미지 ${index + 1}`}
-                className="product-detail-image"
-              />
-            ))}
-          </div>
+          <ProductDetailToggle detailImagePaths={product.detailImagePaths} />
           <NoticeSection />
           <hr className="divider" />
           <ReviewStats productId={product.id} refreshTrigger={reviewChanged} />
@@ -362,6 +383,8 @@ export function ProductDetail() {
             onReviewChange={() => setReviewChanged((prev) => !prev)}
           />
         </div>
+        <hr className="divider" />
+        <RecommendedProduct products={relatedProducts} />
       </div>
       <CartAdded show={showModal} onHide={() => setShowModal(false)} />
       <BuyButton

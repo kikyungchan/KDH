@@ -20,7 +20,6 @@ function CategoryMenu() {
   const handleScrollRight = () => {
     const el = scrollRef.current;
     if (!el) return;
-    // 화면 폭 기준으로 살짝 크게 이동 (끝까지 안가게)
     const step = Math.max(200, Math.floor(el.clientWidth * 0.8));
     el.scrollBy({ left: step, behavior: "smooth" });
   };

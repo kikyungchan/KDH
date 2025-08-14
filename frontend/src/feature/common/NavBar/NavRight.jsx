@@ -16,21 +16,27 @@ function NavRight({ iconRef, onSearchToggle, alertidcator }) {
   return (
     <div className="navbar-right">
       <div className="navbar-icons">
-        <div className="FiSearch">
+        <div className="FiSearch btn btn-ghost btn-circle text-2xl">
           <FiSearch
             ref={iconRef}
-            className="navbar-icon "
+            className="navbar-icon"
             onClick={() => onSearchToggle()}
-            style={{ cursor: "pointer" }}
           />
         </div>
         <NavUserMenu user={user} logout={logout} isAdmin={isAdmin} />
-        <Link to="/product/cart" className="cart-icon-wrapper">
+        <Link
+          to="/product/cart"
+          className="cart-icon-wrapper btn btn-ghost btn-circle text-2xl
+         "
+        >
           <FiShoppingCart className="navbar-icon" />
           {cartCount > 0 && <span className="cart-badge">{cartCount}</span>}
         </Link>
-        <Link to={"/faq/list"}>
+        <Link to={"/faq/list"} className="btn btn-ghost btn-circle text-2xl">
           <MdSupportAgent />
+        </Link>
+        <Link to={"/alert/list"} className="btn btn-ghost btn-circle text-2xl">
+          <HiOutlineBellAlert />
         </Link>
         <div className="indicator">
           {alertidcator != 0 && (
