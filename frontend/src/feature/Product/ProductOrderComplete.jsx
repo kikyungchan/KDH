@@ -67,17 +67,18 @@ export function ProductOrderComplete() {
                 <div className="w-40 space-y-1">
                   <div>받는사람</div>
                   <div>연락처</div>
+                  <div>우편번호</div>
                   <div>주소</div>
+                  <div>상세주소</div>
                   <div>배송메모</div>
                 </div>
                 <div className="space-y-1">
                   <div>{receiver.name}</div>
                   <div>{receiver.phone}</div>
-                  <div>
-                    {receiver.address} {receiver.addressDetail}({" "}
-                    {receiver.zipcode} )
-                  </div>
-                  <div>{memo || "없음"}</div>
+                  <div>{receiver.zipcode}</div>
+                  <div>{receiver.address}</div>
+                  <div>{receiver.addressDetail}</div>
+                  <div>{memo || " "}</div>
                 </div>
               </div>
             </div>
