@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router";
 import axios from "axios";
 import { toast } from "react-toastify";
+// todo : toast
 import retro from "daisyui/theme/retro/index.js";
 
 export function SuccessPage() {

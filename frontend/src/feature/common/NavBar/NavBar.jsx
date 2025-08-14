@@ -18,12 +18,12 @@ import { useAlertWebSocket } from "../../alert/alertContext.jsx";
 function NavBar(props) {
   const [showMobileCategory, setShowMobileCategory] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const { cartCount } = useCart();
+  // const { cartCount } = useCart();
   const { user, isAdmin } = useContext(AuthenticationContext);
   const [showSearch, setShowSearch] = useState(false);
   const menuRef = useRef(null);
-  const searchRef = useRef(null);
-  const iconRef = useRef(null);
+  // const searchRef = useRef(null);
+  // const iconRef = useRef(null);
   const navigate = useNavigate();
   const location = useLocation();
   const [keyword, setKeyword] = useState("");
@@ -178,7 +178,10 @@ function NavBar(props) {
             handleCategoryClick={handleCategoryClick}
           />
           {/* 오른쪽 아이콘 */}
-          <NavRight alertidcator={alertCount} onSearchToggle={() => setShowSearch((prev) => !prev)} />
+          <NavRight
+            alertidcator={alertCount}
+            onSearchToggle={() => setShowSearch((prev) => !prev)}
+          />
         </div>
         {showSearch && (
           <SearchOverlay
