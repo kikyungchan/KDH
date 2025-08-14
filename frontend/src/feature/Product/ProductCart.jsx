@@ -243,9 +243,12 @@ function ProductCart(props) {
     <div className="page-wrapper">
       <div className="center-top-container">
         <div className="w-full mx-auto px-3 sm:px-4 max-w-6xl">
-          {/* 메인: 장바구니 리스트 */}
+          {/* 본문 + 우측 요약 (xl↑에서 2열) */}
           <div className="xl:grid xl:grid-cols-[minmax(0,1fr)_320px] xl:gap-6">
-            <main className="w-full">
+            {/* 메인: 장바구니 리스트 */}
+            <main
+              className={`w-full ${cartItems.length > 0 ? "pb-28 xl:pb-0" : ""}`}
+            >
               <div className="rounded-card">
                 <h2 className="text-center text-3xl font-bold mb-6">
                   장바구니
@@ -260,7 +263,7 @@ function ProductCart(props) {
                   </div>
                 ) : (
                   <>
-                    {/* 헤더 */}
+                    {/* md 이상에서만*/}
                     <div className="hidden md:grid grid-cols-12 font-bold border-b py-3 items-center">
                       <div className="col-span-1 flex justify-center">
                         <input
@@ -272,85 +275,141 @@ function ProductCart(props) {
                           onChange={handleSelectAllCheckboxChange}
                         />
                       </div>
-                      <div className="col-span-5 ml-10">상품 정보</div>
+                      <div className="col-span-5">상품 정보</div>
                       <div className="col-span-2 text-center">수량</div>
                       <div className="col-span-2 text-center">가격</div>
                       <div className="col-span-2 text-center">총 금액</div>
                     </div>
 
-                    {/* 장바구니 아이템들 */}
+                    {/* 아이템들 */}
                     {cartItems.map((item, index) => (
-                      <div
-                        key={index}
-                        className="border-b border-gray-300 py-4
-                        md:grid md:grid-cols-12 md:items-center"
-                      >
-                        <div className="col-span-1 flex justify-center">
-                          <input
-                            type="checkbox"
-                            checked={checkedIds.includes(index)}
-                            onChange={(e) =>
-                              handleCheckboxChange(index, e.target.checked)
-                            }
-                          />
-                        </div>
+                      <div key={index} className="border-b border-gray-200">
+                        {/* md 이하 일때 */}
+                        <div className="md:hidden py-4">
+                          <div className="flex items-start gap-3">
+                            <input
+                              type="checkbox"
+                              checked={checkedIds.includes(index)}
+                              onChange={(e) =>
+                                handleCheckboxChange(index, e.target.checked)
+                              }
+                              className="mt-1 shrink-0"
+                            />
+                            <img
+                              src={item.imagePath || "/default.jpg"}
+                              alt="상품이미지"
+                              onClick={() =>
+                                navigate(`/product/view?id=${item.productId}`)
+                              }
+                              className="w-20 h-16 object-cover rounded cursor-pointer shrink-0"
+                            />
+                            <div className="flex-1 min-w-0">
+                              <div className="font-bold break-words">
+                                {item.productName}
+                              </div>
+                              <div className="text-sm text-gray-500">
+                                {item.optionName}
+                              </div>
 
-                        <div className="col-span-5 flex gap-4 items-center">
-                          <img
-                            src={item.imagePath || "/default.jpg"}
-                            alt="상품이미지"
-                            onClick={() =>
-                              navigate(`/product/view?id=${item.productId}`)
-                            }
-                            className="w-28 h-24 object-cover cursor-pointer rounded"
-                          />
-                          <div>
-                            <div className="font-bold">{item.productName}</div>
-                            <div className="text-sm text-gray-500">
-                              {item.optionName}
+                              <div className="mt-3 flex items-center justify-between">
+                                <div className="text-sm">
+                                  수량 {item.quantity}개
+                                </div>
+                                <button
+                                  onClick={() => handleEditOption(item)}
+                                  className="btn btn-sm btn-outline"
+                                >
+                                  옵션/수량 변경
+                                </button>
+                              </div>
+
+                              <div className="mt-2 flex items-baseline justify-between">
+                                <div className="text-sm text-gray-600">
+                                  가격 {item.price?.toLocaleString() || "-"}원
+                                </div>
+                                <div className="font-semibold">
+                                  {item.price && item.quantity
+                                    ? (
+                                        item.price * item.quantity
+                                      ).toLocaleString()
+                                    : "-"}
+                                  원
+                                </div>
+                              </div>
                             </div>
                           </div>
                         </div>
 
-                        <div className="col-span-2 text-center">
-                          {item.quantity}개
-                          <div className="mt-2">
-                            <button
-                              onClick={() => handleEditOption(item)}
-                              className="btn btn-sm btn-outline"
-                            >
-                              옵션/수량 변경
-                            </button>
+                        {/* md 이상 일때  */}
+                        <div className="hidden md:grid md:grid-cols-12 md:items-center md:py-4">
+                          <div className="col-span-1 flex justify-center">
+                            <input
+                              type="checkbox"
+                              checked={checkedIds.includes(index)}
+                              onChange={(e) =>
+                                handleCheckboxChange(index, e.target.checked)
+                              }
+                            />
                           </div>
-                        </div>
 
-                        <div className="col-span-2 text-center">
-                          {item.price?.toLocaleString() || "-"}원
-                        </div>
+                          <div className="col-span-5 flex gap-4 items-center">
+                            <img
+                              src={item.imagePath || "/default.jpg"}
+                              alt="상품이미지"
+                              onClick={() =>
+                                navigate(`/product/view?id=${item.productId}`)
+                              }
+                              className="w-28 h-24 object-cover cursor-pointer rounded"
+                            />
+                            <div>
+                              <div className="font-bold">
+                                {item.productName}
+                              </div>
+                              <div className="text-sm text-gray-500">
+                                {item.optionName}
+                              </div>
+                            </div>
+                          </div>
 
-                        <div className="col-span-2 text-center">
-                          {item.price && item.quantity
-                            ? (item.price * item.quantity).toLocaleString()
-                            : "-"}
-                          원
+                          <div className="col-span-2 text-center">
+                            {item.quantity}개
+                            <div className="mt-2">
+                              <button
+                                onClick={() => handleEditOption(item)}
+                                className="btn btn-sm btn-outline"
+                              >
+                                옵션/수량 변경
+                              </button>
+                            </div>
+                          </div>
+
+                          <div className="col-span-2 text-center">
+                            {item.price?.toLocaleString() || "-"}원
+                          </div>
+
+                          <div className="col-span-2 text-center">
+                            {item.price && item.quantity
+                              ? (item.price * item.quantity).toLocaleString()
+                              : "-"}
+                            원
+                          </div>
                         </div>
                       </div>
                     ))}
 
                     {/* 선택 삭제 / 유의사항 */}
-                    <div className="flex items-center gap-2 mt-4">
+                    <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2 mt-4">
                       <button
                         onClick={handleDeleteSelected}
                         className="btn btn-outline"
                       >
                         선택 삭제
                       </button>
-                      <div className="ms-auto text-right text-sm text-gray-500">
+                      <div className="sm:ms-auto text-left sm:text-right text-sm text-gray-500">
                         <p>배송시 문제생겨도 책임안집니다.</p>
                         <p>어쩌구 저쩌구</p>
                       </div>
                     </div>
-                    {/*<hr className="mt-4" />*/}
                   </>
                 )}
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4">
@@ -512,14 +571,14 @@ function ProductCart(props) {
                 </div>
               </div>
             </main>
-            {/* 우측: 주문 요약 sticky */}
+
+            {/* 우측: 주문 요약 (xl↑) */}
             <aside className="hidden xl:block">
-              <div className="sticky top-30">
+              <div className="sticky top-28">
                 <div className="rounded-card p-6 bg-white shadow">
                   <h3 className="text-xl text-center font-semibold mb-4">
                     주문 요약
                   </h3>
-
                   <div className="space-y-2 text-sm">
                     <div className="flex justify-between">
                       <span>상품금액</span>
@@ -536,7 +595,6 @@ function ProductCart(props) {
                       </span>
                     </div>
                   </div>
-
                   <button
                     onClick={handleOrderButton}
                     className="btn btn-neutral w-full mt-5"
@@ -559,31 +617,30 @@ function ProductCart(props) {
             <div className="xl:hidden fixed inset-x-0 bottom-0 z-50 border-t bg-white p-4 shadow-lg">
               <div className="flex items-center justify-between">
                 <div className="text-base">
-                  <div>
-                    <div className="text-sm text-gray-600 mb-2">
-                      <div>
-                        <span>상품금액</span>
-                        <span> {totalItemPrice.toLocaleString()}원</span>
-                      </div>
-                      <div>
-                        <span> 배송비</span>
-                        <span>
-                          {" "}
-                          {shippingFee.toLocaleString()}원
-                          {shippingFee === 0 && (
-                            <span className="text-green-600 text-sm ml-2">
-                              (무료배송)
-                            </span>
-                          )}
+                  <div className="text-sm text-gray-600">
+                    <div>
+                      <span>상품금액</span>
+                      <span className="ml-1">
+                        {" "}
+                        {totalItemPrice.toLocaleString()}원
+                      </span>
+                    </div>
+                    <div>
+                      <span>배송비</span>
+                      <span className="ml-1">
+                        {" "}
+                        {shippingFee.toLocaleString()}원
+                      </span>
+                      {shippingFee === 0 && (
+                        <span className="text-green-600 text-sm ml-2">
+                          (무료배송)
                         </span>
-                      </div>
+                      )}
                     </div>
                   </div>
-                  <div>
-                    <div className="text-gray-600 text-sm">총 주문금액</div>
-                    <div className="text-lg font-bold">
-                      {(totalItemPrice + shippingFee).toLocaleString()}원
-                    </div>
+                  <div className="text-gray-600 text-sm mt-2">총 주문금액</div>
+                  <div className="text-lg font-bold">
+                    {(totalItemPrice + shippingFee).toLocaleString()}원
                   </div>
                 </div>
                 <button onClick={handleOrderButton} className="btn btn-dark">
