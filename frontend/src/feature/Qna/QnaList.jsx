@@ -26,12 +26,6 @@ export function QnaList() {
   };
 
   const radios = [
-    {
-      name: "상품목록",
-      value: "1",
-      class: "btn",
-      fnc: handleQnaAddButtonClick,
-    },
     { name: "문의내역", value: "2", fnc: handleQnaListButtonClick },
     { name: "자주 묻는 질문", value: "3", fnc: handleFaQListButtonClick },
   ];
@@ -109,7 +103,7 @@ export function QnaList() {
                     name="바로가기"
                     aria-label={radio.name}
                     value={radio.value}
-                    checked={idx === 1}
+                    checked={idx === 0}
                     onClick={radio.fnc}
                     onChange={(e) => e.target.value}
                   />
