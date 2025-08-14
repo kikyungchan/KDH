@@ -685,7 +685,7 @@ function ProductCart(props) {
                     {(totalItemPrice + shippingFee).toLocaleString()}원
                   </div>
                 </div>
-                <button onClick={handleOrderButton} className="btn btn-dark">
+                <button onClick={handleOrderButton} className="btn btn-primary">
                   주문하기
                 </button>
               </div>

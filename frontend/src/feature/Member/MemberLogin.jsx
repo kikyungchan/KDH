@@ -4,6 +4,7 @@ import axios from "axios";
 import { AuthenticationContext } from "../common/AuthenticationContextProvider.jsx";
 import { useCart } from "../Product/CartContext.jsx";
 import { useAlert } from "../common/AlertContext.jsx";
+import { FaGoogle } from "react-icons/fa";
 
 export function MemberLogin() {
   const [loginId, setLoginId] = useState("");
@@ -114,7 +115,7 @@ export function MemberLogin() {
               </form>
 
               {/* 회원가입 링크 */}
-              <div className="text-right mt-4 text-sm">
+              <div className="text-right mt-2 text-sm">
                 <Link to="/signup" className="link link-hover text-gray-700">
                   회원가입
                 </Link>
