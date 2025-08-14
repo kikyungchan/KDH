@@ -39,82 +39,168 @@ export function GuestOrderDetail() {
               <h2 className="mb-6 text-center text-2xl font-bold">주문 상세</h2>
               <br />
               <div className="border border-gray-100 rounded px-3 py-2 mb-2">
-                <div className="flex">
-                  <div className="w-40">
-                    <div>주문일자</div>
-                    <div>주문번호</div>
+                <div className="space-y-2">
+                  <div className="flex items-start gap-3 flex-nowrap">
+                    <div className="w-20 sm:w-40 shrink-0 font-medium">
+                      주문일자
+                    </div>
+                    <div className="flex-1 min-w-0 break-words">
+                      {new Date(order.orderDate).toLocaleDateString()}
+                    </div>
                   </div>
-                  <div className="w-full">
-                    <div>{new Date(order.orderDate).toLocaleDateString()}</div>
-                    <div>{order.guestOrderToken}</div>
+                  <div className="flex items-start gap-3 flex-nowrap">
+                    <div className="w-20 sm:w-40 shrink-0 font-medium">
+                      주문번호
+                    </div>
+                    <div className="flex-1 min-w-0 break-words">
+                      {order.guestOrderToken}
+                    </div>
                   </div>
                 </div>
               </div>
               <div className="border border-gray-100 rounded px-3 py-2 mb-2">
                 <h4 className="font-semibold mb-2">주문 정보</h4>
-                <div className="flex">
-                  <div className="w-40 ">
-                    <div>이름</div>
-                    <div>연락처</div>
+                <div className="space-y-2">
+                  <div className="flex items-start gap-3 flex-nowrap">
+                    <div className="w-20 sm:w-40 shrink-0 font-medium">
+                      이름
+                    </div>
+                    <div className="flex-1 min-w-0 break-words">
+                      {order.guestName}
+                    </div>
                   </div>
-                  <div className="w-full">
-                    <div>{order.guestName}</div>
-                    <div>{order.guestPhone}</div>
+                  <div className="flex items-start gap-3 flex-nowrap">
+                    <div className="w-20 sm:w-40 shrink-0 font-medium">
+                      연락처
+                    </div>
+                    <div className="flex-1 min-w-0 break-words">
+                      {order.guestPhone}
+                    </div>
                   </div>
                 </div>
               </div>
+
               <div className="border border-gray-100 rounded px-3 py-2 mb-2">
                 <h4 className="font-semibold mb-2">배송지 정보</h4>
-                <div className="flex">
-                  <div className="w-40">
-                    <div>받는 사람</div>
-                    <div>연락처</div>
-                    <div>우편번호</div>
-                    <div>주소</div>
-                    <div>상세주소</div>
-                    <div>배송메세지</div>
+                <div className="space-y-2">
+                  {/* 받는 사람 */}
+                  <div className="flex items-start gap-3 flex-nowrap">
+                    <div className="w-20 sm:w-40 shrink-0 font-medium">
+                      받는 사람
+                    </div>
+                    <div className="flex-1 min-w-0 break-words">
+                      {order.receiverName}
+                    </div>
                   </div>
-                  <div className="w-full">
-                    <div>{order.receiverName}</div>
-                    <div>{order.receiverPhone}</div>
-                    <div>{order.receiverZipcode}</div>
-                    <div>{order.receiverAddress}</div>
-                    <div>{order.receiverAddressDetail}</div>
-                    <div>{order.memo}</div>
+
+                  {/* 연락처 */}
+                  <div className="flex items-start gap-3 flex-nowrap">
+                    <div className="w-20 sm:w-40 shrink-0 font-medium">
+                      연락처
+                    </div>
+                    <div className="flex-1 min-w-0 break-words">
+                      {order.receiverPhone}
+                    </div>
+                  </div>
+
+                  {/* 우편번호 */}
+                  <div className="flex items-start gap-3 flex-nowrap">
+                    <div className="w-20 sm:w-40 shrink-0 font-medium">
+                      우편번호
+                    </div>
+                    <div className="flex-1 min-w-0 break-words">
+                      {order.receiverZipcode}
+                    </div>
+                  </div>
+
+                  {/* 주소 */}
+                  <div className="flex items-start gap-3 flex-nowrap">
+                    <div className="w-20 sm:w-40 shrink-0 font-medium">
+                      주소
+                    </div>
+                    <div className="flex-1 min-w-0 break-words whitespace-pre-line">
+                      {order.receiverAddress}
+                    </div>
+                  </div>
+
+                  {/* 상세주소 */}
+                  <div className="flex items-start gap-3 flex-nowrap">
+                    <div className="w-20 sm:w-40 shrink-0 font-medium">
+                      상세주소
+                    </div>
+                    <div className="flex-1 min-w-0 break-words">
+                      {order.receiverAddressDetail}
+                    </div>
+                  </div>
+
+                  {/* 배송메세지 */}
+                  <div className="flex items-start gap-3 flex-nowrap">
+                    <div className="w-20 sm:w-40 shrink-0 font-medium">
+                      배송메세지
+                    </div>
+                    <div className="flex-1 min-w-0 break-words whitespace-pre-line">
+                      {order.memo || "-"}
+                    </div>
                   </div>
                 </div>
               </div>
+
               <div className="border border-gray-100 rounded px-3 py-2 mb-2">
                 <h4 className="font-semibold mb-2">주문 상품</h4>
-                <div>
-                  {order.orderItems.map((item, index) => (
-                    <div key={index} className="flex gap-3">
-                      <div className="mb-2">
+
+                <div className="divide-y divide-gray-300">
+                  {order.orderItems.map((item, idx) => (
+                    <div key={idx} className="py-3">
+                      {/* 아이템 한 개 */}
+                      <div className="flex gap-3 items-start max-[500px]:flex-col">
+                        {/* 썸네일 */}
                         <img
                           src={item.thumbnailUrl || "/default.png"}
                           alt={item.productName}
-                          className="w-32 h-32 rounded"
+                          className="w-24 h-24 sm:w-32 sm:h-32 rounded object-cover shrink-0"
                         />
-                      </div>
-                      <div className="flex items-center">
-                        <div className="w-15">
-                          <div>상품명 :</div>
-                          <div>옵션 :</div>
-                          <div>수량 :</div>
-                          <div>가격 :</div>
+
+                        {/* 상세 정보 */}
+                        <div className="flex-1 min-w-0 w-full space-y-1">
+                          <div className="flex items-start gap-2 flex-nowrap">
+                            <div className="w-22 sm:w-28 shrink-0 font-medium">
+                              상품명
+                            </div>
+                            <div className="flex-1 min-w-0 break-words">
+                              {item.productName}
+                            </div>
+                          </div>
+                          <div className="flex items-start gap-2 flex-nowrap">
+                            <div className="w-22 sm:w-28 shrink-0 font-medium">
+                              옵션
+                            </div>
+                            <div className="flex-1 min-w-0 break-words">
+                              {item.productOption || "-"}
+                            </div>
+                          </div>
+                          <div className="flex items-start gap-2 flex-nowrap">
+                            <div className="w-22 sm:w-28 shrink-0 font-medium">
+                              수량
+                            </div>
+                            <div className="flex-1 min-w-0">
+                              {item.quantity}
+                            </div>
+                          </div>
+                          <div className="flex items-start gap-2 flex-nowrap">
+                            <div className="w-22 sm:w-28 shrink-0 font-medium">
+                              가격
+                            </div>
+                            <div className="flex-1 min-w-0">
+                              {item.price.toLocaleString()}원
+                            </div>
+                          </div>
                         </div>
-                        <div>
-                          <div>{item.productName}</div>
-                          <div>{item.productOption}</div>
-                          <div>{item.quantity}</div>
-                          <div>{item.price.toLocaleString()}원</div>
-                        </div>
                       </div>
-                      <br />
                     </div>
                   ))}
                 </div>
               </div>
+
               <div className="border border-white px-3 py-1">
                 <div className="text-right py-2">
                   <div>상품금액 : {order.itemSubtotal.toLocaleString()}원</div>
