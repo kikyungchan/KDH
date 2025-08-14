@@ -6,12 +6,23 @@ export function AlertProvider({ children }) {
   const [alert, setAlert] = useState({ text: "", type: "error" }); // 객체형 상태
 
   const showAlert = (message, type = "error") => {
-    const msgText = typeof message === "string" ? message : message?.text || "오류가 발생했습니다";
-    const msgType = typeof message === "object" && message?.type ? message.type : type;
+    const msgText =
+      typeof message === "string"
+        ? message
+        : message?.text || "오류가 발생했습니다";
+    const msgType =
+      typeof message === "object" && message?.type ? message.type : type;
 
     setAlert({ text: msgText, type: msgType });
 
     setTimeout(() => setAlert({ text: "", type: "error" }), 4000); // 자동 사라짐
+  };
+
+  const typeClass = {
+    success: "alert-success",
+    error: "alert-error",
+    warning: "alert-warning",
+    info: "alert-info",
   };
 
   return (
@@ -19,7 +30,9 @@ export function AlertProvider({ children }) {
       {children}
 
       {alert.text && (
-        <div className={`alert alert-${alert.type} fixed top-4 left-1/2 -translate-x-1/2 z-[9999] text-lg shadow-lg w-fit`}>
+        <div
+          className={`alert ${typeClass[alert.type] ?? "alert-error"} fixed top-4 left-1/2 -translate-x-1/2 z-[9999] text-lg shadow-lg w-fit`}
+        >
           <span>{alert.text}</span>
         </div>
       )}

@@ -34,14 +34,21 @@ public class GuestOrder {
     private String receiverPhone;
 
     @Column(name = "shipping_address")
-    private String shippingAddress;
+    private String receiverAddress;
 
     @Column(name = "address_detail")
-    private String addressDetail;
+    private String receiverAddressDetail;
 
     @Column(name = "zipcode", length = 20)
-    private String zipcode;
+    private String receiverZipcode;
 
+    @Column(name = "items_subtotal", nullable = false)
+    private Integer itemsSubtotal;
+
+    @Column(name = "shipping_fee", nullable = false)
+    private Integer shippingFee;
+
+    @Column(name = "total_price", nullable = false)
     private Integer totalPrice;
 
     @Column(name = "memo")
@@ -49,6 +56,10 @@ public class GuestOrder {
 
     @Column(name = "guest_order_token")
     private String guestOrderToken;
+
+    @ColumnDefault("current_timestamp()")
+    @Column(name = "order_date", updatable = false, insertable = false, nullable = false)
+    private LocalDateTime orderDate;
 
     @ColumnDefault("current_timestamp()")
     @Column(name = "created_at", insertable = false, updatable = false)

@@ -1,4 +1,3 @@
-
 export default function ChangePasswordModal({
   show,
   onClose,
@@ -24,7 +23,7 @@ export default function ChangePasswordModal({
 
   return (
     <div className="modal modal-open">
-      <div className="modal-box w-full max-w-md">
+      <div className="modal-box max-w-lg mx-4 sm:mx-auto">
         {/* 헤더 */}
         <div className="flex justify-between items-center mb-2">
           <h3 className="font-bold text-lg">비밀번호 변경</h3>
@@ -40,7 +39,9 @@ export default function ChangePasswordModal({
 
         {/* 현재 비밀번호 */}
         <div className="form-control mb-4">
-          <label className="block text-sm font-semibold mb-1">현재 비밀번호</label>
+          <label className="block text-sm font-semibold mb-1">
+            현재 비밀번호
+          </label>
           <input
             type="password"
             value={oldPassword}
@@ -63,7 +64,9 @@ export default function ChangePasswordModal({
 
         {/* 새 비밀번호 확인 */}
         <div className="form-control mb-2">
-          <label className="block text-sm font-semibold mb-1">변경할 비밀번호 확인</label>
+          <label className="block text-sm font-semibold mb-1">
+            변경할 비밀번호 확인
+          </label>
           <input
             type="password"
             value={newPassword2}

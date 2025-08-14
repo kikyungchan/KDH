@@ -1,9 +1,6 @@
 package com.example.backend.product.service;
 
-import com.example.backend.product.dto.order.GuestLookupRequest;
-import com.example.backend.product.dto.order.OrderDetailDto;
-import com.example.backend.product.dto.order.OrderDto;
-import com.example.backend.product.dto.order.OrderItemDto;
+import com.example.backend.product.dto.order.*;
 import com.example.backend.product.entity.GuestOrder;
 import com.example.backend.product.entity.Order;
 import com.example.backend.product.entity.OrderItem;
@@ -36,45 +33,43 @@ public class OrderService {
 
     public Page<OrderDto> getOrdersByUsersLoginId(Integer memberId, Pageable pageable) {
         // 전체 orderToken 리스트
-            List<String> allTokens = orderRepository.findDistinctOrderTokensByMemberId(memberId);
+        List<String> allTokens = orderRepository.findDistinctOrderTokensByMemberId(memberId);
 
-            // 페이징 처리 수동 적용 (subList)
-            int start = (int) pageable.getOffset();
-            int end = Math.min((start + pageable.getPageSize()), allTokens.size());
+        // 페이징 처리 수동 적용 (subList)
+        int start = (int) pageable.getOffset();
+        int end = Math.min((start + pageable.getPageSize()), allTokens.size());
 
-            List<String> pageTokens = allTokens.subList(start, end);
+        List<String> pageTokens = allTokens.subList(start, end);
 
-            List<OrderDto> dtoList = new ArrayList<>();
+        List<OrderDto> dtoList = new ArrayList<>();
 
-            for (String token : pageTokens) {
-                List<Order> orders = orderRepository.findAllByOrderToken(token);
+        for (String token : pageTokens) {
+            List<Order> orders = orderRepository.findAllByOrderToken(token);
 
-                if (!orders.isEmpty()) {
-                    Order representative = orders.get(0); // 임의 대표
-                    List<OrderItemDto> allItems = orders.stream()
-                            .flatMap(o -> o.getOrderItems().stream())
-                            .map(OrderItemDto::new)
-                            .toList();
+            if (!orders.isEmpty()) {
+                Order representative = orders.get(0); // 임의 대표
+                List<OrderItemDto> allItems = orders.stream()
+                        .flatMap(o -> o.getOrderItems().stream())
+                        .map(OrderItemDto::new)
+                        .toList();
 
-                    OrderDto dto = new OrderDto(representative);
-                    dto.setOrderId(representative.getId());
-                    dto.setOrderToken(token);
-                    dto.setOrderDate(representative.getCreatedAt());
-                    dto.setMemberName(representative.getMember().getName());
-                    dto.setTotalPrice(
-                            allItems.stream()
-                                    .mapToInt(item -> item.getPrice() * item.getQuantity())
-                                    .sum()
-                    );
-                    dto.setOrderItems(allItems);
-                    dto.setStatus("구매 확정");
+                OrderDto dto = new OrderDto(representative);
 
-                    dtoList.add(dto);
-                }
+                dto.setOrderId(representative.getId());
+                dto.setOrderToken(token);
+                dto.setOrderDate(representative.getCreatedAt());
+                dto.setMemberName(representative.getMember().getName());
+                dto.setItemsSubtotal(representative.getItemsSubtotal());
+                dto.setShippingFee(representative.getShippingFee());
+                dto.setTotalPrice(representative.getTotalPrice());
+                dto.setOrderItems(allItems);
+                dto.setStatus("구매 확정");
+
+                dtoList.add(dto);
             }
-            return new PageImpl<>(dtoList, pageable, allTokens.size());
+        }
+        return new PageImpl<>(dtoList, pageable, allTokens.size());
     }
-
 
 
     // 주문 상세 조회
@@ -106,7 +101,7 @@ public class OrderService {
     }
 
     public void verifyGuestOrder(GuestLookupRequest request, HttpSession session) {
-        Optional<GuestOrder> guestOrder = guestOrderRepository.findByGuestOrderToken(request.getGuestOrderToken());
+        Optional<GuestOrder> guestOrder = guestOrderRepository.findVerifyByToken(request.getGuestOrderToken());
 
         if (guestOrder.isEmpty()) {
             throw new NoSuchElementException("주문을 찾을 수 없습니다.");
@@ -122,7 +117,7 @@ public class OrderService {
         session.setMaxInactiveInterval(180); // 180초 후 자동 만료
     }
 
-    public GuestOrder getGuestOrderDetail(HttpSession session) {
+    public GuestOrderDetailDto getGuestOrderDetail(HttpSession session) {
 
         String token = (String) session.getAttribute("guestOrderToken");
 
@@ -130,7 +125,10 @@ public class OrderService {
             throw new SecurityException("인증 정보가 없습니다");
         }
 
-        return guestOrderRepository.findByGuestOrderToken(token)
+        GuestOrder order = guestOrderRepository.findDetailByToken(token)
                 .orElseThrow(() -> new NoSuchElementException("주문을 찾을 수 없습니다."));
+
+        // 여기서 LAZY 컬렉션들이 이미 초기화되어 있음
+        return GuestOrderDetailDto.fromEntity(order);
     }
 }

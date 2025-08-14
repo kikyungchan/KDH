@@ -1,18 +1,18 @@
-
 export default function ConfirmEditModal({
-                                           show,
-                                           onClose,
-                                           onSubmit,
-                                           oldPassword,
-                                           setOldPassword,
-                                           isSubmitted,
-                                           setIsSubmitted,
-                                           isEditProcessing,
-                                         }) {
+  show,
+  onClose,
+  onSubmit,
+  oldPassword,
+  setOldPassword,
+  isSubmitted,
+  setIsSubmitted,
+  isEditProcessing,
+}) {
   if (!show) return null;
   return (
     <div className="modal modal-open">
-      <div className="modal-box w-full max-w-md">
+      <div className="modal-box max-w-lg mx-4 sm:mx-auto">
+        {" "}
         {/* 헤더 */}
         <div className="flex justify-between items-center mb-6">
           <h3 className="font-bold text-lg">회원 정보 수정 확인</h3>
@@ -27,10 +27,11 @@ export default function ConfirmEditModal({
             ✕
           </button>
         </div>
-
         {/* 내용 */}
         <div className="flex items-start gap-6 mb-2">
-          <label className="block text-sm font-semibold pt-2">비밀번호 입력</label>
+          <label className="block text-sm font-semibold pt-2">
+            비밀번호 입력
+          </label>
 
           <div className="flex flex-col flex-1">
             <input
@@ -43,11 +44,12 @@ export default function ConfirmEditModal({
               autoFocus
             />
             {isSubmitted && oldPassword.trim() === "" && (
-              <span className="text-error text-sm mt-2 ml-3">암호를 입력해주세요.</span>
+              <span className="text-error text-sm mt-2 ml-3">
+                암호를 입력해주세요.
+              </span>
             )}
           </div>
         </div>
-
         {/* 하단 버튼 */}
         <div className="modal-action">
           <button

@@ -365,17 +365,22 @@ public class ProductService {
         order.setMember(member);
         order.setOrderToken(orderToken);
         order.setLoginId(member.getLoginId());
-        order.setPhone(member.getPhone());
-        order.setMemberName(member.getName());
+
+        // 주문자 필드 분리
+        order.setOrdererName(member.getName());
+        order.setOrdererPhone(member.getPhone());
 
         // 첫 요청 기준 공통 배송정보 설정
         OrderRequest first = reqList.get(0);
+        // 수령인 필드 분리
         order.setMemo(first.getMemo());
-        order.setShippingAddress(first.getShippingAddress());
-        order.setZipcode(first.getZipcode());
-        order.setAddressDetail(first.getAddressDetail());
+        order.setReceiverName(first.getReceiverName());
+        order.setReceiverPhone(first.getReceiverPhone());
+        order.setReceiverZipcode(first.getReceiverZipcode());
+        order.setReceiverAddress(first.getReceiverAddress());
+        order.setReceiverAddressDetail(first.getReceiverAddressDetail());
 
-        int totalOrderPrice = 0;
+        int setItemsSubtotal = 0;
         List<OrderItem> itemList = new ArrayList<>();
 
         for (OrderRequest req : reqList) {
@@ -398,11 +403,16 @@ public class ProductService {
                 item.setOptionName(option.getOptionName());
             }
 
-            totalOrderPrice += item.getTotalPrice();
+            setItemsSubtotal += item.getTotalPrice();
             itemList.add(item);
         }
 
-        order.setTotalPrice(totalOrderPrice);
+
+        // 금액 필드 분리
+        int shippingFee = (setItemsSubtotal >= 100000) ? 0 : 3000;
+        order.setItemsSubtotal(setItemsSubtotal);
+        order.setShippingFee(shippingFee);
+        order.setTotalPrice(setItemsSubtotal + shippingFee);
         order.setOrderItems(itemList);
 
         orderRepository.save(order); // orderItem도 함께 저장됨

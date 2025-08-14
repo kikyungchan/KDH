@@ -1,45 +1,52 @@
 import { useLocation, useNavigate } from "react-router";
-import React, { useContext, useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import axios from "axios";
 import "./css/ProductOrder.css";
 import { useCart } from "./CartContext.jsx";
-import { AuthenticationContext } from "../common/AuthenticationContextProvider.jsx";
 
-function Order(props) {
-  const [postalCode, setPostalCode] = useState("");
-  const [memo, setMemo] = useState("");
-  const [customMemo, setCustomMemo] = useState("");
+function Order() {
   const [receiverName, setReceiverName] = useState("");
   const [receiverPhone, setReceiverPhone] = useState("");
+  const [receiverZipcode, setReceiverZipcode] = useState("");
   const [receiverAddress, setReceiverAddress] = useState("");
-  const [receiverDetailAddress, setReceiverDetailAddress] = useState("");
+  const [receiverAddressDetail, setReceiverAddressDetail] = useState("");
+  const [memo, setMemo] = useState("");
+  const [customMemo, setCustomMemo] = useState("");
   const [sameAsOrderer, setSameAsOrderer] = useState(false);
-  const [name, setName] = useState("");
-  const [address, setAddress] = useState("");
-  const [phone, setPhone] = useState("");
-  const [addressDetail, setAddressDetail] = useState("");
-  const [email, setEmail] = useState(null);
+  const [ordererName, setOrdererName] = useState("");
+  const [ordererZipcode, setOrdererZipcode] = useState("");
+  const [ordererAddress, setOrdererAddress] = useState("");
+  const [ordererAddressDetail, setOrdererAddressDetail] = useState("");
+  const [ordererPhone, setOrdererPhone] = useState("");
+  const [ordererEmail, setOrdererEmail] = useState(null);
+  const [shippingFee, setShippingFee] = useState(0);
+  const [loadingMember, setLoadingMember] = useState(false);
   const [isProcessing, setIsProcessing] = useState(false);
   const { state } = useLocation();
   const { setCartCount } = useCart();
+  const isMember = !!localStorage.getItem("token");
   // items가 배열이 아니더라도 자동으로 배열로 감싸줌.
   const items = state?.items ?? (state ? [state] : []);
   const totalItemPrice = items.reduce(
     (sum, item) => sum + item.price * item.quantity,
     0,
   );
-  const shippingFee = totalItemPrice >= 100000 ? 0 : 3000;
   const navigate = useNavigate();
   const checkoutWindow = useRef(null);
   const formDataRef = useRef({});
+
+  useEffect(() => {
+    const fee = totalItemPrice >= 100000 ? 0 : 3000;
+    setShippingFee(fee);
+  }, [totalItemPrice]);
 
   useEffect(() => {
     formDataRef.current = {
       receiverName,
       receiverPhone,
       receiverAddress,
-      receiverDetailAddress,
-      postalCode,
+      receiverAddressDetail,
+      receiverZipcode,
       memo,
       customMemo,
     };
@@ -47,8 +54,8 @@ function Order(props) {
     receiverName,
     receiverPhone,
     receiverAddress,
-    receiverDetailAddress,
-    postalCode,
+    receiverAddressDetail,
+    receiverZipcode,
     memo,
     customMemo,
   ]);
@@ -56,6 +63,7 @@ function Order(props) {
   useEffect(() => {
     const token = localStorage.getItem("token");
     if (token) {
+      setLoadingMember(true);
       axios
         .get("/api/product/member/info", {
           headers: {
@@ -63,25 +71,27 @@ function Order(props) {
           },
         })
         .then((res) => {
-          setAddress(res.data.address);
-          setName(res.data.name);
-          setPhone(res.data.phone);
-          setEmail(res.data.email);
-          setAddressDetail(res.data.addressDetail);
+          setOrdererName(res.data.name);
+          setOrdererPhone(res.data.phone);
+          setOrdererEmail(res.data.email);
+          setOrdererZipcode(res.data.zipCode ?? "");
+          setOrdererAddress(res.data.address);
+          setOrdererAddressDetail(res.data.addressDetail);
         })
-        .catch((err) => {});
+        .catch(() => {})
+        .finally(() => setLoadingMember(false));
     }
   }, []);
 
   useEffect(() => {
-    if (email != null) {
-      const handlePopupMessage = (event) => {
-        switch (event.data.type) {
-          case "POPUP_READY":
-            console.log("팝업 준비 완료!");
-            // 팝업이 준비되면 데이터 전송
-            sendDataToPopup();
-            break;
+    if (ordererEmail == null) return;
+    const handlePopupMessage = (event) => {
+      switch (event.data.type) {
+        case "POPUP_READY":
+          console.log("팝업 준비 완료!");
+          // 팝업이 준비되면 데이터 전송
+          sendDataToPopup();
+          break;
 
           case "PAY_SUCCESS":
             // 결제 완료 처리
@@ -90,21 +100,23 @@ function Order(props) {
             window.onbeforeunload = null;
             break;
 
-          case "PAY_FAIL":
-            // 결제 실패 처리
-            alert("결제에 실패하였습니다 다시 시도해 주세요");
-            setIsProcessing(false);
-            break;
-        }
-      };
-      window.addEventListener("message", handlePopupMessage);
+        case "PAY_FAIL":
+          // 결제 실패 처리
+          alert("결제에 실패하였습니다 다시 시도해 주세요");
+          setIsProcessing(false);
+          break;
 
-      // cleanup 함수로 이벤트 리스너 제거
-      return () => {
-        window.removeEventListener("message", handlePopupMessage);
-      };
-    }
-  }, [email]);
+        default:
+          console.log("알 수 없는 오류:", event.data.type);
+      }
+    };
+    window.addEventListener("message", handlePopupMessage);
+
+    // cleanup 함수로 이벤트 리스너 제거
+    return () => {
+      window.removeEventListener("message", handlePopupMessage);
+    };
+  }, [ordererEmail]);
 
   function handlePaymentConnection() {
     // 폼 검증
@@ -133,7 +145,7 @@ function Order(props) {
       }
 
       // 팝업이 닫혔을 때를 감지 (혹시 사용자가 직접 닫을 경우 대비)
-      // setinterval (일정 시간 간격으로 함수를 반복해서 실행)
+      // setInterval (일정 시간 간격으로 함수를 반복해서 실행)
       const checkClosed = setInterval(() => {
         if (checkoutWindow.current && checkoutWindow.current.closed) {
           setIsProcessing(false);
@@ -174,18 +186,21 @@ function Order(props) {
     console.log("items : " + items);
     console.log("items length", items.length);
     if (checkoutWindow.current && !checkoutWindow.current.closed) {
+      const fee = Number(shippingFee) || 0;
+      const amount = totalItemPrice + fee;
+
       checkoutWindow.current.postMessage(
         {
           type: "CHECKOUT_DATA",
           data: {
             orderId: "12345",
-            amount: totalItemPrice + shippingFee,
+            amount,
             productName:
               items[0].productName +
               (items.length > 1 ? ` 외 ${items.length - 1}건` : ""),
-            username: name,
-            phoneNum: phone,
-            emailAddr: email,
+            username: ordererName,
+            phoneNum: ordererPhone,
+            emailAddr: ordererEmail ?? "",
           },
         },
         window.location.origin,
@@ -197,9 +212,6 @@ function Order(props) {
     return <div>잘못된 접근입니다.</div>;
   }
 
-  // const totalPrice = state.price * state.quantity;
-  // const shippingFee = totalPrice >= 100000 ? 0 : 3000;
-
   function handleCancelButton() {
     alert("주문이 취소되었습니다.");
     navigate(-1);
@@ -208,7 +220,19 @@ function Order(props) {
   function validateForm() {
     // 입력값 유효성 검사
     // 주문자 정보
-    if (!name.trim() || !phone.trim() || !address.trim()) {
+    console.log("Name : ", ordererName);
+    console.log("Phone : ", ordererPhone);
+    console.log(isMember ? "ordererAddress" : "receiverAddress");
+    console.log("Address : ", isMember ? ordererAddress : receiverAddress);
+    console.log(
+      "Address : ",
+      isMember ? ordererAddress : formDataRef.current.receiverAddress,
+    );
+    if (
+      !ordererName.trim() ||
+      !ordererPhone.trim() ||
+      (isMember && !ordererAddress.trim())
+    ) {
       alert("주문자 정보를 모두 입력해 주세요.");
       return false;
     }
@@ -218,9 +242,9 @@ function Order(props) {
     if (
       !currentData.receiverName.trim() ||
       !currentData.receiverPhone.trim() ||
+      !currentData.receiverZipcode.trim() ||
       !currentData.receiverAddress.trim() ||
-      !currentData.receiverDetailAddress.trim() ||
-      !currentData.postalCode.trim()
+      !currentData.receiverAddressDetail.trim()
     ) {
       alert("배송지 정보를 모두 입력해 주세요.");
 
@@ -245,14 +269,23 @@ function Order(props) {
       optionName: item.optionName ?? item.option,
       quantity: item.quantity,
       price: item.price,
-      shippingAddress: address,
+
+      // 주문자 정보
+      ordererName: ordererName,
+      ordererPhone: ordererPhone,
+
+      // 수령인 정보
+      receiverName: currentData.receiverName,
+      receiverPhone: currentData.receiverPhone,
+      receiverZipcode: currentData.receiverZipcode,
+      receiverAddress: currentData.receiverAddress,
+      receiverAddressDetail: currentData.receiverAddressDetail,
+
       memo:
         currentData.memo === "직접 작성"
           ? currentData.customMemo
           : currentData.memo,
       totalPrice: item.price * item.quantity,
-      zipcode: currentData.postalCode,
-      addressDetail: currentData.receiverDetailAddress,
     }));
 
     if (token) {
@@ -290,19 +323,23 @@ function Order(props) {
         .then((res) => {
           setCartCount(res.data);
         })
-        .then((res) => {
+        .then(() => {
           alert("주문이 완료되었습니다.");
           navigate("/product/order/complete", {
             state: {
               items,
               orderToken,
-              orderer: { name, phone, address },
+              orderer: {
+                name: ordererName,
+                phone: ordererPhone,
+                address: ordererAddress,
+              },
               receiver: {
                 name: currentData.receiverName,
                 phone: currentData.receiverPhone,
                 address: currentData.receiverAddress,
-                postalCode: currentData.postalCode,
-                receiverDetailAddress: currentData.receiverDetailAddress,
+                zipcode: currentData.receiverZipcode,
+                addressDetail: currentData.receiverAddressDetail,
               },
               memo:
                 currentData.memo === "직접 작성"
@@ -324,19 +361,18 @@ function Order(props) {
         optionName: item.optionName ?? item.option,
         quantity: item.quantity,
         price: item.price,
-        shippingAddress: address,
         memo:
           currentData.memo === "직접 작성"
             ? currentData.customMemo
             : currentData.memo,
         totalPrice: item.price * item.quantity,
-        guestName: name,
-        guestPhone: phone,
+        guestName: ordererName,
+        guestPhone: ordererPhone,
         receiverName: currentData.receiverName,
         receiverPhone: currentData.receiverPhone,
-        receiverAddress: currentData.receiverAddress,
-        zipcode: currentData.postalCode,
-        addressDetail: currentData.receiverDetailAddress,
+        shippingAddress: currentData.receiverAddress,
+        zipcode: currentData.receiverZipcode,
+        addressDetail: currentData.receiverAddressDetail,
       }));
       axios.post("/api/product/order/guest", payloadList).then((res) => {
         const token = res.data.guestOrderToken;
@@ -357,13 +393,17 @@ function Order(props) {
           state: {
             items,
             orderToken: token,
-            orderer: { name, phone, address },
+            orderer: {
+              name: ordererName,
+              phone: ordererPhone,
+              address: ordererAddress,
+            },
             receiver: {
               name: currentData.receiverName,
               phone: currentData.receiverPhone,
               address: currentData.receiverAddress,
-              postalCode: currentData.postalCode,
-              receiverDetailAddress: currentData.receiverDetailAddress,
+              zipcode: currentData.receiverZipcode,
+              addressDetail: currentData.receiverAddressDetail,
             },
             memo:
               currentData.memo === "직접 작성"
@@ -384,12 +424,12 @@ function Order(props) {
       setReceiverName("");
       setReceiverPhone("");
       setReceiverAddress("");
-      setPostalCode("");
-      setReceiverDetailAddress("");
+      setReceiverZipcode("");
+      setReceiverAddressDetail("");
       return;
     }
     if (token) {
-      // 회원: DB에서 배송정보 불러오기
+      // 회원: DB 에서 배송정보 불러오기
       axios
         .get("/api/product/member/info", {
           headers: {
@@ -400,29 +440,39 @@ function Order(props) {
           setReceiverName(res.data.name);
           setReceiverPhone(res.data.phone);
           setReceiverAddress(res.data.address);
-          setPostalCode(res.data.zipCode);
-          setReceiverDetailAddress(res.data.addressDetail);
+          setReceiverZipcode(res.data.zipCode);
+          setReceiverAddressDetail(res.data.addressDetail);
         });
     } else {
-      setReceiverName(name);
-      setReceiverPhone(phone);
-      setReceiverAddress(address);
-      setPostalCode("");
-      setReceiverDetailAddress("");
+      setReceiverName(ordererName);
+      setReceiverPhone(ordererPhone);
+      setReceiverAddress(ordererAddress);
+      setReceiverZipcode(ordererZipcode || "");
+      setReceiverAddressDetail(ordererAddressDetail || "");
     }
   }
 
-  function handleSearchAddress() {
+  function handleSearchOrdererAddress() {
     new window.daum.Postcode({
       oncomplete: function (data) {
-        setReceiverAddress(data.address); // 도로명 주소
-        setPostalCode(data.zonecode); // 우편번호 필요하면 이것도
+        setOrdererAddress(data.address); // 도로명 주소
+        setOrdererZipcode(data.zonecode); // 우편번호 필요하면 이것도
         console.log("작동");
       },
     }).open();
   }
 
-  if (!email) {
+  function handleSearchReceiverAddress() {
+    new window.daum.Postcode({
+      oncomplete: function (data) {
+        setReceiverAddress(data.address); // 도로명 주소
+        setReceiverZipcode(data.zonecode); // 우편번호 필요하면 이것도
+        console.log("작동");
+      },
+    }).open();
+  }
+
+  if (loadingMember) {
     return <span className="loading loading-spinner"></span>;
   }
 
@@ -463,7 +513,9 @@ function Order(props) {
                         <strong>{item.productName}</strong>
                       </div>
                       <div>
-                        {item.optionName ?? item.option} / {item.quantity}개
+                        {(item.optionName ?? item.option)
+                          ? `${item.optionName ?? item.option} / ${item.quantity}개`
+                          : `${item.quantity}개`}
                       </div>
                       <div>
                         {(item.price * item.quantity).toLocaleString()}원
@@ -516,33 +568,62 @@ function Order(props) {
               <div className="order-input-row">
                 <input
                   type="text"
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
+                  value={ordererName}
+                  onChange={(e) => setOrdererName(e.target.value)}
                   placeholder="이름"
                   className="order-input-half"
                 />
                 <input
                   type="text"
-                  value={phone}
-                  onChange={(e) => setPhone(e.target.value)}
+                  value={ordererPhone}
+                  onChange={(e) => setOrdererPhone(e.target.value)}
                   placeholder="연락처"
                   className="order-input-half"
                 />
               </div>
-              <input
-                type="text"
-                value={address}
-                placeholder="주소"
-                onChange={(e) => setAddress(e.target.value)}
-                className="order-input-full"
-              />
-              <input
-                type="text"
-                value={addressDetail}
-                placeholder="상세주소"
-                onChange={(e) => setAddressDetail(e.target.value)}
-                className="order-input-full"
-              />
+
+              {!isMember && (
+                <input
+                  type="email"
+                  placeholder="이메일"
+                  className="order-input-full"
+                  value={ordererEmail ?? ""}
+                  onChange={(e) => setOrdererEmail(e.target.value)}
+                />
+              )}
+              {isMember && (
+                <>
+                  <div className="order-input-zipcode">
+                    <input
+                      placeholder="우편번호"
+                      className="order-input-full"
+                      readOnly
+                      value={ordererZipcode}
+                      onChange={(e) => setOrdererZipcode(e.target.value)}
+                    />
+                    <button
+                      type="button"
+                      onClick={handleSearchOrdererAddress}
+                      className="order-input-full order-search-btn"
+                    >
+                      주소 검색
+                    </button>
+                  </div>
+                  <input
+                    placeholder="주소"
+                    className="order-input-full"
+                    readOnly
+                    value={ordererAddress}
+                    onChange={(e) => setOrdererAddress(e.target.value)}
+                  />
+                  <input
+                    placeholder="상세주소"
+                    className="order-input-full"
+                    value={ordererAddressDetail}
+                    onChange={(e) => setOrdererAddressDetail(e.target.value)}
+                  />
+                </>
+              )}
             </div>
 
             {/* 배송 정보 */}
@@ -576,12 +657,13 @@ function Order(props) {
                 <input
                   placeholder="우편번호"
                   className="order-input-full"
-                  value={postalCode}
-                  onChange={(e) => setPostalCode(e.target.value)}
+                  readOnly
+                  value={receiverZipcode}
+                  onChange={(e) => setReceiverZipcode(e.target.value)}
                 />
                 <button
                   type="button"
-                  onClick={handleSearchAddress}
+                  onClick={handleSearchReceiverAddress}
                   className="order-input-full order-search-btn"
                 >
                   주소 검색
@@ -590,14 +672,15 @@ function Order(props) {
               <input
                 placeholder="주소"
                 className="order-input-full"
+                readOnly
                 value={receiverAddress}
                 onChange={(e) => setReceiverAddress(e.target.value)}
               />
               <input
                 placeholder="상세주소"
                 className="order-input-full"
-                value={receiverDetailAddress}
-                onChange={(e) => setReceiverDetailAddress(e.target.value)}
+                value={receiverAddressDetail}
+                onChange={(e) => setReceiverAddressDetail(e.target.value)}
               />
             </div>
 
@@ -639,7 +722,7 @@ function Order(props) {
                 </button>
               ) : (
                 <button
-                  className="order-button confirm"
+                  className="order-button confirm btn btn-lg"
                   onClick={() => {
                     validateForm() && handlePaymentConnection();
                   }}
@@ -649,7 +732,7 @@ function Order(props) {
               )}
               <button
                 onClick={handleCancelButton}
-                className="order-button cancel"
+                className="order-button cancel btn btn-lg"
               >
                 취소
               </button>

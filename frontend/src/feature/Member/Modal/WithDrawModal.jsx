@@ -1,4 +1,3 @@
-
 export default function WithdrawModal({
   show,
   onClose,
@@ -12,7 +11,7 @@ export default function WithdrawModal({
 
   return (
     <div className="modal modal-open">
-      <div className="modal-box w-full max-w-md">
+      <div className="modal-box max-w-lg mx-4 sm:mx-auto">
         {/* 모달 헤더 */}
         <div className="flex justify-between items-center mb-2">
           <h3 className="text-lg font-bold">회원 탈퇴 확인</h3>

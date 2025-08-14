@@ -33,7 +33,6 @@ public class WidgetController {
     private String API_KEY_FILE;
 
     @PostMapping("confirm")
-    @PreAuthorize("isAuthenticated()")
     public ResponseEntity<TossPaymentResDto> confirm(@RequestBody PaymentConfirmDto request,
                                                      Authentication authentication) throws Exception {
 

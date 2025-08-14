@@ -50,15 +50,16 @@ export function MemberLogin() {
   return (
     <div className="page-wrapper">
       <div className="center-top-container">
-        <div className="w-full max-w-[400px]">
+        <div className="w-full max-w-[400px] mx-auto px-4 sm:px-3">
           <div className="rounded-card">
-            <div className="w-full justify-content-center">
+            <div className="w-full">
               <Link
                 to="/home"
-                className="navbar-logo flex justify-center items-center w-full mb-6"
+                className="navbar-logo !flex justify-center items-center
+                 w-full !mb-8 md:!mb-8"
               >
                 <img
-                  src="../../../../public/logo/kdh.png"
+                  src="/logo/kdh.png"
                   style={{ width: "80px" }}
                   className="mr-2"
                 />

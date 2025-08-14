@@ -13,6 +13,12 @@
     font-family: "Paperlogy";
 }
 
+@media (max-width: 400px) {
+    .alert-text {
+        font-size: 0.875rem; /* Tailwind text-sm */
+    }
+}
+
 .container {
     max-width: 1256px;
     margin: 0 auto;
