@@ -2,7 +2,6 @@ import { loadTossPayments, ANONYMOUS } from "@tosspayments/tosspayments-sdk";
 import { useEffect, useState } from "react";
 import { v4 as uuidv4 } from "uuid";
 
-// 이거 하드코딩 괜찮나..?
 const clientKey = "test_gck_docs_Ovk5rk1EwkEbP0W43n07xlzm";
 const customerKey = "kCGTAUtheqwIR-I7TEkum";
 
