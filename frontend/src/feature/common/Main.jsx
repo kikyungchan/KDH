@@ -14,12 +14,13 @@ function Main() {
       document.body.style.overflow = "auto"; // 페이지 떠날 땐 항상 복구
     };
   }, []);
+  const isRootPath = location.pathname === "/";
 
   return (
     <>
       <AlertWebSocketProvider>
         <NavBar />
-        <div style={{ paddingTop: "80px" }}></div>
+        {!isRootPath && <div style={{ paddingTop: "80px" }}></div>}
         <Outlet />
         {!hideFooter && <Footer />}
       </AlertWebSocketProvider>
