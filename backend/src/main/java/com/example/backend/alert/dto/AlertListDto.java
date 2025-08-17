@@ -17,5 +17,6 @@ public class AlertListDto {
     String status;
     LocalDateTime createdAt;
     LocalDateTime updatedAt;
+    Integer requesterId;
     String link;
 }

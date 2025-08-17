@@ -17,6 +17,7 @@ public interface AlertRepository extends JpaRepository<Alert, Integer> {
                                     a.status,
                                     a.createdAt,
                                     a.updatedAt,
+                                    a.requester,
                                     a.link)
                         FROM Alert a JOIN Member m
                                     ON a.user.loginId = m.loginId

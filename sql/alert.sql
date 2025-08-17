@@ -18,5 +18,19 @@ CREATE TABLE alert_test
 );
 
 insert into alert (id, user_id, title, content)
-    values (1, 'admin1', 'tit', 'content')
-        alert
+values (1, 'admin1', 'tit', 'content');
+
+
+ALTER TABLE alert
+    ADD requester_id varchar(30) NOT NULL;
+
+alter table alert
+    add constraint fk_alert_requester
+        foreign key (requester_id) references member (login_id)
+            on update cascade;
+
+ALTER TABLE alert
+    ADD CONSTRAINT fk_alert_requester
+        FOREIGN KEY (requester_id) REFERENCES member (login_id)
+            ON UPDATE CASCADE;
+
