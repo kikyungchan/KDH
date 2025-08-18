@@ -37,10 +37,28 @@ export function ProductDetail() {
   const [quantity, setQuantity] = useState(1);
   const [product, setProduct] = useState(null);
   const [isProcessing, setIsProcessing] = useState(false);
+  const [reviewCount, setReviewCount] = useState(0);
+  const [isSticky, setIsSticky] = useState(false);
   const { user, isAdmin } = useContext(AuthenticationContext);
   const [searchParams] = useSearchParams();
   const id = searchParams.get("id");
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const tabNav = document.getElementById("productTabNav");
+    if (!tabNav) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        setIsSticky(!entry.isIntersecting);
+        // tabNav가 상단에 닿아서 fixed 되면 isSticky = true
+      },
+      { threshold: [1] },
+    );
+
+    observer.observe(tabNav);
+    return () => observer.disconnect();
+  }, []);
 
   // 상세페이지 진입시 local에 정보 저장
   useEffect(() => {
@@ -75,6 +93,7 @@ export function ProductDetail() {
       });
   }, [id]);
 
+  // 추천상품 최대 6개
   useEffect(() => {
     if (product?.category) {
       axios
@@ -372,15 +391,53 @@ export function ProductDetail() {
           </div>
         </div>
 
-        <hr className="mt-5" />
+        {/* 상세정보 / 구매평 탭 네비게이션 */}
+        <div className="product-tab-nav" id="productTabNav">
+          <button
+            onClick={() => {
+              const el = document.getElementById("detail-section");
+              if (el) {
+                const y = el.getBoundingClientRect().top + window.scrollY - 150; // 150px 위로 보정
+                window.scrollTo({ top: y, behavior: "instant" });
+              }
+            }}
+          >
+            상세정보
+          </button>
+
+          <button
+            onClick={() => {
+              const el = document.getElementById("review-section");
+              if (el) {
+                const y = el.getBoundingClientRect().top + window.scrollY - 150; // 150px 위로 보정
+                window.scrollTo({ top: y, behavior: "instant" });
+              }
+            }}
+          >
+            구매평({reviewCount})
+          </button>
+        </div>
+        <hr />
         <div className="product-body-section">
-          <ProductDetailToggle detailImagePaths={product.detailImagePaths} />
+          <div id="detail-section">
+            <ProductDetailToggle detailImagePaths={product.detailImagePaths} />
+          </div>
           <NoticeSection />
           <hr className="divider" />
-          <ReviewStats productId={product.id} refreshTrigger={reviewChanged} />
+
+          {/* 리뷰 통계 (그래프) */}
+          <div id="review-section">
+            <ReviewStats
+              productId={product.id}
+              refreshTrigger={reviewChanged}
+            />
+          </div>
+
+          {/* 리뷰 코멘트 */}
           <ProductComment
             productId={product.id}
             onReviewChange={() => setReviewChanged((prev) => !prev)}
+            onReviewCountChange={(count) => setReviewCount(count)}
           />
         </div>
         <hr className="divider" />

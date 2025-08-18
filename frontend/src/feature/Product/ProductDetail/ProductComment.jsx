@@ -5,7 +5,7 @@ import { useNavigate } from "react-router";
 import StarRating from "./util/StarRating.jsx";
 import { AuthenticationContext } from "../../common/AuthenticationContextProvider.jsx";
 
-function ReviewSection({ productId, onReviewChange }) {
+function ReviewSection({ productId, onReviewChange, onReviewCountChange }) {
   const [isPurchasable, setIsPurchasable] = useState(false);
   const [alreadyReviewed, setAlreadyReviewed] = useState(false);
   const [editTargetId, setEditTargetId] = useState(null);
@@ -25,6 +25,15 @@ function ReviewSection({ productId, onReviewChange }) {
     const decoded = jwtDecode(token);
     currentUserId = parseInt(decoded.sub); // subject에 userId 있다고 가정
   }
+
+  useEffect(() => {
+    axios.get(`/api/product/comment/${productId}`).then((res) => {
+      setComments(res.data);
+      if (onReviewCountChange) {
+        onReviewCountChange(res.data.length);
+      }
+    });
+  }, [productId]);
 
   useEffect(() => {
     axios

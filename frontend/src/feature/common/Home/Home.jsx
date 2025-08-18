@@ -43,7 +43,11 @@ function Home() {
 
         const messages = [
           "첫구매 최대 2만원 할인!",
+          "한정수량 오늘마감!",
           "인기상품 특가!",
+          "빠른 배송 보장!",
+          "품절 임박!",
+          "놓치면 후회할 인기템!",
           "한정 수량 할인!",
         ];
         const withMsg = shuffled.map((item) => ({
