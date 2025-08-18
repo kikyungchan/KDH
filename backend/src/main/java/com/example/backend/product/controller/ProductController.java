@@ -235,7 +235,7 @@ public class ProductController {
     @GetMapping("/hot-random")
     public ResponseEntity<List<ProductMainSlideDto>> getRandomHotProducts() {
         LocalDateTime oneWeekAgo = LocalDateTime.now().minusDays(7);
-        PageRequest pageable = PageRequest.of(0, 4);
+        PageRequest pageable = PageRequest.of(0, 5);
         List<ProductMainSlideDto> result = productRepository.findHotProductsRandomLimit(oneWeekAgo, pageable);
         return ResponseEntity.ok(result);
     }

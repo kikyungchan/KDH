@@ -309,13 +309,7 @@ function NavBar(props) {
               </div>
             )}
           </div>
-          {/*<Link*/}
-          {/*  to="/product/regist"*/}
-          {/*  onClick={() => setIsMobileMenuOpen(false)}*/}
-          {/*  className="btn btn-ghost w-full justify-start text-left text-xl"*/}
-          {/*>*/}
-          {/*  상품등록*/}
-          {/*</Link>*/}
+
           {user !== null && isAdmin && (
             <Link
               to="/member/list"
