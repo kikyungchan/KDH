@@ -1,6 +1,7 @@
 package com.example.backend.product.controller;
 
 import com.example.backend.member.dto.MemberDto;
+import com.example.backend.member.entity.Member;
 import com.example.backend.member.repository.MemberRepository;
 import com.example.backend.product.dto.*;
 import com.example.backend.product.entity.*;
@@ -21,6 +22,7 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.web.bind.annotation.*;
@@ -42,6 +44,7 @@ public class ProductController {
     private final ProductRepository productRepository;
     private final ProductThumbnailRepository productThumbnailRepository;
     private final ProductOptionRepository productOptionRepository;
+    private final MemberRepository memberRepository;
 
     public class OrderTokenGenerator {
         private static final SecureRandom random = new SecureRandom();
@@ -278,6 +281,36 @@ public class ProductController {
             return ResponseEntity.notFound().build();
         }
         return ResponseEntity.ok(product);
+    }
+
+    // 최근 본 상품 추가
+    @PostMapping("/{productId}")
+    public ResponseEntity<Void> addRecentView(Authentication authentication,
+                                              @PathVariable Integer productId) {
+        // JWT subject에서 memberId 꺼내기
+        String memberIdStr = authentication.getName();
+        Integer memberId = Integer.parseInt(memberIdStr);
+
+        Member member = memberRepository.findById(memberId)
+                .orElseThrow(() -> new RuntimeException("회원 없음"));
+        Product product = productRepository.findById(productId)
+                .orElseThrow(() -> new RuntimeException("상품 없음"));
+
+        productService.addRecentView(member, product);
+        return ResponseEntity.ok().build();
+    }
+
+    // 최근 본 상품 조회
+    @GetMapping
+    public ResponseEntity<List<ProductDto>> getRecentProducts(Authentication authentication) {
+        String memberIdStr = authentication.getName();
+        Integer memberId = Integer.parseInt(memberIdStr);
+
+        Member member = memberRepository.findById(memberId)
+                .orElseThrow(() -> new RuntimeException("회원 없음"));
+
+        List<ProductDto> recentProducts = productService.getRecentProducts(member);
+        return ResponseEntity.ok(recentProducts);
     }
 
 }

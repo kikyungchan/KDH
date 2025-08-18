@@ -38,44 +38,61 @@ export function ProductDetail() {
   const [product, setProduct] = useState(null);
   const [isProcessing, setIsProcessing] = useState(false);
   const [reviewCount, setReviewCount] = useState(0);
-  const [isSticky, setIsSticky] = useState(false);
   const { user, isAdmin } = useContext(AuthenticationContext);
   const [searchParams] = useSearchParams();
   const id = searchParams.get("id");
   const navigate = useNavigate();
 
-  useEffect(() => {
-    const tabNav = document.getElementById("productTabNav");
-    if (!tabNav) return;
+  // // 상세페이지 진입시 local에 정보 저장
+  // useEffect(() => {
+  //   if (!product) return;
+  //   const productData = {
+  //     id: product.id,
+  //     productName: product.productName,
+  //     thumbnail:
+  //       product.thumbnailPaths?.find((t) => t.isMain)?.storedPath ??
+  //       product.thumbnailPaths?.[0]?.storedPath,
+  //     price: product.price,
+  //   };
+  //   let recent = JSON.parse(localStorage.getItem("recentProducts")) || [];
+  //   recent = recent.filter((p) => p.id !== productData.id);
+  //   recent.unshift(productData);
+  //   if (recent.length > 10) recent.pop();
+  //   localStorage.setItem("recentProducts", JSON.stringify(recent));
+  // }, [product]);
 
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        setIsSticky(!entry.isIntersecting);
-        // tabNav가 상단에 닿아서 fixed 되면 isSticky = true
-      },
-      { threshold: [1] },
-    );
-
-    observer.observe(tabNav);
-    return () => observer.disconnect();
-  }, []);
-
-  // 상세페이지 진입시 local에 정보 저장
   useEffect(() => {
     if (!product) return;
-    const productData = {
-      id: product.id,
-      productName: product.productName,
-      thumbnail:
-        product.thumbnailPaths?.find((t) => t.isMain)?.storedPath ??
-        product.thumbnailPaths?.[0]?.storedPath,
-      price: product.price,
-    };
-    let recent = JSON.parse(localStorage.getItem("recentProducts")) || [];
-    recent = recent.filter((p) => p.id !== productData.id);
-    recent.unshift(productData);
-    if (recent.length > 10) recent.pop();
-    localStorage.setItem("recentProducts", JSON.stringify(recent));
+    const token = localStorage.getItem("token");
+
+    if (token) {
+      // 로그인 상태 → 서버 저장
+      axios
+        .post(`/api/product/${product.id}`, null, {
+          headers: { Authorization: `Bearer ${token}` },
+        })
+        .catch((err) => {
+          console.error("최근 본 상품 서버 저장 실패", err);
+        });
+    } else {
+      // 비로그인 상태 → localStorage 저장
+      const productData = {
+        id: product.id,
+        productName: product.productName,
+        thumbnail:
+          product.thumbnailPaths?.find((t) => t.isMain)?.storedPath ??
+          product.thumbnailPaths?.[0]?.storedPath,
+        price: product.price,
+      };
+      let recent = JSON.parse(localStorage.getItem("recentProducts")) || [];
+      // 중복 제거
+      recent = recent.filter((p) => p.id !== productData.id);
+      // 최신 상품 맨 앞에 추가
+      recent.unshift(productData);
+      // 최대 10개까지만 유지
+      if (recent.length > 10) recent.pop();
+      localStorage.setItem("recentProducts", JSON.stringify(recent));
+    }
   }, [product]);
 
   useEffect(() => {

@@ -334,3 +334,18 @@ ALTER TABLE guest_orders
         COLUMN quantity,
     DROP
         COLUMN price;
+
+CREATE TABLE recent_views
+(
+    id         INT AUTO_INCREMENT NOT NULL,
+    member_id  INT                NOT NULL,
+    product_id INT                NOT NULL,
+    viewed_at  datetime           NULL DEFAULT NOW(),
+    CONSTRAINT pk_recent_views PRIMARY KEY (id)
+);
+
+ALTER TABLE recent_views
+    ADD CONSTRAINT FK_RECENT_VIEWS_ON_MEMBER FOREIGN KEY (member_id) REFERENCES prj4.member (id);
+
+ALTER TABLE recent_views
+    ADD CONSTRAINT FK_RECENT_VIEWS_ON_PRODUCT FOREIGN KEY (product_id) REFERENCES product (id);
