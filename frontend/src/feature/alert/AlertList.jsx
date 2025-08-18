@@ -56,9 +56,15 @@ export function AlertList() {
     <div>
       <Row>
         <Col>
-          <div className={"container page-wrapper"}>
+          <div
+            className={
+              "container page-wrapper p-4 sm:p-6 md:p-8 max-[480px]:p-0"
+            }
+          >
             <div
-              className={"w-full max-w-[600px] mx-auto px-4 max-[500px]:px-4"}
+              className={
+                "w-full max-w-[600px] mx-auto sm:px-4 max-[500px]:px-4 p-0"
+              }
             >
               <div className={"rounded-card"}>
                 <h2>알림</h2>
@@ -67,17 +73,26 @@ export function AlertList() {
                   <div>
                     <ul className="list bg-base-100 rounded-box shadow-md">
                       {alertList.map((alert) => (
-                        <li className="list-row">
-                          <Link className="list-col-grow" to={alert.link}>
-                            <div className="relative m-1">{alert.title}</div>
-                            <div className="absolute top-1 right-5 text-xs">
-                              {alert.requester}
-                            </div>
-                            <span className="absolute top-7 right-5 text-xs text-gray-500">
-                              {formatDate(alert.createdAt)}
-                            </span>
-                            <div className="text-xs uppercase font-semibold opacity-60 m-1">
-                              {alert.content}
+                        <li className="list-row block w-full">
+                          <Link
+                            className="block relative w-full"
+                            to={alert.link}
+                          >
+                            <div className="flex justify-between items-start m-1 w-full overflow-hidden">
+                              <div className="flex-1 min-w-0 pr-4">
+                                <div className="truncate">{alert.title}</div>
+                                <div className="text-xs uppercase font-semibold opacity-60 truncate">
+                                  {alert.content}
+                                </div>
+                              </div>
+                              <div className="flex flex-col items-end text-right flex-shrink-0">
+                                <div className="text-xs truncate md:max-w-none">
+                                  {alert.requester}
+                                </div>
+                                <span className="text-[10px] sm:text-xs text-gray-500 mt-1">
+                                  {formatDate(alert.createdAt)}
+                                </span>
+                              </div>
                             </div>
                           </Link>
                         </li>
