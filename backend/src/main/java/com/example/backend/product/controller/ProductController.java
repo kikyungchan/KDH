@@ -26,7 +26,10 @@ import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.time.format.DateTimeFormatter;
+
 import java.security.SecureRandom;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -42,16 +45,21 @@ public class ProductController {
     private final ProductRepository productRepository;
     private final ProductThumbnailRepository productThumbnailRepository;
     private final ProductOptionRepository productOptionRepository;
+    private static final DateTimeFormatter DATE_FORMAT = DateTimeFormatter.ofPattern("yyyyMMdd");
 
     public class OrderTokenGenerator {
         private static final SecureRandom random = new SecureRandom();
 
         public static String generateToken() {
+            // 오늘 날짜(yyyyMMdd)
+            String datePart = LocalDate.now().format(DATE_FORMAT);
+
+            // 랜던 16자리 숫자
             StringBuilder sb = new StringBuilder();
-            for (int i = 0; i < 16; i++) {
+            for (int i = 0; i < 12; i++) {
                 sb.append(random.nextInt(10));
             }
-            return sb.toString();
+            return datePart + "-" + sb.toString();
         }
     }
 
