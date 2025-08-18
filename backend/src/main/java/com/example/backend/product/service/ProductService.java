@@ -23,6 +23,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -478,7 +479,11 @@ public class ProductService {
 
     public void addRecentView(Member member, Product product) {
         // 이미 있으면 삭제 후 새로 삽입 -> 최신순 유지
-        recentViewRepository.findByMemberAndProduct(member, product).ifPresent(recentViewRepository::delete);
+        Optional<RecentView> optional = recentViewRepository.findByMemberAndProduct(member, product);
+        if (optional.isPresent()) {
+            RecentView oldView = optional.get();
+            recentViewRepository.delete(oldView);
+        }
 
         RecentView rv = new RecentView();
         rv.setMember(member);
@@ -488,6 +493,13 @@ public class ProductService {
     }
 
     public List<ProductDto> getRecentProducts(Member member) {
-        return recentViewRepository.findTop10ByMemberOrderByViewedAtDesc(member).stream().map(rv -> ProductDto.fromEntity(rv.getProduct())).toList();
+        List<RecentView> recentViews = recentViewRepository.findTop10ByMemberOrderByViewedAtDesc(member);
+        List<ProductDto> result = new ArrayList<>();
+
+        for (RecentView rv : recentViews) {
+            result.add(ProductDto.fromEntity(rv.getProduct()));
+        }
+
+        return result;
     }
 }
