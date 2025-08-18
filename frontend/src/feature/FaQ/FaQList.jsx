@@ -207,7 +207,7 @@ export function FaQList() {
                         <span className="bg-blue-100 text-blue-600 rounded-full w-5 h-5 flex items-center justify-center mr-2 sm:text-xs text-[2vw] font-bold">
                           Q
                         </span>
-                        비밀번호 변겅은 어떻게 하나요?
+                        비밀번호 변경은 어떻게 하나요?
                       </a>
                     </li>
                   </ul>

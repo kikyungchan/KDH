@@ -22,6 +22,7 @@ function Order() {
   const [shippingFee, setShippingFee] = useState(0);
   const [loadingMember, setLoadingMember] = useState(false);
   const [isProcessing, setIsProcessing] = useState(false);
+  const [emailValid, setEmailValid] = useState(true);
   const { state } = useLocation();
   const { setCartCount } = useCart();
   const isMember = !!localStorage.getItem("token");
@@ -34,6 +35,10 @@ function Order() {
   const navigate = useNavigate();
   const checkoutWindow = useRef(null);
   const formDataRef = useRef({});
+
+  // 이메일 정규식
+  const emailRegEx =
+    /^[A-Za-z0-9]([-_.]?[A-Za-z0-9])*@[A-Za-z0-9]([-_.]?[A-Za-z0-9])*\.[A-Za-z]{2,3}$/;
 
   useEffect(() => {
     const fee = totalItemPrice >= 100000 ? 0 : 3000;
@@ -228,6 +233,7 @@ function Order() {
       "Address : ",
       isMember ? ordererAddress : formDataRef.current.receiverAddress,
     );
+
     if (
       !ordererName.trim() ||
       !ordererPhone.trim() ||
@@ -235,6 +241,11 @@ function Order() {
     ) {
       alert("주문자 정보를 모두 입력해 주세요.");
       return false;
+    }
+
+    if (!emailRegEx.test(ordererEmail.trim())) {
+      alert("유효한 이메일 형식이 아닙니다.");
+      return;
     }
 
     const currentData = formDataRef.current;
@@ -581,13 +592,18 @@ function Order() {
                 </div>
 
                 {!isMember && (
-                  <input
-                    type="email"
-                    placeholder="이메일"
-                    className="input input-bordered w-full mt-2"
-                    value={ordererEmail ?? ""}
-                    onChange={(e) => setOrdererEmail(e.target.value)}
-                  />
+                  <>
+                    <input
+                      type="email"
+                      placeholder="이메일"
+                      className="input input-bordered w-full mt-2"
+                      value={ordererEmail ?? ""}
+                      onChange={(e) => setOrdererEmail(e.target.value)}
+                    />
+                    <p className="text-sm text-gray-400 text-muted mt-1 ml-1">
+                      example@domain.com 형식의 이메일을 입력하세요.
+                    </p>
+                  </>
                 )}
 
                 {isMember && (
