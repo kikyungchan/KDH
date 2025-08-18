@@ -63,8 +63,7 @@ public class AlertController {
         boolean result = alertService.validateForAdd(dto);
 
         if (result) {
-            alertService.add(dto, authentication);
-            alertService.addAdmin(dto, authentication);
+            alertService.addOrder(dto, authentication);
 
             String adminId = alertService.findAdmin();
 

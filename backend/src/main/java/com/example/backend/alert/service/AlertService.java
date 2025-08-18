@@ -84,6 +84,28 @@ public class AlertService {
         alert.setTitle(dto.getTitle());
         alert.setContent(dto.getContent());
         alert.setLink(dto.getLink());
+        Member requester = memberRepository.findById(Integer.valueOf(authentication.getName())).get();
+        alert.setRequester(requester);
+
+        Member user = memberRepository.findByLoginId(dto.getUser()).get();
+        alert.setUser(user);
+
+        alert.setStatus("open");
+        alertRepository.save(alert);
+
+
+    }
+
+    public void addOrder(AlertAddForm dto, Authentication authentication) {
+        if (authentication == null) {
+            throw new RuntimeException("권한이 없습니다.");
+        }
+
+
+        Alert alert = new Alert();
+        alert.setTitle(dto.getTitle());
+        alert.setContent(dto.getContent());
+        alert.setLink(dto.getLink());
         Member requester = memberRoleRepository.findAll().getFirst().getMember();
         alert.setRequester(requester);
 
@@ -92,6 +114,8 @@ public class AlertService {
 
         alert.setStatus("open");
         alertRepository.save(alert);
+        dto.setTitle("새로운 주문이 들어왔습니다.");
+        addAdmin(dto, authentication);
 
 
     }
