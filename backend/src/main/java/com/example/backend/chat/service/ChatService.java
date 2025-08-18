@@ -93,16 +93,14 @@ public class ChatService {
     private void validateChatRoomStatus(ChatRoom room, Authentication authentication) {
         String roomType = room.getType();
         Member user = memberRepository.findById(Integer.valueOf(authentication.getName())).get();
-        List<MemberRole> byMember = memberRoleRepository.findByMember(user);
-        if (byMember.isEmpty() && room.getUser() != user) {
-            throw new RuntimeException("접근할 수 없는 채팅방입니다");
+        List<MemberRole> roles = memberRoleRepository.findByMember(user);
+        if (!roles.isEmpty()) {
+            return;
         }
-
         if ("CLOSED".equals(roomType) || "DISABLE".equals(roomType)) {
             throw new RuntimeException("대화가 종료된 방입니다");
         }
-
-        if (!"OPEN".equals(roomType)) {
+        if (!"OPEN".equals(roomType) || room.getUser() != user) {
             throw new RuntimeException("접근할 수 없는 채팅방입니다");
         }
 
