@@ -465,4 +465,12 @@ public class ProductService {
         int total = (memberSales != null ? memberSales : 0) + (guestSales != null ? guestSales : 0);
         return total >= 10;
     }
+
+    public ProductDto getProductById(Integer id) {
+        List<Product> products = productRepository.findAllById(List.of(id));
+        for (Product p : products) {
+            return ProductDto.fromEntity(p);
+        }
+        return null;
+    }
 }

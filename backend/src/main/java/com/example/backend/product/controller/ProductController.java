@@ -270,4 +270,14 @@ public class ProductController {
         return ResponseEntity.ok(topProducts);
     }
 
+    // 단일 상품 조회
+    @GetMapping("/{id}")
+    public ResponseEntity<ProductDto> getProductById(@PathVariable Integer id) {
+        ProductDto product = productService.getProductById(id);
+        if (product == null) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(product);
+    }
+
 }
