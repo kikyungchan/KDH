@@ -42,7 +42,7 @@ export function ProductOrderComplete() {
           <div className="rounded-card">
             <h2 className="text-center text-3xl font-bold mb-6">주문 완료</h2>
             <p className="text-lg mb-4">
-              <strong>주문번호: {orderToken}</strong>
+              <strong>주문번호 : {orderToken}</strong>
             </p>
 
             {/* 주문자 정보 */}

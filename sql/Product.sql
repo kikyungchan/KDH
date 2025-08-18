@@ -152,6 +152,9 @@ ALTER TABLE prj4.orders
 
 SHOW CREATE TABLE prj4.orders;
 
+ALTER TABLE orders
+    MODIFY COLUMN order_token VARCHAR(30) NOT NULL;
+
 
 #
 비회원
