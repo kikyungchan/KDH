@@ -17,10 +17,10 @@ public interface AlertRepository extends JpaRepository<Alert, Integer> {
                                     a.status,
                                     a.createdAt,
                                     a.updatedAt,
-                                    a.requester,
+                                    m.name,
                                     a.link)
                         FROM Alert a JOIN Member m
-                                    ON a.user.loginId = m.loginId
+                                    ON a.requester.loginId = m.loginId
                         WHERE (a.title LIKE %:keyword%
                            OR a.content LIKE %:keyword%) 
                            and (a.user.loginId = :userId)
