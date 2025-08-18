@@ -5,7 +5,7 @@ import axios from "axios";
 import { useCart } from "./CartContext.jsx";
 import { FaCheck } from "react-icons/fa";
 
-function ProductCart(props) {
+function ProductCart() {
   const [selectedStock, setSelectedStock] = useState(null);
   const { setCartCount } = useCart();
   const navigate = useNavigate();
@@ -154,7 +154,7 @@ function ProductCart(props) {
           setCartItems(res.data);
           setShowModal(false);
         })
-        .catch((err) => {});
+        .catch(() => {});
     } else {
       // 비회원
       const existingCart = JSON.parse(

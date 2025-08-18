@@ -36,6 +36,7 @@ import { GuestOrder } from "./Order/GuestOrder.jsx";
 import { GuestOrderDetail } from "./Order/GuestOrderDetail.jsx";
 import { AlertList } from "./feature/alert/AlertList.jsx";
 import { Toaster } from "sonner";
+import { AdminOrderList } from "./Order/AdminOrderList.jsx";
 
 function App() {
   // const username = prompt("닉네임을 입력해 주세요");
@@ -76,6 +77,8 @@ function App() {
                   path="/order/guest-order/detail"
                   element={<GuestOrderDetail />}
                 />
+                <Route path="/admin/order-list" element={<AdminOrderList />} />
+                <Route path="/member/edit" element={<MemberEdit />} />
                 <Route path="/member/edit" element={<MemberEdit />} />
                 <Route path="/member/list" element={<MemberList />} />
                 <Route path="/member" element={<MemberDetail />} />

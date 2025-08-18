@@ -31,12 +31,8 @@ export function OrderList() {
         <div className="w-full max-w-[700px] mx-auto px-4">
           <div className="rounded-card">
             <div className="mb-8">
-              <h2 className="mb-6 text-center text-2xl font-bold">주문 목록</h2>
+              <h2 className="mb-6 text-center text-3xl font-bold">주문 목록</h2>
               <br />
-              <div className="flex justify-content-between text-lg font-semibold">
-                <div>주문일자</div>
-                <div>주문번호</div>
-              </div>
             </div>
             {!isProcessing && orderList.length === 0 ? (
               <div className="border border-gray-300 rounded-xl p-6 text-center text-gray-500">
@@ -48,7 +44,7 @@ export function OrderList() {
                   <div>
                     <div className="mb-4">
                       <div className="flex justify-content-between mb-2">
-                        <div>
+                        <div className="font-semibold">
                           {new Date(order.orderDate).toLocaleDateString()}
                         </div>
                         <div

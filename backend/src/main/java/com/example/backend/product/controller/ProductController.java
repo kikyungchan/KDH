@@ -8,7 +8,6 @@ import com.example.backend.product.repository.GuestOrderRepository;
 import com.example.backend.product.repository.ProductOptionRepository;
 import com.example.backend.product.repository.ProductRepository;
 import com.example.backend.product.repository.ProductThumbnailRepository;
-import com.example.backend.product.service.OrderService;
 import com.example.backend.product.service.ProductService;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
