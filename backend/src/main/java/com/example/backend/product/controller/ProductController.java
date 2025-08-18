@@ -228,16 +228,16 @@ public class ProductController {
     }
 
 
-    // 우측배너
+    // 우측배너 주간판매량 10개이상 제품 중에서 랜덤으로 4개
     @GetMapping("/hot-random")
     public ResponseEntity<List<ProductMainSlideDto>> getRandomHotProducts() {
         LocalDateTime oneWeekAgo = LocalDateTime.now().minusDays(7);
-        PageRequest pageable = PageRequest.of(0, 5);
+        PageRequest pageable = PageRequest.of(0, 4);
         List<ProductMainSlideDto> result = productRepository.findHotProductsRandomLimit(oneWeekAgo, pageable);
         return ResponseEntity.ok(result);
     }
 
-    // 좌측배너 썸네일이미지 주간판매량 10개이상 아이템 랜덤 1개
+    // 좌측배너 썸네일이미지 주간판매량 10개이상아이템 중 랜덤 1개
     @GetMapping("/main-thumbnail-random")
     public ResponseEntity<ThumbnailDto> getRandomMainThumbnail() {
         List<ProductThumbnail> mainThumbnails = productThumbnailRepository.findByIsMainTrue();
@@ -262,7 +262,7 @@ public class ProductController {
     }
 
 
-    // 누적판매량 제일 많은 아이템 기본3개
+    // 누적판매량 제일 많은 아이템 3개
     @GetMapping("/best")
     public ResponseEntity<List<ProductBestDto>> getTopProducts(@RequestParam(required = false) String category,
                                                                @RequestParam(required = false, defaultValue = "3") Integer limit) {

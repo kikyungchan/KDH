@@ -73,6 +73,16 @@ export function ProductEdit() {
       alert("상세설명을 입력해주세요.");
       return;
     }
+    const totalThumbnailCount =
+      (thumbnailPaths?.length || 0) + (newThumbnails?.length || 0);
+    if (totalThumbnailCount === 0) {
+      alert("썸네일이미지를 한 장 이상 등록해주세요.");
+      return;
+    }
+    // if (detailImagePaths.length === 0) {
+    //   alert("본문이미지를 한 장 이상 등록해주세요.");
+    //   return;
+    // }
 
     const formData = new FormData();
     formData.append("productName", form.productName);
@@ -193,10 +203,12 @@ export function ProductEdit() {
               </div>
 
               {/* 썸네일 이미지 변경 */}
+              {/* 썸네일 이미지 변경 + 업로드 묶음 */}
               <div className="product-edit-field">
                 <label className="product-edit-label">썸네일 이미지 변경</label>
+
+                {/* 기존 썸네일 / 새 미리보기 */}
                 <div className="product-edit-image-box">
-                  {/* 기존 썸네일 */}
                   {thumbnailPaths.map((path, idx) => (
                     <div key={idx} className="product-edit-image-wrapper">
                       <img
@@ -221,7 +233,7 @@ export function ProductEdit() {
                       </button>
                     </div>
                   ))}
-                  {/* 새 썸네일 미리보기 */}
+
                   {previewThumbnails.map((url, idx) => (
                     <div
                       key={`new-${idx}`}
@@ -242,30 +254,31 @@ export function ProductEdit() {
                     </div>
                   ))}
                 </div>
-              </div>
-              {/* 썸네일 추가 업로드 */}
-              <div className="product-edit-file-upload">
-                <label
-                  htmlFor="thumbnailInput"
-                  className="product-edit-file-label"
-                >
-                  파일 선택
-                </label>
-                <input
-                  id="thumbnailInput"
-                  type="file"
-                  multiple
-                  accept="image/*"
-                  onChange={(e) => {
-                    const files = Array.from(e.target.files);
-                    setNewThumbnails((prev) => [...prev, ...files]);
-                    const previews = files.map((file) =>
-                      URL.createObjectURL(file),
-                    );
-                    setPreviewThumbnails((prev) => [...prev, ...previews]);
-                  }}
-                  className="product-edit-file-input"
-                />
+
+                {/* 썸네일 추가 업로드 */}
+                <div className="product-edit-file-upload">
+                  <label
+                    htmlFor="thumbnailInput"
+                    className="product-edit-file-label"
+                  >
+                    이미지 추가
+                  </label>
+                  <input
+                    id="thumbnailInput"
+                    type="file"
+                    multiple
+                    accept="image/*"
+                    onChange={(e) => {
+                      const files = Array.from(e.target.files);
+                      setNewThumbnails((prev) => [...prev, ...files]);
+                      const previews = files.map((file) =>
+                        URL.createObjectURL(file),
+                      );
+                      setPreviewThumbnails((prev) => [...prev, ...previews]);
+                    }}
+                    className="product-edit-file-input"
+                  />
+                </div>
               </div>
 
               {/* 본문 이미지 변경 */}
