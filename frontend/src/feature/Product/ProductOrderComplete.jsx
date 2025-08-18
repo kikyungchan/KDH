@@ -23,7 +23,7 @@ export function ProductOrderComplete() {
               <div className="mt-4">
                 <button
                   className="order-button btn w-40 confirm"
-                  onClick={() => navigate("/home")}
+                  onClick={() => navigate("/Home")}
                 >
                   홈으로
                 </button>
@@ -125,7 +125,7 @@ export function ProductOrderComplete() {
             <div className="order-buttons">
               <button
                 type="button"
-                onClick={() => navigate("/")}
+                onClick={() => navigate("/Home")}
                 className="order-button btn w-40 confirm"
               >
                 홈으로

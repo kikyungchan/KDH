@@ -713,26 +713,26 @@ function Order() {
 
             {/* 버튼 영역 */}
             <div className="order-buttons justify-content-end">
-              {/*<button*/}
-              {/*  onClick={handleOrderButton}*/}
-              {/*  className="order-button confirm"*/}
-              {/*>*/}
-              {/*  결제하기*/}
-              {/*</button>*/}
-              {isProcessing ? (
-                <button className={"order-button confirm"}>
-                  <span className="loading loading-spinner"></span>
-                </button>
-              ) : (
-                <button
-                  className="order-button confirm btn btn-lg"
-                  onClick={() => {
-                    validateForm() && handlePaymentConnection();
-                  }}
-                >
-                  결제하기
-                </button>
-              )}
+              <button
+                onClick={handleOrderButton}
+                className="order-button confirm"
+              >
+                결제하기
+              </button>
+              {/*{isProcessing ? (*/}
+              {/*  <button className={"order-button confirm"}>*/}
+              {/*    <span className="loading loading-spinner"></span>*/}
+              {/*  </button>*/}
+              {/*) : (*/}
+              {/*  <button*/}
+              {/*    className="order-button confirm btn btn-lg"*/}
+              {/*    onClick={() => {*/}
+              {/*      validateForm() && handlePaymentConnection();*/}
+              {/*    }}*/}
+              {/*  >*/}
+              {/*    결제하기*/}
+              {/*  </button>*/}
+              {/*)}*/}
               <button
                 onClick={handleCancelButton}
                 className="order-button cancel btn btn-lg"
