@@ -47,11 +47,18 @@ export function Chat() {
           console.log("res", res.data);
         })
         .catch((err) => {
+          console.log("err", err);
           if (err.response && err.response.status === 401) {
             alert("로그인 후 이용해주세요.");
             window.location.href = "/login";
-          } else {
-            console.log("잘 안될 때 코드");
+          } else if (
+            err.response &&
+            err.response.data &&
+            err.response.data.message
+          ) {
+            // 백엔드에서 온 에러 메시지 사용
+            console.log(err.response.data.message);
+            console.log("서버 에러 메시지:", err.response.data.message);
           }
         });
     }
@@ -142,14 +149,14 @@ export function Chat() {
       // 언마운트 될 때
       return () => {
         if (client && client.connected) {
-          /*client.publish({
-            destination: "/app/chat/leave", // 서버 MessageMapping 경로
+          client.publish({
+            destination: "/app/chat/end", // 서버 MessageMapping 경로
             body: JSON.stringify({
               from: user.name,
               roomId: roomId,
-              type: "LEAVE", // 서버 DTO와 맞추기!
+              type: "END", // 서버 DTO와 맞추기!
             }),
-          });*/
+          });
         }
         client.deactivate(); //연결 해제
       };
@@ -253,25 +260,6 @@ export function Chat() {
                 전송
               </button>
             </div>
-            {/* <input
-              placeholder="상대방 아이디"
-              value={target}
-              onChange={(e) => setTarget(e.target.value)}
-              style={{ marginRight: 10 }}
-            />*/}
-            {/*<input
-              placeholder="메시지 입력"
-              value={text}
-              onChange={(e) => setText(e.target.value)}
-              onKeyPress={(e) => e.key === "Enter" && sendMessage()}
-              style={{ width: "40%", marginRight: 10 }}
-            />*/}
-            {/*<button
-              className={"btn btn-outline btn-primary"}
-              onClick={sendMessage}
-            >
-              전송
-            </button>*/}
 
             {clientRef.current && (
               <button
