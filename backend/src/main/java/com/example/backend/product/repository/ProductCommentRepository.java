@@ -14,10 +14,11 @@ public interface ProductCommentRepository extends JpaRepository<ProductComment, 
 
     List<ProductComment> findByProductId(Integer productId);
 
-    //평균별점 / 댓글수
+    //평균별점
     @Query("SELECT AVG(c.rating) FROM ProductComment c WHERE c.product.id = :productId")
     Double getAverageRating(@Param("productId") Integer productId);
 
+    // 댓글수
     @Query("SELECT COUNT(c) FROM ProductComment c WHERE c.product.id = :productId")
     Integer getReviewCount(@Param("productId") Integer productId);
 }
