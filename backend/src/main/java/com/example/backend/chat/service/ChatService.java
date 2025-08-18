@@ -49,16 +49,20 @@ public class ChatService {
 
         ChatRoom room = chatRoomRepository.findByRoomId(roomId);
 
+        System.out.println("room: " + room);
         if (room == null) {
+            System.out.println("is work");
             ChatRoom chatRoom = new ChatRoom();
             chatRoom.setRoomId(roomId);
-            Member user = memberRepository.findById(Integer.valueOf(authentication.getName()))
-                    .orElseThrow(() -> new RuntimeException("사용자를 찾을 수 없습니다"));
+            Member user = memberRepository.findById(Integer.valueOf(authentication.getName())).get();
             chatRoom.setUser(user);
+            chatRoom.setType("OPEN");
+            System.out.println("chatRoom" + chatRoom);
             chatRoomRepository.save(chatRoom);
+            System.out.println("is worked");
+        } else {
+            validateChatRoomStatus(room, authentication);
         }
-
-        validateChatRoomStatus(room, authentication);
 
         Page<ChatListDto> chatListDtoPage =
                 chatLogRepository.findAllBy(roomId, PageRequest.of(pageNumber - 1, 30));
@@ -78,6 +82,10 @@ public class ChatService {
 
         return Map.of("pageInfo", pageInfo,
                 "chatList", chatListDtoPage.getContent());
+
+    }
+
+    public void chatRoomclose() {
 
     }
 

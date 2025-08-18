@@ -29,7 +29,7 @@ public class ChatRoom {
 
     @ColumnDefault("'OPEN'")
     @Lob
-    @Column(name = "type", nullable = false)
+    @Column(name = "type", columnDefinition = "ENUM('OPEN', 'CLOSED', 'DISABLE') DEFAULT 'OPEN'")
     private String type;
 
     @ColumnDefault("current_timestamp()")
