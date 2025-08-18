@@ -1,12 +1,15 @@
 import { useLocation, useNavigate } from "react-router";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import axios from "axios";
 import { useCart } from "./CartContext.jsx";
+import { useAlertWebSocket } from "../alert/alertContext.jsx";
+import { AuthenticationContext } from "../common/AuthenticationContextProvider.jsx";
 
 function Order() {
   useEffect(() => {
     import("./css/ProductOrder.css");
   }, []);
+  const { user, isAdmin } = useContext(AuthenticationContext);
   const [receiverName, setReceiverName] = useState("");
   const [receiverPhone, setReceiverPhone] = useState("");
   const [receiverZipcode, setReceiverZipcode] = useState("");
@@ -36,6 +39,7 @@ function Order() {
   const navigate = useNavigate();
   const checkoutWindow = useRef(null);
   const formDataRef = useRef({});
+  const { alertCount, sendAlert } = useAlertWebSocket();
 
   useEffect(() => {
     const fee = totalItemPrice >= 100000 ? 0 : 3000;
@@ -185,7 +189,7 @@ function Order() {
   }
 
   function sendDataToPopup() {
-    console.log("items : " + items);
+    console.log("items : ", items);
     console.log("items length", items.length);
     if (checkoutWindow.current && !checkoutWindow.current.closed) {
       const fee = Number(shippingFee) || 0;
@@ -326,6 +330,12 @@ function Order() {
           setCartCount(res.data);
         })
         .then(() => {
+          sendAlert(
+            user.loginId,
+            "주문이 완료되었습니다.",
+            `${items[0].productName} ${items.length <= 1 ? "의" : `외 ${items.length}개의`} 주문이 완료되었습니다`,
+            `/order/detail/${orderToken}`,
+          );
           alert("주문이 완료되었습니다.");
           navigate("/product/order/complete", {
             state: {
