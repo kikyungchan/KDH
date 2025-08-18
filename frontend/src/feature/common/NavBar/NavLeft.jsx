@@ -137,6 +137,35 @@ function NavLeft({ user, isAdmin, handleCategoryClick }) {
           상품등록
         </Link>
       )}
+      {/*{user !== null && isAdmin && (*/}
+      {/*  <Link to="/member/list" className="btn btn-ghost text-xl">*/}
+      {/*    회원목록*/}
+      {/*  </Link>*/}
+      {/*)}*/}
+      {/*{user === null && (*/}
+      {/*  <Link to="/signup" className="btn btn-ghost text-xl">*/}
+      {/*    회원가입*/}
+      {/*  </Link>*/}
+      {/*)}*/}
+      {/*{user && (*/}
+      {/*  <>*/}
+      {/*    <Link to="/logout" className="btn btn-ghost text-xl">*/}
+      {/*      로그아웃*/}
+      {/*    </Link>*/}
+      {/*    /!*<Link to={`/member?id=${user.id}`} className="btn btn-ghost text-xl">*!/*/}
+      {/*    /!*  {user.name}*!/*/}
+      {/*    /!*</Link>*!/*/}
+      {/*    <Link to="/qna/list" className="btn btn-ghost text-xl">*/}
+      {/*      문의 내역*/}
+      {/*    </Link>*/}
+      {/*  </>*/}
+      {/*)}*/}
+      {/*<Link to="/chat/chatting" className="btn btn-ghost text-xl">*/}
+      {/*  채팅 프로토콜*/}
+      {/*</Link>*/}
+      {/*<Link to="/pay/Checkout" className="btn btn-ghost text-xl">*/}
+      {/*  토스 페이먼츠*/}
+      {/*</Link>*/}
     </div>
   );
 }
