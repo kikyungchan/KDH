@@ -3,10 +3,12 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { Link, useSearchParams } from "react-router";
 import { toast, Toaster } from "sonner";
+import { useAlertWebSocket } from "./alertContext.jsx";
 
 export function AlertList() {
   const [alertList, setAlertList] = useState(null);
   const [searchParams, setSearchParams] = useSearchParams("1");
+  const { setAlertCount } = useAlertWebSocket();
 
   useEffect(() => {
     axios
@@ -14,6 +16,7 @@ export function AlertList() {
       .then((res) => {
         setAlertList(res.data.alertList);
         console.log(res.data);
+        setAlertCount(0);
       })
       .catch((err) => {
         if (err.response && err.response.status === 401) {
