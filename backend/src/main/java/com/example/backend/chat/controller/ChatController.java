@@ -114,6 +114,6 @@ public class ChatController {
         message.setMessage(message.getFrom() + "님이 대화를 종료하였습니다.");
         message.setType(ChatForm.MessageType.END);
         template.convertAndSend("/topic/chat/" + message.getRoomId(), message);
-//        chatservice.chatRoomclose(message);
+        chatservice.chatRoomclose(message.getRoomId());
     }
 }

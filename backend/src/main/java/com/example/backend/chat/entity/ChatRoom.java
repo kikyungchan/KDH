@@ -7,6 +7,7 @@ import lombok.Setter;
 import lombok.ToString;
 import org.hibernate.annotations.ColumnDefault;
 
+import java.time.Instant;
 import java.time.LocalDateTime;
 
 @Getter
@@ -29,7 +30,7 @@ public class ChatRoom {
 
     @ColumnDefault("'OPEN'")
     @Lob
-    @Column(name = "type", columnDefinition = "ENUM('OPEN', 'CLOSED', 'DISABLE') DEFAULT 'OPEN'")
+    @Column(name = "type", nullable = false)
     private String type;
 
     @ColumnDefault("current_timestamp()")

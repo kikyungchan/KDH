@@ -2,6 +2,7 @@ package com.example.backend.chat.repository;
 
 import com.example.backend.chat.dto.ChatListDto;
 import com.example.backend.chat.entity.ChatLog;
+import com.example.backend.chat.entity.ChatRoom;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -18,5 +19,5 @@ public interface ChatLogRepository extends JpaRepository<ChatLog, Integer> {
                         WHERE (c.roomId = :roomId)
                         ORDER BY c.id DESC
             """)
-    Page<ChatListDto> findAllBy(String roomId, PageRequest of);
+    Page<ChatListDto> findAllBy(ChatRoom roomId, PageRequest of);
 }

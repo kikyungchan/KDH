@@ -24,8 +24,9 @@ public class ChatLog {
     @JoinColumn(name = "user_id", nullable = false, referencedColumnName = "login_id")
     private Member user;
 
-    @Column(name = "room_id", length = 36)
-    private String roomId;
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "room_id", nullable = false, referencedColumnName = "room_id")
+    private ChatRoom roomId;
 
     @Column(name = "message")
     private String message;

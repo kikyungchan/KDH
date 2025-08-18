@@ -34,7 +34,9 @@ public class ChatService {
         System.out.println("msg: " + msg);
 
         ChatLog chatLog = new ChatLog();
-        chatLog.setRoomId(roomId);
+        ChatRoom chatRoom = chatRoomRepository.findByRoomId(roomId);
+        chatLog.setRoomId(chatRoom);
+        System.out.println("chatRoom: " + chatRoom);
         Member user = memberRepository.findById(Integer.valueOf(msg.getUserid())).get();
         chatLog.setUser(user);
         chatLog.setType(String.valueOf(msg.getType()));
@@ -49,31 +51,26 @@ public class ChatService {
 
         ChatRoom room = chatRoomRepository.findByRoomId(roomId);
 
-        System.out.println("room: " + room);
         if (room == null) {
-            System.out.println("is work");
             ChatRoom chatRoom = new ChatRoom();
             chatRoom.setRoomId(roomId);
             Member user = memberRepository.findById(Integer.valueOf(authentication.getName())).get();
             chatRoom.setUser(user);
             chatRoom.setType("OPEN");
-            System.out.println("chatRoom" + chatRoom);
             chatRoomRepository.save(chatRoom);
-            System.out.println("is worked");
         } else {
             validateChatRoomStatus(room, authentication);
         }
 
+        ChatRoom chatRoom = chatRoomRepository.findByRoomId(roomId);
+
         Page<ChatListDto> chatListDtoPage =
-                chatLogRepository.findAllBy(roomId, PageRequest.of(pageNumber - 1, 30));
+                chatLogRepository.findAllBy(chatRoom, PageRequest.of(pageNumber - 1, 30));
         int totalPages = chatListDtoPage.getTotalPages(); // 마지막 페이지
         int rightPageNumber = ((pageNumber - 1) / 10 + 1) * 10;
         int leftPageNumber = rightPageNumber - 9;
         rightPageNumber = Math.min(rightPageNumber, totalPages);
         leftPageNumber = Math.max(leftPageNumber, 1);
-
-        System.out.println("chatList" + chatListDtoPage.getContent());
-        System.out.println("chatListDtoPage" + chatListDtoPage);
 
         var pageInfo = Map.of("totalPages", totalPages,
                 "rightPageNumber", rightPageNumber,
@@ -85,7 +82,11 @@ public class ChatService {
 
     }
 
-    public void chatRoomclose() {
+    public void chatRoomclose(String roomId) {
+        ChatRoom chatRoom = chatRoomRepository.findByRoomId(roomId);
+        chatRoom.setType("closed");
+        /*System.out.println("chatRoom: " + chatRoom);*/
+        chatRoomRepository.save(chatRoom);
 
     }
 

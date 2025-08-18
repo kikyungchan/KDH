@@ -1,5 +1,6 @@
 package com.example.backend.chat.dto;
 
+import com.example.backend.chat.entity.ChatRoom;
 import com.example.backend.member.dto.MemberDto;
 import lombok.Value;
 
@@ -13,7 +14,7 @@ import java.time.LocalDateTime;
 public class ChatLogDto implements Serializable {
     Integer id;
     MemberDto user;
-    String roomId;
+    ChatRoom roomId;
     String message;
     String type;
     LocalDateTime createdAt;
