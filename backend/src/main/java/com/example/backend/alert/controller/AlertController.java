@@ -54,4 +54,25 @@ public class AlertController {
                             "text", "입력한 내용이 유효하지 않습니다.")));
         }
     }
+
+    @PostMapping("addOrder")
+    @PreAuthorize("isAuthenticated()")
+    public Map<String, Object> addOrder(@RequestBody AlertAddForm dto,
+                                        Authentication authentication) {
+        // 유효성 검사
+        boolean result = alertService.validateForAdd(dto);
+
+        if (result) {
+            alertService.add(dto, authentication);
+            alertService.addAdmin(dto, authentication);
+
+            String adminId = alertService.findAdmin();
+
+            return Map.of("adminId", adminId);
+        } else {
+            return Map.of(
+                    "type", "error",
+                    "text", "입력한 내용이 유효하지 않습니다.");
+        }
+    }
 }

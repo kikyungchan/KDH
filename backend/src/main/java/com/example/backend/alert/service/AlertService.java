@@ -7,8 +7,10 @@ import com.example.backend.alert.entity.Alert;
 import com.example.backend.alert.respository.AlertRepository;
 import com.example.backend.member.entity.Member;
 import com.example.backend.member.repository.MemberRepository;
+import com.example.backend.member.repository.MemberRoleRepository;
 import com.example.backend.product.entity.Product;
 import com.example.backend.product.entity.ProductImage;
+import com.example.backend.product.repository.ProductRepository;
 import com.example.backend.qna.dto.QuestionAddForm;
 import com.example.backend.qna.entity.Question;
 import lombok.RequiredArgsConstructor;
@@ -30,6 +32,7 @@ public class AlertService {
 
     private final AlertRepository alertRepository;
     private final MemberRepository memberRepository;
+    private final MemberRoleRepository memberRoleRepository;
 
     public Map<String, Object> list(String keyword, Integer pageNumber, Authentication authentication) {
 
@@ -81,10 +84,10 @@ public class AlertService {
         alert.setTitle(dto.getTitle());
         alert.setContent(dto.getContent());
         alert.setLink(dto.getLink());
-        Member requester = memberRepository.findById(Integer.valueOf(authentication.getName())).get();
+        Member requester = memberRoleRepository.findAll().getFirst().getMember();
         alert.setRequester(requester);
-        
-        Member user = memberRepository.findByLoginId(dto.getUser()).get();
+
+        Member user = memberRepository.findById(Integer.valueOf(authentication.getName())).get();
         alert.setUser(user);
 
         alert.setStatus("open");
@@ -103,5 +106,31 @@ public class AlertService {
         }
 
         return true;
+    }
+
+    public String findAdmin() {
+        Member user = memberRoleRepository.findAll().getFirst().getMember();
+
+        return user.getLoginId();
+    }
+
+    public void addAdmin(AlertAddForm dto, Authentication authentication) {
+        if (authentication == null) {
+            throw new RuntimeException("권한이 없습니다.");
+        }
+
+
+        Alert alert = new Alert();
+        alert.setTitle(dto.getTitle());
+        alert.setContent(dto.getContent());
+        alert.setLink(dto.getLink());
+        Member requester = memberRepository.findById(Integer.valueOf(authentication.getName())).get();
+        alert.setRequester(requester);
+
+        Member user = memberRoleRepository.findAll().getFirst().getMember();
+        alert.setUser(user);
+
+        alert.setStatus("open");
+        alertRepository.save(alert);
     }
 }

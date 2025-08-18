@@ -9,7 +9,6 @@ function Order() {
   useEffect(() => {
     import("./css/ProductOrder.css");
   }, []);
-  const { user, isAdmin } = useContext(AuthenticationContext);
   const [receiverName, setReceiverName] = useState("");
   const [receiverPhone, setReceiverPhone] = useState("");
   const [receiverZipcode, setReceiverZipcode] = useState("");
@@ -39,7 +38,7 @@ function Order() {
   const navigate = useNavigate();
   const checkoutWindow = useRef(null);
   const formDataRef = useRef({});
-  const { alertCount, sendAlert } = useAlertWebSocket();
+  const { sendOrderAlert } = useAlertWebSocket();
 
   useEffect(() => {
     const fee = totalItemPrice >= 100000 ? 0 : 3000;
@@ -330,9 +329,7 @@ function Order() {
           setCartCount(res.data);
         })
         .then(() => {
-          sendAlert(
-            user.loginId,
-            "주문이 완료되었습니다.",
+          sendOrderAlert(
             `${items[0].productName} ${items.length <= 1 ? "의" : `외 ${items.length}개의`} 주문이 완료되었습니다`,
             `/order/detail/${orderToken}`,
           );
