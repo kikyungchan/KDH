@@ -440,7 +440,7 @@ export function ProductDetail() {
             onReviewCountChange={(count) => setReviewCount(count)}
           />
         </div>
-        <hr className="divider" />
+        {/*<hr className="divider" />*/}
         <RecommendedProduct products={relatedProducts} />
       </div>
       <CartAdded show={showModal} onHide={() => setShowModal(false)} />
