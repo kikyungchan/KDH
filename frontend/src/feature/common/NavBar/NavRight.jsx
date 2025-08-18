@@ -25,7 +25,7 @@ function NavRight({ iconRef, onSearchToggle, alertidcator }) {
       <div className="navbar-icons flex items-center gap-6">
         <button
           type="button"
-          className={`${iconBase} ${iconHover}`}
+          className={`${iconBase} ${iconHover} FiSearch`}
           onMouseDown={(e) => e.preventDefault()}
           onClick={() => onSearchToggle()}
         >
