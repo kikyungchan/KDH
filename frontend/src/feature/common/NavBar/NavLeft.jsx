@@ -6,21 +6,22 @@ function NavLeft({ user, isAdmin, handleCategoryClick }) {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const isRootPath = location.pathname === "/";
 
+  // 텍스트 버튼 공통 크기
+  const textBtnBase =
+    "h-10 px-3 rounded-lg flex items-center no-animation focus:outline-none focus-visible:outline-none";
+  const textHover = isRootPath ? "no-hover" : "hover:bg-gray-100";
+
   return (
     <div className="navbar-left flex items-center gap-2">
-      {/* 홈 */}
       <NavLink
         to="/Home"
-        onMouseDown={(e) => e.preventDefault()} //  클릭 시 포커스 방지
+        onMouseDown={(e) => e.preventDefault()}
         onClick={(e) => e.currentTarget.blur()}
-        className={`text-xl px-4 py-2 font-bold no-animation focus:outline-none focus-visible:outline-none ${
-          isRootPath ? "" : "btn btn-ghost hover:bg-gray-100"
-        }`}
+        className={`text-xl font-bold ${textBtnBase} ${textHover}`}
       >
         홈
       </NavLink>
 
-      {/* 모든상품 드롭다운 */}
       <div
         className={`dropdown ${dropdownOpen && !isRootPath ? "dropdown-open" : ""}`}
         onMouseEnter={() => setDropdownOpen(true)}
@@ -28,14 +29,12 @@ function NavLeft({ user, isAdmin, handleCategoryClick }) {
       >
         <NavLink
           to="/product/list"
-          onMouseDown={(e) => e.preventDefault()} //  클릭 시 포커스 방지
+          onMouseDown={(e) => e.preventDefault()}
           onClick={() => {
             handleCategoryClick("");
             setDropdownOpen(false);
           }}
-          className={`text-xl px-4 py-2 no-animation focus:outline-none focus-visible:outline-none ${
-            isRootPath ? "" : "btn btn-ghost hover:bg-gray-100"
-          }`}
+          className={`font-bold text-xl ${textBtnBase} ${textHover}`}
         >
           모든상품
         </NavLink>
@@ -133,7 +132,7 @@ function NavLeft({ user, isAdmin, handleCategoryClick }) {
         <Link
           to="/product/regist"
           onMouseDown={(e) => e.preventDefault()}
-          className="btn btn-ghost text-xl no-animation focus:outline-none focus-visible:outline-none"
+          className={`text-xl font-bold ${textBtnBase} ${textHover}`}
         >
           상품등록
         </Link>

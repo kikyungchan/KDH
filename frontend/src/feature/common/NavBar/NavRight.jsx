@@ -1,5 +1,5 @@
 import React, { useContext } from "react";
-import { Link, useNavigate, useLocation } from "react-router";
+import { Link, useLocation } from "react-router";
 import { FiSearch, FiShoppingCart } from "react-icons/fi";
 import { MdSupportAgent } from "react-icons/md";
 import { useCart } from "../../Product/CartContext.jsx";
@@ -7,42 +7,39 @@ import { NavUserMenu } from "./NavUserMenu.jsx";
 import { AuthenticationContext } from "../AuthenticationContextProvider.jsx";
 import { HiOutlineBellAlert } from "react-icons/hi2";
 
-NavUserMenu.propTypes = {};
-
 function NavRight({ iconRef, onSearchToggle, alertidcator }) {
   const { cartCount } = useCart();
   const { user, isAdmin, logout } = useContext(AuthenticationContext);
   const location = useLocation();
   const isRootPath = location.pathname === "/";
 
-  // 루트일 때 hover 스타일 제거
-  const baseBtnClass = isRootPath
-    ? "px-2 py-1 text-2xl no-animation focus:outline-none focus-visible:outline-none"
-    : "btn btn-ghost btn-circle text-2xl no-animation focus:outline-none focus-visible:outline-none";
+  // 아이콘/버튼 공통 사이즈
+  const iconBase =
+    "w-10 h-10 rounded-full flex items-center justify-center text-2xl no-animation focus:outline-none focus-visible:outline-none";
+
+  // 루트에서는 hover 배경만 제거, 그 외는 hover 배경 허용
+  const iconHover = isRootPath ? "no-hover" : "hover:bg-gray-100";
 
   return (
     <div className="navbar-right">
-      <div className="navbar-icons">
-        <div className={baseBtnClass}>
-          <FiSearch
-            ref={iconRef}
-            className="navbar-icon"
-            onClick={() => onSearchToggle()}
-          />
-        </div>
-        <NavUserMenu
-          user={user}
-          logout={logout}
-          isAdmin={isAdmin}
-          isRoothPath={isRootPath}
-        />
+      <div className="navbar-icons flex items-center gap-6">
+        <button
+          type="button"
+          className={`${iconBase} ${iconHover}`}
+          onMouseDown={(e) => e.preventDefault()}
+          onClick={() => onSearchToggle()}
+        >
+          <FiSearch ref={iconRef} className="navbar-icon" />
+        </button>
 
-        <Link to="/product/cart" className={baseBtnClass}>
+        <NavUserMenu user={user} logout={logout} isAdmin={isAdmin} />
+
+        <Link to="/product/cart" className={`${iconBase} ${iconHover}`}>
           <FiShoppingCart className="navbar-icon" />
           {cartCount > 0 && <span className="cart-badge">{cartCount}</span>}
         </Link>
 
-        <Link to={"/faq/list"} className={baseBtnClass}>
+        <Link to="/faq/list" className={`${iconBase} ${iconHover}`}>
           <MdSupportAgent />
         </Link>
 
@@ -53,7 +50,7 @@ function NavRight({ iconRef, onSearchToggle, alertidcator }) {
             </span>
           )}
           {user && (
-            <Link to={"/alert/list"} className={baseBtnClass}>
+            <Link to="/alert/list" className={`${iconBase} ${iconHover}`}>
               <HiOutlineBellAlert />
             </Link>
           )}

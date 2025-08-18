@@ -248,7 +248,7 @@ function NavBar(props) {
               className="btn btn-sm btn-ghost text-left cursor-pointer text-xl"
               onClick={() => setShowMobileCategory((prev) => !prev)}
             >
-              모든상품 ▾
+              모든상품
             </div>
             {showMobileCategory && (
               <div className="mobile-category-list">
