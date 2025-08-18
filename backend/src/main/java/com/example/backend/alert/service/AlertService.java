@@ -81,6 +81,8 @@ public class AlertService {
         alert.setTitle(dto.getTitle());
         alert.setContent(dto.getContent());
         alert.setLink(dto.getLink());
+        Member requester = memberRepository.findById(Integer.valueOf(authentication.getName())).get();
+        alert.setRequester(requester);
         
         Member user = memberRepository.findByLoginId(dto.getUser()).get();
         alert.setUser(user);
