@@ -496,27 +496,27 @@ export function MemberSignup() {
               <div>
                 <label className="block font-semibold mb-1">이메일</label>
                 <p className="text-sm text-muted mb-1">
-                  예: example@domain.com 형식의 이메일을 입력하세요.
+                  example@domain.com 형식의 이메일을 입력하세요.
                 </p>
                 <div className="flex gap-2 items-center">
                   <input
                     type="text"
                     value={emailId}
                     onChange={(e) => setEmailId(e.target.value)}
-                    className="w-2/5 rounded px-3 py-2 bg-gray-100 mb-2"
+                    className="basis-0 grow-[2] min-w-0 rounded px-3 py-2 bg-gray-100 mb-2"
                   />
-                  <span>@</span>
+                  <span className="shrink-0">@</span>
                   {customDomain ? (
                     <>
                       <input
                         type="text"
                         value={emailDomain}
                         onChange={(e) => setEmailDomain(e.target.value)}
-                        className="flex-1 rounded px-3 py-2 bg-gray-100 mb-2"
+                        className="basis-0 grow-[3] min-w-0 rounded px-3 py-2 bg-gray-100 mb-2"
                       />
                       <button
                         type="button"
-                        className="btn btn-sm btn-ghost px-2 h-9 min-h-0 text-lg mb-2"
+                        className="btn btn-sm btn-ghost px-2 h-9 min-h-0 text-lg mb-2 shrink-0"
                         onClick={() => setCustomDomain(false)}
                       >
                         x
