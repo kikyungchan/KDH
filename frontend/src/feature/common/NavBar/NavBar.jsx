@@ -176,11 +176,13 @@ function NavBar(props) {
             user={user}
             isAdmin={isAdmin}
             handleCategoryClick={handleCategoryClick}
+            isRootPath={isRootPath}
           />
           {/* 오른쪽 아이콘 */}
           <NavRight
             alertidcator={alertCount}
             onSearchToggle={() => setShowSearch((prev) => !prev)}
+            isRootPath={isRootPath}
           />
         </div>
         {showSearch && (

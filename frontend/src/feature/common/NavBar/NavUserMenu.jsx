@@ -1,21 +1,25 @@
 import { FiUser } from "react-icons/fi";
-import { Link } from "react-router";
+import { Link, useLocation } from "react-router";
 
 export function NavUserMenu({ user, logout, isAdmin }) {
+  const location = useLocation();
+  const isRootPath = location.pathname === "/";
+
+  // 루트일 때 hover 스타일 제거
+  const baseBtnClass = isRootPath
+    ? "px-2 py-1 avatar no-animation focus:outline-none focus-visible:outline-none"
+    : "btn btn-ghost btn-circle avatar no-animation focus:outline-none focus-visible:outline-none";
+
   return (
     <div className="dropdown dropdown-end">
-      <div
-        tabIndex={0}
-        role="button"
-        className="btn btn-ghost btn-circle avatar"
-      >
-        <FiUser className="text-2xl text-black" />
+      <div tabIndex={0} role="button" className={baseBtnClass}>
+        <FiUser style={{ cursor: "pointer" }} className="text-2xl text-black" />
       </div>
       <ul
         tabIndex={0}
         className="menu dropdown-content z-[999]
         text-lg
-          p-2 shadow bg-white text-black rounded-box w-52"
+        p-2 shadow bg-white text-black rounded-box w-52"
       >
         {user ? (
           <>

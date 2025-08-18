@@ -93,12 +93,12 @@ function Order() {
           sendDataToPopup();
           break;
 
-          case "PAY_SUCCESS":
-            // 결제 완료 처리
-            handleOrderButton();
-            setIsProcessing(false);
-            window.onbeforeunload = null;
-            break;
+        case "PAY_SUCCESS":
+          // 결제 완료 처리
+          handleOrderButton();
+          setIsProcessing(false);
+          window.onbeforeunload = null;
+          break;
 
         case "PAY_FAIL":
           // 결제 실패 처리
@@ -713,9 +713,12 @@ function Order() {
 
             {/* 버튼 영역 */}
             <div className="order-buttons justify-content-end">
-              {/*<button onClick={handleOrderButton} className="order-button confirm">
-          결제하기
-        </button>*/}
+              {/*<button*/}
+              {/*  onClick={handleOrderButton}*/}
+              {/*  className="order-button confirm"*/}
+              {/*>*/}
+              {/*  결제하기*/}
+              {/*</button>*/}
               {isProcessing ? (
                 <button className={"order-button confirm"}>
                   <span className="loading loading-spinner"></span>
