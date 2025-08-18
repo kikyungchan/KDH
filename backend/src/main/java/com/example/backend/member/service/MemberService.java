@@ -44,6 +44,12 @@ public class MemberService {
 
     // 회원 등록
     public void signup(MemberForm memberForm) {
+
+        if (memberForm.getLoginId() != null &&
+            memberForm.getLoginId().toLowerCase().contains("admin")) {
+            throw new IllegalArgumentException("아이디에 'admin'을 포함할 수 없습니다.");
+        }
+
         Member member = new Member();
         member.setLoginId(memberForm.getLoginId());
         member.setPassword(passwordEncoder.encode(memberForm.getPassword()));

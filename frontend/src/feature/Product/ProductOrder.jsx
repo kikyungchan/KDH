@@ -538,7 +538,7 @@ function Order() {
                 {/* 주문 요약 카드 md 이상에서만 */}
                 <div className="hidden md:block mt-3">
                   <div className="rounded p-4 bg-gray-50 border border-gray-200">
-                    <h5 className="block text-center font-semibold mb-3">
+                    <h5 className="block text-lg text-center font-semibold mb-3">
                       주문 요약
                     </h5>
                     <div className="flex justify-between">

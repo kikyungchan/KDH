@@ -8,6 +8,7 @@ import { useAlert } from "../common/AlertContext.jsx";
 export function MemberSignup() {
   // 입력 항목 정규식
   const loginIdRegEx = /^[A-Za-z][A-Za-z0-9]{3,19}$/;
+  const hasAdmin = /admin/i; // 'admin' 포함 여부(대소문자 무시)
   const emailRegEx =
     /^[A-Za-z0-9]([-_.]?[A-Za-z0-9])*@[A-Za-z0-9]([-_.]?[A-Za-z0-9])*\.[A-Za-z]{2,3}$/;
   const passwordRegEx = /^[A-Za-z0-9]{8,20}$/;
@@ -195,6 +196,12 @@ export function MemberSignup() {
   function handleCheckLoginId() {
     if (!loginId.trim()) {
       setLoginIdCheckMessage("아이디를 입력하세요.");
+      return;
+    }
+
+    if (hasAdmin.test(loginId.trim())) {
+      setLoginIdCheckMessage("아이디에 'admin'을 포함할 수 없습니다.");
+      setLoginIdChecked(false);
       return;
     }
 
