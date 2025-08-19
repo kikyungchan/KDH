@@ -377,7 +377,7 @@ function ProductCart() {
                             </div>
                           </div>
                         </div>
-                        ㅈ{/* md 이상 일때  */}
+                        {/* md 이상 일때  */}
                         <div className="hidden md:grid md:grid-cols-12 md:items-center md:py-4">
                           <div className="col-span-1 flex justify-center">
                             <input
@@ -468,10 +468,11 @@ function ProductCart() {
                       }}
                     >
                       <div
+                        className="ml-3 mr-3"
                         style={{
                           background: "white",
                           padding: 24,
-                          width: 400,
+                          width: 350,
                           borderRadius: 8,
                         }}
                       >
