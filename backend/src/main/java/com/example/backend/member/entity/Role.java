@@ -17,6 +17,4 @@ public class Role {
     @Id
     @Column(name = "name", nullable = false, length = 30)
     private String name;
-
-    //TODO [Reverse Engineering] generate columns from DB
 }
