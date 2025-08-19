@@ -45,7 +45,7 @@ public class EmailService {
         MimeMessage message = mailSender.createMimeMessage();
         message.setFrom(senderEmail);
         message.setRecipients(MimeMessage.RecipientType.TO, email);
-        message.setSubject("인증코드입니다.");
+        message.setSubject("코데헌 가입 인증코드입니다.");
         message.setText(setContext(authCode), "utf-8", "html");
 
         redisUtil.setDataExpire(email, authCode, 3 * 60L); // 3분
@@ -55,8 +55,9 @@ public class EmailService {
 
     private String setContext(String authCode) {
         String body = "";
+        body += "<h3>" + "코데헌 가입 인증코드입니다." + "</h3>";
         body += "<h4>" + "인증 코드를 입력하세요." + "</h4>";
-        body += "<h2>" + "[" + authCode + "]" + "</h2>";
+        body += "<h2>" + "[ " + authCode + " ]" + "</h2>";
         return body;
     }
 
