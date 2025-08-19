@@ -59,16 +59,19 @@ function NavRight({ iconRef, onSearchToggle, alertidcator }) {
         </Link>
 
         <div className="indicator">
-          {alertidcator !== 0 && (
+          {/*{alertidcator !== 0 && (
             <span className="indicator-item badge badge-secondary text-[0.5rem] py-[0px] px-[6px]">
               {alertidcator}
             </span>
-          )}
+          )}*/}
           {user && (
             <Link to="/alert/list" className={`${iconBase} ${iconHover}`}>
               <HiOutlineBellAlert
                 className={`navbar-icon ${isRootPath ? "icon-white" : ""}`}
               />
+              {alertidcator > 0 && (
+                <span className="cart-badge">{alertidcator}</span>
+              )}
             </Link>
           )}
         </div>
