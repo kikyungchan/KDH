@@ -144,10 +144,12 @@ export function QnaAdd() {
     <Row className="justify-content-center">
       <Col md={8} lg={9} className="mt-5">
         <div className="container">
-          <h2 className="mb-4">1:1 상담 문의</h2>
-          <div>
-            {/*<Button disabled={true}>상담문의</Button>*/}
-            {/*<Button>상담내역</Button>*/}
+          <h2 className="mb-4 lg:text-2xl md:text-xl font-bold">
+            1:1 상담 문의
+          </h2>
+          {/* <div>
+            <Button disabled={true}>상담문의</Button>
+            <Button>상담내역</Button>
 
             <ButtonGroup>
               {radios.map((radio, idx) => (
@@ -163,7 +165,7 @@ export function QnaAdd() {
                 />
               ))}
             </ButtonGroup>
-          </div>
+          </div>*/}
           <br />
           <div className="row">
             <div ref={categoryRef}>
