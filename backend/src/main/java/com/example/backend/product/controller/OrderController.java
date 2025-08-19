@@ -52,7 +52,7 @@ public class OrderController {
     // 주문 상세 조회
     @GetMapping("/detail/{orderToken}")
     public ResponseEntity<OrderDetailDto> getOrderDetail(@PathVariable String orderToken,
-                                                         Authentication authentication // ✅ 여기서 권한 확인
+                                                         Authentication authentication
     ) {
         Jwt jwt = (Jwt) authentication.getPrincipal();
         Integer memberId = Integer.parseInt(jwt.getSubject());

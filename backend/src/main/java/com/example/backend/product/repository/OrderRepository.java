@@ -19,4 +19,7 @@ public interface OrderRepository extends JpaRepository<Order, Integer> {
 
     List<Order> findAllByOrderToken(String orderToken);
 
+    boolean existsByOrderToken(String orderToken);
+
+    List<Order> findAllByOrderTokenAndMemberId(String orderToken, Integer memberId);
 }

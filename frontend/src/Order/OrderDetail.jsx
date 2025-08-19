@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate, useParams } from "react-router";
+import { toast } from "sonner";
 
 export function OrderDetail() {
   const { orderToken } = useParams();
@@ -14,11 +15,16 @@ export function OrderDetail() {
         setOrder(res.data);
       })
       .catch((err) => {
-        console.error(
-          "❌ 주문 상세 불러오기 실패",
-          err.response?.status,
-          err.response?.data,
-        );
+        const code = err?.response?.status;
+        if (code === 403) {
+          toast("권한이 없습니다.", { type: "error" });
+          navigate("/");
+        } else if (code === 404) {
+          toast("주문을 찾을 수 없습니다.", { type: "error" });
+          navigate("/");
+        } else {
+          toast("조회 중 오류가 발생했습니다.", { type: "error" });
+        }
       })
       .finally(() => {});
   }, [orderToken]);
