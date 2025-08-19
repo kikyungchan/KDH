@@ -297,28 +297,87 @@ public class ProductService {
 
 
     public void edit(Integer id, ProductEditDto dto) {
-        Product product = productRepository.findById(id).get();
+//        Product product = productRepository.findById(id).get();
+//        product.setProductName(dto.getProductName());
+//        product.setPrice(dto.getPrice());
+//        product.setCategory(dto.getCategory());
+//        product.setInfo(dto.getInfo());
+//        product.setQuantity(dto.getQuantity());
+//
+//        // 본문이미지 삭제
+//        if (dto.getDeletedImages() != null) {
+//            for (String path : dto.getDeletedImages()) {
+//                s3Uploader.delete(extractS3Key(path));
+//                productImageRepository.deleteByStoredPath(path);
+//            }
+//        }
+//        // 본문이미지 저장
+//        if (dto.getNewImages() != null) {
+//            List<ProductImage> imageList = new ArrayList<>();
+//
+//            for (MultipartFile file : dto.getNewImages()) {
+//                String s3Url = null;
+//                try {
+//                    s3Url = s3Uploader.upload(file, String.valueOf(product.getId()));
+//                    ProductImage image = new ProductImage();
+//                    image.setOriginalFileName(file.getOriginalFilename());
+//                    image.setStoredPath(s3Url);
+//                    image.setProduct(product);
+//                    imageList.add(image);
+//                } catch (IOException e) {
+//                    throw new RuntimeException(e);
+//                }
+//            }
+//            productImageRepository.saveAll(imageList);
+//
+//        }
+//        // 기존 썸네일 삭제
+//        if (dto.getDeletedThumbnails() != null) {
+//            for (String path : dto.getDeletedThumbnails()) {
+//                s3Uploader.delete(extractS3Key(path));
+//                productThumbnailRepository.deleteByStoredPath(path);
+//            }
+//        }
+//
+//        // 새 썸네일 저장
+//        if (dto.getNewThumbnails() != null) {
+//            List<ProductThumbnail> thumbnailList = new ArrayList<>();
+//            for (MultipartFile file : dto.getNewThumbnails()) {
+//                try {
+//                    String s3Url = s3Uploader.upload(file, "thumbnails/" + product.getId());
+//                    ProductThumbnail thumbnail = new ProductThumbnail();
+//                    thumbnail.setOriginalFileName(file.getOriginalFilename());
+//                    thumbnail.setStoredPath(s3Url);
+//                    thumbnail.setProduct(product);
+//                    thumbnail.setIsMain(false);
+//                    thumbnailList.add(thumbnail);
+//                } catch (IOException e) {
+//                    throw new RuntimeException(e);
+//                }
+//            }
+//            productThumbnailRepository.saveAll(thumbnailList);
+//        }
+        Product product = productRepository.findById(id).orElseThrow();
         product.setProductName(dto.getProductName());
         product.setPrice(dto.getPrice());
         product.setCategory(dto.getCategory());
         product.setInfo(dto.getInfo());
         product.setQuantity(dto.getQuantity());
 
-        // 본문이미지 삭제
+        // 본문 이미지 삭제
         if (dto.getDeletedImages() != null) {
             for (String path : dto.getDeletedImages()) {
                 s3Uploader.delete(extractS3Key(path));
                 productImageRepository.deleteByStoredPath(path);
             }
         }
-        // 본문이미지 저장
+
+        // 본문 이미지 추가
         if (dto.getNewImages() != null) {
             List<ProductImage> imageList = new ArrayList<>();
-
             for (MultipartFile file : dto.getNewImages()) {
-                String s3Url = null;
                 try {
-                    s3Url = s3Uploader.upload(file, String.valueOf(product.getId()));
+                    String s3Url = s3Uploader.upload(file, String.valueOf(product.getId()));
                     ProductImage image = new ProductImage();
                     image.setOriginalFileName(file.getOriginalFilename());
                     image.setStoredPath(s3Url);
@@ -329,9 +388,9 @@ public class ProductService {
                 }
             }
             productImageRepository.saveAll(imageList);
-
         }
-        // 기존 썸네일 삭제
+
+        // 썸네일 삭제
         if (dto.getDeletedThumbnails() != null) {
             for (String path : dto.getDeletedThumbnails()) {
                 s3Uploader.delete(extractS3Key(path));
@@ -339,8 +398,8 @@ public class ProductService {
             }
         }
 
-        // 새 썸네일 저장
-        if (dto.getNewThumbnails() != null) {
+        // 썸네일 추가
+        if (dto.getNewThumbnails() != null && !dto.getNewThumbnails().isEmpty()) {
             List<ProductThumbnail> thumbnailList = new ArrayList<>();
             for (MultipartFile file : dto.getNewThumbnails()) {
                 try {
@@ -349,13 +408,34 @@ public class ProductService {
                     thumbnail.setOriginalFileName(file.getOriginalFilename());
                     thumbnail.setStoredPath(s3Url);
                     thumbnail.setProduct(product);
-                    thumbnail.setIsMain(false);
+                    thumbnail.setIsMain(false); // 일단 false
                     thumbnailList.add(thumbnail);
                 } catch (IOException e) {
                     throw new RuntimeException(e);
                 }
             }
             productThumbnailRepository.saveAll(thumbnailList);
+        }
+
+        // 대표 썸네일(isMain) 보정: 하나만 true가 되도록
+        List<ProductThumbnail> thumbnails = productThumbnailRepository.findByProductIdOrderByIdAsc(product.getId());
+        if (!thumbnails.isEmpty()) {
+            boolean hasMain = false;
+            for (ProductThumbnail t : thumbnails) {
+                if (Boolean.TRUE.equals(t.getIsMain())) {
+                    hasMain = true;
+                    break;
+                }
+            }
+
+            if (!hasMain) {
+                // 첫 번째만 대표로
+                thumbnails.get(0).setIsMain(true);
+                for (int i = 1; i < thumbnails.size(); i++) {
+                    thumbnails.get(i).setIsMain(false);
+                }
+                productThumbnailRepository.saveAll(thumbnails);
+            }
         }
     }
 

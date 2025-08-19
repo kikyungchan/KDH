@@ -18,4 +18,6 @@ public interface ProductThumbnailRepository extends JpaRepository<ProductThumbna
             WHERE img.product.id = :productId
             """)
     String findByProductid(Integer productId);
+
+    List<ProductThumbnail> findByProductIdOrderByIdAsc(Integer id);
 }
