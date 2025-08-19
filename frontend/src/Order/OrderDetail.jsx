@@ -15,16 +15,8 @@ export function OrderDetail() {
         setOrder(res.data);
       })
       .catch((err) => {
-        const code = err?.response?.status;
-        if (code === 403) {
-          toast("권한이 없습니다.", { type: "error" });
-          navigate("/");
-        } else if (code === 404) {
-          toast("주문을 찾을 수 없습니다.", { type: "error" });
-          navigate("/");
-        } else {
-          toast("조회 중 오류가 발생했습니다.", { type: "error" });
-        }
+        toast("조회 중 오류가 발생했습니다.", { type: "error" });
+        navigate("/home");
       })
       .finally(() => {});
   }, [orderToken]);
