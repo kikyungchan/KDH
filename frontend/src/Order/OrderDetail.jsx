@@ -23,11 +23,6 @@ export function OrderDetail() {
       .finally(() => {});
   }, [orderToken]);
 
-  // useEffect(() => {
-  //   console.log("✅ 주문 상세 DTO:", orderDetail);
-  //   console.log("📦 상품 목록:", orderDetail.orderItems);
-  // }, [orderDetail]);
-
   if (!order) {
     return (
       <div className="text-center pt-10 text-gray-500">
