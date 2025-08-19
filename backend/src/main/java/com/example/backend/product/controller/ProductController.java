@@ -10,6 +10,7 @@ import com.example.backend.product.repository.ProductOptionRepository;
 import com.example.backend.product.repository.ProductRepository;
 import com.example.backend.product.repository.ProductThumbnailRepository;
 import com.example.backend.product.service.ProductService;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
@@ -159,17 +160,26 @@ public class ProductController {
     }
 
     @PostMapping(value = "/edit", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public void editProduct(@RequestParam Integer id,
-                            @RequestParam String productName,
-                            @RequestParam Integer price,
-                            @RequestParam String category,
-                            @RequestParam String info,
-                            @RequestParam Integer quantity,
-                            @RequestParam(required = false) List<String> deletedImages,
-                            @RequestParam(required = false) List<MultipartFile> newImages,
-                            @RequestParam(required = false) List<String> deletedThumbnails,
-                            @RequestParam(required = false) List<MultipartFile> newThumbnails
-    ) {
+    public void editProduct(
+            @RequestParam Integer id,
+            @RequestParam String productName,
+            @RequestParam Integer price,
+            @RequestParam String category,
+            @RequestParam String info,
+            @RequestParam Integer quantity,
+            @RequestParam(required = false) List<String> deletedImages,
+            @RequestParam(required = false) List<MultipartFile> newImages,
+            @RequestParam(required = false) List<String> deletedThumbnails,
+            @RequestParam(required = false) List<MultipartFile> newThumbnails,
+            @RequestParam(required = false) String optionsJson // ★ JSON 문자열로 받기
+    ) throws JsonProcessingException {
+        ObjectMapper mapper = new ObjectMapper();
+        List<ProductOptionDto> options = null;
+        if (optionsJson != null && !optionsJson.isEmpty()) {
+            options = mapper.readValue(optionsJson, new TypeReference<List<ProductOptionDto>>() {
+            });
+        }
+
         ProductEditDto dto = new ProductEditDto();
         dto.setProductName(productName);
         dto.setPrice(price);
@@ -180,9 +190,11 @@ public class ProductController {
         dto.setNewImages(newImages);
         dto.setDeletedThumbnails(deletedThumbnails);
         dto.setNewThumbnails(newThumbnails);
+        dto.setOptions(options);
 
         productService.edit(id, dto);
     }
+
 
     @DeleteMapping("/delete")
     public void delete(@RequestParam Integer id) {

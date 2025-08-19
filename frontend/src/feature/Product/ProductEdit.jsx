@@ -5,6 +5,7 @@ import axios from "axios";
 export function ProductEdit() {
   useEffect(() => {
     import("./css/ProductEdit.css");
+    import("./css/ProductRegist.css");
   }, []);
   // 썸네일이미지
   const [thumbnailPaths, setThumbnailPaths] = useState([]);
@@ -16,6 +17,7 @@ export function ProductEdit() {
   // 본문이미지
   const [detailImagePaths, setDetailImagePaths] = useState([]);
 
+  const [options, setOptions] = useState([]);
   const [newImages, setNewImages] = useState([]);
   const [previewImages, setPreviewImages] = useState([]);
   const [deletedImagePaths, setDeletedImagePaths] = useState([]);
@@ -33,6 +35,7 @@ export function ProductEdit() {
   useEffect(() => {
     axios.get(`/api/product/view?id=${id}`).then((res) => {
       const data = res.data;
+      setOptions(data.options || []);
       setForm({
         productName: data.productName,
         price: data.price,
@@ -90,6 +93,7 @@ export function ProductEdit() {
     formData.append("info", form.info);
     formData.append("quantity", form.quantity);
     formData.append("id", id);
+    formData.append("optionsJson", JSON.stringify(options));
 
     // 썸네일 삭제 목록
     deletedThumbnails.forEach((path) => {
@@ -197,7 +201,55 @@ export function ProductEdit() {
                   onChange={handleChange}
                 />
               </div>
-
+              <div className="product-regist-options">
+                <label className="product-regist-label">옵션 목록</label>
+                {options.map((opt, index) => (
+                  <div className="product-regist-option-row" key={index}>
+                    <input
+                      type="text"
+                      placeholder="메뉴이름"
+                      className="product-regist-input"
+                      value={opt.optionName}
+                      onChange={(e) => {
+                        const newOptions = [...options];
+                        newOptions[index].optionName = e.target.value;
+                        setOptions(newOptions);
+                      }}
+                    />
+                    <input
+                      type="text"
+                      placeholder="가격"
+                      className="product-regist-input"
+                      value={opt.price}
+                      onChange={(e) => {
+                        const newOptions = [...options];
+                        newOptions[index].price = e.target.value;
+                        setOptions(newOptions);
+                      }}
+                    />
+                    <button
+                      type="button"
+                      onClick={() => {
+                        const newOptions = [...options];
+                        newOptions.splice(index, 1);
+                        setOptions(newOptions);
+                      }}
+                      className="product-regist-option-remove-btn"
+                    >
+                      ×
+                    </button>
+                  </div>
+                ))}
+                <button
+                  type="button"
+                  className="product-regist-file-label"
+                  onClick={() =>
+                    setOptions([...options, { optionName: "", price: "" }])
+                  }
+                >
+                  옵션 추가
+                </button>
+              </div>
               {/* 썸네일 이미지 변경 + 업로드 묶음 */}
               <div className="product-edit-field">
                 <label className="product-edit-label">썸네일 이미지 변경</label>

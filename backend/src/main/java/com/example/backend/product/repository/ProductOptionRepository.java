@@ -6,4 +6,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface ProductOptionRepository extends JpaRepository<ProductOption, Integer> {
     ProductOption findByProductAndOptionName(Product product, String optionName);
+
+    void deleteByProduct(Product product);
 }

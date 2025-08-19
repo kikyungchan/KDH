@@ -12,6 +12,8 @@ public class ProductEditDto {
     private String category;
     private String info;
     private Integer quantity;
+    private List<ProductOptionDto> options;
+
     private List<MultipartFile> newImages;
     private List<String> deletedImages;
 

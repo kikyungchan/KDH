@@ -297,72 +297,29 @@ public class ProductService {
 
 
     public void edit(Integer id, ProductEditDto dto) {
-//        Product product = productRepository.findById(id).get();
-//        product.setProductName(dto.getProductName());
-//        product.setPrice(dto.getPrice());
-//        product.setCategory(dto.getCategory());
-//        product.setInfo(dto.getInfo());
-//        product.setQuantity(dto.getQuantity());
-//
-//        // 본문이미지 삭제
-//        if (dto.getDeletedImages() != null) {
-//            for (String path : dto.getDeletedImages()) {
-//                s3Uploader.delete(extractS3Key(path));
-//                productImageRepository.deleteByStoredPath(path);
-//            }
-//        }
-//        // 본문이미지 저장
-//        if (dto.getNewImages() != null) {
-//            List<ProductImage> imageList = new ArrayList<>();
-//
-//            for (MultipartFile file : dto.getNewImages()) {
-//                String s3Url = null;
-//                try {
-//                    s3Url = s3Uploader.upload(file, String.valueOf(product.getId()));
-//                    ProductImage image = new ProductImage();
-//                    image.setOriginalFileName(file.getOriginalFilename());
-//                    image.setStoredPath(s3Url);
-//                    image.setProduct(product);
-//                    imageList.add(image);
-//                } catch (IOException e) {
-//                    throw new RuntimeException(e);
-//                }
-//            }
-//            productImageRepository.saveAll(imageList);
-//
-//        }
-//        // 기존 썸네일 삭제
-//        if (dto.getDeletedThumbnails() != null) {
-//            for (String path : dto.getDeletedThumbnails()) {
-//                s3Uploader.delete(extractS3Key(path));
-//                productThumbnailRepository.deleteByStoredPath(path);
-//            }
-//        }
-//
-//        // 새 썸네일 저장
-//        if (dto.getNewThumbnails() != null) {
-//            List<ProductThumbnail> thumbnailList = new ArrayList<>();
-//            for (MultipartFile file : dto.getNewThumbnails()) {
-//                try {
-//                    String s3Url = s3Uploader.upload(file, "thumbnails/" + product.getId());
-//                    ProductThumbnail thumbnail = new ProductThumbnail();
-//                    thumbnail.setOriginalFileName(file.getOriginalFilename());
-//                    thumbnail.setStoredPath(s3Url);
-//                    thumbnail.setProduct(product);
-//                    thumbnail.setIsMain(false);
-//                    thumbnailList.add(thumbnail);
-//                } catch (IOException e) {
-//                    throw new RuntimeException(e);
-//                }
-//            }
-//            productThumbnailRepository.saveAll(thumbnailList);
-//        }
-        Product product = productRepository.findById(id).orElseThrow();
+        Product product = productRepository.findById(id).get();
         product.setProductName(dto.getProductName());
         product.setPrice(dto.getPrice());
         product.setCategory(dto.getCategory());
         product.setInfo(dto.getInfo());
         product.setQuantity(dto.getQuantity());
+
+        // 옵션 수정 로직
+        if (dto.getOptions() != null) {
+            // 기존 옵션 전부 삭제 후 새로 저장하는 방식 (간단)
+            productOptionRepository.deleteByProduct(product);
+
+            List<ProductOption> optionList = dto.getOptions().stream()
+                    .map(optDto -> {
+                        ProductOption opt = new ProductOption();
+                        opt.setOptionName(optDto.getOptionName());
+                        opt.setPrice(optDto.getPrice());
+                        opt.setProduct(product);
+                        return opt;
+                    })
+                    .toList();
+            productOptionRepository.saveAll(optionList);
+        }
 
         // 본문 이미지 삭제
         if (dto.getDeletedImages() != null) {
