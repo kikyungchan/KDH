@@ -2,14 +2,12 @@ import { useContext, useEffect } from "react";
 import { useNavigate } from "react-router";
 import { AuthenticationContext } from "../common/AuthenticationContextProvider.jsx";
 import { useCart } from "../Product/CartContext.jsx";
-import { useAlert } from "../common/AlertContext.jsx";
 import { toast } from "sonner";
 
 export function MemberLogout() {
   const navigate = useNavigate();
   const { logout } = useContext(AuthenticationContext);
   const { setCartCount } = useCart();
-  const { showAlert } = useAlert();
   useEffect(() => {
     logout();
 
