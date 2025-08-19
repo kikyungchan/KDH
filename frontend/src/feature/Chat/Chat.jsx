@@ -59,6 +59,10 @@ export function Chat() {
             // 백엔드에서 온 에러 메시지 사용
             console.log(err.response.data.message);
             console.log("서버 에러 메시지:", err.response.data.message);
+          } else {
+            alert("접근 권한이 없습니다.");
+            window.location.href = "/Home";
+            // toast.error("접근 권한이 없습니다");
           }
         });
     }
@@ -96,18 +100,18 @@ export function Chat() {
             setMsgs((prev) => [...prev, JSON.parse(message.body)]);
           } else if (data.type === "ENTER") {
             /*if (data.currentUsers) {
-              setRoomUsers(data.currentUsers);
-            }
-            // 입장 메시지도 채팅창에 표시
-            setMsgs((prev) => [
-              ...prev,
-              {
-                from: "SYSTEM",
-                message: data.message,
-                timestamp: data.timestamp,
-                type: "SYSTEM",
-              },
-            ]);*/
+                                                                                                                                                              setRoomUsers(data.currentUsers);
+                                                                                                                                                            }
+                                                                                                                                                            // 입장 메시지도 채팅창에 표시
+                                                                                                                                                            setMsgs((prev) => [
+                                                                                                                                                              ...prev,
+                                                                                                                                                              {
+                                                                                                                                                                from: "SYSTEM",
+                                                                                                                                                                message: data.message,
+                                                                                                                                                                timestamp: data.timestamp,
+                                                                                                                                                                type: "SYSTEM",
+                                                                                                                                                              },
+                                                                                                                                                            ]);*/
           } else if (/*data.type === "LEAVE" || */ data.type === "END") {
             if (data.currentUsers) {
               setRoomUsers(data.currentUsers);
@@ -127,14 +131,14 @@ export function Chat() {
 
         // 들어왔을 때 메시지 보내기
         /*client.publish({
-          destination: "/app/chat/enter", // 서버의 MessageMapping 경로
-          body: JSON.stringify({
-            from: user.name, // 내 이름
-            roomId: roomId, // 방 id (props, params 등에서 받아와야 함)
-            type: "ENTER", // 필요하다면 type도 함께
-            // 필요하면 다른 필드도 추가
-          }),
-        });*/
+                                                                                                          destination: "/app/chat/enter", // 서버의 MessageMapping 경로
+                                                                                                          body: JSON.stringify({
+                                                                                                            from: user.name, // 내 이름
+                                                                                                            roomId: roomId, // 방 id (props, params 등에서 받아와야 함)
+                                                                                                            type: "ENTER", // 필요하다면 type도 함께
+                                                                                                            // 필요하면 다른 필드도 추가
+                                                                                                          }),
+                                                                                                        });*/
       };
 
       client.onDisconnect = () => {
