@@ -10,6 +10,7 @@ import com.example.backend.product.repository.GuestOrderRepository;
 import com.example.backend.product.service.OrderService;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -17,6 +18,7 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.web.bind.annotation.*;
@@ -24,6 +26,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
+@Slf4j
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/api/order/")
@@ -48,21 +51,27 @@ public class OrderController {
 
     // 주문 상세 조회
     @GetMapping("/detail/{orderToken}")
-    private ResponseEntity<OrderDetailDto> getOrderDetail(@PathVariable String orderToken,
-                                                          @RequestHeader("Authorization") String authHeader) {
+    public ResponseEntity<OrderDetailDto> getOrderDetail(@PathVariable String orderToken,
+                                                         Authentication authentication // ✅ 여기서 권한 확인
+    ) {
+        Jwt jwt = (Jwt) authentication.getPrincipal();
+        Integer memberId = Integer.parseInt(jwt.getSubject());
 
-        String token = authHeader.replace("Bearer ", "");
-        Jwt decode = jwtDecoder.decode(token);
-        Integer memberId = Integer.parseInt(decode.getSubject());
+        authentication.getAuthorities()
+                .forEach(a -> System.out.println("  AUTH=" + a.getAuthority()));
 
-        OrderDetailDto dto = orderService.getOrderDetail(orderToken, memberId);
-        return ResponseEntity.ok(dto);
+        boolean isAdmin = authentication.getAuthorities().stream()
+                .map(GrantedAuthority::getAuthority)
+                .map(s -> s == null ? "" : s.trim().toLowerCase())
+                .anyMatch(a -> a.equals("role_admin") || a.equals("admin") || a.equals("scope_admin"));
+
+        return ResponseEntity.ok(orderService.getOrderDetail(orderToken, memberId, isAdmin));
     }
 
     // 비회원 주문 조회
     @PostMapping("/guest-order/lookup")
-    private ResponseEntity<?> verifyGuestOrder(@RequestBody GuestLookupRequest request,
-                                               HttpSession session) {
+    public ResponseEntity<?> verifyGuestOrder(@RequestBody GuestLookupRequest request,
+                                              HttpSession session) {
         try {
             orderService.verifyGuestOrder(request, session);
             return ResponseEntity.ok("인증 성공");

@@ -72,10 +72,15 @@ public class OrderService {
     }
 
 
-    // 주문 상세 조회
+    // 기존 호출 호환용 (항상 일반 사용자로 처리)
     public OrderDetailDto getOrderDetail(String orderToken, Integer memberId) {
-        List<Order> orders = orderRepository.findAllByOrderToken(orderToken);
+        return getOrderDetail(orderToken, memberId, false);
+    }
 
+    // 주문 상세 조회
+    public OrderDetailDto getOrderDetail(String orderToken, Integer memberId, boolean isAdmin) {
+
+        List<Order> orders = orderRepository.findAllByOrderToken(orderToken);
 
         if (orders.isEmpty()) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "주문을 찾을 수 없습니다.");
@@ -84,8 +89,14 @@ public class OrderService {
         // ✅ 첫 번째 Order만 사용 (임시 조치)
         Order representativeOrder = orders.get(0);
 
-        if (!representativeOrder.getMember().getId().equals(memberId)) {
-            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "본인의 주문만 조회할 수 있습니다.");
+        // 🔐 관리자만 소유자 검증 우회
+        if (!isAdmin) {
+            Integer ownerId = representativeOrder.getMember() != null
+                    ? representativeOrder.getMember().getId()
+                    : null;
+            if (ownerId == null || !ownerId.equals(memberId)) {
+                throw new ResponseStatusException(HttpStatus.FORBIDDEN, "본인의 주문만 조회할 수 있습니다.");
+            }
         }
 
         // ✅ 모든 주문의 아이템을 통합
