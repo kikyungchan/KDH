@@ -34,7 +34,7 @@ export const AlertWebSocketProvider = ({ children }) => {
           : WS_PATH;
         return new SockJS(url);
       },
-      debug: (str) => console.log("[STOMP]", str),
+      debug: (str) => {},
       reconnectDelay: 5000, // 끊기면 5초후 재연결
       connectHeaders: {
         username: user.name,
@@ -71,12 +71,6 @@ export const AlertWebSocketProvider = ({ children }) => {
     };
   }, [user && user.name]);
 
-  /*clientRef.current.publish({
-    destination: "/app/chat/alert",
-    body: JSON.stringify(chatMsg),
-  });
-  setText(""); // 입력창 초기화*/
-
   // 메시지 보내기 함수 (다른 컴포넌트에서 사용 가능)
   const sendMessage = (destination, message) => {
     if (clientRef.current?.connected) {
@@ -85,7 +79,7 @@ export const AlertWebSocketProvider = ({ children }) => {
         body: JSON.stringify(message),
       });
     } else {
-      console.error("WebSocket이 연결되지 않았습니다.");
+      // console.error("WebSocket이 연결되지 않았습니다.");
     }
   };
 

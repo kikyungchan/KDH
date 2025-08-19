@@ -68,22 +68,13 @@ export function FaQList() {
       .then((res) => {
         setFaQList(res.data.faqList);
         setPageInfo(res.data.pageInfo);
-        // console.log("data : ", res.data);
         setsearchCategory(searchParams.get("c") || 0);
-        // searchParams.set("c", searchCategory);
-        // const newSearchParams = new URLSearchParams();
-        // newSearchParams.set("c", searchCategory);
-        // newSearchParams.set("P", PAGE);
-        // newSearchParams.set("q", );
-        // setSearchParams(newSearchParams);
         const hash = window.location.hash.replace("#", "");
         if (hash) {
           setTimeout(() => {
             const el = document.getElementById(hash);
             if (el && el.type === "checkbox") {
               el.checked = true;
-              console.log("checked : ", hash);
-              // 부드럽게 스크롤 이동도 추가하고 싶으면 아래처럼!
               el.scrollIntoView({ behavior: "smooth", block: "center" });
             }
           }, 0);
@@ -123,7 +114,6 @@ export function FaQList() {
         category: category,
       })
       .then((res) => {
-        console.log("success");
         const message = res.data.message;
         if (message) {
           toast(message.text, { type: message.type });
@@ -138,7 +128,7 @@ export function FaQList() {
         }
       })
       .finally(() => {
-        console.log("always");
+        // console.log("always");
       });
   }
 

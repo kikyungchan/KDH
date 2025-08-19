@@ -38,16 +38,13 @@ export function QnaView() {
     axios
       .get(`/api/qna/view?${searchParams}`)
       .then((res) => {
-        // user 값이 없음
-        console.log("user : ", user);
-        console.log("isAdmin : ", isAdmin);
         setQuestion(res.data);
       })
       .catch((err) => {
         console.log(err);
       })
       .finally(() => {
-        console.log("always");
+        // console.log("always");
       });
   }, []);
 
@@ -57,19 +54,16 @@ export function QnaView() {
       // .delete(`/api/qna/?${searchParams}`)
       .delete(`/api/qna/${question.id}`)
       .then((res) => {
-        console.log("잘됨");
-
         const message = res.data.message;
         if (message) {
           toast(message.text, { type: message.type });
         }
       })
       .catch((err) => {
-        console.log("안된");
         toast("게시물이 삭제되지 않았습니다.", { type: "warning" });
       })
       .finally(() => {
-        console.log("항상");
+        // console.log("항상");
       });
     return null;
   }

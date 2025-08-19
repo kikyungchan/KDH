@@ -39,8 +39,7 @@ public class QuestionController {
         // 로그인 여부 확인
         questionService.hasPermission(authentication);
 
-        System.out.println("keyword : " + keyword);
-        System.out.println("pageNumber : " + pageNumber);
+
         return questionService.list(keyword, pageNumber, authentication);
     }
 

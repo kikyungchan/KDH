@@ -54,9 +54,7 @@ export function QnaAdd() {
     axios
       .get(`/api/qna/add?id=${params.id}`)
       .then((res) => {
-        console.log(res.data);
         setProductId(res.data.id);
-        console.log(res.data.id);
         setImage(res.data.image);
         setProductPrice(res.data.price);
         setProductName(res.data.productName);
@@ -66,11 +64,9 @@ export function QnaAdd() {
           alert("로그인 후 이용해주세요.");
           window.location.href = "/login";
         } else {
-          console.log("잘 안될 때 코드");
+          // console.log("잘 안될 때 코드");
         }
       });
-    console.log("user : ", user);
-    console.log("productName : ", productName);
   }, []);
 
   function handleSaveButtonClick() {
@@ -81,7 +77,7 @@ export function QnaAdd() {
         // 요소의 위치 정보 가져오기
         const rect = categoryElement.getBoundingClientRect();
         const targetPosition = window.scrollY + rect.top - 100;
-        
+
         window.scrollTo({
           top: targetPosition,
           behavior: "smooth",
@@ -123,7 +119,6 @@ export function QnaAdd() {
           }
         })
         .finally(() => {
-          console.log("항상 실행되는 코드");
           setIsProcessing(false);
         });
     }

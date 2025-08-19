@@ -15,15 +15,12 @@ export function AlertList() {
       .get(`/api/alert/list?${searchParams}`)
       .then((res) => {
         setAlertList(res.data.alertList);
-        console.log(res.data);
         setAlertCount(0);
       })
       .catch((err) => {
         if (err.response && err.response.status === 401) {
           alert("로그인 후 이용해주세요.");
           window.location.href = "/login";
-        } else {
-          console.log("잘 안될 때 코드");
         }
       });
   }, [searchParams]);

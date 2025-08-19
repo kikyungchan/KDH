@@ -93,10 +93,8 @@ public class ChatService {
     public Boolean chatRoomCheck(String roomId) {
         ChatRoom chatRoom = chatRoomRepository.findByRoomId(roomId);
         if (chatRoom.getType().equals("OPEN")) {
-            System.out.println("room is open");
             return true;
         } else {
-            System.out.println("room is closed " + chatRoom.getType());
             return false;
         }
     }

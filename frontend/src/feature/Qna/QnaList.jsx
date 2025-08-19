@@ -36,7 +36,6 @@ export function QnaList() {
     axios
       .get(`/api/qna/list?${searchParams}`)
       .then((res) => {
-        console.log("잘 될 때 코드");
         setQuestionList(res.data.questionList);
         setPageInfo(res.data.pageInfo);
       })
@@ -45,11 +44,11 @@ export function QnaList() {
           alert("로그인 후 이용해주세요.");
           window.location.href = "/login";
         } else {
-          console.log("잘 안될 때 코드");
+          // console.log("잘 안될 때 코드");
         }
       })
       .finally(() => {
-        console.log("항상 실행 코드");
+        // console.log("항상 실행 코드");
       });
   }, [searchParams]);
 
