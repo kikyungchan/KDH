@@ -10,7 +10,7 @@ export function NavUserMenu({ user, logout, isAdmin }) {
   const iconHover = isRootPath ? "no-hover" : "hover:bg-gray-100";
 
   return (
-    <div className="dropdown dropdown-end">
+    <div className="dropdown dropdown-end user-menu">
       <div tabIndex={0} role="button" className={`${iconBase} ${iconHover}`}>
         <FiUser className="text-2xl text-black" />
       </div>
