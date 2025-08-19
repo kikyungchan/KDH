@@ -127,8 +127,8 @@
 
 .cart-badge {
     position: absolute;
-    top: 3px;
-    right: -3px;
+    top: 24px;
+    right: 85px;
     background-color: red;
     color: white;
     font-size: 10px;
@@ -304,25 +304,22 @@
         display: none;
     }
 
-    .navbar-icons {
-        gap: 0.5rem;
-    }
-
-    .navbar-right .btn-circle {
-        width: 36px;
-        height: 36px;
-        min-height: 36px;
-    }
-
-    .navbar-right .btn-circle,
-    .navbar-right .navbar-icon {
-        font-size: 1.3rem;
-        line-height: 1;
-    }
-
-    .hamburger-icon {
-        font-size: 1.4rem;
-    }
+    /*.navbar-icons {*/
+    /*    gap: 0.5rem;*/
+    /*}*/
+    /*.navbar-right .btn-circle {*/
+    /*    width: 36px;*/
+    /*    height: 36px;*/
+    /*    min-height: 36px;*/
+    /*}*/
+    /*.navbar-right .btn-circle,*/
+    /*.navbar-right .navbar-icon {*/
+    /*    font-size: 1.3rem;*/
+    /*    line-height: 1;*/
+    /*}*/
+    /*.hamburger-icon {*/
+    /*    font-size: 1.4rem;*/
+    
 }
 
 /* ===== Search Overlay ===== */
