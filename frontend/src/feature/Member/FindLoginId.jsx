@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router";
-import { useAlert } from "../common/AlertContext.jsx";
+import { toast } from "sonner";
 
 export function FindLoginId() {
   // 이메일 정규식
@@ -30,8 +30,6 @@ export function FindLoginId() {
   const [emailValid, setEmailValid] = useState(true);
 
   const navigate = useNavigate();
-
-  const { showAlert } = useAlert();
 
   // 이메일 입력 실시간 검사
   useEffect(() => {
@@ -70,19 +68,18 @@ export function FindLoginId() {
       })
       .then((res) => {
         if (res.data.success) {
-          showAlert(res.data.message, "info");
+          toast(res.data.message, "info");
           setEmailSent(true);
           setRemainTime(res.data.remainTimeInSec);
         } else {
-          showAlert(
-            res?.data?.message || "인증번호 전송에 실패했습니다.",
-            "error",
-          );
+          toast(res?.data?.message || "인증번호 전송에 실패했습니다.", {
+            type: "error",
+          });
           setRemainTime(res.data.remainTimeInSec);
         }
       })
       .catch((err) => {
-        showAlert(err.response?.data || err.message, "error");
+        toast(err.response?.data || err.message, "error");
       })
       .finally(() => {
         setIsSending(false);
@@ -106,19 +103,19 @@ export function FindLoginId() {
       })
       .then((res) => {
         if (res.data.success) {
-          showAlert("이메일 인증이 완료되었습니다.", "info");
+          toast("이메일 인증이 완료되었습니다.", { type: "success" });
           setAuthCompleted(true); // 이메일 인증 완료 처리
           setIsSubmitted(false); // 경고 문구 방지
           setAuthFailed(false);
           showFoundId();
         } else {
-          showAlert("인증번호가 일치하지 않습니다.", "error");
+          toast("인증번호가 일치하지 않습니다.", { type: "error" });
           setAuthFailed(true);
         }
       })
       .catch((err) => {
         console.error("인증번호 검증 실패", err.response?.data || err.message);
-        showAlert("서버 오류로 인증번호 확인에 실패했습니다.", "error");
+        toast("서버 오류로 인증번호 확인에 실패했습니다.", { type: "error" });
         setAuthFailed(true);
       });
   };
@@ -132,7 +129,9 @@ export function FindLoginId() {
         if (res.data.success) {
           setFoundLoginId(res.data.loginId); // 마스킹된 ID
         } else {
-          showAlert(res.data.message || "아이디를 찾을 수 없습니다.", "error");
+          toast(res.data.message || "아이디를 찾을 수 없습니다.", {
+            type: "error",
+          });
         }
       })
       .catch(() => {})

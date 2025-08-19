@@ -14,7 +14,6 @@ public class MemberUpdateForm {
 
     @NotBlank(message = "아이디는 필수입니다.")
     @Pattern(
-//            TODO : admin 을 포함한 id 는 생성불가
             regexp = "^[A-Za-z][A-Za-z0-9]{3,19}$",
             message = "아이디는 영문으로 시작하고 4~20자의 영문자 또는 숫자여야 합니다."
     )

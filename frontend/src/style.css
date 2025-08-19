@@ -56,3 +56,42 @@ td, tr, th {
 .rounded-card {
     @apply p-6 shadow rounded-2xl bg-white;
 }
+
+@layer utilities {
+    @media (max-width: 375px) {
+        .text-xs-375 {
+            @apply text-xs;
+        }
+    }
+}
+
+@layer utilities {
+    @media (max-width: 356px) {
+        .col-356 {
+            @apply flex-col items-start gap-1;
+        }
+
+        /* 가로→세로 */
+        .full-356 {
+            @apply w-full;
+        }
+
+        /* 줄바꿈 시 한 줄 꽉 차게 */
+        .mt0-356 {
+            @apply mt-0;
+        }
+
+        /* 모바일에선 여백 줄이기 */
+        .label-356 {
+            @apply block text-[11px] text-gray-500;
+        }
+    }
+}
+
+@layer utilities {
+    @media (max-width: 375px) {
+        .btn-375 {
+            @apply btn-sm;
+        }
+    }
+}

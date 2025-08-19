@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate, useParams } from "react-router";
+import { toast } from "sonner";
 
 export function OrderDetail() {
   const { orderToken } = useParams();
@@ -14,19 +15,11 @@ export function OrderDetail() {
         setOrder(res.data);
       })
       .catch((err) => {
-        console.error(
-          "❌ 주문 상세 불러오기 실패",
-          err.response?.status,
-          err.response?.data,
-        );
+        toast("조회 중 오류가 발생했습니다.", { type: "error" });
+        navigate("/home");
       })
       .finally(() => {});
   }, [orderToken]);
-
-  // useEffect(() => {
-  //   console.log("✅ 주문 상세 DTO:", orderDetail);
-  //   console.log("📦 상품 목록:", orderDetail.orderItems);
-  // }, [orderDetail]);
 
   if (!order) {
     return (

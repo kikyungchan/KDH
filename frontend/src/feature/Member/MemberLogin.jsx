@@ -3,14 +3,13 @@ import { useNavigate, Link } from "react-router";
 import axios from "axios";
 import { AuthenticationContext } from "../common/AuthenticationContextProvider.jsx";
 import { useCart } from "../Product/CartContext.jsx";
-import { useAlert } from "../common/AlertContext.jsx";
 import { FaGoogle } from "react-icons/fa";
+import { toast } from "sonner";
 
 export function MemberLogin() {
   const [loginId, setLoginId] = useState("");
   const [password, setPassword] = useState("");
   const { login } = useContext(AuthenticationContext);
-  const { showAlert } = useAlert();
   const { setCartCount } = useCart();
 
   const navigate = useNavigate();
@@ -43,7 +42,7 @@ export function MemberLogin() {
         navigate("/");
       })
       .catch((err) => {
-        showAlert(err.response?.data?.message); // { type: 'error', text: '...' }
+        toast(err.response?.data?.message, { type: "error" }); // { type: 'error', text: '...' }
       })
       .finally(() => {});
   }

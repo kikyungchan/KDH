@@ -72,23 +72,41 @@ public class OrderService {
     }
 
 
-    // 주문 상세 조회
+    // 기존 호출 호환용 (항상 일반 사용자로 처리)
     public OrderDetailDto getOrderDetail(String orderToken, Integer memberId) {
-        List<Order> orders = orderRepository.findAllByOrderToken(orderToken);
+        return getOrderDetail(orderToken, memberId, false);
+    }
 
+    // 주문 상세 조회
+    public OrderDetailDto getOrderDetail(String orderToken, Integer memberId, boolean isAdmin) {
 
-        if (orders.isEmpty()) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "주문을 찾을 수 없습니다.");
+        List<Order> orders;
+
+        if (isAdmin) {
+            // 관리자: 토큰으로 조회
+            orders = orderRepository.findAllByOrderToken(orderToken);
+            if (orders.isEmpty()) {
+                throw new ResponseStatusException(HttpStatus.NOT_FOUND, "주문을 찾을 수 없습니다.");
+            }
+        } else {
+            // 👤 일반 사용자: 토큰 + 본인 소유 조건으로 조회(여기서 차단)
+            orders = orderRepository.findAllByOrderTokenAndMemberId(orderToken, memberId);
+
+            if (orders.isEmpty()) {
+                boolean exists = orderRepository.existsByOrderToken(orderToken);
+                if (exists) {
+                    throw new ResponseStatusException(HttpStatus.FORBIDDEN, "본인의 주문만 조회할 수 있습니다.");
+                } else {
+                    throw new ResponseStatusException(HttpStatus.NOT_FOUND, "주문을 찾을 수 없습니다.");
+                }
+            }
         }
 
-        // ✅ 첫 번째 Order만 사용 (임시 조치)
+        // 대표 주문(첫 건) + 모든 주문의 아이템 합치기
         Order representativeOrder = orders.get(0);
 
-        if (!representativeOrder.getMember().getId().equals(memberId)) {
-            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "본인의 주문만 조회할 수 있습니다.");
-        }
 
-        // ✅ 모든 주문의 아이템을 통합
+        // 모든 주문의 아이템을 통합
         List<OrderItemDto> allItems = new ArrayList<>();
         for (Order order : orders) {
             for (OrderItem item : order.getOrderItems()) {
@@ -96,7 +114,7 @@ public class OrderService {
             }
         }
 
-        // ✅ 대표 주문 정보와 모든 상품으로 DTO 생성
+        // 대표 주문 정보와 모든 상품으로 DTO 생성
         return new OrderDetailDto(representativeOrder, allItems);
     }
 

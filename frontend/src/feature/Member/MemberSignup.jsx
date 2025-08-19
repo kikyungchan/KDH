@@ -1,9 +1,9 @@
 import React, { useContext, useEffect, useState } from "react";
 import axios from "axios";
+import { toast } from "sonner";
 import { useNavigate } from "react-router";
 import { AuthenticationContext } from "../common/AuthenticationContextProvider.jsx";
 import PrivacyModal from "./Modal/PrivacyModal.jsx";
-import { useAlert } from "../common/AlertContext.jsx";
 
 export function MemberSignup() {
   // 입력 항목 정규식
@@ -77,8 +77,6 @@ export function MemberSignup() {
   // 로그인 여부
   const { user } = useContext(AuthenticationContext);
 
-  const { showAlert } = useAlert();
-
   const navigate = useNavigate();
 
   // 각 항목을 입력하지 않으면 가입 버튼 비활성화
@@ -106,7 +104,7 @@ export function MemberSignup() {
   // 로그인 되어 있을때 회원가입 접속 차단
   useEffect(() => {
     if (user) {
-      showAlert("이미 로그인되어 있습니다.");
+      toast("이미 로그인되어 있습니다.", { type: "error" });
       navigate("/");
     }
   }, [user]);
@@ -160,7 +158,9 @@ export function MemberSignup() {
       return;
     }
     if (!privacyAgreed) {
-      showAlert("개인정보 수집 및 이용에 동의하셔야 회원가입이 가능합니다.");
+      toast("개인정보 수집 및 이용에 동의하셔야 회원가입이 가능합니다.", {
+        type: "error",
+      });
       return;
     }
 
@@ -185,7 +185,7 @@ export function MemberSignup() {
       })
       .catch((err) => {
         console.log("에러응답", err.response?.data);
-        showAlert("잠시 후 다시 시도해주십시오.");
+        toast("잠시 후 다시 시도해주십시오.", { type: "error" });
       })
       .finally(() => {
         setIsProcessing(false);
@@ -200,7 +200,7 @@ export function MemberSignup() {
     }
 
     if (hasAdmin.test(loginId.trim())) {
-      setLoginIdCheckMessage("아이디에 'admin'을 포함할 수 없습니다.");
+      setLoginIdCheckMessage("아이디에 'admin' 을 포함할 수 없습니다.");
       setLoginIdChecked(false);
       return;
     }
@@ -249,7 +249,7 @@ export function MemberSignup() {
       })
       .then((res) => {
         if (res.data.exists) {
-          showAlert("이미 사용중인 이메일입니다.");
+          toast("이미 사용중인 이메일입니다.", { type: "error" });
         } else {
           // 중복이 아니면 인증번호 전송
           sendEmail();
@@ -271,18 +271,16 @@ export function MemberSignup() {
       })
       .then((res) => {
         if (res.data.success) {
-          console.log("인증번호 전송에 성공했습니다.", res.data.message);
-          showAlert(res.data.message);
+          toast(res.data.message, { type: "success" });
           setEmailSent(true);
           setRemainTime(res.data.remainTimeInSec);
         } else {
-          showAlert(res?.data?.message || "인증번호 전송에 실패했습니다.");
+          toast("인증번호 전송에 실패했습니다.", { type: "error" });
           setRemainTime(res.data.remainTimeInSec);
         }
       })
       .catch((err) => {
-        console.log("인증번호 전송에 실패했습니다.", err.response?.data);
-        showAlert(err.response?.data || err.message);
+        toast("인증번호 전송에 실패했습니다.", { type: "error" });
       })
       .finally(() => {
         setIsSending(false);
@@ -306,18 +304,18 @@ export function MemberSignup() {
       })
       .then((res) => {
         if (res.data.success) {
-          showAlert("이메일 인증이 완료되었습니다.", "success");
+          toast("이메일 인증이 완료되었습니다.", { type: "success" });
           setAuthCompleted(true); // 이메일 인증 완료 처리
           setIsSubmitted(false); // 경고 문구 방지
           setAuthFailed(false);
         } else {
-          showAlert("인증번호가 일치하지 않습니다.");
+          toast("인증번호가 일치하지 않습니다.", { type: "error" });
           setAuthFailed(true);
         }
       })
       .catch((err) => {
-        console.error("인증번호 검증 실패", err.response?.data || err.message);
-        showAlert("서버 오류로 인증번호 확인에 실패했습니다.");
+        // console.error("인증번호 검증 실패", err.response?.data || err.message);
+        toast("서버 오류로 인증번호 확인에 실패했습니다.", { type: "error" });
         setAuthFailed(true);
       });
   };
