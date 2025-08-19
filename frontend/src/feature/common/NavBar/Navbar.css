@@ -255,6 +255,10 @@
         order: -1;
     }
 
+    .hide-on-root {
+        display: none;
+    }
+
     .navbar-center {
         position: absolute;
         left: 50%;
@@ -305,6 +309,10 @@
 /* (~639px) */
 @media (max-width: 639px) {
     .user-menu {
+        display: none;
+    }
+
+    .support-agent {
         display: none;
     }
 

@@ -12,8 +12,8 @@
 
 .overlay {
     position: absolute;
-    bottom: 200px;
     left: 140px;
+    bottom: 200px;
     color: white;
     font-size: 3rem;
     text-shadow: 2px 2px 15px rgba(0, 0, 0, 0.8);
@@ -71,4 +71,12 @@
     height: 26px;
     background: #fff;
     border-radius: 5px;
+}
+
+@media (max-width: 767px) {
+    .overlay {
+        font-size: 1.8rem;
+        left: 90px;
+        bottom: 110px;
+    }
 }

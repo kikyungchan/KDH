@@ -20,16 +20,12 @@ function NavBar(props) {
   }, []);
   const [showMobileCategory, setShowMobileCategory] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  // const { cartCount } = useCart();
   const { user, isAdmin } = useContext(AuthenticationContext);
   const [showSearch, setShowSearch] = useState(false);
   const menuRef = useRef(null);
-  // const searchRef = useRef(null);
-  // const iconRef = useRef(null);
   const navigate = useNavigate();
   const location = useLocation();
   const [keyword, setKeyword] = useState("");
-  // const [alertCount, setAlertCount] = useState(0);
   const { alertCount, sendTestAlert } = useAlertWebSocket();
 
   // 추천 카테고리
@@ -155,7 +151,7 @@ function NavBar(props) {
         <div className="navbar-inner">
           {/* 모바일 메뉴 아이콘 */}
           <FiMenu
-            className="hamburger-icon"
+            className={`hamburger-icon ${isRootPath ? "hide-on-root" : ""}`}
             onClick={() =>
               setIsMobileMenuOpen((prev) => {
                 const next = !prev;
