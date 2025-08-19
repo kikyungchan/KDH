@@ -336,15 +336,15 @@ function ProductCart() {
                               className="w-24 h-24 object-cover rounded cursor-pointer shrink-0"
                             />
                             <div className="flex-1 min-w-0">
-                              <div className="font-bold break-words">
+                              <div className="text-sm-375 font-bold break-words">
                                 {item.productName}
                               </div>
-                              <div className="text-sm text-gray-500">
+                              <div className="text-sm text-xs-375 text-gray-500">
                                 {item.optionName}
                               </div>
 
                               <div className="mt-1 flex items-center justify-between">
-                                <div className="text-sm">
+                                <div className="text-sm text-xs-375">
                                   수량 {item.quantity}개
                                 </div>
                                 <button
@@ -355,24 +355,29 @@ function ProductCart() {
                                 </button>
                               </div>
 
-                              <div className="flex items-baseline justify-between">
-                                <div className="text-sm text-gray-600">
-                                  가격 {item.price?.toLocaleString() || "-"}원
+                              <div className="flex items-baseline justify-between gap-2 col-356">
+                                <div className="text-sm text-xs-375 text-gray-600 full-356">
+                                  <span className="label-356">가격</span>
+                                  <span className="tabular-nums">
+                                    {item.price?.toLocaleString() || "-"}
+                                  </span>
+                                  원
                                 </div>
-                                <div className="font-semibold mt-2">
-                                  {item.price && item.quantity
-                                    ? (
-                                        item.price * item.quantity
-                                      ).toLocaleString()
-                                    : "-"}
+                                <div className="font-semibold text-xs-375 mt-2 mt0-356 full-356">
+                                  <span className="tabular-nums">
+                                    {item.price && item.quantity
+                                      ? (
+                                          item.price * item.quantity
+                                        ).toLocaleString()
+                                      : "-"}
+                                  </span>
                                   원
                                 </div>
                               </div>
                             </div>
                           </div>
                         </div>
-
-                        {/* md 이상 일때  */}
+                        ㅈ{/* md 이상 일때  */}
                         <div className="hidden md:grid md:grid-cols-12 md:items-center md:py-4">
                           <div className="col-span-1 flex justify-center">
                             <input
@@ -434,11 +439,11 @@ function ProductCart() {
                     <div className="grid grid-cols-[auto_1fr] items-center gap-2 mt-4">
                       <button
                         onClick={handleDeleteSelected}
-                        className="btn btn-outline justify-self-start"
+                        className="btn btn-outline justify-self-start btn-375"
                       >
                         선택 삭제
                       </button>
-                      <div className="justify-self-end text-right text-sm text-gray-500 leading-tight">
+                      <div className="justify-self-end text-right text-sm text-xs-375 text-gray-500 leading-tight">
                         <p>샘플 쇼핑몰 안내 문구</p>
                         <p>이 내용은 실제와 다를 수 있습니다.</p>
                       </div>

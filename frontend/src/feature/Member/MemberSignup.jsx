@@ -200,7 +200,7 @@ export function MemberSignup() {
     }
 
     if (hasAdmin.test(loginId.trim())) {
-      setLoginIdCheckMessage("아이디에 'admin'을 포함할 수 없습니다.");
+      setLoginIdCheckMessage("아이디에 'admin' 을 포함할 수 없습니다.");
       setLoginIdChecked(false);
       return;
     }
