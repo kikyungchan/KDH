@@ -48,7 +48,6 @@ export function QnaView() {
       });
   }, []);
 
-  // todo : userid 와 user를 대조후 맞을 경우만 작동하게
   function handleDeleteButtonClick() {
     axios
       // .delete(`/api/qna/?${searchParams}`)
@@ -172,8 +171,6 @@ export function QnaView() {
                   빠른 시일 내에 답변드리도록 하겠습니다
                 </h6>
                 <div>
-                  {/* todo : is Admin 여부에 따라 보임 관련 코드 수정될 시 즉시 수정할 것*/}
-                  {/* todo : 링크 연결 및 답변하기 페이지 만들어야 함*/}
                   {user !== null && isAdmin && (
                     <a
                       href={`/qna/addAns?${searchParams}`}
@@ -188,14 +185,13 @@ export function QnaView() {
               </>
             )}
             <br />
-            <div className="mb-3">
-              {/*  todo : 로그인 시에도 user 값이 현재 없는 것으로 나오는데 이후 처리*/}
+            {/*<div className="mb-3">
               {user !== null && question.loginId === user && (
                 <Button className="ms-2 btn-danger" onClick={setModalShow}>
                   삭제
                 </Button>
               )}
-            </div>
+            </div>*/}
           </div>
         </div>
       </Col>

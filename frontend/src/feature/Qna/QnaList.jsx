@@ -94,7 +94,6 @@ export function QnaList() {
           <div className="container">
             <h2 className="text-2xl font-bold my-4">문의 내역</h2>
             <div>
-              {/* todo : onclick 시 상품 질문 페이지로 넘어가게 */}
               <ButtonGroup>
                 {radios.map((radio, idx) => (
                   <input

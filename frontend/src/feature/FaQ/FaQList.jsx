@@ -132,8 +132,6 @@ export function FaQList() {
       });
   }
 
-  // todo : add 유효성 검사 필요함
-
   return (
     <>
       <Row className="justify-content-center">
@@ -264,7 +262,6 @@ export function FaQList() {
                       // onClick={() => setsearchCategory(cat.value)}
                       onClick={() => handleCategoryButtonClick(cat.value)}
                     >
-                      {/*  todo : 카테고리별 검색 기능 구현 */}
                       {cat.name}
                     </button>
                   </label>
@@ -306,7 +303,7 @@ export function FaQList() {
             )}
             <br />
             <div>
-              {/*todo : 관리자인지 여부 확인*/}
+              {/*관리자인지 여부 확인*/}
               {isAdmin && (
                 // <Button className="btn-primary" onClick={setModalShow}>
                 //   등록하기
@@ -324,7 +321,6 @@ export function FaQList() {
             </div>
           </div>
         </Col>
-        {/*  todo : admin 확인되면 modal 띄워서 자주 묻는 질문 CUD 할 수 있게 기능 추가*/}
         {modalShow && (
           <div id="my_modal_1" className="modal modal-open">
             <div className="modal-box">

@@ -123,8 +123,6 @@ export const AlertWebSocketProvider = ({ children }) => {
     };
     sendMessage("/app/chat/alert", chatMsg);
   };
-  // todo : admin 수정할 것
-  // todo : 주문하기 전용 함수 만들어야하나?
   const sendOrderAlert = async (content, link) => {
     await axios
       .post("/api/alert/addOrder", {

@@ -2,7 +2,6 @@ import { useEffect, useRef, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router";
 import axios from "axios";
 import { toast } from "react-toastify";
-// todo : toast
 import retro from "daisyui/theme/retro/index.js";
 
 export function SuccessPage() {
@@ -21,7 +20,6 @@ export function SuccessPage() {
     };
 
     async function confirm() {
-      // todo : fetch -> axios 로 바꾸기
       // StrictMode로 인한 api 두번 보내는 현상 방지
       if (!hasCalled.current) {
         hasCalled.current = true;
