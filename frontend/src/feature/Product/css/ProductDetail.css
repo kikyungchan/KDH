@@ -250,13 +250,6 @@
     border-radius: 8px;
 }
 
-.loading-spinner-detail {
-    display: block;
-    margin: 4rem auto;
-    width: 3rem;
-    height: 3rem;
-}
-
 .universal-actions {
     display: flex;
     align-items: center;
@@ -361,18 +354,12 @@
     margin-top: 2rem;
 }
 
-.related-product-grid {
-    display: grid;
-    gap: 20px;
-}
-
 .related-product-card {
     display: flex;
     flex-direction: column;
     text-decoration: none;
     color: inherit;
-    /*border: 1px solid #eee;*/
-    /*border-radius: 8px;*/
+
     overflow: hidden;
     background: #fff;
     transition: transform 0.3s ease;
@@ -580,7 +567,7 @@
     justify-content: center;
     background: #fff;
     position: sticky;
-    top: 80px; /* navbar 높이에 맞게 조정 */
+    top: 80px;
     z-index: 50;
     padding: 10px 0;
 }
