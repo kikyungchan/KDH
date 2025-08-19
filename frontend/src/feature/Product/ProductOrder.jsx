@@ -26,6 +26,7 @@ function Order() {
   const [shippingFee, setShippingFee] = useState(0);
   const [loadingMember, setLoadingMember] = useState(false);
   const [isProcessing, setIsProcessing] = useState(false);
+  const [emailValid, setEmailValid] = useState(true);
   const { state } = useLocation();
   const { setCartCount } = useCart();
   const isMember = !!localStorage.getItem("token");
@@ -39,6 +40,10 @@ function Order() {
   const checkoutWindow = useRef(null);
   const formDataRef = useRef({});
   const { sendOrderAlert } = useAlertWebSocket();
+
+  // 이메일 정규식
+  const emailRegEx =
+    /^[A-Za-z0-9]([-_.]?[A-Za-z0-9])*@[A-Za-z0-9]([-_.]?[A-Za-z0-9])*\.[A-Za-z]{2,3}$/;
 
   useEffect(() => {
     const fee = totalItemPrice >= 100000 ? 0 : 3000;
@@ -233,6 +238,7 @@ function Order() {
       "Address : ",
       isMember ? ordererAddress : formDataRef.current.receiverAddress,
     );
+
     if (
       !ordererName.trim() ||
       !ordererPhone.trim() ||
@@ -240,6 +246,11 @@ function Order() {
     ) {
       alert("주문자 정보를 모두 입력해 주세요.");
       return false;
+    }
+
+    if (!emailRegEx.test(ordererEmail.trim())) {
+      alert("유효한 이메일 형식이 아닙니다.");
+      return;
     }
 
     const currentData = formDataRef.current;
@@ -488,19 +499,24 @@ function Order() {
   return (
     <div className="page-wrapper">
       <div className="center-top-container">
-        <div className="w-full max-w-[800px]">
-          <div className="rounded-card">
-            <h2 className="text-center text-3xl font-bold mb-6">결제하기</h2>
-
+        <div className="w-full mx-auto px-3 sm:px-4 max-w-6xl">
+          {/* md 이상에서는 현재 레이아웃 그대로 */}
+          <div className="w-full">
             <div
-              className="order-box rounded"
-              style={{ display: "flex", gap: "20px" }}
+              className={`rounded-card ${items?.length ? "pb-28 md:pb-0" : ""}`}
             >
-              {/* 왼쪽: 주문 상품 목록 */}
-              <div style={{ flex: 2 }}>
+              <h2 className="text-center text-3xl font-bold mb-6">결제하기</h2>
+
+              {/* 주문 상품 + 주문 요약 카드 */}
+              <div className="order-box rounded">
                 <h4 className="mb-1 font-semibold text-lg">주문 상품 정보</h4>
+
+                {/* 상품 리스트 */}
                 {items.map((item, idx) => (
-                  <div key={idx} className="order-product mb-1">
+                  <div
+                    key={idx}
+                    className="order-product mb-1 flex gap-4 p-3 border border-gray-100 rounded"
+                  >
                     <img
                       onClick={() =>
                         window.open(
@@ -510,243 +526,298 @@ function Order() {
                       }
                       src={item.imagePath}
                       alt="상품"
-                      className="rounded"
-                      style={{
-                        width: "150px",
-                        height: "150px",
-                        cursor: "pointer",
-                      }}
+                      className="rounded w-24 h-24 sm:w-32 sm:h-32 object-cover cursor-pointer"
                     />
-                    <div className="order-product-info">
-                      <div>
-                        <strong>{item.productName}</strong>
+                    <div className="order-product-info flex-1 min-w-0">
+                      <div className="font-semibold break-words">
+                        {item.productName}
                       </div>
-                      <div>
+                      <div className="text-sm text-gray-500">
                         {(item.optionName ?? item.option)
                           ? `${item.optionName ?? item.option} / ${item.quantity}개`
                           : `${item.quantity}개`}
                       </div>
-                      <div>
+                      <div className="mt-1 font-bold">
                         {(item.price * item.quantity).toLocaleString()}원
                       </div>
                     </div>
                   </div>
                 ))}
-              </div>
-              {/* 오른쪽: 주문 요약 */}
-              <div
-                className="mt-3"
-                style={{
-                  flex: 1,
-                  background: "#f9f9f9",
-                  padding: "16px",
-                  border: "1px solid #ddd",
-                  borderRadius: "8px",
-                  height: "fit-content",
-                }}
-              >
-                <h5 className="block text-center font-semibold mb-3">
-                  주문 요약
-                </h5>
-                <div className="flex justify-content-between">
-                  <span>상품가격</span>
-                  <span>{totalItemPrice.toLocaleString()}원</span>
-                </div>
-                <div className="flex justify-content-between mt-2">
-                  <span>배송비</span>
-                  <span>+{shippingFee.toLocaleString()}원</span>
-                </div>
-                <hr className="border-t border-gray-300 my-2" />
-                <div
-                  style={{
-                    display: "flex",
-                    justifyContent: "space-between",
-                    fontWeight: "bold",
-                  }}
-                >
-                  <span>총 주문금액</span>
-                  <span>
-                    {(totalItemPrice + shippingFee).toLocaleString()}원
-                  </span>
-                </div>
-              </div>
-            </div>
-            {/* 주문자 정보 */}
-            <div className="order-box rounded">
-              <h4 className="mb-1 font-semibold text-lg">주문자 정보</h4>
-              <div className="order-input-row">
-                <input
-                  type="text"
-                  value={ordererName}
-                  onChange={(e) => setOrdererName(e.target.value)}
-                  placeholder="이름"
-                  className="order-input-half"
-                />
-                <input
-                  type="text"
-                  value={ordererPhone}
-                  onChange={(e) => setOrdererPhone(e.target.value)}
-                  placeholder="연락처"
-                  className="order-input-half"
-                />
-              </div>
 
-              {!isMember && (
-                <input
-                  type="email"
-                  placeholder="이메일"
-                  className="order-input-full"
-                  value={ordererEmail ?? ""}
-                  onChange={(e) => setOrdererEmail(e.target.value)}
-                />
-              )}
-              {isMember && (
-                <>
-                  <div className="order-input-zipcode">
-                    <input
-                      placeholder="우편번호"
-                      className="order-input-full"
-                      readOnly
-                      value={ordererZipcode}
-                      onChange={(e) => setOrdererZipcode(e.target.value)}
-                    />
-                    <button
-                      type="button"
-                      onClick={handleSearchOrdererAddress}
-                      className="order-input-full order-search-btn"
-                    >
-                      주소 검색
-                    </button>
+                {/* 주문 요약 카드 md 이상에서만 */}
+                <div className="hidden md:block mt-3">
+                  <div className="rounded p-4 bg-gray-50 border border-gray-200">
+                    <h5 className="block text-lg text-center font-semibold mb-3">
+                      주문 요약
+                    </h5>
+                    <div className="flex justify-between">
+                      <span>상품가격</span>
+                      <span>{totalItemPrice.toLocaleString()}원</span>
+                    </div>
+                    <div className="flex justify-between mt-2">
+                      <span>배송비</span>
+                      <div>
+                        {shippingFee === 0 && totalItemPrice > 0 && (
+                          <span className="text-green-600 text-sm ml-2">
+                            (무료배송)
+                          </span>
+                        )}
+                        <span className="ml-1">
+                          {" "}
+                          {shippingFee.toLocaleString()}원
+                        </span>
+                      </div>
+                    </div>
+                    <hr className="border-t border-gray-300 my-2" />
+                    <div className="flex justify-between font-bold">
+                      <span>총 주문금액</span>
+                      <span>
+                        {(totalItemPrice + shippingFee).toLocaleString()}원
+                      </span>
+                    </div>
                   </div>
+                </div>
+              </div>
+
+              {/* 주문자 정보 */}
+              <div className="order-box rounded">
+                <h4 className="mb-1 font-semibold text-lg">주문자 정보</h4>
+
+                <div className="grid sm:grid-cols-2 gap-2">
                   <input
-                    placeholder="주소"
-                    className="order-input-full"
+                    type="text"
+                    value={ordererName}
+                    onChange={(e) => setOrdererName(e.target.value)}
+                    placeholder="이름"
+                    className="input input-bordered w-full"
+                  />
+                  <input
+                    type="text"
+                    value={ordererPhone}
+                    onChange={(e) => setOrdererPhone(e.target.value)}
+                    placeholder="연락처"
+                    className="input input-bordered w-full"
+                  />
+                </div>
+
+                {!isMember && (
+                  <>
+                    <input
+                      type="email"
+                      placeholder="이메일"
+                      className="input input-bordered w-full mt-2"
+                      value={ordererEmail ?? ""}
+                      onChange={(e) => setOrdererEmail(e.target.value)}
+                    />
+                    <p className="text-sm text-gray-400 text-muted mt-1 ml-1">
+                      example@domain.com 형식의 이메일을 입력하세요.
+                    </p>
+                  </>
+                )}
+
+                {isMember && (
+                  <>
+                    <div className="flex gap-2 mt-2">
+                      <input
+                        placeholder="우편번호"
+                        className="input input-bordered flex-1 min-w-0"
+                        readOnly
+                        value={ordererZipcode}
+                        onChange={(e) => setOrdererZipcode(e.target.value)}
+                      />
+                      <button
+                        type="button"
+                        onClick={handleSearchOrdererAddress}
+                        className="btn btn-outline shrink-0"
+                      >
+                        주소 검색
+                      </button>
+                    </div>
+                    <input
+                      placeholder="주소"
+                      className="input input-bordered w-full mt-2"
+                      readOnly
+                      value={ordererAddress}
+                      onChange={(e) => setOrdererAddress(e.target.value)}
+                    />
+                    <input
+                      placeholder="상세주소"
+                      className="input input-bordered w-full mt-2"
+                      value={ordererAddressDetail}
+                      onChange={(e) => setOrdererAddressDetail(e.target.value)}
+                    />
+                  </>
+                )}
+              </div>
+
+              {/* 배송 정보 */}
+              <div className="order-box rounded">
+                <h4 className="mb-1 font-semibold text-lg">배송 정보</h4>
+
+                <label className="flex items-center gap-2 mb-3">
+                  <input
+                    type="checkbox"
+                    checked={sameAsOrderer}
+                    onChange={handleSameAsOrdererChange}
+                  />
+                  주문자 정보와 동일
+                </label>
+
+                <div className="grid sm:grid-cols-2 gap-2">
+                  <input
+                    placeholder="수령인"
+                    className="input input-bordered w-full"
+                    value={receiverName}
+                    onChange={(e) => setReceiverName(e.target.value)}
+                  />
+                  <input
+                    placeholder="연락처"
+                    className="input input-bordered w-full"
+                    value={receiverPhone}
+                    onChange={(e) => setReceiverPhone(e.target.value)}
+                  />
+                </div>
+
+                <div className="flex gap-2 mt-2">
+                  <input
+                    placeholder="우편번호"
+                    className="input input-bordered flex-1 min-w-0"
                     readOnly
-                    value={ordererAddress}
-                    onChange={(e) => setOrdererAddress(e.target.value)}
+                    value={receiverZipcode}
+                    onChange={(e) => setReceiverZipcode(e.target.value)}
                   />
-                  <input
-                    placeholder="상세주소"
-                    className="order-input-full"
-                    value={ordererAddressDetail}
-                    onChange={(e) => setOrdererAddressDetail(e.target.value)}
-                  />
-                </>
-              )}
-            </div>
-
-            {/* 배송 정보 */}
-            <div className="order-box rounded">
-              <h4 className="mb-1 font-semibold text-lg">배송 정보</h4>
-              <div style={{ marginBottom: "10px" }}>
+                  <button
+                    type="button"
+                    onClick={handleSearchReceiverAddress}
+                    className="btn btn-outline shrink-0"
+                  >
+                    주소 검색
+                  </button>
+                </div>
                 <input
-                  type="checkbox"
-                  checked={sameAsOrderer}
-                  onChange={handleSameAsOrdererChange}
-                />
-                <label style={{ marginLeft: "6px" }}>주문자 정보와 동일</label>
-              </div>
-
-              <div className="order-input-row">
-                <input
-                  placeholder="수령인"
-                  className="order-input-half"
-                  value={receiverName}
-                  onChange={(e) => setReceiverName(e.target.value)}
-                />
-                <input
-                  placeholder="연락처"
-                  className="order-input-half"
-                  value={receiverPhone}
-                  onChange={(e) => setReceiverPhone(e.target.value)}
-                />
-              </div>
-
-              <div className="order-input-zipcode">
-                <input
-                  placeholder="우편번호"
-                  className="order-input-full"
+                  placeholder="주소"
+                  className="input input-bordered w-full mt-2"
                   readOnly
-                  value={receiverZipcode}
-                  onChange={(e) => setReceiverZipcode(e.target.value)}
+                  value={receiverAddress}
+                  onChange={(e) => setReceiverAddress(e.target.value)}
                 />
-                <button
-                  type="button"
-                  onClick={handleSearchReceiverAddress}
-                  className="order-input-full order-search-btn"
+                <input
+                  placeholder="상세주소"
+                  className="input input-bordered w-full mt-2"
+                  value={receiverAddressDetail}
+                  onChange={(e) => setReceiverAddressDetail(e.target.value)}
+                />
+              </div>
+
+              {/* 배송 메모 */}
+              <div className="order-box rounded">
+                <h4 className="mb-1 font-semibold">배송 메모</h4>
+                <select
+                  className="select select-bordered w-full"
+                  value={memo}
+                  onChange={(e) => setMemo(e.target.value)}
                 >
-                  주소 검색
+                  <option value="">배송메모를 선택해 주세요.</option>
+                  <option value="문 앞에 두고 가주세요">
+                    문 앞에 두고 가주세요
+                  </option>
+                  <option value="부재 시 전화주세요">부재 시 전화주세요</option>
+                  <option value="경비실에 맡겨주세요">
+                    경비실에 맡겨주세요
+                  </option>
+                  <option value="직접 작성">직접 작성</option>
+                </select>
+                {memo === "직접 작성" && (
+                  <input
+                    type="text"
+                    className="input input-bordered w-full mt-2"
+                    placeholder="배송 메모를 직접 입력하세요"
+                    value={customMemo}
+                    onChange={(e) => setCustomMemo(e.target.value)}
+                  />
+                )}
+              </div>
+
+              {/* 버튼 영역: md↓에서는 숨기고(하단 고정 바 사용), md↑에서는 기존처럼 노출 */}
+              <div className="justify-end hidden md:flex md:gap-3 mt-4">
+                {isProcessing ? (
+                  <button className="confirm btn btn-lg">
+                    <span className="loading loading-spinner"></span>
+                  </button>
+                ) : (
+                  <button
+                    className="confirm btn btn-lg btn-neutral"
+                    onClick={() => {
+                      validateForm() && handlePaymentConnection();
+                    }}
+                  >
+                    결제하기
+                  </button>
+                )}
+                <button
+                  onClick={handleCancelButton}
+                  className="cancel btn btn-lg btn-outline"
+                >
+                  취소
                 </button>
               </div>
-              <input
-                placeholder="주소"
-                className="order-input-full"
-                readOnly
-                value={receiverAddress}
-                onChange={(e) => setReceiverAddress(e.target.value)}
-              />
-              <input
-                placeholder="상세주소"
-                className="order-input-full"
-                value={receiverAddressDetail}
-                onChange={(e) => setReceiverAddressDetail(e.target.value)}
-              />
-            </div>
-
-            {/* 배송 메모 */}
-            <div className="order-box rounded">
-              <h4 className="mb-1 font-semibold">배송 메모</h4>
-              <select
-                className="order-select"
-                value={memo}
-                onChange={(e) => setMemo(e.target.value)}
-              >
-                <option value="">배송메모를 선택해 주세요.</option>
-                <option value="문 앞에 두고 가주세요">
-                  문 앞에 두고 가주세요
-                </option>
-                <option value="부재 시 전화주세요">부재 시 전화주세요</option>
-                <option value="경비실에 맡겨주세요">경비실에 맡겨주세요</option>
-                <option value="직접 작성">직접 작성</option>
-              </select>
-              {memo === "직접 작성" && (
-                <input
-                  type="text"
-                  className="order-input-full mt-2"
-                  placeholder="배송 메모를 직접 입력하세요"
-                  value={customMemo}
-                  onChange={(e) => setCustomMemo(e.target.value)}
-                />
-              )}
-            </div>
-
-            {/* 버튼 영역 */}
-            <div className="order-buttons justify-content-end">
-              {/*<button onClick={handleOrderButton} className="order-button confirm">
-          결제하기
-        </button>*/}
-              {isProcessing ? (
-                <button className={"order-button confirm"}>
-                  <span className="loading loading-spinner"></span>
-                </button>
-              ) : (
-                <button
-                  className="order-button confirm btn btn-lg"
-                  onClick={() => {
-                    validateForm() && handlePaymentConnection();
-                  }}
-                >
-                  결제하기
-                </button>
-              )}
-              <button
-                onClick={handleCancelButton}
-                className="order-button cancel btn btn-lg"
-              >
-                취소
-              </button>
             </div>
           </div>
+
+          {/* (모바일) 하단 고정 주문 요약 + 결제 버튼 */}
+          {items?.length > 0 && (
+            <div className="md:hidden fixed inset-x-0 bottom-0 z-50 border-t bg-white p-4 shadow-lg">
+              <div className="flex items-center justify-between">
+                <div className="text-base">
+                  <div className="text-sm text-gray-600">
+                    <div className="flex justify-between gap-4">
+                      <span>상품가격</span>
+                      <span>{totalItemPrice.toLocaleString()}원</span>
+                    </div>
+                    <div>
+                      <span>배송비</span>
+                      <span className="ml-1">
+                        {" "}
+                        {shippingFee.toLocaleString()}원
+                      </span>
+                      {shippingFee === 0 && totalItemPrice > 0 && (
+                        <span className="text-green-600 text-sm ml-2">
+                          (무료배송)
+                        </span>
+                      )}
+                    </div>
+                  </div>
+                  <div className="text-gray-600 text-sm mt-2">총 주문금액</div>
+                  <div className="text-lg font-bold">
+                    {(totalItemPrice + shippingFee).toLocaleString()}원
+                  </div>
+                </div>
+
+                <div className="flex flex-col gap-2">
+                  {isProcessing ? (
+                    <button className="btn ">
+                      <span className="loading loading-spinner"></span>
+                    </button>
+                  ) : (
+                    <button
+                      className="btn btn-neutral"
+                      onClick={() => {
+                        validateForm() && handlePaymentConnection();
+                      }}
+                    >
+                      결제하기
+                    </button>
+                  )}
+                  <button
+                    onClick={handleCancelButton}
+                    className="btn btn-outline"
+                  >
+                    취소
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
         </div>
       </div>
     </div>

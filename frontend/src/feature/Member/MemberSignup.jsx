@@ -3,10 +3,12 @@ import axios from "axios";
 import { useNavigate } from "react-router";
 import { AuthenticationContext } from "../common/AuthenticationContextProvider.jsx";
 import PrivacyModal from "./Modal/PrivacyModal.jsx";
+import { useAlert } from "../common/AlertContext.jsx";
 
 export function MemberSignup() {
   // 입력 항목 정규식
   const loginIdRegEx = /^[A-Za-z][A-Za-z0-9]{3,19}$/;
+  const hasAdmin = /admin/i; // 'admin' 포함 여부(대소문자 무시)
   const emailRegEx =
     /^[A-Za-z0-9]([-_.]?[A-Za-z0-9])*@[A-Za-z0-9]([-_.]?[A-Za-z0-9])*\.[A-Za-z]{2,3}$/;
   const passwordRegEx = /^[A-Za-z0-9]{8,20}$/;
@@ -75,6 +77,8 @@ export function MemberSignup() {
   // 로그인 여부
   const { user } = useContext(AuthenticationContext);
 
+  const { showAlert } = useAlert();
+
   const navigate = useNavigate();
 
   // 각 항목을 입력하지 않으면 가입 버튼 비활성화
@@ -102,7 +106,7 @@ export function MemberSignup() {
   // 로그인 되어 있을때 회원가입 접속 차단
   useEffect(() => {
     if (user) {
-      alert("이미 로그인되어 있습니다.");
+      showAlert("이미 로그인되어 있습니다.");
       navigate("/");
     }
   }, [user]);
@@ -156,7 +160,7 @@ export function MemberSignup() {
       return;
     }
     if (!privacyAgreed) {
-      alert("개인정보 수집 및 이용에 동의하셔야 회원가입이 가능합니다.");
+      showAlert("개인정보 수집 및 이용에 동의하셔야 회원가입이 가능합니다.");
       return;
     }
 
@@ -176,11 +180,12 @@ export function MemberSignup() {
         addressDetail: addressDetail,
         privacyAgreed: privacyAgreed,
       })
-      .then((res) => {
+      .then(() => {
         navigate("/login");
       })
       .catch((err) => {
         console.log("에러응답", err.response?.data);
+        showAlert("잠시 후 다시 시도해주십시오.");
       })
       .finally(() => {
         setIsProcessing(false);
@@ -191,6 +196,12 @@ export function MemberSignup() {
   function handleCheckLoginId() {
     if (!loginId.trim()) {
       setLoginIdCheckMessage("아이디를 입력하세요.");
+      return;
+    }
+
+    if (hasAdmin.test(loginId.trim())) {
+      setLoginIdCheckMessage("아이디에 'admin'을 포함할 수 없습니다.");
+      setLoginIdChecked(false);
       return;
     }
 
@@ -238,7 +249,7 @@ export function MemberSignup() {
       })
       .then((res) => {
         if (res.data.exists) {
-          alert("이미 사용중인 이메일입니다.");
+          showAlert("이미 사용중인 이메일입니다.");
         } else {
           // 중복이 아니면 인증번호 전송
           sendEmail();
@@ -261,17 +272,17 @@ export function MemberSignup() {
       .then((res) => {
         if (res.data.success) {
           console.log("인증번호 전송에 성공했습니다.", res.data.message);
-          alert(res.data.message);
+          showAlert(res.data.message);
           setEmailSent(true);
           setRemainTime(res.data.remainTimeInSec);
         } else {
-          alert(res?.data?.message || "인증번호 전송에 실패했습니다.");
+          showAlert(res?.data?.message || "인증번호 전송에 실패했습니다.");
           setRemainTime(res.data.remainTimeInSec);
         }
       })
       .catch((err) => {
         console.log("인증번호 전송에 실패했습니다.", err.response?.data);
-        alert(err.response?.data || err.message);
+        showAlert(err.response?.data || err.message);
       })
       .finally(() => {
         setIsSending(false);
@@ -295,18 +306,18 @@ export function MemberSignup() {
       })
       .then((res) => {
         if (res.data.success) {
-          alert("이메일 인증이 완료되었습니다.");
+          showAlert("이메일 인증이 완료되었습니다.", "success");
           setAuthCompleted(true); // 이메일 인증 완료 처리
           setIsSubmitted(false); // 경고 문구 방지
           setAuthFailed(false);
         } else {
-          alert("인증번호가 일치하지 않습니다.");
+          showAlert("인증번호가 일치하지 않습니다.");
           setAuthFailed(true);
         }
       })
       .catch((err) => {
         console.error("인증번호 검증 실패", err.response?.data || err.message);
-        alert("서버 오류로 인증번호 확인에 실패했습니다.");
+        showAlert("서버 오류로 인증번호 확인에 실패했습니다.");
         setAuthFailed(true);
       });
   };
@@ -496,27 +507,27 @@ export function MemberSignup() {
               <div>
                 <label className="block font-semibold mb-1">이메일</label>
                 <p className="text-sm text-muted mb-1">
-                  예: example@domain.com 형식의 이메일을 입력하세요.
+                  example@domain.com 형식의 이메일을 입력하세요.
                 </p>
                 <div className="flex gap-2 items-center">
                   <input
                     type="text"
                     value={emailId}
                     onChange={(e) => setEmailId(e.target.value)}
-                    className="w-2/5 rounded px-3 py-2 bg-gray-100 mb-2"
+                    className="basis-0 grow-[2] min-w-0 rounded px-3 py-2 bg-gray-100 mb-2"
                   />
-                  <span>@</span>
+                  <span className="shrink-0">@</span>
                   {customDomain ? (
                     <>
                       <input
                         type="text"
                         value={emailDomain}
                         onChange={(e) => setEmailDomain(e.target.value)}
-                        className="flex-1 rounded px-3 py-2 bg-gray-100 mb-2"
+                        className="basis-0 grow-[3] min-w-0 rounded px-3 py-2 bg-gray-100 mb-2"
                       />
                       <button
                         type="button"
-                        className="btn btn-sm btn-ghost px-2 h-9 min-h-0 text-lg mb-2"
+                        className="btn btn-sm btn-ghost px-2 h-9 min-h-0 text-lg mb-2 shrink-0"
                         onClick={() => setCustomDomain(false)}
                       >
                         x

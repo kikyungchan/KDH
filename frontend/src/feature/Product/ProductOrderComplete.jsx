@@ -40,24 +40,31 @@ export function ProductOrderComplete() {
   return (
     <div className="page-wrapper">
       <div className="center-top-container">
-        <div className="w-full max-w-[800px]">
+        <div className="w-full max-w-[800px] mx-auto px-3 sm:px-4">
           <div className="rounded-card">
             <h2 className="text-center text-3xl font-bold mb-6">주문 완료</h2>
             <p className="text-lg mb-4">
-              <strong>주문번호: {orderToken}</strong>
+              <strong>주문번호 : {orderToken}</strong>
             </p>
 
             {/* 주문자 정보 */}
             <div className="order-box rounded">
               <h4 className="font-semibold mb-2">주문자 정보</h4>
               <div className="flex">
-                <div className="w-40 mt-1 space-y-1">
-                  <div>이름</div>
-                  <div>연락처</div>
-                </div>
-                <div className="space-y-1">
-                  <div>{orderer.name}</div>
-                  <div>{orderer.phone}</div>
+                <div className="space-y-2 mt-1">
+                  <div className="flex flex-col sm:flex-row sm:gap-4">
+                    <div className="w-24 shrink-0 text-gray-600 mb-1 font-semibold">
+                      이름
+                    </div>
+                    <div className="flex-1">{orderer.name}</div>
+                  </div>
+
+                  <div className="flex flex-col sm:flex-row sm:gap-4">
+                    <div className="w-24 shrink-0 text-gray-600 mb-1 font-semibold">
+                      연락처
+                    </div>
+                    <div className="flex-1">{orderer.phone}</div>
+                  </div>
                 </div>
               </div>
             </div>
@@ -65,21 +72,40 @@ export function ProductOrderComplete() {
             {/* 배송 정보 */}
             <div className="order-box rounded">
               <h4 className="font-semibold mb-2">배송 정보</h4>
-              <div className="flex">
-                <div className="w-40 space-y-1">
-                  <div>받는사람</div>
-                  <div>연락처</div>
-                  <div>주소</div>
-                  <div>배송메모</div>
-                </div>
-                <div className="space-y-1">
-                  <div>{receiver.name}</div>
-                  <div>{receiver.phone}</div>
-                  <div>
-                    {receiver.address} {receiver.addressDetail}({" "}
-                    {receiver.zipcode} )
+
+              <div className="space-y-2">
+                <div className="flex flex-col sm:flex-row sm:gap-4">
+                  <div className="w-24 shrink-0 text-gray-600 mb-1 font-semibold">
+                    받는사람
                   </div>
-                  <div>{memo || "없음"}</div>
+                  <div className="flex-1">{receiver.name}</div>
+                </div>
+
+                <div className="flex flex-col sm:flex-row sm:gap-4">
+                  <div className="w-24 shrink-0 text-gray-600 mb-1 font-semibold">
+                    연락처
+                  </div>
+                  <div className="flex-1">{receiver.phone}</div>
+                </div>
+
+                <div className="flex flex-col sm:flex-row sm:gap-4">
+                  <div className="w-24 shrink-0 text-gray-600 mb-1 font-semibold">
+                    주소
+                  </div>
+                  <div className="flex-1">{receiver.address}</div>
+                </div>
+
+                <div className="flex flex-col sm:flex-row sm:gap-4">
+                  <div className="w-24 shrink-0 text-gray-600 mb-1 font-semibold">
+                    상세주소
+                  </div>
+                  <div className="flex-1">{receiver.addressDetail}</div>
+                </div>
+                <div className="flex flex-col sm:flex-row sm:gap-4">
+                  <div className="w-24 shrink-0 text-gray-600 mb-1 font-semibold">
+                    배송 메모
+                  </div>
+                  <div className="flex-1">{memo || " "}</div>
                 </div>
               </div>
             </div>
@@ -114,11 +140,29 @@ export function ProductOrderComplete() {
               ))}
               <hr className="border-t border-gray-300 my-4" />
               <div className="text-end mt-2 text-lg">
-                <div>상품합계 : {totalItemPrice.toLocaleString()}원</div>
-                <div>배송비: {shippingFee.toLocaleString()}원</div>
-                <div className="font-bold mt-2">
-                  총 주문금액: {(totalItemPrice + shippingFee).toLocaleString()}
-                  원
+                <div className="flex justify-between">
+                  <span>상품금액</span>
+                  <span>{totalItemPrice.toLocaleString()}원</span>
+                </div>
+                <div className="flex justify-between">
+                  <span>배송비</span>
+                  <div>
+                    {shippingFee === 0 && totalItemPrice > 0 && (
+                      <span className="text-green-600 text-sm ml-2">
+                        (무료배송)
+                      </span>
+                    )}
+                    <span className="ml-1">
+                      {" "}
+                      {shippingFee.toLocaleString()}원
+                    </span>
+                  </div>
+                </div>
+                <div className="pt-3 flex justify-between font-bold">
+                  <span>총 주문금액</span>
+                  <span>
+                    {(totalItemPrice + shippingFee).toLocaleString()}원
+                  </span>
                 </div>
               </div>
             </div>

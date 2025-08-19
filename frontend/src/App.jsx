@@ -77,6 +77,7 @@ function App() {
                   element={<GuestOrderDetail />}
                 />
                 <Route path="/member/edit" element={<MemberEdit />} />
+                <Route path="/member/edit" element={<MemberEdit />} />
                 <Route path="/member/list" element={<MemberList />} />
                 <Route path="/member" element={<MemberDetail />} />
                 <Route path="/signup" element={<MemberSignup />} />
