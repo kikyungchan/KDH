@@ -95,8 +95,8 @@ export function ProductList() {
       ) : (
         // <div className="product-grid">
         <ul className="productList">
-          {products.map((product, i) => (
-            <li key={i}>
+          {products.map((product) => (
+            <li>
               <Link
                 to={`/product/view?id=${product.id}`}
                 className="product-card"
