@@ -29,21 +29,33 @@ function NavRight({ iconRef, onSearchToggle, alertidcator }) {
           onMouseDown={(e) => e.preventDefault()}
           onClick={() => onSearchToggle()}
         >
-          <FiSearch ref={iconRef} className="navbar-icon" />
+          <FiSearch
+            ref={iconRef}
+            className={`navbar-icon ${isRootPath ? "icon-white" : ""}`}
+          />
         </button>
 
-        <NavUserMenu user={user} logout={logout} isAdmin={isAdmin} />
+        <NavUserMenu
+          className={`navbar-icon ${isRootPath ? "icon-white" : ""}`}
+          user={user}
+          logout={logout}
+          isAdmin={isAdmin}
+        />
 
         <Link
           to="/product/cart"
           className={`${iconBase} ${iconHover} relative`}
         >
-          <FiShoppingCart className="navbar-icon" />
+          <FiShoppingCart
+            className={`navbar-icon ${isRootPath ? "icon-white" : ""}`}
+          />
           {cartCount > 0 && <span className="cart-badge">{cartCount}</span>}
         </Link>
 
         <Link to="/faq/list" className={`${iconBase} ${iconHover}`}>
-          <MdSupportAgent />
+          <MdSupportAgent
+            className={`navbar-icon ${isRootPath ? "icon-white" : ""}`}
+          />
         </Link>
 
         <div className="indicator">
@@ -54,7 +66,9 @@ function NavRight({ iconRef, onSearchToggle, alertidcator }) {
           )}
           {user && (
             <Link to="/alert/list" className={`${iconBase} ${iconHover}`}>
-              <HiOutlineBellAlert />
+              <HiOutlineBellAlert
+                className={`navbar-icon ${isRootPath ? "icon-white" : ""}`}
+              />
             </Link>
           )}
         </div>

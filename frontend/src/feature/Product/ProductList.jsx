@@ -29,9 +29,6 @@ export function ProductList() {
         setProducts(res.data.productList);
         setPageInfo(res.data.pageInfo);
       })
-      .catch((err) => {
-        console.log(err.message);
-      })
       .finally(() => setLoading(false));
   }, [pageParam, keyword, sort, category]);
 

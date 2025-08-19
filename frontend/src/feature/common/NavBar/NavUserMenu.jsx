@@ -12,7 +12,9 @@ export function NavUserMenu({ user, logout, isAdmin }) {
   return (
     <div className="dropdown dropdown-end user-menu">
       <div tabIndex={0} role="button" className={`${iconBase} ${iconHover}`}>
-        <FiUser className="text-2xl text-black" />
+        <FiUser
+          className={`text-2xl ${isRootPath ? "text-white" : "text-black"}`}
+        />
       </div>
       <ul
         tabIndex={0}

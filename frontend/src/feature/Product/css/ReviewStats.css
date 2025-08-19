@@ -5,7 +5,7 @@
     padding: 2rem 5rem;
     background-color: #f4f4f4;
     font-size: 14px;
-    flex-wrap: wrap; /* 좁아지면 줄바꿈 허용 */
+    flex-wrap: wrap;
 }
 
 .average {
@@ -13,11 +13,11 @@
     font-weight: bold;
     text-align: center;
     min-width: 120px;
-    flex-shrink: 0; /* 점수 영역은 최소한 유지 */
+    flex-shrink: 0;
 }
 
 .score {
-    font-size: clamp(28px, 6vw, 48px); /* 반응형 폰트 */
+    font-size: clamp(28px, 6vw, 48px);
     color: orange;
 }
 
@@ -27,7 +27,7 @@
 }
 
 .bars {
-    flex: 1; /* 남은 공간 다 차지 */
+    flex: 1;
     min-width: 180px;
 }
 
@@ -48,7 +48,7 @@
 .bar {
     background-color: #eee;
     height: 12px;
-    flex: 1; /* 남은 공간 자동 차지 */
+    flex: 1;
     margin: 0 10px;
     position: relative;
     border-radius: 4px;
@@ -66,7 +66,7 @@
     text-align: right;
 }
 
-/* 모바일 (639px 이하) */
+/* (639px 이하) */
 @media (max-width: 639px) {
     .review-stats {
         flex-direction: column;

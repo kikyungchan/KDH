@@ -288,6 +288,9 @@ public class ProductService {
             productImageRepository.delete(image); // DB 삭제
         }
 
+        // 최근 본 목록에서도 삭제
+        recentViewRepository.deleteByProduct(product);
+
         // 상품 삭제
         productRepository.delete(product);
     }

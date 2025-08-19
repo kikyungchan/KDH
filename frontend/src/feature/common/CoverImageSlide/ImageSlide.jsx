@@ -4,14 +4,18 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import { Mousewheel, Pagination } from "swiper/modules";
 import { useNavigate } from "react-router";
 import { gsap } from "gsap";
+import "swiper/css";
+import "swiper/css/pagination";
+import "swiper/css/mousewheel";
+import "./ImageSlide.css";
 
 function ImageSlide() {
-  useEffect(() => {
-    import("swiper/css");
-    import("swiper/css/pagination");
-    import("swiper/css/mousewheel");
-    import("./ImageSlide.css");
-  }, []);
+  // useEffect(() => {
+  //   import("swiper/css");
+  //   import("swiper/css/pagination");
+  //   import("swiper/css/mousewheel");
+  //   import("./ImageSlide.css");
+  // }, []);
   const navigate = useNavigate();
   const [slides, setSlides] = useState([]);
   const swiperRef = useRef(null);

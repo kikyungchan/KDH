@@ -47,6 +47,10 @@
     position: relative;
 }
 
+.icon-white {
+    color: white;
+}
+
 .navbar-inner {
     display: flex;
     justify-content: space-between;
