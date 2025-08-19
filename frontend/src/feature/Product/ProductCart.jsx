@@ -4,6 +4,7 @@ import { useNavigate } from "react-router";
 import axios from "axios";
 import { useCart } from "./CartContext.jsx";
 import { FaCheck } from "react-icons/fa";
+import { toast } from "sonner";
 
 function ProductCart() {
   const [selectedStock, setSelectedStock] = useState(null);
@@ -36,7 +37,9 @@ function ProductCart() {
         .then((res) => {
           setCartItems(res.data);
         })
-        .catch((err) => console.log(err));
+        .catch((err) => {
+          toast("잠시 후 다시 시도해주십시오.", { type: "error" });
+        });
     } else {
       // 비로그인 사용자 => localStorage 에서 guestCart 가져옴
       const localCart = JSON.parse(localStorage.getItem("guestCart") || "[]");
@@ -112,7 +115,7 @@ function ProductCart() {
           setCartCount(res.data.length);
         })
         .catch((err) => {
-          console.error("삭제 실패:", err);
+          toast("잠시 후 다시 시도해주십시오.", { type: "error" });
         });
     } else {
       // 비로그인 사용자 - localStorage 에서 삭제 처리

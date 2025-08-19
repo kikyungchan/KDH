@@ -1,6 +1,7 @@
 import { useNavigate } from "react-router";
 import { useEffect, useState } from "react";
 import axios from "axios";
+import { toast } from "sonner";
 
 export function GuestOrderDetail() {
   const navigate = useNavigate();
@@ -9,11 +10,9 @@ export function GuestOrderDetail() {
     axios
       .get("/api/order/guest-order/detail")
       .then((res) => {
-        console.log(res.data);
         setOrder(res.data);
       })
       .catch((err) => {
-        console.log(err.message);
         toast("조회 권한이 없습니다.", { type: "error" });
         navigate("/home");
       });

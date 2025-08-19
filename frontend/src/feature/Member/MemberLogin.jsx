@@ -3,7 +3,6 @@ import { useNavigate, Link } from "react-router";
 import axios from "axios";
 import { AuthenticationContext } from "../common/AuthenticationContextProvider.jsx";
 import { useCart } from "../Product/CartContext.jsx";
-import { FaGoogle } from "react-icons/fa";
 import { toast } from "sonner";
 
 export function MemberLogin() {
@@ -16,6 +15,15 @@ export function MemberLogin() {
 
   function handleLogInButtonClick(e) {
     e.preventDefault(); // form submit 기본 동작 방지(리로드 X)
+
+    if (!loginId.trim()) {
+      toast("아이디를 입력하세요.", { type: "error" });
+      return;
+    }
+    if (!password.trim()) {
+      toast("비밀번호를 입력하세요.", { type: "error" });
+      return;
+    }
 
     axios
       .post("/api/member/login", {
@@ -38,11 +46,10 @@ export function MemberLogin() {
           });
 
         const message = res.data.message;
-        console.log(message.text);
         navigate("/");
       })
       .catch((err) => {
-        toast(err.response?.data?.message, { type: "error" }); // { type: 'error', text: '...' }
+        toast("아이디 또는 비밀번호가 일치하지않습니다.", { type: "error" }); // { type: 'error', text: '...' }
       })
       .finally(() => {});
   }

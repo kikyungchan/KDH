@@ -355,7 +355,6 @@ function Order() {
           });
         })
         .catch((err) => {
-          console.log(err);
           alert("주문 실패");
         });
     } else {
@@ -463,7 +462,6 @@ function Order() {
       oncomplete: function (data) {
         setOrdererAddress(data.address); // 도로명 주소
         setOrdererZipcode(data.zonecode); // 우편번호 필요하면 이것도
-        console.log("작동");
       },
     }).open();
   }
@@ -473,7 +471,6 @@ function Order() {
       oncomplete: function (data) {
         setReceiverAddress(data.address); // 도로명 주소
         setReceiverZipcode(data.zonecode); // 우편번호 필요하면 이것도
-        console.log("작동");
       },
     }).open();
   }

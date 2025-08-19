@@ -181,10 +181,10 @@ export function MemberSignup() {
         privacyAgreed: privacyAgreed,
       })
       .then(() => {
+        toast("회원가입이 완료되었습니다.", { type: "success" });
         navigate("/login");
       })
       .catch((err) => {
-        console.log("에러응답", err.response?.data);
         toast("잠시 후 다시 시도해주십시오.", { type: "error" });
       })
       .finally(() => {
@@ -225,7 +225,6 @@ export function MemberSignup() {
       .catch((err) => {
         setLoginIdChecked(false);
         setLoginIdCheckMessage("확인 중 오류가 발생했습니다");
-        console.log("error", err.response?.data || err.message);
       })
       .finally(() => {});
   }

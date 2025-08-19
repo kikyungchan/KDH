@@ -12,7 +12,6 @@ export function MemberList() {
     axios
       .get(`/api/member/list?${searchParams}`)
       .then((res) => {
-        // console.log("res.data" + res.data);
         setMemberList(res.data.memberList);
         setPageInfo(res.data.pageInfo);
       })
@@ -21,7 +20,6 @@ export function MemberList() {
   }, [searchParams]);
 
   const pageNumber = [];
-  // console.log("pageInfo : ", pageInfo);
   for (let i = pageInfo.leftPageNumber; i <= pageInfo.rightPageNumber; i++) {
     pageNumber.push(i);
   }
