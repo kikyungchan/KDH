@@ -94,7 +94,7 @@ function ImageSlide() {
       spaceBetween={0}
       mousewheel={true}
       modules={[Mousewheel, Pagination]}
-      loop={true}
+      loop={slides.length > 4}
       pagination={{ clickable: true }}
       onSwiper={(swiper) => (swiperRef.current = swiper)}
       onSlideChange={(swiper) => animateActiveSlide(swiper)}

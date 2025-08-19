@@ -26,6 +26,22 @@
     background-color: black;
 }
 
+.mainSwiper .swiper-pagination-bullet {
+    width: 8px;
+    height: 10px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.6);
+    opacity: 1;
+    transition: all 0.3s ease;
+}
+
+.mainSwiper .swiper-pagination-bullet-active {
+    width: 8px;
+    height: 36px;
+    border-radius: 5px;
+    background: #fff;
+}
+
 @media (max-width: 767px) {
     .overlay {
         font-size: 1.8rem;

@@ -45,24 +45,6 @@ export function ProductDetail() {
   const id = searchParams.get("id");
   const navigate = useNavigate();
 
-  // // 상세페이지 진입시 local에 정보 저장
-  // useEffect(() => {
-  //   if (!product) return;
-  //   const productData = {
-  //     id: product.id,
-  //     productName: product.productName,
-  //     thumbnail:
-  //       product.thumbnailPaths?.find((t) => t.isMain)?.storedPath ??
-  //       product.thumbnailPaths?.[0]?.storedPath,
-  //     price: product.price,
-  //   };
-  //   let recent = JSON.parse(localStorage.getItem("recentProducts")) || [];
-  //   recent = recent.filter((p) => p.id !== productData.id);
-  //   recent.unshift(productData);
-  //   if (recent.length > 10) recent.pop();
-  //   localStorage.setItem("recentProducts", JSON.stringify(recent));
-  // }, [product]);
-
   useEffect(() => {
     if (!product) return;
     const token = localStorage.getItem("token");
