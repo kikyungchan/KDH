@@ -256,7 +256,7 @@
     }
 
     .hide-on-root {
-        display: none;
+        display: none !important;
     }
 
     .navbar-center {

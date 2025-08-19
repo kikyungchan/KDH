@@ -6,19 +6,20 @@
     color: #555;
 }
 
-/* 상단 섹션 */
 .footer-content {
     display: flex;
-    justify-content: space-between;
+    align-items: flex-start;
     flex-wrap: wrap;
-    gap: 480px;
+    gap: 40px;
+    width: 100%;
 }
+
 
 .footer-brand {
     display: flex;
     flex-direction: column;
     gap: 35px;
-    margin-right: 55px;
+    margin-right: auto;
 }
 
 .footer-logo {
@@ -48,9 +49,10 @@
 }
 
 .footer-right {
+    margin-left: auto;
     display: flex;
-    flex-direction: column; /* 위(운영시간), 아래(SNS) */
-    align-items: flex-end; /* 오른쪽 끝으로 정렬 */
+    flex-direction: column;
+    align-items: flex-end;
     gap: 15px;
 }
 
@@ -108,12 +110,15 @@
     color: #333;
 }
 
-@media (max-width: 639px) {
+/* 모바일~태블릿 세로배치 */
+@media (max-width: 767px) {
     .footer {
         padding: 20px 14px;
     }
 
     .footer-content {
+        flex-direction: column;
+        align-items: flex-start;
         gap: 16px;
         padding-bottom: 16px;
     }
@@ -147,6 +152,14 @@
 
     .info-text {
         font-size: 0.8rem;
+    }
+
+    .footer-right {
+        width: 100%; /* 한 줄 전체 차지 */
+        align-items: flex-start; /* 왼쪽 기준 */
+        text-align: left; /* 텍스트도 왼쪽 */
+        margin-left: 0; /* auto 밀기 제거 */
+        margin-top: 10px; /* 위쪽 여백 살짝 */
     }
 
     .footer-bottom {
