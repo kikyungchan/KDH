@@ -323,7 +323,7 @@ function Order() {
           });
         })
         .then((res) => {
-          setCartCount(res.data);
+          setCartCount(res.data.length);
         })
         .then(() => {
           sendOrderAlert(
