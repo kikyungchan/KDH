@@ -41,7 +41,7 @@ export function FaQList() {
   const uuid = uuidv4();
   const radios = [
     {
-      name: "1:1 문의하기",
+      name: "1:1 채팅 문의",
       value: "1",
       path: `/chat/chatting?rid=${uuid}`,
       fnc: () => {

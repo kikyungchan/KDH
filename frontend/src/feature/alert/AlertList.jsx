@@ -72,8 +72,8 @@ export function AlertList() {
                 {alertList.length > 0 ? (
                   <div>
                     <ul className="list bg-base-100 rounded-box shadow-md">
-                      {alertList.map((alert) => (
-                        <li className="list-row block w-full">
+                      {alertList.map((alert, i) => (
+                        <li className="list-row block w-full" key={i}>
                           <Link
                             className="block relative w-full"
                             to={alert.link}
