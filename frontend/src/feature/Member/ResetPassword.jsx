@@ -1,7 +1,7 @@
 import { useLocation, useNavigate } from "react-router";
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { useAlert } from "../common/AlertContext.jsx";
+import { toast } from "sonner";
 
 export function ResetPassword() {
   // password 정규식
@@ -37,12 +37,10 @@ export function ResetPassword() {
   // 전송 버튼 클릭 여부
   const [isSubmitted, setIsSubmitted] = useState(false);
 
-  const { showAlert } = useAlert();
-
   // 새로고침시 토큰 초기화
   useEffect(() => {
     if (!token) {
-      showAlert("유효하지 않은 접근입니다.");
+      toast("유효하지 않은 접근입니다.", { type: "error" });
       navigate("/");
     }
   }, [token, navigate]);
@@ -82,7 +80,9 @@ export function ResetPassword() {
       })
       .catch((err) => {
         console.error("비밀번호 변경 실패", err.response?.data || err.message);
-        showAlert("비밀번호 변경에 실패했습니다. 다시 시도해주세요.");
+        toast("비밀번호 변경에 실패했습니다. 다시 시도해주세요.", {
+          type: "error",
+        });
       })
       .finally(() => {
         setIsPasswordProcessing(false);

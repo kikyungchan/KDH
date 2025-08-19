@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router";
 import { useAlert } from "../common/AlertContext.jsx";
+import { toast } from "sonner";
 
 export function FindLoginId() {
   // 이메일 정규식
@@ -70,7 +71,7 @@ export function FindLoginId() {
       })
       .then((res) => {
         if (res.data.success) {
-          showAlert(res.data.message, "info");
+          toast(res.data.message, "info");
           setEmailSent(true);
           setRemainTime(res.data.remainTimeInSec);
         } else {

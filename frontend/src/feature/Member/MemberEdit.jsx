@@ -4,7 +4,7 @@ import { useNavigate, useSearchParams } from "react-router";
 import LeaveMemberEditModal from "./Modal/LeaveMemberEditModal.jsx";
 import ConfirmEditModal from "./Modal/ConfirmEditModal.jsx";
 import ChangePasswordModal from "./Modal/ChangePasswordModal.jsx";
-import { useAlert } from "../common/AlertContext.jsx";
+import { toast } from "sonner";
 
 export function MemberEdit() {
   // 입력 항목 정규식
@@ -15,7 +15,6 @@ export function MemberEdit() {
   const nameRegEx = /^[가-힣a-zA-Z\s]{2,20}$/; // 한글 + 영문 이름 허용 시
   const phoneRegEx = /^01[016789][0-9]{7,8}$/;
 
-  const { showAlert } = useAlert();
   // 입력항목
   const [member, setMember] = useState({
     loginId: "",
@@ -59,8 +58,7 @@ export function MemberEdit() {
         setMember(res.data);
       })
       .catch(() => {
-        showAlert("잠시 후 다시 시도해주십시오.", "error");
-        alert("잠시 후 다시 시도해주십시오.");
+        toast("잠시 후 다시 시도해주십시오.", { type: "error" });
       })
       .finally(() => {});
   }, [memberParams]);
@@ -118,7 +116,7 @@ export function MemberEdit() {
         navigate(`/member?id=${member.id}`);
       })
       .catch(() => {
-        showAlert("비밀번호가 일치하지 않습니다.", "error");
+        toast("비밀번호가 일치하지 않습니다.", { type: "error" });
         // alert("비밀번호가 일치하지 않습니다.");
       })
       .finally(() => {
@@ -184,7 +182,7 @@ export function MemberEdit() {
         setChangePasswordModalShow(false);
       })
       .catch(() => {
-        showAlert("비밀번호가 일치하지 않습니다.", "error");
+        toast("비밀번호가 일치하지 않습니다.", { type: "error" });
       })
       .finally(() => {
         setIsPasswordProcessing(false);

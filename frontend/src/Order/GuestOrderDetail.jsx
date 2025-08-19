@@ -14,7 +14,7 @@ export function GuestOrderDetail() {
       })
       .catch((err) => {
         console.log(err.message);
-        alert("조회 권한이 없습니다.");
+        toast("조회 권한이 없습니다.", { type: "error" });
         navigate("/home");
       });
   }, []);

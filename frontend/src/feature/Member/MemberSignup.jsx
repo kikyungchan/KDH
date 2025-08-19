@@ -4,7 +4,6 @@ import { toast } from "sonner";
 import { useNavigate } from "react-router";
 import { AuthenticationContext } from "../common/AuthenticationContextProvider.jsx";
 import PrivacyModal from "./Modal/PrivacyModal.jsx";
-import { useAlert } from "../common/AlertContext.jsx";
 
 export function MemberSignup() {
   // 입력 항목 정규식
@@ -78,8 +77,6 @@ export function MemberSignup() {
   // 로그인 여부
   const { user } = useContext(AuthenticationContext);
 
-  const { showAlert } = useAlert();
-
   const navigate = useNavigate();
 
   // 각 항목을 입력하지 않으면 가입 버튼 비활성화
@@ -107,7 +104,7 @@ export function MemberSignup() {
   // 로그인 되어 있을때 회원가입 접속 차단
   useEffect(() => {
     if (user) {
-      showAlert("이미 로그인되어 있습니다.");
+      toast("이미 로그인되어 있습니다.", { type: "error" });
       navigate("/");
     }
   }, [user]);
@@ -275,7 +272,6 @@ export function MemberSignup() {
       .then((res) => {
         if (res.data.success) {
           toast(res.data.message, { type: "success" });
-          // showAlert(res.data.message);
           setEmailSent(true);
           setRemainTime(res.data.remainTimeInSec);
         } else {

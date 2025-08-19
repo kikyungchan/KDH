@@ -1,14 +1,13 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router";
 import axios from "axios";
-import { useAlert } from "../feature/common/AlertContext.jsx";
+import { toast } from "sonner";
 
 export function GuestOrder() {
   const [orderToken, setOrderToken] = useState("");
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
   const navigate = useNavigate();
-  const { showAlert } = useAlert();
 
   function handleSearchOrderButtonClick(e) {
     e.preventDefault();
@@ -24,7 +23,7 @@ export function GuestOrder() {
         navigate("/order/guest-order/detail");
       })
       .catch((err) => {
-        showAlert(err.response?.data || "조회 실패");
+        toast(err.response?.data || "조회 실패", { type: "error" });
       });
   }
 
