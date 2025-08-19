@@ -264,7 +264,6 @@ function Order() {
     const token = localStorage.getItem("token");
     // const orderMemo = memo === "직접 작성" ? customMemo : memo;
     // const totalPrice = state.price * state.quantity;
-    console.log(items);
     const payloadList = items.map((item) => ({
       productId: item.productId ?? item.product?.id,
       optionId: item.optionId ?? item.option?.id,
