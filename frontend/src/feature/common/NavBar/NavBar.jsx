@@ -336,20 +336,6 @@ function NavBar(props) {
               문의 내역
             </Link>
           )}
-          <Link
-            to="/chat/chatting"
-            onClick={() => setIsMobileMenuOpen(false)}
-            className="btn btn-ghost w-full justify-start text-left text-xl"
-          >
-            채팅 프로토콜
-          </Link>
-          <Link
-            to="/pay/Checkout"
-            onClick={() => setIsMobileMenuOpen(false)}
-            className="btn btn-ghost w-full justify-start text-left text-xl"
-          >
-            토스 페이먼츠
-          </Link>
         </div>
       )}
     </>
