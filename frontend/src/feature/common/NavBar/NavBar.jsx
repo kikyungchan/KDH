@@ -178,11 +178,13 @@ function NavBar(props) {
             user={user}
             isAdmin={isAdmin}
             handleCategoryClick={handleCategoryClick}
+            isRootPath={isRootPath}
           />
           {/* 오른쪽 아이콘 */}
           <NavRight
             alertidcator={alertCount}
             onSearchToggle={() => setShowSearch((prev) => !prev)}
+            isRootPath={isRootPath}
           />
         </div>
         {showSearch && (
@@ -248,7 +250,7 @@ function NavBar(props) {
               className="btn btn-sm btn-ghost text-left cursor-pointer text-xl"
               onClick={() => setShowMobileCategory((prev) => !prev)}
             >
-              모든상품 ▾
+              모든상품
             </div>
             {showMobileCategory && (
               <div className="mobile-category-list">
@@ -309,13 +311,7 @@ function NavBar(props) {
               </div>
             )}
           </div>
-          {/*<Link*/}
-          {/*  to="/product/regist"*/}
-          {/*  onClick={() => setIsMobileMenuOpen(false)}*/}
-          {/*  className="btn btn-ghost w-full justify-start text-left text-xl"*/}
-          {/*>*/}
-          {/*  상품등록*/}
-          {/*</Link>*/}
+
           {user !== null && isAdmin && (
             <Link
               to="/member/list"

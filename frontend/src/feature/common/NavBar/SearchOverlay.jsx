@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { FiChevronLeft, FiSearch } from "react-icons/fi";
+import axios from "axios";
 
 function SearchOverlay({
   open,
@@ -12,20 +13,69 @@ function SearchOverlay({
 }) {
   const [recentProducts, setRecentProducts] = useState([]);
 
+  // useEffect(() => {
+  //   if (open) {
+  //     try {
+  //       const data = JSON.parse(localStorage.getItem("recentProducts"));
+  //       if (Array.isArray(data)) {
+  //         // 존재하는 상품만 필터링
+  //         Promise.all(
+  //           data.map(async (p) => {
+  //             try {
+  //               const res = await axios.get(`/api/product/${p.id}`);
+  //               return res.data ? p : null; // 상품이 있으면 유지
+  //             } catch {
+  //               return null; // 삭제된 상품은 제거
+  //             }
+  //           }),
+  //         ).then((results) => {
+  //           const validProducts = results.filter((p) => p !== null);
+  //           setRecentProducts(validProducts);
+  //           localStorage.setItem(
+  //             "recentProducts",
+  //             JSON.stringify(validProducts),
+  //           );
+  //         });
+  //       } else {
+  //         setRecentProducts([]);
+  //       }
+  //     } catch (err) {
+  //       setRecentProducts([]);
+  //     }
+  //   }
+  // }, [open]);
+
   useEffect(() => {
     if (open) {
-      try {
-        const data = JSON.parse(localStorage.getItem("recentProducts"));
-        if (Array.isArray(data)) {
-          setRecentProducts(data);
-        } else {
-          setRecentProducts([]); // 데이터가 배열이 아니면 빈 배열
+      const token = localStorage.getItem("token");
+
+      if (token) {
+        // 로그인 상태 → 서버에서 가져오기
+        axios
+          .get("/api/product", {
+            headers: { Authorization: `Bearer ${token}` },
+          })
+          .then((res) => setRecentProducts(res.data))
+          .catch((err) => {
+            console.error("최근 본 상품 서버 불러오기 실패", err);
+            setRecentProducts([]);
+          });
+      } else {
+        // 비로그인 상태 → localStorage에서 가져오기
+        try {
+          const data = JSON.parse(localStorage.getItem("recentProducts"));
+          if (Array.isArray(data)) {
+            setRecentProducts(data);
+          } else {
+            setRecentProducts([]);
+          }
+        } catch (err) {
+          setRecentProducts([]);
         }
-      } catch (err) {
-        setRecentProducts([]);
       }
     }
   }, [open]);
+
   if (!open) return null;
 
   return (
@@ -71,6 +121,7 @@ function SearchOverlay({
             </div>
           </>
         )}
+
         {/* 최근 본 상품 */}
         {recentProducts.length > 0 && (
           <>

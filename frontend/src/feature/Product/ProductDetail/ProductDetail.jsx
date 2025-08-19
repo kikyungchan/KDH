@@ -39,27 +39,62 @@ export function ProductDetail() {
   const [quantity, setQuantity] = useState(1);
   const [product, setProduct] = useState(null);
   const [isProcessing, setIsProcessing] = useState(false);
+  const [reviewCount, setReviewCount] = useState(0);
   const { user, isAdmin } = useContext(AuthenticationContext);
   const [searchParams] = useSearchParams();
   const id = searchParams.get("id");
   const navigate = useNavigate();
 
-  // 상세페이지 진입시 local에 정보 저장
+  // // 상세페이지 진입시 local에 정보 저장
+  // useEffect(() => {
+  //   if (!product) return;
+  //   const productData = {
+  //     id: product.id,
+  //     productName: product.productName,
+  //     thumbnail:
+  //       product.thumbnailPaths?.find((t) => t.isMain)?.storedPath ??
+  //       product.thumbnailPaths?.[0]?.storedPath,
+  //     price: product.price,
+  //   };
+  //   let recent = JSON.parse(localStorage.getItem("recentProducts")) || [];
+  //   recent = recent.filter((p) => p.id !== productData.id);
+  //   recent.unshift(productData);
+  //   if (recent.length > 10) recent.pop();
+  //   localStorage.setItem("recentProducts", JSON.stringify(recent));
+  // }, [product]);
+
   useEffect(() => {
     if (!product) return;
-    const productData = {
-      id: product.id,
-      productName: product.productName,
-      thumbnail:
-        product.thumbnailPaths?.find((t) => t.isMain)?.storedPath ??
-        product.thumbnailPaths?.[0]?.storedPath,
-      price: product.price,
-    };
-    let recent = JSON.parse(localStorage.getItem("recentProducts")) || [];
-    recent = recent.filter((p) => p.id !== productData.id);
-    recent.unshift(productData);
-    if (recent.length > 10) recent.pop();
-    localStorage.setItem("recentProducts", JSON.stringify(recent));
+    const token = localStorage.getItem("token");
+
+    if (token) {
+      // 로그인 상태 → 서버 저장
+      axios
+        .post(`/api/product/${product.id}`, null, {
+          headers: { Authorization: `Bearer ${token}` },
+        })
+        .catch((err) => {
+          console.error("최근 본 상품 서버 저장 실패", err);
+        });
+    } else {
+      // 비로그인 상태 → localStorage 저장
+      const productData = {
+        id: product.id,
+        productName: product.productName,
+        thumbnail:
+          product.thumbnailPaths?.find((t) => t.isMain)?.storedPath ??
+          product.thumbnailPaths?.[0]?.storedPath,
+        price: product.price,
+      };
+      let recent = JSON.parse(localStorage.getItem("recentProducts")) || [];
+      // 중복 제거
+      recent = recent.filter((p) => p.id !== productData.id);
+      // 최신 상품 맨 앞에 추가
+      recent.unshift(productData);
+      // 최대 10개까지만 유지
+      if (recent.length > 10) recent.pop();
+      localStorage.setItem("recentProducts", JSON.stringify(recent));
+    }
   }, [product]);
 
   useEffect(() => {
@@ -77,6 +112,7 @@ export function ProductDetail() {
       });
   }, [id]);
 
+  // 추천상품 최대 6개
   useEffect(() => {
     if (product?.category) {
       axios
@@ -374,18 +410,56 @@ export function ProductDetail() {
           </div>
         </div>
 
-        <hr className="mt-5" />
+        {/* 상세정보 / 구매평 탭 네비게이션 */}
+        <div className="product-tab-nav" id="productTabNav">
+          <button
+            onClick={() => {
+              const el = document.getElementById("detail-section");
+              if (el) {
+                const y = el.getBoundingClientRect().top + window.scrollY - 150; // 150px 위로 보정
+                window.scrollTo({ top: y, behavior: "instant" });
+              }
+            }}
+          >
+            상세정보
+          </button>
+
+          <button
+            onClick={() => {
+              const el = document.getElementById("review-section");
+              if (el) {
+                const y = el.getBoundingClientRect().top + window.scrollY - 150; // 150px 위로 보정
+                window.scrollTo({ top: y, behavior: "instant" });
+              }
+            }}
+          >
+            구매평({reviewCount})
+          </button>
+        </div>
+        <hr />
         <div className="product-body-section">
-          <ProductDetailToggle detailImagePaths={product.detailImagePaths} />
+          <div id="detail-section">
+            <ProductDetailToggle detailImagePaths={product.detailImagePaths} />
+          </div>
           <NoticeSection />
           <hr className="divider" />
-          <ReviewStats productId={product.id} refreshTrigger={reviewChanged} />
+
+          {/* 리뷰 통계 (그래프) */}
+          <div id="review-section">
+            <ReviewStats
+              productId={product.id}
+              refreshTrigger={reviewChanged}
+            />
+          </div>
+
+          {/* 리뷰 코멘트 */}
           <ProductComment
             productId={product.id}
             onReviewChange={() => setReviewChanged((prev) => !prev)}
+            onReviewCountChange={(count) => setReviewCount(count)}
           />
         </div>
-        <hr className="divider" />
+        {/*<hr className="divider" />*/}
         <RecommendedProduct products={relatedProducts} />
       </div>
       <CartAdded show={showModal} onHide={() => setShowModal(false)} />

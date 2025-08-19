@@ -5,7 +5,7 @@ import { useNavigate } from "react-router";
 import StarRating from "./util/StarRating.jsx";
 import { AuthenticationContext } from "../../common/AuthenticationContextProvider.jsx";
 
-function ReviewSection({ productId, onReviewChange }) {
+function ReviewSection({ productId, onReviewChange, onReviewCountChange }) {
   const [isPurchasable, setIsPurchasable] = useState(false);
   const [alreadyReviewed, setAlreadyReviewed] = useState(false);
   const [editTargetId, setEditTargetId] = useState(null);
@@ -25,6 +25,15 @@ function ReviewSection({ productId, onReviewChange }) {
     const decoded = jwtDecode(token);
     currentUserId = parseInt(decoded.sub); // subject에 userId 있다고 가정
   }
+
+  useEffect(() => {
+    axios.get(`/api/product/comment/${productId}`).then((res) => {
+      setComments(res.data);
+      if (onReviewCountChange) {
+        onReviewCountChange(res.data.length);
+      }
+    });
+  }, [productId]);
 
   useEffect(() => {
     axios
@@ -67,7 +76,12 @@ function ReviewSection({ productId, onReviewChange }) {
 
         return axios.get(`/api/product/comment/${productId}`);
       })
-      .then((res) => setComments(res.data))
+      .then((res) => {
+        setComments(res.data);
+        if (onReviewCountChange) {
+          onReviewCountChange(res.data.length);
+        }
+      })
       .then(() => {
         return axios.get(`/api/product/comment/check?productId=${productId}`, {
           headers: { Authorization: `Bearer ${token}` },
@@ -120,7 +134,12 @@ function ReviewSection({ productId, onReviewChange }) {
         onReviewChange && onReviewChange();
         return axios.get(`/api/product/comment/${productId}`);
       })
-      .then((res) => setComments(res.data))
+      .then((res) => {
+        setComments(res.data);
+        if (onReviewCountChange) {
+          onReviewCountChange(res.data.length);
+        }
+      })
       .then(() => {
         return axios.get(`/api/product/comment/check?productId=${commentId}`, {
           headers: {
@@ -164,8 +183,24 @@ function ReviewSection({ productId, onReviewChange }) {
         width: "100%",
       }}
     >
-      <h4>상품 리뷰</h4>
-
+      <h4 className="text-xl mb-2">구매평({comments.length})</h4>
+      <p className="text-sm mb-2">상품을 구매하신 분들이 작성한 리뷰입니다.</p>
+      {!showInput && (
+        <button
+          className="mb-10"
+          style={{
+            backgroundColor: "black",
+            color: "white",
+            border: "none",
+            padding: "8px 16px",
+            borderRadius: "4px",
+            cursor: "pointer",
+          }}
+          onClick={handleAddCommentButton}
+        >
+          구매평 작성
+        </button>
+      )}
       {/* 등록된 리뷰들 */}
       {comments.map((c) => (
         <div key={c.id} style={{ marginBottom: "15px" }}>
@@ -231,7 +266,7 @@ function ReviewSection({ productId, onReviewChange }) {
               </div>
 
               <p style={{ margin: "4px 0" }}>{c.content}</p>
-              <small style={{ color: "#666" }}>
+              <small className="mb-2 block text-gray-500">
                 {c.createdAt?.replace("T", " ").slice(0, 16)}
               </small>
 
@@ -256,21 +291,6 @@ function ReviewSection({ productId, onReviewChange }) {
           )}
         </div>
       ))}
-
-      {!showInput && (
-        <button
-          style={{
-            backgroundColor: "black",
-            color: "white",
-            border: "none",
-            padding: "8px 16px",
-            borderRadius: "4px",
-          }}
-          onClick={handleAddCommentButton}
-        >
-          구매평 작성
-        </button>
-      )}
 
       {showInput && (
         <>

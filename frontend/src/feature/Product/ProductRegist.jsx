@@ -114,6 +114,10 @@ export function ProductRegist() {
       alert("썸네일이미지를 한 장 이상 추가해주세요.");
       return;
     }
+    // if (detailImages.length === 0) {
+    //   alert("상세이미지를 한 장 이상 추가해주세요.");
+    //   return;
+    // }
     const formData = new FormData();
     formData.append("productName", productName);
     formData.append("price", price);

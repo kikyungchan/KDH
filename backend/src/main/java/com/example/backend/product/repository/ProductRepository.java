@@ -15,7 +15,7 @@ public interface ProductRepository extends JpaRepository<Product, Integer> {
 
     List<Product> id(Integer id);
 
-    // 검색
+    // 키워드로 상품검색
     @Query("SELECT p FROM Product p WHERE " +
            "LOWER(p.productName) LIKE LOWER(CONCAT('%', :keyword, '%')) OR " +
            "LOWER(p.info) LIKE LOWER(CONCAT('%', :keyword, '%')) OR " +
@@ -32,7 +32,7 @@ public interface ProductRepository extends JpaRepository<Product, Integer> {
             """)
     Page<Product> findAllOrderByPopularity(Pageable pageable);
 
-    // 키워드 유지하고 검색.
+    // 키워드 검색 + 인기순 정렬
     @Query("""
                 SELECT p FROM Product p
                 LEFT JOIN OrderItem oi ON oi.product = p
@@ -44,7 +44,7 @@ public interface ProductRepository extends JpaRepository<Product, Integer> {
             """)
     Page<Product> findByKeywordOrderByPopularity(String keyword, Pageable pageable);
 
-    //우측 배너 주간판매량 10개이상 아이템 랜덤으로 최대 10개 까지
+    //HOT 상품 (최근 1주일. 판매량>=10) -> 랜덤 10개
     @Query("""
                 SELECT new com.example.backend.product.dto.ProductMainSlideDto(
                     p.id, p.productName, p.price, t.storedPath
@@ -61,7 +61,7 @@ public interface ProductRepository extends JpaRepository<Product, Integer> {
             """)
     List<ProductMainSlideDto> findHotProductsRandomLimit(LocalDateTime oneWeekAgo, Pageable pageable);
 
-    // 검색쿼리
+    // 카테고리 + 키워드 검색
     @Query("SELECT p FROM Product p WHERE p.category = :category AND " +
            "(LOWER(p.productName) LIKE LOWER(CONCAT('%', :keyword, '%')) " +
            "OR LOWER(p.info) LIKE LOWER(CONCAT('%', :keyword, '%')) " +
@@ -70,8 +70,11 @@ public interface ProductRepository extends JpaRepository<Product, Integer> {
                                            @Param("keyword") String keyword,
                                            Pageable pageable);
 
+    // 카테고리만 (페이징)
     Page<Product> findByCategory(String category, Pageable pageable);
 
+
+    // 카테고리별 인기순 (판매량 많은 순)
     @Query("""
                 SELECT p FROM Product p
                 LEFT JOIN OrderItem oi ON oi.product = p
@@ -81,6 +84,8 @@ public interface ProductRepository extends JpaRepository<Product, Integer> {
             """)
     Page<Product> findByCategoryOrderByPopularity(@Param("category") String category, Pageable pageable);
 
+
+    // 카테고리+검색+인기순
     @Query("""
                 SELECT p FROM Product p
                 LEFT JOIN OrderItem oi ON oi.product = p
@@ -94,7 +99,7 @@ public interface ProductRepository extends JpaRepository<Product, Integer> {
             """)
     Page<Product> findByCategoryAndKeywordOrderByPopularity(@Param("category") String category, @Param("keyword") String keyword, Pageable pageable);
 
-    //    누적판매량 제일 많은 아이템 3개
+    // 누적판매량 제일 많은 아이템
     @Query("""
             SELECT p
             FROM Product p
@@ -104,6 +109,7 @@ public interface ProductRepository extends JpaRepository<Product, Integer> {
             """)
     List<Product> findTopSellingProducts(Pageable pageable);
 
+    // 카테고리별 판매량순 정렬 (카테고리별 베스트 템)
     @Query("""
             SELECT p
             FROM Product p

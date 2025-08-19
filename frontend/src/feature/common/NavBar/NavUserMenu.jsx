@@ -1,21 +1,22 @@
 import { FiUser } from "react-icons/fi";
-import { Link } from "react-router";
+import { Link, useLocation } from "react-router";
 
 export function NavUserMenu({ user, logout, isAdmin }) {
+  const location = useLocation();
+  const isRootPath = location.pathname === "/";
+
+  const iconBase =
+    "w-10 h-10 rounded-full flex items-center justify-center text-2xl no-animation focus:outline-none focus-visible:outline-none";
+  const iconHover = isRootPath ? "no-hover" : "hover:bg-gray-100";
+
   return (
     <div className="dropdown dropdown-end">
-      <div
-        tabIndex={0}
-        role="button"
-        className="btn btn-ghost btn-circle avatar"
-      >
+      <div tabIndex={0} role="button" className={`${iconBase} ${iconHover}`}>
         <FiUser className="text-2xl text-black" />
       </div>
       <ul
         tabIndex={0}
-        className="menu dropdown-content z-[999]
-        text-lg
-          p-2 shadow bg-white text-black rounded-box w-52"
+        className="menu dropdown-content z-[999] text-lg p-2 shadow bg-white text-black rounded-box w-52"
       >
         {user ? (
           <>

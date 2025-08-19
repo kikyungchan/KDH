@@ -25,7 +25,7 @@ export function ProductOrderComplete() {
               <div className="mt-4">
                 <button
                   className="order-button btn w-40 confirm"
-                  onClick={() => navigate("/home")}
+                  onClick={() => navigate("/Home")}
                 >
                   홈으로
                 </button>

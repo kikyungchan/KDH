@@ -28,6 +28,7 @@ public interface OrderItemRepository extends JpaRepository<OrderItem, Integer> {
 //    Integer getWeeklySales(@Param("productId") Integer productId,
 //                           @Param("since") LocalDateTime since);
 
+    // 특정상품의 회원주문 기준 최근기간 이후 판매량 합계
     @Query("SELECT SUM(oi.quantity) " +
            "FROM OrderItem oi " +
            "WHERE oi.order.createdAt > :since " +

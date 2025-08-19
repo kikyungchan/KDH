@@ -86,11 +86,10 @@
 /* 서브비주얼박스 좌우측 버튼*/
 .custom-nav-btn {
     position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
     z-index: 20;
+    top: 150px;
+    transform: translateY(150px);
     background-color: rgba(255, 255, 255, 0.9);
-    border: none;
     width: 32px;
     height: 32px;
     border-radius: 9999px;
@@ -139,12 +138,6 @@
     font-weight: 600;
     z-index: 2;
     pointer-events: none; /* 클릭은 이미지로 통과 */
-}
-
-.custom-nav-btn {
-    width: 32px;
-    height: 32px;
-    font-size: 18px;
 }
 
 .slide-index-indicator {
@@ -226,8 +219,3 @@
         padding: 2px 5px;
     }
 }
-
-
-
-
-

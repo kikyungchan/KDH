@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 import java.util.Optional;
 
 public interface GuestOrderRepository extends JpaRepository<GuestOrder, Integer> {
-
+    // 최근기간(7일) 이후 판매량 합산
     @Query(value = """
             SELECT SUM(goi.quantity)
             FROM guest_order_item goi

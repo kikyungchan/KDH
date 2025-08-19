@@ -15,8 +15,8 @@ export default function RecommendedProduct({ products }) {
       <Swiper
         modules={[Navigation]}
         navigation={{
-          nextEl: ".custom-nav-btn.right",
-          prevEl: ".custom-nav-btn.left",
+          nextEl: ".custom-product-detail-nav-btn.right",
+          prevEl: ".custom-product-detail-nav-btn.left",
         }}
         spaceBetween={20}
         breakpointsBase="window"
@@ -47,8 +47,8 @@ export default function RecommendedProduct({ products }) {
             </Link>
           </SwiperSlide>
         ))}
-        <button className="custom-nav-btn left">‹</button>
-        <button className="custom-nav-btn right">›</button>
+        <button className="custom-product-detail-nav-btn left">‹</button>
+        <button className="custom-product-detail-nav-btn right">›</button>
       </Swiper>
     </div>
   );

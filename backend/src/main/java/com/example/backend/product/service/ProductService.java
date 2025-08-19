@@ -23,6 +23,8 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -42,6 +44,7 @@ public class ProductService {
     private final ProductCommentRepository productCommentRepository;
     private final ProductThumbnailRepository productThumbnailRepository;
     private final CartRepository cartRepository;
+    private final RecentViewRepository recentViewRepository;
 
     // url에서 key만 따오는 메소드
     private String extractS3Key(String url) {
@@ -464,5 +467,39 @@ public class ProductService {
 
         int total = (memberSales != null ? memberSales : 0) + (guestSales != null ? guestSales : 0);
         return total >= 10;
+    }
+
+    public ProductDto getProductById(Integer id) {
+        List<Product> products = productRepository.findAllById(List.of(id));
+        for (Product p : products) {
+            return ProductDto.fromEntity(p);
+        }
+        return null;
+    }
+
+    public void addRecentView(Member member, Product product) {
+        // 이미 있으면 삭제 후 새로 삽입 -> 최신순 유지
+        Optional<RecentView> optional = recentViewRepository.findByMemberAndProduct(member, product);
+        if (optional.isPresent()) {
+            RecentView oldView = optional.get();
+            recentViewRepository.delete(oldView);
+        }
+
+        RecentView rv = new RecentView();
+        rv.setMember(member);
+        rv.setProduct(product);
+        rv.setViewedAt(LocalDateTime.now());
+        recentViewRepository.save(rv);
+    }
+
+    public List<ProductDto> getRecentProducts(Member member) {
+        List<RecentView> recentViews = recentViewRepository.findTop10ByMemberOrderByViewedAtDesc(member);
+        List<ProductDto> result = new ArrayList<>();
+
+        for (RecentView rv : recentViews) {
+            result.add(ProductDto.fromEntity(rv.getProduct()));
+        }
+
+        return result;
     }
 }

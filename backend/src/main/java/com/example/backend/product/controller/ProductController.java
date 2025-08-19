@@ -1,6 +1,7 @@
 package com.example.backend.product.controller;
 
 import com.example.backend.member.dto.MemberDto;
+import com.example.backend.member.entity.Member;
 import com.example.backend.member.repository.MemberRepository;
 import com.example.backend.product.dto.*;
 import com.example.backend.product.entity.*;
@@ -20,6 +21,7 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.web.bind.annotation.*;
@@ -44,6 +46,7 @@ public class ProductController {
     private final ProductRepository productRepository;
     private final ProductThumbnailRepository productThumbnailRepository;
     private final ProductOptionRepository productOptionRepository;
+    private final MemberRepository memberRepository;
     private static final DateTimeFormatter DATE_FORMAT = DateTimeFormatter.ofPattern("yyyyMMdd");
 
     public class OrderTokenGenerator {
@@ -235,7 +238,7 @@ public class ProductController {
     }
 
 
-    // 우측배너
+    // 우측배너 주간판매량 10개이상 제품 중에서 랜덤으로 4개
     @GetMapping("/hot-random")
     public ResponseEntity<List<ProductMainSlideDto>> getRandomHotProducts() {
         LocalDateTime oneWeekAgo = LocalDateTime.now().minusDays(7);
@@ -244,7 +247,7 @@ public class ProductController {
         return ResponseEntity.ok(result);
     }
 
-    //좌측배너 썸네일이미지 주간판매량 10개이상 아이템 랜덤 1개
+    // 좌측배너 썸네일이미지 주간판매량 10개이상아이템 중 랜덤 1개
     @GetMapping("/main-thumbnail-random")
     public ResponseEntity<ThumbnailDto> getRandomMainThumbnail() {
         List<ProductThumbnail> mainThumbnails = productThumbnailRepository.findByIsMainTrue();
@@ -275,6 +278,46 @@ public class ProductController {
                                                                @RequestParam(required = false, defaultValue = "3") Integer limit) {
         List<ProductBestDto> topProducts = productService.getTopSellingProducts(category, limit);
         return ResponseEntity.ok(topProducts);
+    }
+
+    // 단일 상품 조회
+    @GetMapping("/{id}")
+    public ResponseEntity<ProductDto> getProductById(@PathVariable Integer id) {
+        ProductDto product = productService.getProductById(id);
+        if (product == null) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(product);
+    }
+
+    // 최근 본 상품 추가
+    @PostMapping("/{productId}")
+    public ResponseEntity<Void> addRecentView(Authentication authentication,
+                                              @PathVariable Integer productId) {
+        // JWT subject에서 memberId 꺼내기
+        String memberIdStr = authentication.getName();
+        Integer memberId = Integer.parseInt(memberIdStr);
+
+        Member member = memberRepository.findById(memberId)
+                .orElseThrow(() -> new RuntimeException("회원 없음"));
+        Product product = productRepository.findById(productId)
+                .orElseThrow(() -> new RuntimeException("상품 없음"));
+
+        productService.addRecentView(member, product);
+        return ResponseEntity.ok().build();
+    }
+
+    // 최근 본 상품 조회
+    @GetMapping
+    public ResponseEntity<List<ProductDto>> getRecentProducts(Authentication authentication) {
+        String memberIdStr = authentication.getName();
+        Integer memberId = Integer.parseInt(memberIdStr);
+
+        Member member = memberRepository.findById(memberId)
+                .orElseThrow(() -> new RuntimeException("회원 없음"));
+
+        List<ProductDto> recentProducts = productService.getRecentProducts(member);
+        return ResponseEntity.ok(recentProducts);
     }
 
 }

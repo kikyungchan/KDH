@@ -462,3 +462,17 @@
     overflow: hidden;
     text-overflow: ellipsis;
 }
+
+/* 마우스 클릭 시 생기는 잔여 효과 최소화 */
+.btn:focus,
+.btn:focus-visible,
+a:focus,
+a:focus-visible {
+    outline: none;
+    box-shadow: none;
+}
+
+.no-animation {
+    transition: none;
+    animation: none;
+}
