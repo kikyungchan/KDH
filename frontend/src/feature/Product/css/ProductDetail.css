@@ -250,13 +250,6 @@
     border-radius: 8px;
 }
 
-.loading-spinner-detail {
-    display: block;
-    margin: 4rem auto;
-    width: 3rem;
-    height: 3rem;
-}
-
 .universal-actions {
     display: flex;
     align-items: center;
@@ -361,18 +354,12 @@
     margin-top: 2rem;
 }
 
-.related-product-grid {
-    display: grid;
-    gap: 20px;
-}
-
 .related-product-card {
     display: flex;
     flex-direction: column;
     text-decoration: none;
     color: inherit;
-    /*border: 1px solid #eee;*/
-    /*border-radius: 8px;*/
+
     overflow: hidden;
     background: #fff;
     transition: transform 0.3s ease;
@@ -403,6 +390,23 @@
     font-weight: bold;
 }
 
+.notice-section-wrapper {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    font-size: 15px;
+}
+
+.notice-section-inner {
+    margin-top: 35px;
+    width: 75%;
+}
+
+.notice-title {
+    font-size: 1.8rem;
+    font-weight: bold;
+    margin-top: 1rem;
+}
 
 /*1023이하*/
 @media (max-width: 1023px) {
@@ -449,6 +453,29 @@
 
     .detail-collapsible.is-closed::after {
         height: 120px;
+    }
+}
+
+
+/* ← 767px 이하일 때 줄이기 */
+@media (max-width: 767px) {
+    .notice-section-wrapper {
+        font-size: 13px;
+    }
+
+    .notice-title {
+        font-size: 1.4rem;
+    }
+}
+
+/* 479px 이하 */
+@media (max-width: 479px) {
+    .notice-section-wrapper {
+        font-size: 12px;
+    }
+
+    .notice-title {
+        font-size: 1.2rem;
     }
 }
 
@@ -540,7 +567,7 @@
     justify-content: center;
     background: #fff;
     position: sticky;
-    top: 80px; /* navbar 높이에 맞게 조정 */
+    top: 80px;
     z-index: 50;
     padding: 10px 0;
 }

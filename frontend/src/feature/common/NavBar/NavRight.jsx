@@ -52,7 +52,10 @@ function NavRight({ iconRef, onSearchToggle, alertidcator }) {
           {cartCount > 0 && <span className="cart-badge">{cartCount}</span>}
         </Link>
 
-        <Link to="/faq/list" className={`${iconBase} ${iconHover}`}>
+        <Link
+          to="/faq/list"
+          className={`${iconBase} ${iconHover} support-agent`}
+        >
           <MdSupportAgent
             className={`navbar-icon ${isRootPath ? "icon-white" : ""}`}
           />

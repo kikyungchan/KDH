@@ -12,28 +12,11 @@
 
 .overlay {
     position: absolute;
-    bottom: 200px;
     left: 140px;
+    bottom: 200px;
     color: white;
     font-size: 3rem;
     text-shadow: 2px 2px 15px rgba(0, 0, 0, 0.8);
-}
-
-.slide-img {
-    max-width: 100%;
-    max-height: 100%;
-    object-fit: contain;
-}
-
-.slide-container {
-    position: relative;
-    width: 100vw;
-    height: 100vh;
-    background-color: black;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    overflow: hidden;
 }
 
 .slide {
@@ -43,32 +26,26 @@
     background-color: black;
 }
 
-.swiper-pagination {
-    position: absolute;
-    right: 15px;
-    top: 50%;
-    transform: translateY(-50%);
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-    z-index: 10;
-}
-
-.swiper-pagination-bullet {
-    width: 6px;
-    height: 6px;
-    margin: 0 !important;
+.mainSwiper .swiper-pagination-bullet {
+    width: 8px;
+    height: 10px;
+    border-radius: 50%;
     background: rgba(255, 255, 255, 0.6);
-    border-radius: 9999px;
     opacity: 1;
-    transition: height 180ms ease,
-    background 180ms ease,
-    opacity 180ms ease;
+    transition: all 0.3s ease;
 }
 
-.swiper-pagination-bullet-active {
-    width: 6px;
-    height: 26px;
-    background: #fff;
+.mainSwiper .swiper-pagination-bullet-active {
+    width: 8px;
+    height: 36px;
     border-radius: 5px;
+    background: #fff;
+}
+
+@media (max-width: 767px) {
+    .overlay {
+        font-size: 1.8rem;
+        left: 90px;
+        bottom: 110px;
+    }
 }

@@ -1,21 +1,11 @@
 import { Col, Row } from "react-bootstrap";
 import noticeData from "./notice.json";
 
-function NoticeSection({ style }) {
+function NoticeSection() {
   return (
-    <div
-      style={{
-        display: "flex",
-        justifyContent: "center",
-        width: "100%",
-        fontSize: "15px",
-        ...style,
-      }}
-    >
-      <div style={{ marginTop: "35px", width: "75%" }}>
-        <h2 className="mt-3" style={{ fontSize: "1.8rem", fontWeight: "bold" }}>
-          NOTICE
-        </h2>
+    <div className="notice-section-wrapper">
+      <div className="notice-section-inner">
+        <h2 className="notice-title">NOTICE</h2>
         <Row>
           <Col>
             {noticeData.sections.map((section, idx) => (
