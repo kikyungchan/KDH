@@ -36,8 +36,6 @@ public class WidgetController {
     public ResponseEntity<TossPaymentResDto> confirm(@RequestBody PaymentConfirmDto request,
                                                      Authentication authentication) throws Exception {
 
-        System.out.println("도착---------------------------");
-
         String paymentKey = request.getPaymentKey();
         String orderId = request.getOrderId();
         Long amount = request.getAmount();
@@ -51,7 +49,6 @@ public class WidgetController {
 
         // 시크릭 키 나중에 등록
         String widgetSecretKey = API_KEY_FILE;
-        System.out.println("API_KEY_FILE : " + API_KEY_FILE);
         // Base64 인코딩
         Base64.Encoder encoder = Base64.getEncoder();
         byte[] encodedBytes = encoder.encode((widgetSecretKey + ":").getBytes(StandardCharsets.UTF_8));

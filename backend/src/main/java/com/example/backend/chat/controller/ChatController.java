@@ -75,16 +75,20 @@ public class ChatController {
     @MessageMapping("/chat/{roomId}")
     @SendTo("/topic/chat/{roomId}")
     public ChatForm sendTopicMessage(@DestinationVariable String roomId, ChatForm msg, Principal principal) {
-        msg.setType(ChatForm.MessageType.CHAT);
-        chatservice.add(roomId, msg);
-        System.out.println("msg: " + msg);
+        if (chatservice.chatRoomCheck(roomId)) {
+
+            msg.setType(ChatForm.MessageType.CHAT);
+            chatservice.add(roomId, msg);
+            System.out.println("msg: " + msg);
         /*template.convertAndSendToUser(
                 msg.getTo(),                // 받는 사용자 ID
                 "/topic/chat/" + roomId,          // 구독 경로
                 msg                         // 메시지 payload
         );*/
 //        template.convertAndSend("/topic/chat/" + roomId, msg);
-        return msg;
+            return msg;
+        }
+        return null;
     }
 
 

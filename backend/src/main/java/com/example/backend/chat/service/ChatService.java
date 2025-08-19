@@ -90,6 +90,15 @@ public class ChatService {
 
     }
 
+    public Boolean chatRoomCheck(String roomId) {
+        ChatRoom chatRoom = chatRoomRepository.findByRoomId(roomId);
+        if (chatRoom.getType().equals("OPEN")) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
     private void validateChatRoomStatus(ChatRoom room, Authentication authentication) {
         String roomType = room.getType();
         Member user = memberRepository.findById(Integer.valueOf(authentication.getName())).get();

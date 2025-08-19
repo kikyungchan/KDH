@@ -341,7 +341,7 @@ function Order() {
         })
         .then(() => {
           sendOrderAlert(
-            `${items[0].productName} ${items.length <= 1 ? "의" : `외 ${items.length}개의`} 주문이 완료되었습니다`,
+            `${items[0].productName} ${items.length <= 1 ? "의" : `외 ${items.length - 1}개의`} 주문이 완료되었습니다`,
             `/order/detail/${orderToken}`,
           );
           alert("주문이 완료되었습니다.");

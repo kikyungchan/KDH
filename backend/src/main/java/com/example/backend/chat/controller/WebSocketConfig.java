@@ -44,7 +44,6 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
                 if (authHeader != null && !authHeader.trim().isEmpty()) {
                     String token = authHeader.replace("Bearer ", "");
                     attributes.put("jwt", token);
-                    System.out.println("인터셉터: 쿼리 파라미터에서 토큰을 추출하여 attributes에 저장했습니다.");
                 } else {
                     System.out.println("인터셉터: 쿼리 파라미터에 'Authorization' 헤더가 없습니다.");
                 }
@@ -69,12 +68,6 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
                 // SUBSCRIBE 요청이 들어왔을 때만 Principal을 확인합니다.
                 if (StompCommand.SUBSCRIBE.equals(accessor.getCommand())) {
                     Principal userPrincipal = accessor.getUser();
-
-                    if (userPrincipal != null) {
-                        System.out.println("▶ SUBSCRIBE 요청자: " + userPrincipal.getName());
-                    } else {
-                        System.out.println("▶ SUBSCRIBE 요청자: Principal을 찾을 수 없습니다.");
-                    }
                 }
 
                 return message;
@@ -94,7 +87,6 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
                     protected Principal determineUser(ServerHttpRequest request,
                                                       WebSocketHandler wsHandler,
                                                       Map<String, Object> attributes) {
-                        System.out.println("attributes: " + attributes);
 
                         String jwt = (String) attributes.get("jwt");
 

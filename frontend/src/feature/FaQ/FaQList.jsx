@@ -41,7 +41,7 @@ export function FaQList() {
   const uuid = uuidv4();
   const radios = [
     {
-      name: "1:1 문의하기",
+      name: "1:1 채팅 문의",
       value: "1",
       path: `/chat/chatting?rid=${uuid}`,
       fnc: () => {
@@ -68,22 +68,13 @@ export function FaQList() {
       .then((res) => {
         setFaQList(res.data.faqList);
         setPageInfo(res.data.pageInfo);
-        // console.log("data : ", res.data);
         setsearchCategory(searchParams.get("c") || 0);
-        // searchParams.set("c", searchCategory);
-        // const newSearchParams = new URLSearchParams();
-        // newSearchParams.set("c", searchCategory);
-        // newSearchParams.set("P", PAGE);
-        // newSearchParams.set("q", );
-        // setSearchParams(newSearchParams);
         const hash = window.location.hash.replace("#", "");
         if (hash) {
           setTimeout(() => {
             const el = document.getElementById(hash);
             if (el && el.type === "checkbox") {
               el.checked = true;
-              console.log("checked : ", hash);
-              // 부드럽게 스크롤 이동도 추가하고 싶으면 아래처럼!
               el.scrollIntoView({ behavior: "smooth", block: "center" });
             }
           }, 0);
@@ -123,7 +114,6 @@ export function FaQList() {
         category: category,
       })
       .then((res) => {
-        console.log("success");
         const message = res.data.message;
         if (message) {
           toast(message.text, { type: message.type });
@@ -138,11 +128,9 @@ export function FaQList() {
         }
       })
       .finally(() => {
-        console.log("always");
+        // console.log("always");
       });
   }
-
-  // todo : add 유효성 검사 필요함
 
   return (
     <>
@@ -274,7 +262,6 @@ export function FaQList() {
                       // onClick={() => setsearchCategory(cat.value)}
                       onClick={() => handleCategoryButtonClick(cat.value)}
                     >
-                      {/*  todo : 카테고리별 검색 기능 구현 */}
                       {cat.name}
                     </button>
                   </label>
@@ -316,7 +303,7 @@ export function FaQList() {
             )}
             <br />
             <div>
-              {/*todo : 관리자인지 여부 확인*/}
+              {/*관리자인지 여부 확인*/}
               {isAdmin && (
                 // <Button className="btn-primary" onClick={setModalShow}>
                 //   등록하기
@@ -334,7 +321,6 @@ export function FaQList() {
             </div>
           </div>
         </Col>
-        {/*  todo : admin 확인되면 modal 띄워서 자주 묻는 질문 CUD 할 수 있게 기능 추가*/}
         {modalShow && (
           <div id="my_modal_1" className="modal modal-open">
             <div className="modal-box">

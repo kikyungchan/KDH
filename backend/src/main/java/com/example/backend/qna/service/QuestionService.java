@@ -164,12 +164,10 @@ public class QuestionService {
         Question db = questionRepository.findById(id).get();
         System.out.println("db : " + db);
 
-        // todo : answer 데이터도 지워야 함, 나중에 테스트 후 기능 제대로 완설할 것
         Answer ans = answerRepository.findByQuestionId(db.getId());
-        System.out.println("ans = " + ans);
         // delete
-//        questionRepository.deleteById(id);
-//        answerRepository.deleteByQuestion(db);
+        questionRepository.deleteById(id);
+        answerRepository.deleteByQuestion(db);
 
     }
 
@@ -183,10 +181,6 @@ public class QuestionService {
         Question question = questionRepository.findById(dto.getQuestionId()).get();
         ans.setQuestion(question);
         question.setStatus("answered");
-
-        // todo : sout 지우고 관리자 권환 확인해서 실행하기
-        System.out.println("question = " + question);
-        System.out.println("ans = " + ans);
 
         questionRepository.save(question);
         answerRepository.save(ans);

@@ -43,10 +43,9 @@ public class AlertService {
             userId = jwt.getClaimAsString("loginId");
         }
 
-        System.out.println("userId = " + userId);
 
         Page<AlertListDto> alertListDtoPage
-                = alertRepository.findAllBy(keyword, userId, PageRequest.of(pageNumber - 1, 10));
+                = alertRepository.findAllBy(keyword, userId, PageRequest.of(pageNumber - 1, 20));
 
 
         int totalPages = alertListDtoPage.getTotalPages(); // 마지막 페이지
@@ -67,7 +66,6 @@ public class AlertService {
 
 
     public void hasPermission(Authentication authentication) {
-        System.out.println("로그인 여부 확인");
         // 로그인 여부 확인해주는 메서드
         if (authentication == null) {
             throw new RuntimeException("권한이 없습니다.");
