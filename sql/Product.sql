@@ -119,6 +119,12 @@ ALTER TABLE orders
     DROP
         COLUMN option_name;
 
+ALTER TABLE orders
+    DROP COLUMN member_name,
+    DROP COLUMN shipping_address,
+    DROP COLUMN zipcode,
+    DROP COLUMN address_detail;
+
 # 새 컬럼 추가
 ALTER TABLE prj4.orders
     ADD COLUMN orderer_name            VARCHAR(50)  NULL,

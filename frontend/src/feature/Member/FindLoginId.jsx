@@ -114,7 +114,6 @@ export function FindLoginId() {
         }
       })
       .catch((err) => {
-        console.error("인증번호 검증 실패", err.response?.data || err.message);
         toast("서버 오류로 인증번호 확인에 실패했습니다.", { type: "error" });
         setAuthFailed(true);
       });

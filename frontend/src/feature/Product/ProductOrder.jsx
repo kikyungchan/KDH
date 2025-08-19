@@ -264,7 +264,6 @@ function Order() {
     const token = localStorage.getItem("token");
     // const orderMemo = memo === "직접 작성" ? customMemo : memo;
     // const totalPrice = state.price * state.quantity;
-    console.log(items);
     const payloadList = items.map((item) => ({
       productId: item.productId ?? item.product?.id,
       optionId: item.optionId ?? item.option?.id,
@@ -356,7 +355,6 @@ function Order() {
           });
         })
         .catch((err) => {
-          console.log(err);
           alert("주문 실패");
         });
     } else {
@@ -464,7 +462,6 @@ function Order() {
       oncomplete: function (data) {
         setOrdererAddress(data.address); // 도로명 주소
         setOrdererZipcode(data.zonecode); // 우편번호 필요하면 이것도
-        console.log("작동");
       },
     }).open();
   }
@@ -474,7 +471,6 @@ function Order() {
       oncomplete: function (data) {
         setReceiverAddress(data.address); // 도로명 주소
         setReceiverZipcode(data.zonecode); // 우편번호 필요하면 이것도
-        console.log("작동");
       },
     }).open();
   }

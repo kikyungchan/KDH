@@ -1,6 +1,7 @@
 import { Fragment, useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 import axios from "axios";
+import { toast } from "sonner";
 
 export function OrderList() {
   const [orderList, setOrderList] = useState([]);
@@ -18,7 +19,7 @@ export function OrderList() {
         setTotalPages(res.data.totalPages);
       })
       .catch((err) => {
-        console.error("❌ 주문 목록 불러오기 실패:", err);
+        toast("❌ 주문 목록 불러오기 실패", { type: "error" });
       })
       .finally(() => {
         setIsProcessing(false);

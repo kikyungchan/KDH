@@ -46,7 +46,6 @@ export function MemberLogin() {
           });
 
         const message = res.data.message;
-        console.log(message.text);
         navigate("/");
       })
       .catch((err) => {
