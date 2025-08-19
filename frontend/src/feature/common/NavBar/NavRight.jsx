@@ -34,7 +34,10 @@ function NavRight({ iconRef, onSearchToggle, alertidcator }) {
 
         <NavUserMenu user={user} logout={logout} isAdmin={isAdmin} />
 
-        <Link to="/product/cart" className={`${iconBase} ${iconHover}`}>
+        <Link
+          to="/product/cart"
+          className={`${iconBase} ${iconHover} relative`}
+        >
           <FiShoppingCart className="navbar-icon" />
           {cartCount > 0 && <span className="cart-badge">{cartCount}</span>}
         </Link>
