@@ -25,3 +25,9 @@ FROM chat_log c
               ON c.user_id = m.login_id
 where room_id = "b300c649-d1b6-46a7-8021-afc838f807ef"
 ORDER BY c.id DESC;
+
+
+alter table chat_log
+    add constraint fk_chat_roomid
+        foreign key (room_id) references chat_room (room_id);
+

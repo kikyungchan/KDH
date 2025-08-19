@@ -1,5 +1,4 @@
-import React, { useRef } from "react";
-import "./CategoryMenu.css";
+import React, { useEffect, useRef } from "react";
 import { useNavigate } from "react-router";
 
 const categories = [
@@ -14,6 +13,9 @@ const categories = [
 ];
 
 function CategoryMenu() {
+  useEffect(() => {
+    import("./CategoryMenu.css");
+  }, []);
   const navigate = useNavigate();
   const scrollRef = useRef(null);
 

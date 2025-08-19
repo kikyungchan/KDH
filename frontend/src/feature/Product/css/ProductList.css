@@ -92,6 +92,24 @@
     gap: 0.5rem;
 }
 
+.productList {
+    display: flex; /* li 요소를 가로로 나열 */
+    flex-wrap: wrap;
+    list-style: none; /* 리스트 점 제거 */
+    padding: 0;
+    margin: 0;
+    justify-content: space-evenly;
+}
+
+.productList li {
+    /*flex: 1;*/
+    width: 220px;
+    margin: 0px 10px 10px 10px; /* 각 li 요소 사이에 간격 추가 */
+    padding: 8px 12px;
+    /*border: 1px solid #ccc;*/
+}
+
+
 .new-badge, .hot-badge, .sold-out-badge, .low-stock-badge {
     font-size: 0.75rem;
     padding: 0.25rem 0.5rem;
@@ -135,6 +153,7 @@
     margin-right: 0.5rem;
 }
 
+/*todo : spinner css, 필요없으면 삭제*/
 @keyframes spin {
     0% {
         transform: rotate(0deg);
@@ -203,12 +222,12 @@
     }
 
     .product-name {
-        font-size: 0.5rem !important;
+        /*font-size: 0.5rem;*/
         margin-bottom: 0.1rem;
     }
 
     .product-price {
-        font-size: 0.4rem !important;
+        /*font-size: 0.4rem;*/
         margin-bottom: 0.2rem;
     }
 
@@ -217,7 +236,7 @@
     }
 
     .new-badge, .hot-badge, .sold-out-badge, .low-stock-badge {
-        font-size: 0.25rem !important;
+        /*font-size: 0.25rem;*/
         padding: 0.05em 0.15rem;
     }
 }

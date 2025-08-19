@@ -1,9 +1,11 @@
 import { useNavigate, useSearchParams } from "react-router";
 import { useEffect, useState } from "react";
 import axios from "axios";
-import "./css/ProductEdit.css";
 
 export function ProductEdit() {
+  useEffect(() => {
+    import("./css/ProductEdit.css");
+  }, []);
   // 썸네일이미지
   const [thumbnailPaths, setThumbnailPaths] = useState([]);
   const [deletedThumbnails, setDeletedThumbnails] = useState([]);

@@ -5,6 +5,7 @@ import com.example.backend.chat.dto.ChatForm;
 import com.example.backend.chat.service.ChatService;
 import com.example.backend.qna.dto.QuestionAddForm;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
@@ -16,6 +17,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
+import java.util.HashMap;
 import java.util.Map;
 
 @RestController
@@ -112,5 +114,6 @@ public class ChatController {
         message.setMessage(message.getFrom() + "님이 대화를 종료하였습니다.");
         message.setType(ChatForm.MessageType.END);
         template.convertAndSend("/topic/chat/" + message.getRoomId(), message);
+        chatservice.chatRoomclose(message.getRoomId());
     }
 }

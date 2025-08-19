@@ -1,5 +1,4 @@
 import React, { useEffect, useRef, useState } from "react";
-import "./BestProductSection.css";
 import axios from "axios";
 import { useNavigate } from "react-router";
 
@@ -35,6 +34,9 @@ function BestProductSection() {
 
   const cacheRef = useRef({});
   const allRef = useRef([]);
+  useEffect(() => {
+    import("./BestProductSection.css");
+  }, []);
 
   useEffect(() => {
     let mounted = true;
@@ -113,7 +115,7 @@ function BestProductSection() {
           </button>
         ))}
       </div>
-      
+
       {loading ? (
         <div className="best-loading">로딩중...</div>
       ) : (

@@ -8,7 +8,6 @@ import {
   FiShoppingCart,
   FiUser,
 } from "react-icons/fi";
-import "./Navbar.css";
 import NavLeft from "./NavLeft.jsx";
 import NavRight from "./NavRight.jsx";
 import "bootstrap/dist/css/bootstrap-grid.min.css";
@@ -16,6 +15,9 @@ import SearchOverlay from "./SearchOverlay.jsx";
 import { useAlertWebSocket } from "../../alert/alertContext.jsx";
 
 function NavBar(props) {
+  useEffect(() => {
+    import("./Navbar.css");
+  }, []);
   const [showMobileCategory, setShowMobileCategory] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   // const { cartCount } = useCart();

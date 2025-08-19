@@ -129,6 +129,33 @@ export const AlertWebSocketProvider = ({ children }) => {
     };
     sendMessage("/app/chat/alert", chatMsg);
   };
+  // todo : admin 수정할 것
+  // todo : 주문하기 전용 함수 만들어야하나?
+  const sendOrderAlert = async (content, link) => {
+    await axios
+      .post("/api/alert/addOrder", {
+        user: user.name,
+        title: "주문이 완료되었습니다.",
+        content: content,
+        link: link,
+      })
+      .then((res) => {
+        const chatMsg = {
+          from: res.data.adminId,
+          to: user.name,
+          title: "주문이 완료되었습니다.",
+          content,
+        };
+        const chatMsg2 = {
+          from: user.name,
+          to: res.data.adminId,
+          title: "새로운 주문이 들어왔습니다.",
+          content,
+        };
+        sendMessage("/app/chat/alert", chatMsg);
+        sendMessage("/app/chat/alert", chatMsg2);
+      });
+  };
 
   const sendChatAlert = async (link) => {
     await axios.post("/api/alert/add", {
@@ -152,6 +179,7 @@ export const AlertWebSocketProvider = ({ children }) => {
     setAlertCount,
     sendMessage,
     sendAlert,
+    sendOrderAlert,
     sendChatAlert,
     sendTestAlert,
     isConnected: clientRef.current?.connected || false,

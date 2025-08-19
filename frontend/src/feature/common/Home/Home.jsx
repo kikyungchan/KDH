@@ -1,5 +1,4 @@
 import React, { useEffect, useRef, useState } from "react";
-import "./Home.css";
 import axios from "axios";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay } from "swiper/modules";
@@ -10,6 +9,9 @@ import BestProductSection from "./BestProductSection.jsx";
 import LeftVisual from "./LeftVisual.jsx";
 
 function Home() {
+  useEffect(() => {
+    import("./Home.css");
+  }, []);
   const navigate = useNavigate();
   const [currentIndex, setCurrentIndex] = useState(1);
   const [shuffledItems, setShuffledItems] = useState([]);

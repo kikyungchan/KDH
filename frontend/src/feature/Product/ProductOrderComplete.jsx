@@ -1,8 +1,10 @@
 import { useLocation, useNavigate } from "react-router";
-import "./css/ProductOrder.css";
-import React from "react";
+import React, { useEffect } from "react";
 
 export function ProductOrderComplete() {
+  useEffect(() => {
+    import("./css/ProductOrder.css");
+  }, []);
   const { state } = useLocation();
   const navigate = useNavigate();
   const { orderToken, items, orderer, receiver, memo } = state;
@@ -125,7 +127,7 @@ export function ProductOrderComplete() {
             <div className="order-buttons">
               <button
                 type="button"
-                onClick={() => navigate("/")}
+                onClick={() => navigate("/Home")}
                 className="order-button btn w-40 confirm"
               >
                 홈으로

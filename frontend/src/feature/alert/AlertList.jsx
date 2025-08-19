@@ -3,17 +3,20 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { Link, useSearchParams } from "react-router";
 import { toast, Toaster } from "sonner";
+import { useAlertWebSocket } from "./alertContext.jsx";
 
 export function AlertList() {
   const [alertList, setAlertList] = useState(null);
   const [searchParams, setSearchParams] = useSearchParams("1");
+  const { setAlertCount } = useAlertWebSocket();
 
   useEffect(() => {
     axios
       .get(`/api/alert/list?${searchParams}`)
       .then((res) => {
         setAlertList(res.data.alertList);
-        // console.log(res.data);
+        console.log(res.data);
+        setAlertCount(0);
       })
       .catch((err) => {
         if (err.response && err.response.status === 401) {
@@ -25,20 +28,28 @@ export function AlertList() {
       });
   }, [searchParams]);
 
-  /*
-  useEffect(() => {
-    axios.get(`/api/qna/add?id=${params.id}`).then((res) => {
-      console.log(res.data);
-      setProductId(res.data.id);
-      console.log(res.data.id);
-      setImage(res.data.image?.[0]);
-      setProductPrice(res.data.price);
-      setProductName(res.data.productName);
+  const formatDate = (isoDateString) => {
+    const date = new Date(isoDateString);
+    const now = new Date();
+
+    // 시간 차이 계산
+    const diffMs = now - date;
+    const diffMinutes = Math.floor(diffMs / (1000 * 60));
+    const diffHours = Math.floor(diffMs / (1000 * 60 * 60));
+    const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+
+    // 상대적 시간
+    if (diffMinutes < 1) return "방금 전";
+    if (diffMinutes < 60) return `${diffMinutes}분 전`;
+    if (diffHours < 24) return `${diffHours}시간 전`;
+    if (diffDays < 7) return `${diffDays}일 전`;
+
+    // 일주일 이상이면 실제 날짜 표시
+    return date.toLocaleDateString("ko-KR", {
+      month: "short",
+      day: "numeric",
     });
-    console.log("user : ", user);
-    console.log("productName : ", productName);
-  }, []);
-  */
+  };
 
   if (!alertList) {
     return <span className="loading loading-spinner"></span>;
@@ -48,58 +59,54 @@ export function AlertList() {
     <div>
       <Row>
         <Col>
-          <div className={"container"}>
-            <h2>알림</h2>
-            {/*<button
-              className="btn btn-primary"
-              onClick={() => toast("버튼이 클릭되었습니다!")}
-            >
-              기본 토스트
-            </button>
-            <button
-              className="btn btn-primary"
-              onClick={() =>
-                toast(alertList[1].content, {
-                  action: {
-                    label: "확인 완료", // 액션 버튼에 표시될 텍스트
-                    onClick: () => console.log("액션 버튼 클릭됨"),
-                  },
-                })
+          <div
+            className={
+              "container page-wrapper p-4 sm:p-6 md:p-8 max-[480px]:p-0"
+            }
+          >
+            <div
+              className={
+                "w-full max-w-[600px] mx-auto sm:px-4 max-[500px]:px-4 p-0"
               }
             >
-              액션 토스트
-            </button>*/}
-            {/*<Toaster />*/}
+              <div className={"rounded-card"}>
+                <h2>알림</h2>
 
-            {alertList.length > 0 ? (
-              <div>
-                <ul className="list bg-base-100 rounded-box shadow-md">
-                  {alertList.map((alert) => (
-                    <li className="list-row">
-                      {/*<div
-                        tabIndex={0}
-                        className="collapse bg-base-100 border-base-300 border"
-                      >
-                        <div className="collapse-title font-semibold">
-                          {alert.title}
-                        </div>
-                        <div className="collapse-content text-sm">
-                          <Link to={alert.link}>{alert.content}</Link>
-                        </div>
-                      </div>*/}
-                      <Link className="list-col-grow" to={alert.link}>
-                        <div className="m-1">{alert.title}</div>
-                        <div className="text-xs uppercase font-semibold opacity-60 m-1">
-                          {alert.content}
-                        </div>
-                      </Link>
-                    </li>
-                  ))}
-                </ul>
+                {alertList.length > 0 ? (
+                  <div>
+                    <ul className="list bg-base-100 rounded-box shadow-md">
+                      {alertList.map((alert) => (
+                        <li className="list-row block w-full">
+                          <Link
+                            className="block relative w-full"
+                            to={alert.link}
+                          >
+                            <div className="flex justify-between items-start m-1 w-full overflow-hidden">
+                              <div className="flex-1 min-w-0 pr-4">
+                                <div className="truncate">{alert.title}</div>
+                                <div className="text-xs uppercase font-semibold opacity-60 truncate">
+                                  {alert.content}
+                                </div>
+                              </div>
+                              <div className="flex flex-col items-end text-right flex-shrink-0">
+                                <div className="text-xs truncate md:max-w-none">
+                                  {alert.requester}
+                                </div>
+                                <span className="text-[10px] sm:text-xs text-gray-500 mt-1">
+                                  {formatDate(alert.createdAt)}
+                                </span>
+                              </div>
+                            </div>
+                          </Link>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                ) : (
+                  <p>새로운 소식이 없습니다.</p>
+                )}
               </div>
-            ) : (
-              <p>새로운 소식이 없습니다.</p>
-            )}
+            </div>
           </div>
         </Col>
       </Row>

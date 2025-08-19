@@ -100,8 +100,8 @@
 
 
     .best-category-tabs::after {
-        content: none !important;
-        display: none !important;
+        content: none;
+        display: none;
     }
 
     .best-cat-more {

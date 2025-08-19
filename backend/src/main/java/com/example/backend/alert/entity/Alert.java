@@ -46,4 +46,8 @@ public class Alert {
     @Column(name = "link")
     private String link;
 
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "requester_id", nullable = false, referencedColumnName = "login_id")
+    private Member requester;
+
 }

@@ -1,10 +1,13 @@
 import { Link } from "react-router";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation } from "swiper/modules";
-import "swiper/css";
-import "swiper/css/navigation";
+import { useEffect } from "react";
 
 export default function RecommendedProduct({ products }) {
+  useEffect(() => {
+    import("swiper/css");
+    import("swiper/css/navigation");
+  }, []);
   if (!products?.length) return null;
 
   return (

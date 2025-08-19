@@ -13,10 +13,8 @@ import {
   handleGoToCartWithCurrenProduct,
 } from "./util/ProductDetailUtilButton.jsx";
 import ReviewStats from "./util/ReviewStats.jsx";
-import "../css/ProductDetail.css";
 import axios from "axios";
 import ScrollToTopButton from "./util/ScrollToTopButton.jsx";
-import "../css/ProductList.css";
 import ShareModal from "./util/ShareModal.jsx";
 import { RxShare1 } from "react-icons/rx";
 import LikeButton from "./util/LikeButton.jsx";
@@ -25,6 +23,10 @@ import ProductDetailToggle from "./util/ProductDetailToggle.jsx";
 import RecommendedProduct from "./util/RecommendedProduct.jsx";
 
 export function ProductDetail() {
+  useEffect(() => {
+    import("../css/ProductList.css");
+    import("../css/ProductDetail.css");
+  }, []);
   const [relatedProducts, setRelatedProducts] = useState([]);
   const [selectedThumbnail, setSelectedThumbnail] = useState(null);
   const [showShareModal, setShowShareModal] = useState(false);

@@ -259,7 +259,7 @@
     }
 
     .navbar-left {
-        display: none !important;
+        display: none;
         flex-wrap: nowrap;
     }
 
@@ -301,7 +301,7 @@
 /* (~639px) */
 @media (max-width: 639px) {
     .navbar-right .avatar {
-        display: none !important;
+        display: none;
     }
 
     .navbar-icons {
@@ -316,7 +316,7 @@
 
     .navbar-right .btn-circle,
     .navbar-right .navbar-icon {
-        font-size: 1.3rem !important;
+        font-size: 1.3rem;
         line-height: 1;
     }
 

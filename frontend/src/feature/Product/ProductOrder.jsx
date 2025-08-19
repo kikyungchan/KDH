@@ -1,10 +1,14 @@
 import { useLocation, useNavigate } from "react-router";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import axios from "axios";
-import "./css/ProductOrder.css";
 import { useCart } from "./CartContext.jsx";
+import { useAlertWebSocket } from "../alert/alertContext.jsx";
+import { AuthenticationContext } from "../common/AuthenticationContextProvider.jsx";
 
 function Order() {
+  useEffect(() => {
+    import("./css/ProductOrder.css");
+  }, []);
   const [receiverName, setReceiverName] = useState("");
   const [receiverPhone, setReceiverPhone] = useState("");
   const [receiverZipcode, setReceiverZipcode] = useState("");
@@ -34,6 +38,7 @@ function Order() {
   const navigate = useNavigate();
   const checkoutWindow = useRef(null);
   const formDataRef = useRef({});
+  const { sendOrderAlert } = useAlertWebSocket();
 
   useEffect(() => {
     const fee = totalItemPrice >= 100000 ? 0 : 3000;
@@ -93,12 +98,12 @@ function Order() {
           sendDataToPopup();
           break;
 
-          case "PAY_SUCCESS":
-            // 결제 완료 처리
-            handleOrderButton();
-            setIsProcessing(false);
-            window.onbeforeunload = null;
-            break;
+        case "PAY_SUCCESS":
+          // 결제 완료 처리
+          handleOrderButton();
+          setIsProcessing(false);
+          window.onbeforeunload = null;
+          break;
 
         case "PAY_FAIL":
           // 결제 실패 처리
@@ -183,7 +188,7 @@ function Order() {
   }
 
   function sendDataToPopup() {
-    console.log("items : " + items);
+    console.log("items : ", items);
     console.log("items length", items.length);
     if (checkoutWindow.current && !checkoutWindow.current.closed) {
       const fee = Number(shippingFee) || 0;
@@ -324,6 +329,10 @@ function Order() {
           setCartCount(res.data);
         })
         .then(() => {
+          sendOrderAlert(
+            `${items[0].productName} ${items.length <= 1 ? "의" : `외 ${items.length}개의`} 주문이 완료되었습니다`,
+            `/order/detail/${orderToken}`,
+          );
           alert("주문이 완료되었습니다.");
           navigate("/product/order/complete", {
             state: {

@@ -8,14 +8,13 @@ import java.io.Serializable;
 import java.time.LocalDateTime;
 
 /**
- * DTO for {@link com.example.backend.chat.entity.ChatLog}
+ * DTO for {@link ChatRoom}
  */
 @Value
-public class ChatLogDto implements Serializable {
+public class ChatRoomDto implements Serializable {
     Integer id;
     MemberDto user;
-    ChatRoom roomId;
-    String message;
+    String roomId;
     String type;
     LocalDateTime createdAt;
 }

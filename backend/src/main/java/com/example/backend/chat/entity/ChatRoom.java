@@ -7,14 +7,15 @@ import lombok.Setter;
 import lombok.ToString;
 import org.hibernate.annotations.ColumnDefault;
 
+import java.time.Instant;
 import java.time.LocalDateTime;
 
 @Getter
 @Setter
 @ToString
 @Entity
-@Table(name = "chat_log", schema = "prj4")
-public class ChatLog {
+@Table(name = "chat_room", schema = "prj4")
+public class ChatRoom {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
@@ -24,15 +25,12 @@ public class ChatLog {
     @JoinColumn(name = "user_id", nullable = false, referencedColumnName = "login_id")
     private Member user;
 
-    @ManyToOne(optional = false)
-    @JoinColumn(name = "room_id", nullable = false, referencedColumnName = "room_id")
-    private ChatRoom roomId;
+    @Column(name = "room_id", nullable = false, length = 36)
+    private String roomId;
 
-    @Column(name = "message")
-    private String message;
-
+    @ColumnDefault("'OPEN'")
     @Lob
-    @Column(name = "type")
+    @Column(name = "type", nullable = false)
     private String type;
 
     @ColumnDefault("current_timestamp()")

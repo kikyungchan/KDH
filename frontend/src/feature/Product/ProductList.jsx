@@ -1,10 +1,11 @@
 import { Link, useSearchParams } from "react-router";
 import { useEffect, useState } from "react";
 import axios from "axios";
-import "./css/ProductList.css";
-import "../../style.css";
 
 export function ProductList() {
+  useEffect(() => {
+    import("../../style.css");
+  }, []);
   const [searchParams, setSearchParams] = useSearchParams();
   const pageParam = parseInt(searchParams.get("page")) || 1;
   const [products, setProducts] = useState([]);
@@ -13,6 +14,10 @@ export function ProductList() {
   const keyword = searchParams.get("keyword") || "";
   const category = searchParams.get("category") || "";
   const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    import("./css/ProductList.css");
+  }, []);
 
   useEffect(() => {
     setLoading(true);
@@ -59,6 +64,13 @@ export function ProductList() {
     setSearchParams(newParams);
   };
 
+  const pageNumbers = [];
+  if (pageInfo) {
+    for (let i = pageInfo.leftPageNumber; i <= pageInfo.rightPageNumber; i++) {
+      pageNumbers.push(i);
+    }
+  }
+
   return (
     <div className="container" id="product-list-container">
       {/* PC와 모바일을 위한 별도의 헤더를 하나로 통합 */}
@@ -84,50 +96,54 @@ export function ProductList() {
       ) : products.length === 0 ? (
         <div className="empty-state">검색 결과가 없습니다.</div>
       ) : (
-        <div className="product-grid">
+        // <div className="product-grid">
+        <ul className="productList">
           {products.map((product) => (
-            <Link
-              to={`/product/view?id=${product.id}`}
-              className="product-card"
-              key={product.id}
-            >
-              {product.thumbnailPaths?.length > 0 && (
-                <div className="product-image-wrapper">
-                  <img
-                    src={product.thumbnailPaths[0].storedPath}
-                    alt={product.productName}
-                    className="product-image"
-                  />
+            <li>
+              <Link
+                to={`/product/view?id=${product.id}`}
+                className="product-card"
+                key={product.id}
+              >
+                {product.thumbnailPaths?.length > 0 && (
+                  <div className="product-image-wrapper">
+                    <img
+                      src={product.thumbnailPaths[0].storedPath}
+                      alt={product.productName}
+                      className="product-image"
+                    />
+                  </div>
+                )}
+                <div className="product-info-wrapper">
+                  <div className="product-name">{product.productName}</div>
+                  <div className="product-price">
+                    {product.price.toLocaleString()}원
+                  </div>
+                  <div className="product-badges">
+                    {isNewProduct(product.insertedAt) && (
+                      <span className="new-badge">NEW</span>
+                    )}
+                    {product.hot && <span className="hot-badge">HOT</span>}
+                    {product.quantity === 0 && (
+                      <span className="sold-out-badge">SOLD OUT</span>
+                    )}
+                    {product.quantity > 0 && product.quantity < 5 && (
+                      <span className="low-stock-badge">
+                        🔥 {product.quantity}개 남음
+                      </span>
+                    )}
+                  </div>
                 </div>
-              )}
-              <div className="product-info-wrapper">
-                <div className="product-name">{product.productName}</div>
-                <div className="product-price">
-                  {product.price.toLocaleString()}원
-                </div>
-                <div className="product-badges">
-                  {isNewProduct(product.insertedAt) && (
-                    <span className="new-badge">NEW</span>
-                  )}
-                  {product.hot && <span className="hot-badge">HOT</span>}
-                  {product.quantity === 0 && (
-                    <span className="sold-out-badge">SOLD OUT</span>
-                  )}
-                  {product.quantity > 0 && product.quantity < 5 && (
-                    <span className="low-stock-badge">
-                      🔥 {product.quantity}개 남음
-                    </span>
-                  )}
-                </div>
-              </div>
-            </Link>
+              </Link>
+            </li>
           ))}
-        </div>
+        </ul>
+        // </div>
       )}
 
       {/* 페이지네이션 컴포넌트 */}
       <div className="pagination">
-        <button
+        {/*<button
           onClick={() => handlePageClick(pageInfo.leftPageNumber - 1)}
           disabled={pageInfo.leftPageNumber < 6}
           className="pagination-button"
@@ -157,7 +173,72 @@ export function ProductList() {
           className="pagination-button"
         >
           다음
-        </button>
+        </button>*/}
+
+        <ul className="join flex justify-center">
+          {/* 첫 페이지로 이동 */}
+          <li>
+            <button
+              className="join-item btn btn-sm"
+              disabled={pageInfo.currentPageNumber === 1}
+              onClick={() => handlePageClick(1)}
+              aria-label="First Page"
+            >
+              &laquo;
+            </button>
+          </li>
+          {/* 10페이지 이전 이동 */}
+          <li>
+            <button
+              className="join-item btn btn-sm"
+              disabled={pageInfo.leftPageNumber <= 1}
+              onClick={() => handlePageClick(pageInfo.leftPageNumber - 10)}
+              aria-label="Previous 10 Pages"
+            >
+              &#8249;
+            </button>
+          </li>
+          {/* 페이지 번호들 */}
+          {pageNumbers.map((pageNumber) => (
+            <li key={pageNumber}>
+              <button
+                className={`join-item btn btn-sm ${
+                  pageInfo.currentPageNumber === pageNumber
+                    ? "btn-active btn-primary"
+                    : ""
+                }`}
+                onClick={() => handlePageClick(pageNumber)}
+                aria-current={
+                  pageInfo.currentPageNumber === pageNumber ? "page" : undefined
+                }
+              >
+                {pageNumber}
+              </button>
+            </li>
+          ))}
+          {/* 10페이지 이후 이동 */}
+          <li>
+            <button
+              className="join-item btn btn-sm"
+              disabled={pageInfo.rightPageNumber >= pageInfo.totalPages}
+              onClick={() => handlePageClick(pageInfo.rightPageNumber + 1)}
+              aria-label="Next 10 Pages"
+            >
+              &#8250;
+            </button>
+          </li>
+          {/* 마지막 페이지로 이동 */}
+          <li>
+            <button
+              className="join-item btn btn-sm"
+              disabled={pageInfo.currentPageNumber === pageInfo.totalPages}
+              onClick={() => handlePageClick(pageInfo.totalPages)}
+              aria-label="Last Page"
+            >
+              &raquo;
+            </button>
+          </li>
+        </ul>
       </div>
     </div>
   );
