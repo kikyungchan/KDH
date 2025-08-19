@@ -5,6 +5,7 @@ import { AuthenticationContext } from "../common/AuthenticationContextProvider.j
 import { useCart } from "../Product/CartContext.jsx";
 import { useAlert } from "../common/AlertContext.jsx";
 import { FaGoogle } from "react-icons/fa";
+import { toast } from "sonner";
 
 export function MemberLogin() {
   const [loginId, setLoginId] = useState("");
@@ -43,7 +44,7 @@ export function MemberLogin() {
         navigate("/");
       })
       .catch((err) => {
-        showAlert(err.response?.data?.message); // { type: 'error', text: '...' }
+        toast(err.response?.data?.message, { type: "error" }); // { type: 'error', text: '...' }
       })
       .finally(() => {});
   }

@@ -193,8 +193,6 @@ function Order() {
   }
 
   function sendDataToPopup() {
-    console.log("items : ", items);
-    console.log("items length", items.length);
     if (checkoutWindow.current && !checkoutWindow.current.closed) {
       const fee = Number(shippingFee) || 0;
       const amount = totalItemPrice + fee;
@@ -228,17 +226,6 @@ function Order() {
   }
 
   function validateForm() {
-    // 입력값 유효성 검사
-    // 주문자 정보
-    console.log("Name : ", ordererName);
-    console.log("Phone : ", ordererPhone);
-    console.log(isMember ? "ordererAddress" : "receiverAddress");
-    console.log("Address : ", isMember ? ordererAddress : receiverAddress);
-    console.log(
-      "Address : ",
-      isMember ? ordererAddress : formDataRef.current.receiverAddress,
-    );
-
     if (
       !ordererName.trim() ||
       !ordererPhone.trim() ||

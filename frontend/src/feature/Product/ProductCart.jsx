@@ -468,7 +468,7 @@ function ProductCart() {
                       }}
                     >
                       <div
-                        className="ml-3 mr-3"
+                        className="mx-4 sm:mx-0"
                         style={{
                           background: "white",
                           padding: 24,
