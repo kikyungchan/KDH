@@ -2,12 +2,14 @@ import { Link } from "react-router";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation } from "swiper/modules";
 import { useEffect } from "react";
+import "swiper/css";
+import "swiper/css/navigation";
 
 export default function RecommendedProduct({ products }) {
-  useEffect(() => {
-    import("swiper/css");
-    import("swiper/css/navigation");
-  }, []);
+  // useEffect(() => {
+  //   import("swiper/css");
+  //   import("swiper/css/navigation");
+  // }, []);
   if (!products?.length) return null;
 
   return (
@@ -20,8 +22,10 @@ export default function RecommendedProduct({ products }) {
         }}
         spaceBetween={20}
         breakpointsBase="window"
+        slidesPerView={1}
         breakpoints={{
-          0: { slidesPerView: 2 },
+          320: { slidesPerView: 1 },
+          480: { slidesPerView: 2 },
           768: { slidesPerView: 4 },
         }}
         watchOverflow

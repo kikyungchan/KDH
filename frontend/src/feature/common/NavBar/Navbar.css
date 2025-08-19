@@ -177,11 +177,6 @@
     position: relative;
 }
 
-.dropdown-title {
-    position: relative;
-    cursor: pointer;
-}
-
 .dropdown-content {
     display: none;
     position: absolute;
@@ -256,7 +251,7 @@
     }
 
     .hide-on-root {
-        display: none !important;
+        display: none;
     }
 
     .navbar-center {
