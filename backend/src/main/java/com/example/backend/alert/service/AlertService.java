@@ -46,7 +46,7 @@ public class AlertService {
         System.out.println("userId = " + userId);
 
         Page<AlertListDto> alertListDtoPage
-                = alertRepository.findAllBy(keyword, userId, PageRequest.of(pageNumber - 1, 10));
+                = alertRepository.findAllBy(keyword, userId, PageRequest.of(pageNumber - 1, 20));
 
 
         int totalPages = alertListDtoPage.getTotalPages(); // 마지막 페이지
