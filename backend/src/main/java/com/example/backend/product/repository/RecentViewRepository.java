@@ -16,4 +16,6 @@ public interface RecentViewRepository extends JpaRepository<RecentView, Integer>
     // 특정 상품 중복 방지용 ( 있으면 delete 후 insert )
     Optional<RecentView> findByMemberAndProduct(Member member, Product product);
 
+    // 최근본 상품중 삭제된 상품 있으면 최근 본 상품 목록에서도 삭제
+    void deleteByProduct(Product product);
 }

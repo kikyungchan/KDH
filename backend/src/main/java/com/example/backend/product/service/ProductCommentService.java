@@ -88,8 +88,6 @@ public class ProductCommentService {
         // 구매이력 확인
         boolean hasPurchased = orderItemRepository.existsByMemberIdAndProductId(memberId, productId);
         boolean alreadyReviewed = productCommentRepository.existsByMemberIdAndProductId(memberId, productId);
-        System.out.println("hasPurchased: " + hasPurchased);
-        System.out.println("alreadyReviewed: " + alreadyReviewed);
         return hasPurchased && !alreadyReviewed;
     }
 

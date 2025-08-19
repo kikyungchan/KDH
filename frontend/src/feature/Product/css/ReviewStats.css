@@ -5,6 +5,7 @@
     padding: 2rem 5rem;
     background-color: #f4f4f4;
     font-size: 14px;
+    flex-wrap: wrap;
 }
 
 .average {
@@ -12,20 +13,22 @@
     font-weight: bold;
     text-align: center;
     min-width: 120px;
+    flex-shrink: 0;
 }
 
 .score {
-    font-size: 48px;
+    font-size: clamp(28px, 6vw, 48px);
     color: orange;
 }
 
 .stars {
-    font-size: 20px;
+    font-size: clamp(14px, 2.5vw, 20px);
     margin-top: 5px;
 }
 
 .bars {
     flex: 1;
+    min-width: 180px;
 }
 
 .bar-line {
@@ -35,53 +38,58 @@
 }
 
 .label {
-    width: 50px;
+    width: 15%;
+    min-width: 40px;
     padding-left: 5px;
     text-align: left;
+    font-size: clamp(12px, 2vw, 14px);
 }
 
 .bar {
     background-color: #eee;
     height: 12px;
-    width: 200px;
+    flex: 1;
     margin: 0 10px;
     position: relative;
+    border-radius: 4px;
 }
 
 .fill {
     background-color: orange;
     height: 100%;
+    border-radius: 4px;
 }
 
-/* 639px 이하 반응형 스타일 */
+.count {
+    width: 40px;
+    font-size: clamp(12px, 2vw, 14px);
+    text-align: right;
+}
+
+/* (639px 이하) */
 @media (max-width: 639px) {
     .review-stats {
-        padding: 1rem 1.5rem;
-        gap: 20px;
+        flex-direction: column;
+        align-items: center;
+        padding: 1rem;
+        gap: 16px;
+        font-size: 12px;
     }
 
-    .score {
-        font-size: 36px;
-    }
-
-    .stars {
-        font-size: 16px;
+    .bars {
+        width: 100%;
     }
 
     .bar {
-        width: 140px;
+        height: 10px;
+        margin: 0 6px;
     }
 
-    .average {
-        min-width: auto;
+    .score {
+        font-size: clamp(24px, 8vw, 36px);
     }
 
-    .label {
-        width: 40px;
-        font-size: 13px;
-    }
-
-    .count {
-        font-size: 13px;
+    .stars {
+        font-size: clamp(12px, 4vw, 16px);
     }
 }

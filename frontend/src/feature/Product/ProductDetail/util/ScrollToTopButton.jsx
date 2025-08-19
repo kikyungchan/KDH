@@ -20,7 +20,7 @@ function ScrollToTopButton() {
   const scrollToTop = () => {
     window.scrollTo({
       top: 0,
-      behavior: "instant", // 즉시 이동
+      behavior: "smooth",
     });
   };
 

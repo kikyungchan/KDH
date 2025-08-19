@@ -417,7 +417,7 @@ export function ProductDetail() {
               const el = document.getElementById("detail-section");
               if (el) {
                 const y = el.getBoundingClientRect().top + window.scrollY - 150; // 150px 위로 보정
-                window.scrollTo({ top: y, behavior: "instant" });
+                window.scrollTo({ top: y, behavior: "smooth" });
               }
             }}
           >
@@ -429,7 +429,7 @@ export function ProductDetail() {
               const el = document.getElementById("review-section");
               if (el) {
                 const y = el.getBoundingClientRect().top + window.scrollY - 150; // 150px 위로 보정
-                window.scrollTo({ top: y, behavior: "instant" });
+                window.scrollTo({ top: y, behavior: "smooth" });
               }
             }}
           >

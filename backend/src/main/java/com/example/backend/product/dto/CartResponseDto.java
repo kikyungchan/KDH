@@ -48,10 +48,8 @@ public class CartResponseDto {
         List<ProductThumbnail> thumbnails = cart.getProduct().getThumbnails();
         if (thumbnails != null && !thumbnails.isEmpty()) {
             this.imagePath = thumbnails.get(0).getStoredPath();
-            System.out.println("[CartResponseDto] " + productName + " 썸네일: " + this.imagePath);
         } else {
             this.imagePath = "/default.jpg";
-            System.out.println("[CartResponseDto] " + productName + " 썸네일 없음 → 기본 이미지 세팅");
         }
 
         //  옵션 목록 설정

@@ -47,6 +47,10 @@
     position: relative;
 }
 
+.icon-white {
+    color: white;
+}
+
 .navbar-inner {
     display: flex;
     justify-content: space-between;
@@ -127,7 +131,7 @@
 
 .cart-badge {
     position: absolute;
-    top: 3px;
+    top: 4px;
     right: -3px;
     background-color: red;
     color: white;
@@ -275,7 +279,7 @@
 }
 
 /* (768px~1023px) */
-@media (max-width: 1023px) {
+@media (min-width: 768px) and (max-width: 1023px) {
     .navbar-left {
         display: flex;
         gap: 0.9rem;
@@ -300,7 +304,7 @@
 
 /* (~639px) */
 @media (max-width: 639px) {
-    .navbar-right .avatar {
+    .user-menu {
         display: none;
     }
 

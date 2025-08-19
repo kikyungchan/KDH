@@ -13,38 +13,6 @@ function SearchOverlay({
 }) {
   const [recentProducts, setRecentProducts] = useState([]);
 
-  // useEffect(() => {
-  //   if (open) {
-  //     try {
-  //       const data = JSON.parse(localStorage.getItem("recentProducts"));
-  //       if (Array.isArray(data)) {
-  //         // 존재하는 상품만 필터링
-  //         Promise.all(
-  //           data.map(async (p) => {
-  //             try {
-  //               const res = await axios.get(`/api/product/${p.id}`);
-  //               return res.data ? p : null; // 상품이 있으면 유지
-  //             } catch {
-  //               return null; // 삭제된 상품은 제거
-  //             }
-  //           }),
-  //         ).then((results) => {
-  //           const validProducts = results.filter((p) => p !== null);
-  //           setRecentProducts(validProducts);
-  //           localStorage.setItem(
-  //             "recentProducts",
-  //             JSON.stringify(validProducts),
-  //           );
-  //         });
-  //       } else {
-  //         setRecentProducts([]);
-  //       }
-  //     } catch (err) {
-  //       setRecentProducts([]);
-  //     }
-  //   }
-  // }, [open]);
-
   useEffect(() => {
     if (open) {
       const token = localStorage.getItem("token");

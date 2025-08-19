@@ -31,23 +31,20 @@ export function ProductEdit() {
   });
 
   useEffect(() => {
-    axios
-      .get(`/api/product/view?id=${id}`)
-      .then((res) => {
-        const data = res.data;
-        setForm({
-          productName: data.productName,
-          price: data.price,
-          category: data.category,
-          info: data.info,
-          quantity: data.quantity,
-        });
-        // 썸네일 이미지 목록
-        setThumbnailPaths(data.thumbnailPaths || []);
-        // 본문 이미지 목록
-        setDetailImagePaths(data.detailImagePaths || []);
-      })
-      .catch((err) => console.error(err));
+    axios.get(`/api/product/view?id=${id}`).then((res) => {
+      const data = res.data;
+      setForm({
+        productName: data.productName,
+        price: data.price,
+        category: data.category,
+        info: data.info,
+        quantity: data.quantity,
+      });
+      // 썸네일 이미지 목록
+      setThumbnailPaths(data.thumbnailPaths || []);
+      // 본문 이미지 목록
+      setDetailImagePaths(data.detailImagePaths || []);
+    });
   }, [id]);
 
   function handleChange(e) {
@@ -120,9 +117,6 @@ export function ProductEdit() {
       .then(() => {
         alert("수정 완료");
         navigate(`/product/view?id=${id}`);
-      })
-      .catch((err) => {
-        console.error("수정 실패", err);
       });
   }
 
@@ -204,7 +198,6 @@ export function ProductEdit() {
                 />
               </div>
 
-              {/* 썸네일 이미지 변경 */}
               {/* 썸네일 이미지 변경 + 업로드 묶음 */}
               <div className="product-edit-field">
                 <label className="product-edit-label">썸네일 이미지 변경</label>
