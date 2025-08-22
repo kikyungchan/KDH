@@ -59,7 +59,7 @@ jobs:
             docker stop prj4 || true
             docker rm prj4 || true
 
-            docker run -d -p 8080:8080 --restart always --name prj4 -v /home/${{secrets.EC2_USER}}/app:/app openjdk:21 java -jar /app/prj4.jar
+            docker run -d -p 8080:8080 --name prj4 -v /home/${{secrets.EC2_USER}}/app:/app openjdk:21 java -jar /app/prj4.jar
 
             docker image prune -f
           EOF

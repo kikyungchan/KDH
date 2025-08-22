@@ -29,19 +29,19 @@ const Footer = () => {
               <a href="https://www.instagram.com/"
                  target="_blank"
                  rel="noopener noreferrer">
-                <img src="../../../../public/logo/insta.webp" alt="Instagram" />
+                <img src="/logo/insta.webp" alt="Instagram" />
                 Instagram
               </a>
               <a href="https://www.youtube.com/"
                  target="_blank"
                  rel="noopener noreferrer">
-                <img src="../../../../public/logo/Youtube.png" alt="YouTube" />
+                <img src="/logo/Youtube.png" alt="YouTube" />
                 YouTube
               </a>
               <a href="https://www.kakaocorp.com/"
                  target="_blank"
                  rel="noopener noreferrer">
-                <img src="../../../../public/logo/KakaoTalk.svg" alt="Kakao" />
+                <img src="/logo/KakaoTalk.svg" alt="Kakao" />
                 Kakao
               </a>
             </div>

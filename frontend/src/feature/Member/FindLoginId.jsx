@@ -146,7 +146,7 @@ export function FindLoginId() {
               <div>
                 <div className="flex items-center justify-center mb-3">
                   <img
-                    src="../../../../public/logo/kdh.png"
+                    src="/logo/kdh.png"
                     style={{ width: "50px" }}
                     className="mr-1"
                   />

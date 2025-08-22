@@ -164,7 +164,7 @@ function NavBar(props) {
             <Link to="/Home" className="navbar-logo">
               {/*코데헌*/}
               <img
-                src="../../../../public/logo/kdh.png"
+                src="/logo/kdh.png"
                 style={{ width: "80px" }}
               />
             </Link>
