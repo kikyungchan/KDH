@@ -39,7 +39,7 @@ export function GuestOrder() {
                  w-full !mb-8 md:!mb-8"
               >
                 <img
-                  src="../../../../public/logo/kdh.png"
+                  src="/logo/kdh.png"
                   style={{ width: "80px" }}
                   className="mr-2"
                 />
