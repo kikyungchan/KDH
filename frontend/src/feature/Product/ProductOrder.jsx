@@ -1,9 +1,8 @@
 import { useLocation, useNavigate } from "react-router";
-import React, { useContext, useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import axios from "axios";
 import { useCart } from "./CartContext.jsx";
 import { useAlertWebSocket } from "../alert/alertContext.jsx";
-import { AuthenticationContext } from "../common/AuthenticationContextProvider.jsx";
 
 function Order() {
   useEffect(() => {
